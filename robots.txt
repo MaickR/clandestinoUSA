@@ -1,0 +1,73 @@
+###############################################
+# robots.txt · The Clandestino USA
+# Updated: 2025-09-16
+# Goal: Index all public pages & assets. Block internal, build & duplicate sources.
+# Notes: Anchor fragments (#section) are not listed in sitemap & are handled via on‑page links.
+###############################################
+
+User-agent: *
+Allow: /
+
+# Disallow sensitive / non-public or build artefacts
+Disallow: /.git/
+Disallow: /admin/
+Disallow: /dev/
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /temp/
+Disallow: /cache/
+# Block ZIPs/backups (safety) — Google/Bing support wildcards
+Disallow: /*.zip$
+Disallow: /clandestino%20min.zip
+
+# Duplicate or non-canonical endpoints
+Disallow: /contact.php
+
+# Query parameter patterns (tracking & faceted search variants)
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid=*
+Disallow: /*?*gclid=*
+Disallow: /*?*msclkid=*
+Disallow: /*?*ttclid=*
+Disallow: /*?*search*
+Disallow: /*?*filter*
+
+# Explicitly allow core assets & service worker (clarity only)
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/images/
+Allow: /assets/favicon/
+Allow: /sw.js
+
+# Crawl pacing (advisory; Google ignores Crawl-delay)
+Crawl-delay: 1
+
+# Sitemap & host
+Sitemap: https://theclandestinousa.com/sitemap.xml
+Host: theclandestinousa.com
+
+# Major crawler explicit clarity (optional; all inherit *)
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: LinkedInBot
+Allow: /
+User-agent: Twitterbot
+Allow: /
+User-agent: facebookexternalhit
+Allow: /
+User-agent: WhatsApp
+Allow: /
+
+# Known aggressive / unnecessary bots
+User-agent: AhrefsBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+User-agent: DotBot
+Disallow: /
+
+# End · The Clandestino USA

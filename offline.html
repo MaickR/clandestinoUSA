@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MVF7WM94');</script>
+  <!-- End Google Tag Manager -->
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MVF7WM94" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - The Clandestino USA</title>
+  <meta name="description" content="You're currently offline. Please check your internet connection.">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon/favicon.svg">
+  <style>
+    :root {
+      --gold-crayola: hsl(54.86deg 33.98% 79.8%);
+      --clandestino-bg: #161616;
+      --white: #ffffff;
+      --font-family-headings: 'Libre Bodoni', serif;
+      --font-family-text: 'Playfair Display', serif;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--clandestino-bg);
+      color: var(--white);
+      font-family: var(--font-family-text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .offline-container {
+      max-width: 500px;
+      width: 100%;
+    }
+    
+    .logo {
+      width: 120px;
+      height: auto;
+      margin: 0 auto 2rem;
+      opacity: 0.8;
+    }
+    
+    h1 {
+      font-family: var(--font-family-headings);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--gold-crayola);
+      margin-bottom: 1rem;
+    }
+    
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .retry-btn {
+      display: inline-block;
+      background-color: var(--gold-crayola);
+      color: var(--clandestino-bg);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .retry-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .offline-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+    
+    .contact-info {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .contact-info h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--gold-crayola);
+    }
+    
+    .contact-info p {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-info a {
+      color: var(--gold-crayola);
+      text-decoration: none;
+    }
+    
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">📶</div>
+    
+    <img src="/assets/images/clandestino-logo.svg" alt="The Clandestino USA Logo" class="logo">
+    
+    <h1>You're Offline</h1>
+    
+    <p>
+      It looks like you've lost your internet connection. 
+      Don't worry - you can still browse some cached content or try reconnecting.
+    </p>
+    
+    <button class="retry-btn" onclick="window.location.reload()">
+      Try Again
+    </button>
+    
+    <div class="contact-info">
+      <h2>Still want to reach us?</h2>
+      <p><strong>Phone:</strong> <a href="tel:+14086090027">+1 (408) 609-0027</a></p>
+      <p><strong>Address:</strong> 211 N Mt Shasta Blvd, Mount Shasta, CA 96067</p>
+      <p><strong>Hours:</strong> Daily 2:00 PM - 8:00 PM</p>
+    </div>
+  </div>
+
+  <script>
+    // Check for connection and redirect when back online
+    window.addEventListener('online', () => {
+      window.location.href = '/';
+    });
+    
+    // Retry button functionality
+    function checkConnection() {
+      if (navigator.onLine) {
+        window.location.href = '/';
+      } else {
+        alert('Still offline. Please check your internet connection.');
+      }
+    }
+  </script>
+</body>
+</html>

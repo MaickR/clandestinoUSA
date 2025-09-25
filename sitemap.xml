@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Generated/Updated: 2025-09-16 -->
+
+  <!-- Root / Homepage -->
+  <url>
+    <loc>https://theclandestinousa.com/</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg</image:loc>
+      <image:title>The Clandestino USA Restaurant Interior</image:title>
+      <image:caption>Authentic Spanish tapas and wine restaurant in Mount Shasta, California</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg</image:loc>
+      <image:title>Spanish Tapas at The Clandestino USA</image:title>
+      <image:caption>Handcrafted Spanish tapas served at The Clandestino USA</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/clandestino-wine-friends.jpg</image:loc>
+      <image:title>Spanish Wine Experience</image:title>
+      <image:caption>Friends enjoying Spanish wines at The Clandestino USA</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Tapas (recently updated content & pricing) -->
+  <url>
+    <loc>https://theclandestinousa.com/tapas.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/tapas.jpeg</image:loc>
+      <image:title>Tapas Selection</image:title>
+      <image:caption>Authentic Spanish tapas assortment</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Main Menu (updated naming) -->
+  <url>
+    <loc>https://theclandestinousa.com/menu.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <!-- Image reference removed or update when asset exists -->
+  </url>
+
+  <!-- Wines -->
+  <url>
+    <loc>https://theclandestinousa.com/wines.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/wines.jpeg</image:loc>
+      <image:title>Spanish Wine Selection</image:title>
+      <image:caption>Curated Spanish wines</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Hampers / Gifts -->
+  <url>
+    <loc>https://theclandestinousa.com/hampers.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/hampers/basket-05.webp</image:loc>
+      <image:title>Spanish Gift Hampers</image:title>
+      <image:caption>Curated gourmet Spanish gift hampers</image:caption>
+    </image:image>
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://theclandestinousa.com/about.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/about-banner.jpg</image:loc>
+      <image:title>About The Clandestino USA</image:title>
+      <image:caption>Authentic Spanish dining story & philosophy</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Spanish Wine Club -->
+  <url>
+    <loc>https://theclandestinousa.com/swc.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/swc.jpeg</image:loc>
+      <image:title>Spanish Wine Club</image:title>
+      <image:caption>Exclusive Spanish Wine Club membership</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://theclandestinousa.com/contact.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <!-- Policies / Terms -->
+  <url>
+    <loc>https://theclandestinousa.com/policies.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
+  </url>
+  <url>
+    <loc>https://theclandestinousa.com/terms.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.40</priority>
+  </url>
+
+  <!-- Links / Partners -->
+  <url>
+    <loc>https://theclandestinousa.com/links.html</loc>
+    <lastmod>2025-09-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+  </url>
+
+  <!-- Offline fallback intentionally excluded from sitemap -->
+
+</urlset>

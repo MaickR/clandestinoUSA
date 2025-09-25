@@ -1,0 +1,96 @@
+{
+  "name": "The Clandestino USA - Spanish Tapas & Wine",
+  "short_name": "Clandestino USA",
+  "description": "Authentic Spanish tapas and curated wines in Mount Shasta, California. Experience Mediterranean flavors and Spanish hospitality.",
+  "version": "2.0.0",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#161616",
+  "background_color": "#161616",
+  "lang": "en-US",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/assets/favicon/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/favicon/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/favicon/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/favicon/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/favicon/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  
+  "categories": [
+    "food",
+    "restaurant",
+    "lifestyle",
+    "entertainment"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "View Menu",
+      "short_name": "Menu",
+      "description": "Browse our Spanish tapas and wine selection",
+      "url": "/#menu",
+      "icons": [
+        {
+          "src": "/assets/images/icons/menu-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Make Reservation",
+      "short_name": "Reserve",
+      "description": "Book a table at The Clandestino USA",
+      "url": "/#reservation",
+      "icons": [
+        {
+          "src": "/assets/images/icons/reservation-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Wine Club",
+      "short_name": "Wine Club",
+      "description": "Join our Spanish Wine Club",
+      "url": "/#wine-club",
+      "icons": [
+        {
+          "src": "/assets/images/icons/wine-shortcut.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "prefer_related_applications": false,
+  "id": "clandestino-usa-pwa"
+}
