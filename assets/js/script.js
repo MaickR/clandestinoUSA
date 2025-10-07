@@ -1847,11 +1847,11 @@ function initClosureModal() {
 }
 
 /* ----------------------------------
-   Countdown Timer to October 19, 2025
+   Countdown Timer to October 30, 2025
 ----------------------------------- */
 function initCountdownTimer() {
-  // Target date: October 19, 2025 at 2:00 PM
-  const targetDate = new Date('2025-10-19T14:00:00').getTime();
+  // Target date: October 30, 2025 at 2:00 PM
+  const targetDate = new Date('2025-10-30T14:00:00').getTime();
 
   const daysEl = document.getElementById('countdown-days');
   const hoursEl = document.getElementById('countdown-hours');
