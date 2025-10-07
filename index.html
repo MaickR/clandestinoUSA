@@ -199,6 +199,65 @@
     </div>
   </div>
 
+  <!-- Temporary Closure Modal -->
+  <div id="closureModal" class="closure-modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+    <div class="closure-modal-content">
+      <button class="modal-close-btn" data-modal-close aria-label="Close announcement">
+        <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+      </button>
+      
+      <div class="closure-modal-header">
+        <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" class="modal-logo">
+      </div>
+
+      <div class="closure-modal-body">
+        <h2 id="modal-title" class="modal-title">Sourcing Excellence from Spain</h2>
+        <p class="modal-subtitle">Seasonal Harvest Trip</p>
+        
+        <p class="modal-text">
+          We've traveled to Spain to personally select the finest seasonal harvest products. 
+          Our journey ensures we bring back the freshest, highest-quality ingredients for your authentic Spanish experience.
+        </p>
+
+        <div class="modal-countdown">
+          <p class="countdown-title">We Reopen In:</p>
+          <div class="countdown-timer">
+            <div class="countdown-unit">
+              <span class="countdown-number" id="countdown-days">00</span>
+              <span class="countdown-label">Days</span>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-number" id="countdown-hours">00</span>
+              <span class="countdown-label">Hours</span>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-number" id="countdown-minutes">00</span>
+              <span class="countdown-label">Minutes</span>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-unit">
+              <span class="countdown-number" id="countdown-seconds">00</span>
+              <span class="countdown-label">Seconds</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="closure-modal-footer">
+          <p class="modal-footer-note">Thank you for your patience and understanding</p>
+          <a href="https://wa.me/14086090027?text=Hey!%20%F0%9F%87%AA%F0%9F%87%B8%20Just%20saw%20you're%20in%20Spain%20sourcing%20amazing%20products!%20Can't%20wait%20for%20you%20to%20reopen.%20What%20treasures%20are%20you%20bringing%20back%20this%20time%3F%20%F0%9F%8D%B7%E2%9C%A8" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="modal-whatsapp-btn">
+            <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
+            <span>Contact Us on WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- 
     - #TOP BAR
@@ -324,8 +383,12 @@
             <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
+          <li class="navbar-item has-submenu" role="none">
             <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -664,13 +727,13 @@
             <source srcset="./assets/images/avif/shape-1.avif" type="image/avif">
             <source srcset="./assets/images/webp/shape-1.webp" type="image/webp">
             <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" aria-hidden="true"
-              class="shape shape-1 move-anim">
+              class="shape shape-1 move-anim" role="presentation">
           </picture>
           <picture>
             <source srcset="./assets/images/avif/shape-2.avif" type="image/avif">
             <source srcset="./assets/images/webp/shape-2.webp" type="image/webp">
             <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" aria-hidden="true"
-              class="shape shape-2 move-anim">
+              class="shape shape-2 move-anim" role="presentation">
           </picture>
 
           
@@ -888,8 +951,8 @@
           <picture>
             <source srcset="./assets/images/avif/shape-8.avif" type="image/avif">
             <source srcset="./assets/images/webp/shape-8.webp" type="image/webp">
-            <img src="./assets/images/shape-8.png" width="208" height="178" loading="lazy" alt="shape"
-              class="shape shape-1">
+            <img src="./assets/images/shape-8.png" width="208" height="178" loading="lazy" alt=""
+              class="shape shape-1" role="presentation" aria-hidden="true">
           </picture>
 
          <!--  <img src="./assets/images/shape-8.png" width="120" height="115" loading="lazy" alt="shape"
@@ -917,6 +980,63 @@
             <div class="swiper-container" aria-roledescription="carousel">
               <div class="swiper-wrapper">
 
+                <!-- Videos nuevos de clientes -->
+                <div class="swiper-slide">
+                  <article class="testi-card">
+                    <div class="video-wrap">
+                      <video controls preload="metadata" width="100%" height="auto">
+                        <source src="./assets/images/gallery/videos/Client-1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="swiper-slide">
+                  <article class="testi-card">
+                    <div class="video-wrap">
+                      <video controls preload="metadata" width="100%" height="auto">
+                        <source src="./assets/images/gallery/videos/Cliente-2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="swiper-slide">
+                  <article class="testi-card">
+                    <div class="video-wrap">
+                      <video controls preload="metadata" width="100%" height="auto">
+                        <source src="./assets/images/gallery/videos/Cliente-4.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="swiper-slide">
+                  <article class="testi-card">
+                    <div class="video-wrap">
+                      <video controls preload="metadata" width="100%" height="auto">
+                        <source src="./assets/images/gallery/videos/Cliente-5.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="swiper-slide">
+                  <article class="testi-card">
+                    <div class="video-wrap">
+                      <video controls preload="metadata" width="100%" height="auto">
+                        <source src="./assets/images/gallery/videos/Cliente-7.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </article>
+                </div>
+
+                <!-- Videos anteriores de clientes -->
                 <div class="swiper-slide">
                   <article class="testi-card">
                     <div class="video-wrap">
@@ -985,6 +1105,7 @@
 
               </div>
               <div class="swiper-pagination" aria-label="Testimonials pagination"></div>
+              <div class="testimonials-pagination-status" aria-live="polite" aria-atomic="true"></div>
             </div>
           </div>
 

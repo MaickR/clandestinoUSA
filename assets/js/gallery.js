@@ -130,5 +130,88 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', ()=>{ initGalleries(); initFilters(); });
+  function initVideoOverlays(){
+    // Handle video overlays - hide when playing, show when paused/ended
+    document.querySelectorAll('.clandestino-gallery-video-wrapper').forEach(wrapper => {
+      const video = wrapper.querySelector('video');
+      const overlay = wrapper.querySelector('.clandestino-gallery-video-overlay');
+      
+      if(!video || !overlay) return;
+      
+      // Click on overlay/play button to start video
+      overlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        video.play();
+      });
+      
+      // Hide overlay when video starts playing
+      video.addEventListener('play', () => {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      });
+      
+      // Show overlay when video is paused
+      video.addEventListener('pause', () => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+      });
+      
+      // Show overlay when video ends
+      video.addEventListener('ended', () => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+      });
+      
+      // Ensure overlay is visible initially
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
+    });
+    
+    // Handle testimonial videos in index.html (Swiper carousel)
+    document.querySelectorAll('.testi-card .video-wrap video').forEach(video => {
+      const videoWrap = video.closest('.video-wrap');
+      if(!videoWrap) return;
+      
+      // Create overlay if it doesn't exist
+      let overlay = videoWrap.querySelector('.video-overlay');
+      if(!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'video-overlay';
+        overlay.innerHTML = '<div class="video-play-btn"><ion-icon name="play" aria-hidden="true"></ion-icon></div>';
+        videoWrap.appendChild(overlay);
+      }
+      
+      // Click on overlay to play
+      overlay.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        video.play();
+      });
+      
+      // Hide overlay when playing
+      video.addEventListener('play', () => {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      });
+      
+      // Show overlay when paused
+      video.addEventListener('pause', () => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+      });
+      
+      // Show overlay when ended
+      video.addEventListener('ended', () => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{ 
+    initGalleries(); 
+    initFilters(); 
+    initVideoOverlays();
+  });
 })();

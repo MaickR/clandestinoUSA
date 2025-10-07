@@ -28,7 +28,7 @@
   <title>Main Menu — The Clandestino USA | Spanish Tapas, Charcuterie & Wine Pairings</title>
   <meta name="title" content="Main Menu — The Clandestino USA | Spanish Tapas, Charcuterie & Wine Pairings">
   <meta name="description" content="Browse The Clandestino USA main menu: artisan Spanish tapas, charcuterie boards, cheeses, olives, conservas, desserts & curated wine pairings in Mount Shasta, CA.">
-  <meta name="keywords" content="Spanish menu, tapas menu, charcuterie Mount Shasta, Spanish cheeses, conservas, Mediterranean menu California, wine pairings Mount Shasta">
+  <meta name="keywords" content="Spanish restaurant Mount Shasta, Mount Shasta tapas menu, artisan charcuterie Northern California, gourmet conservas California, Spanish cheese flights Mount Shasta, wine pairing dinners Shasta">
   <meta name="author" content="The Clandestino USA">
   <meta name="copyright" content="© 2025 The Clandestino USA. All rights reserved.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -137,7 +137,78 @@
     {"@type": "MenuSection", "name": "Conservas"}
   ],
   "offers": {"@type":"Offer","priceCurrency":"USD"},
-  "hasMenuItem": []
+  "hasMenuItem": [
+    {
+      "@type": "MenuItem",
+      "name": "Adaro",
+      "description": "Tempranillo from Ribera del Duero — elegant, tasty and fresh.",
+      "image": "https://theclandestinousa.com/assets/images/wines/ADARO.jpeg",
+      "offers": {
+        "@type": "Offer",
+        "price": "50",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://theclandestinousa.com/wines.html"
+      },
+      "menuSection": "Wine Selection"
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Mystic",
+      "description": "Grenache and Syrah blend aged on lees with dark fruit and spice.",
+      "image": "https://theclandestinousa.com/assets/images/wines/MYSTIC.jpeg",
+      "offers": {
+        "@type": "Offer",
+        "price": "29",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://theclandestinousa.com/wines.html"
+      },
+      "menuSection": "Wine Selection"
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Serrano Ham",
+      "description": "Premium Spanish cured Serrano ham from artisan producers.",
+      "image": "https://theclandestinousa.com/assets/images/gallery/tapas/jamon-cerrano.jpg",
+      "offers": {
+        "@type": "Offer",
+        "price": "24",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://theclandestinousa.com/tapas.html"
+      },
+      "menuSection": "Tapas & Take Away"
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Chorizo Sticks",
+      "description": "Traditional Spanish chorizo sticks bursting with flavor.",
+      "image": "https://theclandestinousa.com/assets/images/gallery/tapas/the-clandestino-chorizo.jpeg",
+      "offers": {
+        "@type": "Offer",
+        "price": "14.60",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://theclandestinousa.com/tapas.html"
+      },
+      "menuSection": "Tapas & Take Away"
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Classic Hamper",
+      "description": "Gift basket featuring wine, cheese and charcuterie staples.",
+      "image": "https://theclandestinousa.com/assets/images/hampers/basket-01.webp",
+      "offers": {
+        "@type": "Offer",
+        "price": "128",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/LimitedAvailability",
+        "url": "https://theclandestinousa.com/hampers.html"
+      },
+      "menuSection": "Gift Hampers"
+    }
+  ]
 }
   </script>
   <!-- Breadcrumb -->
@@ -295,8 +366,12 @@
             <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
+          <li class="navbar-item has-submenu" role="none">
             <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -386,14 +461,16 @@
           <div class="clandestino-menu-items-container">
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/wines/ADARO.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/wines/ADARO.webp" type="image/webp">
-                  <img src="./assets/images/wines/ADARO.jpeg" alt="Adaro wine from Ribera del Duero" loading="lazy" decoding="async" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/wines/ADARO.jpeg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/wines/ADARO.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/wines/ADARO.webp" type="image/webp">
+                    <img src="./assets/images/wines/ADARO.jpeg" alt="Adaro wine from Ribera del Duero" loading="lazy" decoding="async" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Adaro</h5>
@@ -414,14 +491,16 @@
 
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/wines/MYSTIC.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/wines/MYSTIC.webp" type="image/webp">
-                  <img src="./assets/images/wines/MYSTIC.jpeg" alt="Mystic wine from Aragón Cariñena" loading="lazy" decoding="async" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/wines/MYSTIC.jpeg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/wines/MYSTIC.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/wines/MYSTIC.webp" type="image/webp">
+                    <img src="./assets/images/wines/MYSTIC.jpeg" alt="Mystic wine from Aragón Cariñena" loading="lazy" decoding="async" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Mystic</h5>
@@ -442,14 +521,16 @@
 
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/wines/EVOLUZION.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/wines/EVOLUZION.webp" type="image/webp">
-                  <img src="./assets/images/wines/EVOLUZION.jpeg" alt="Evoluzion white wine from Aragón Cariñena" loading="lazy" decoding="async" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/wines/EVOLUZION.jpeg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/wines/EVOLUZION.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/wines/EVOLUZION.webp" type="image/webp">
+                    <img src="./assets/images/wines/EVOLUZION.jpeg" alt="Evoluzion white wine from Aragón Cariñena" loading="lazy" decoding="async" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Evoluzion</h5>
@@ -507,14 +588,16 @@
           <div class="clandestino-menu-items-container">
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/gallery/tapas/jamon-cerrano.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/gallery/tapas/jamon-cerrano.webp" type="image/webp">
-                  <img src="./assets/images/gallery/tapas/jamon-cerrano.jpg" alt="Serrano Ham premium cured ham" loading="lazy" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/gallery/tapas/jamon-cerrano.jpg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/gallery/tapas/jamon-cerrano.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/gallery/tapas/jamon-cerrano.webp" type="image/webp">
+                    <img src="./assets/images/gallery/tapas/jamon-cerrano.jpg" alt="Serrano Ham premium cured ham" loading="lazy" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Serrano Ham</h5>
@@ -535,14 +618,16 @@
             
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/gallery/tapas/the-clandestino-chorizo.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/gallery/tapas/the-clandestino-chorizo.webp" type="image/webp">
-                  <img src="./assets/images/gallery/tapas/the-clandestino-chorizo.jpeg" alt="Chorizo Sticks premium Spanish chorizo" loading="lazy" decoding="async" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/gallery/tapas/the-clandestino-chorizo.jpeg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/gallery/tapas/the-clandestino-chorizo.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/gallery/tapas/the-clandestino-chorizo.webp" type="image/webp">
+                    <img src="./assets/images/gallery/tapas/the-clandestino-chorizo.jpeg" alt="Chorizo Sticks premium Spanish chorizo" loading="lazy" decoding="async" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Chorizo Sticks</h5>
@@ -563,14 +648,16 @@
             
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <picture>
-                  <source srcset="./assets/images/avif/gallery/quesos/manchego.avif" type="image/avif">
-                  <source srcset="./assets/images/webp/gallery/quesos/manchego.webp" type="image/webp">
-                  <img src="./assets/images/gallery/quesos/manchego.jpg" alt="Cheese Manchego Spanish aged cheese" loading="lazy" />
-                </picture>
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/gallery/quesos/manchego.jpg" class="has-popup-image">
+                  <picture>
+                    <source srcset="./assets/images/avif/gallery/quesos/manchego.avif" type="image/avif">
+                    <source srcset="./assets/images/webp/gallery/quesos/manchego.webp" type="image/webp">
+                    <img src="./assets/images/gallery/quesos/manchego.jpg" alt="Cheese Manchego Spanish aged cheese" loading="lazy" />
+                  </picture>
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Cheese Manchego</h5>
@@ -606,10 +693,12 @@
           <div class="clandestino-menu-items-container">
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <img src="./assets/images/hampers/basket-01.webp" alt="Classic Spanish hamper" loading="lazy" decoding="async" />
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/hampers/basket-01.webp" class="has-popup-image">
+                  <img src="./assets/images/hampers/basket-01.webp" alt="Classic Spanish hamper" loading="lazy" decoding="async" />
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Classic Hamper</h5>
@@ -630,10 +719,12 @@
             
             <div class="clandestino-menu-item-card">
               <div class="clandestino-menu-item-image">
-                <img src="./assets/images/hampers/basket-02.webp" alt="Premium Spanish gift hamper" loading="lazy" decoding="async" />
-                <div class="popup-overlay">
-                  <ion-icon name="eye-outline"></ion-icon>
-                </div>
+                <a href="./assets/images/hampers/basket-02.webp" class="has-popup-image">
+                  <img src="./assets/images/hampers/basket-02.webp" alt="Premium Spanish gift hamper" loading="lazy" decoding="async" />
+                  <div class="popup-overlay">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </div>
+                </a>
               </div>
               <div class="clandestino-menu-item-desc">
                 <h5 class="clandestino-menu-item-name">Premium Selection</h5>
@@ -732,8 +823,8 @@
         <div class="reservation-decor" aria-hidden="true">
           <span class="reservation-orb orb-1"></span>
           <span class="reservation-orb orb-2"></span>
-          <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim">
-          <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim">
+          <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim" role="presentation" aria-hidden="true">
+          <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim" role="presentation" aria-hidden="true">
         </div>
       </div>
   </section>

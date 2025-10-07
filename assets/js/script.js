@@ -66,6 +66,13 @@ const $$ = (selector) => Array.from(document.querySelectorAll(selector));
           pre.parentNode.removeChild(pre);
           pre = null;
         }
+        
+        // Mostrar modal de cierre temporal solo en index.html
+        if (window.location.pathname === '/' || 
+            window.location.pathname.endsWith('/index.html') ||
+            window.location.pathname.endsWith('/')) {
+          initClosureModal();
+        }
       }, 800);
     }, 200);
   }
@@ -709,6 +716,7 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
   ensureSwiper().then(() => {
     try {
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const totalSlides = container.querySelectorAll('.swiper-wrapper > .swiper-slide').length;
       // eslint-disable-next-line no-undef
       const testiSwiper = new Swiper(container, {
         loop: true,
@@ -726,8 +734,46 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
           1024: { slidesPerView: 2, spaceBetween: 20 },
           1200: { slidesPerView: 3, spaceBetween: 24 }
         },
-        pagination: { el: '.testimonials-carousel .swiper-pagination', clickable: true }
+        pagination: {
+          el: '.testimonials-carousel .swiper-pagination',
+          type: 'progressbar'
+        }
       });
+
+      const paginationEl = container.querySelector('.swiper-pagination');
+      if (paginationEl) {
+        paginationEl.classList.add('testimonials-progressbar');
+        paginationEl.setAttribute('role', 'progressbar');
+        paginationEl.setAttribute('aria-valuemin', '1');
+        paginationEl.setAttribute('aria-valuemax', String(totalSlides));
+      }
+
+      const statusEl = container.parentElement.querySelector('.testimonials-pagination-status');
+
+      const updateStatus = () => {
+        if (!statusEl) return;
+        const current = testiSwiper.realIndex + 1;
+        const formattedCurrent = current.toString().padStart(2, '0');
+        const formattedTotal = totalSlides.toString().padStart(2, '0');
+
+        statusEl.setAttribute('aria-label', `Client story ${current} of ${totalSlides}`);
+        statusEl.innerHTML = `
+          <span class="status-prefix">Client Stories</span>
+          <span class="status-count">
+            <span class="status-current">${formattedCurrent}</span>
+            <span class="status-divider" aria-hidden="true">/</span>
+            <span class="status-total">${formattedTotal}</span>
+          </span>
+        `;
+
+        if (paginationEl) {
+          paginationEl.setAttribute('aria-valuenow', String(current));
+        }
+      };
+
+      updateStatus();
+      testiSwiper.on('slideChange', updateStatus);
+      testiSwiper.on('loopFix', updateStatus);
 
       // Pause on hover (autoplay) and ensure proper behavior
       if (testiSwiper.autoplay) {
@@ -1233,3 +1279,666 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
 
   form.addEventListener('submit', handleSubmit);
 })();
+
+/* ----------------------------------
+   CLX Contact Form (Clandestino Enhanced)
+   - Fixed: No validation errors on page load
+   - Validation only triggers after user interaction
+   - Clean UX with progressive validation
+---------------------------------- */
+(function initClandestinoContactForm(){
+  'use strict';
+
+  // Configuration
+  const CONFIG = {
+    formId: 'clx-contact-form',
+    csrfTokenId: 'clx-csrf-token',
+    submitBtnId: 'clx-submit-btn',
+    statusClass: 'clx-status',
+    errorClass: 'clx-error',
+    loadingClass: 'loading',
+    showClass: 'show',
+    successClass: 'success',
+    errorStateClass: 'error',
+    fieldSuccessClass: 'success'
+  };
+
+  // DOM Elements
+  let elements = {};
+  
+  // Track which fields have been touched by user
+  let touchedFields = {};
+  
+  // Track if form has been submitted at least once
+  let formSubmitted = false;
+
+  // Validation rules
+  const validationRules = {
+    name: {
+      required: true,
+      minLength: 2,
+      maxLength: 80,
+      pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s\-'\.]+$/,
+      message: 'Please enter a valid name (letters only, 2-80 characters)'
+    },
+    email: {
+      required: true,
+      maxLength: 120,
+      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      message: 'Please enter a valid email address'
+    },
+    tel: {
+      required: true,
+      maxLength: 30,
+      pattern: /^[0-9+()\-\s]{6,}$/,
+      message: 'Please enter a valid phone number'
+    },
+    subject: {
+      required: true,
+      message: 'Please select an inquiry type'
+    },
+    message: {
+      required: true,
+      minLength: 5,
+      maxLength: 1500,
+      message: 'Please enter a message (5-1500 characters)'
+    }
+  };
+
+  // Initialize form
+  function init() {
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initForm);
+    } else {
+      initForm();
+    }
+  }
+
+  function initForm() {
+    // Cache DOM elements
+    cacheElements();
+    
+    if (!elements.form) {
+      // Form not present on this page - exit silently
+      return;
+    }
+
+    // Generate CSRF token
+    generateCSRFToken();
+    
+    // Bind events
+    bindEvents();
+    
+    // Initial state: button disabled until form is valid
+    checkFormCompleteness();
+    
+    console.log('Clandestino contact form initialized');
+  }
+
+  function cacheElements() {
+    elements = {
+      form: document.getElementById(CONFIG.formId),
+      submitBtn: document.getElementById(CONFIG.submitBtnId),
+      csrfToken: document.getElementById(CONFIG.csrfTokenId),
+      status: document.querySelector('.' + CONFIG.statusClass),
+      fields: {}
+    };
+
+    // Cache form fields
+    if (elements.form) {
+      ['name', 'email', 'tel', 'subject', 'message'].forEach(fieldName => {
+        const field = elements.form.querySelector(`[name="${fieldName}"]`);
+        const errorEl = elements.form.querySelector(`[data-error-for="${fieldName}"]`);
+        const fieldGroup = field ? field.closest('.clx-field-group') : null;
+        
+        if (field) {
+          elements.fields[fieldName] = { field, errorEl, fieldGroup };
+          touchedFields[fieldName] = false; // Initialize as untouched
+        }
+      });
+    }
+  }
+
+  function generateCSRFToken() {
+    if (!elements.csrfToken) return;
+    
+    // Generate a token with timestamp for server-side validation
+    const timestamp = Math.floor(Date.now() / 1000);
+    const random = Math.random().toString(36).substring(2);
+    const token = btoa(`${timestamp}.${random}`);
+    elements.csrfToken.value = token;
+  }
+
+  function bindEvents() {
+    if (!elements.form || !elements.submitBtn) return;
+
+    // Form submission
+    elements.form.addEventListener('submit', handleSubmit);
+
+    // Field-level events with progressive validation
+    Object.keys(elements.fields).forEach(fieldName => {
+      const { field } = elements.fields[fieldName];
+      if (!field) return;
+
+      // Mark field as touched on first blur
+      field.addEventListener('blur', () => {
+        if (!touchedFields[fieldName]) {
+          touchedFields[fieldName] = true;
+        }
+        // Validate only if field has been touched OR form was submitted
+        if (touchedFields[fieldName] || formSubmitted) {
+          validateField(fieldName);
+        }
+        checkFormCompleteness();
+      });
+
+      // Real-time validation during input (only if already touched or submitted)
+      field.addEventListener('input', () => {
+        if (touchedFields[fieldName] || formSubmitted) {
+          // Clear error immediately on input
+          clearFieldError(fieldName);
+          
+          // Validate after short delay for better UX
+          clearTimeout(field._validationTimer);
+          field._validationTimer = setTimeout(() => {
+            if (touchedFields[fieldName] || formSubmitted) {
+              validateField(fieldName);
+            }
+          }, 300);
+        }
+        checkFormCompleteness();
+      });
+    });
+
+    // Prevent form resubmission on refresh
+    window.addEventListener('beforeunload', () => {
+      if (elements.submitBtn.classList.contains(CONFIG.loadingClass)) {
+        return 'Form is being submitted. Are you sure you want to leave?';
+      }
+    });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    
+    if (elements.submitBtn.classList.contains(CONFIG.loadingClass)) {
+      return; // Already submitting
+    }
+
+    // Mark form as submitted to enable all validations
+    formSubmitted = true;
+    
+    // Mark all fields as touched
+    Object.keys(touchedFields).forEach(key => {
+      touchedFields[key] = true;
+    });
+
+    // Validate all fields and show errors
+    if (!evaluateFormValidity(true)) {
+      return; // Stop if validation fails
+    }
+
+    // Submit form
+    submitForm();
+  }
+
+  /**
+   * Validate a single field
+   * @param {string} fieldName - The field to validate
+   * @param {boolean} showError - Whether to show error visually (default: true)
+   * @returns {boolean} - True if valid
+   */
+  function validateField(fieldName, showError = true) {
+    const { field, errorEl, fieldGroup } = elements.fields[fieldName] || {};
+    if (!field || !errorEl || !fieldGroup) return true;
+
+    const rule = validationRules[fieldName];
+    const value = field.value.trim();
+
+    // Clear previous state
+    if (showError) {
+      clearFieldError(fieldName);
+    }
+
+    // Required validation
+    if (rule.required && !value) {
+      if (showError) {
+        showFieldError(fieldName, rule.message || `${fieldName} is required`);
+      }
+      return false;
+    }
+
+    // Skip other validations if field is empty and not required
+    if (!value && !rule.required) {
+      return true;
+    }
+
+    // Length validation
+    if (rule.minLength && value.length < rule.minLength) {
+      if (showError) {
+        showFieldError(fieldName, `Minimum ${rule.minLength} characters required`);
+      }
+      return false;
+    }
+
+    if (rule.maxLength && value.length > rule.maxLength) {
+      if (showError) {
+        showFieldError(fieldName, `Maximum ${rule.maxLength} characters allowed`);
+      }
+      return false;
+    }
+
+    // Pattern validation
+    if (rule.pattern && !rule.pattern.test(value)) {
+      if (showError) {
+        showFieldError(fieldName, rule.message);
+      }
+      return false;
+    }
+
+    // Field-specific validation
+    if (fieldName === 'subject' && value === '') {
+      if (showError) {
+        showFieldError(fieldName, 'Please select an inquiry type');
+      }
+      return false;
+    }
+
+    // Mark as valid (only if showing errors)
+    if (showError && (touchedFields[fieldName] || formSubmitted)) {
+      fieldGroup.classList.add(CONFIG.fieldSuccessClass);
+      field.setAttribute('aria-invalid', 'false');
+    }
+    
+    return true;
+  }
+
+  function showFieldError(fieldName, message) {
+    const { errorEl, fieldGroup, field } = elements.fields[fieldName] || {};
+    if (!errorEl || !fieldGroup) return;
+
+    errorEl.textContent = message;
+    fieldGroup.classList.add(CONFIG.errorStateClass);
+    fieldGroup.classList.remove(CONFIG.fieldSuccessClass);
+    if (field) {
+      field.setAttribute('aria-invalid', 'true');
+      field.setAttribute('aria-describedby', errorEl.id);
+    }
+  }
+
+  function clearFieldError(fieldName) {
+    const { errorEl, fieldGroup, field } = elements.fields[fieldName] || {};
+    if (!errorEl || !fieldGroup) return;
+
+    errorEl.textContent = '';
+    fieldGroup.classList.remove(CONFIG.errorStateClass);
+    if (field) {
+      field.removeAttribute('aria-invalid');
+      field.removeAttribute('aria-describedby');
+    }
+  }
+
+  /**
+   * Check if form is complete (all required fields filled)
+   * This doesn't show visual errors, just enables/disables submit button
+   */
+  function checkFormCompleteness() {
+    let allComplete = true;
+    
+    Object.keys(validationRules).forEach(fieldName => {
+      // Validate without showing errors
+      if (!validateField(fieldName, false)) {
+        allComplete = false;
+      }
+    });
+    
+    setSubmitEnabled(allComplete);
+    return allComplete;
+  }
+
+  /**
+   * Evaluate full form validity with visual feedback
+   * Used when submitting form
+   */
+  function evaluateFormValidity(scrollToError = false) {
+    let allValid = true;
+    
+    Object.keys(validationRules).forEach(fieldName => {
+      if (!validateField(fieldName, true)) {
+        allValid = false;
+      }
+    });
+    
+    setSubmitEnabled(allValid);
+
+    if (!allValid && scrollToError) {
+      showStatus('Please correct the highlighted fields.', 'error');
+      const firstErrorField = elements.form.querySelector('.clx-field-group.error input, .clx-field-group.error select, .clx-field-group.error textarea');
+      if (firstErrorField) {
+        firstErrorField.focus({ preventScroll: false });
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return false;
+    }
+    return allValid;
+  }
+
+  async function submitForm() {
+    setLoadingState(true);
+    showStatus('Sending your message…', 'info');
+    elements.status?.setAttribute('aria-busy', 'true');
+
+    try {
+      const formData = new FormData(elements.form);
+      
+      const response = await fetch('contact.php', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Server did not return JSON response');
+      }
+
+      const result = await response.json();
+      
+      if (result.success) {
+        showStatus('Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
+        resetForm();
+        
+        // Analytics tracking (if implemented)
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'contact_form_submit', {
+            'event_category': 'Contact',
+            'event_label': formData.get('subject') || 'General'
+          });
+        }
+      } else {
+        let errorMessage = 'There was an error sending your message. Please try again.';
+        
+        if (result.errorMessage) {
+          errorMessage = result.errorMessage;
+        }
+        
+        showStatus(errorMessage, 'error');
+        
+        // Log error details for debugging
+        console.error('Form submission failed:', result);
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      showStatus('Network error. Please check your connection and try again. If the problem persists, please call us directly.', 'error');
+    } finally {
+      setLoadingState(false);
+      elements.status?.setAttribute('aria-busy', 'false');
+    }
+  }
+
+  function setLoadingState(loading) {
+    if (!elements.submitBtn) return;
+
+    elements.submitBtn.classList.toggle(CONFIG.loadingClass, loading);
+    elements.submitBtn.disabled = loading;
+    elements.submitBtn.setAttribute('aria-busy', loading ? 'true' : 'false');
+    
+    if (loading) {
+      elements.submitBtn.textContent = 'Sending...';
+    } else {
+      elements.submitBtn.textContent = 'Send Message';
+    }
+  }
+
+  function showStatus(message, type) {
+    if (!elements.status) return;
+    
+    const icon = type === 'success' ? 'checkmark-circle-outline' : 
+                 (type === 'error' ? 'alert-circle-outline' : 'information-circle-outline');
+    
+    elements.status.className = `${CONFIG.statusClass}`;
+    elements.status.classList.add(CONFIG.showClass, type);
+    elements.status.innerHTML = `<div class="clx-status-inner"><ion-icon name="${icon}" aria-hidden="true"></ion-icon><span>${message}</span></div>`;
+    elements.status.setAttribute('data-status', type);
+    elements.status.setAttribute('role', 'alert');
+    elements.status.setAttribute('aria-live', 'polite');
+
+    // Auto-hide success messages after 10 seconds
+    if (type === 'success') {
+      setTimeout(() => {
+        hideStatus();
+      }, 10000);
+    }
+
+    // Scroll to status message
+    setTimeout(() => {
+      elements.status.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'nearest' 
+      });
+    }, 100);
+  }
+
+  function hideStatus() {
+    if (!elements.status) return;
+
+    elements.status.classList.remove(CONFIG.showClass, 'success', 'error', 'info');
+    elements.status.removeAttribute('data-status');
+  }
+
+  function setSubmitEnabled(enabled) {
+    if (!elements.submitBtn) return;
+    elements.submitBtn.disabled = !enabled;
+    elements.submitBtn.classList.toggle('disabled', !enabled);
+    elements.submitBtn.setAttribute('aria-disabled', !enabled ? 'true' : 'false');
+  }
+
+  function resetForm() {
+    if (!elements.form) return;
+
+    // Reset form fields
+    elements.form.reset();
+    
+    // Reset touched state
+    Object.keys(touchedFields).forEach(key => {
+      touchedFields[key] = false;
+    });
+    
+    // Reset form submitted flag
+    formSubmitted = false;
+    
+    // Clear validation states
+    Object.keys(elements.fields).forEach(fieldName => {
+      clearFieldError(fieldName);
+      const { fieldGroup } = elements.fields[fieldName] || {};
+      if (fieldGroup) {
+        fieldGroup.classList.remove(CONFIG.fieldSuccessClass);
+      }
+    });
+
+    // Generate new CSRF token
+    generateCSRFToken();
+    
+    // Disable submit button
+    setSubmitEnabled(false);
+    
+    // Focus first field after short delay
+    const firstField = elements.form.querySelector('input, select, textarea');
+    if (firstField) {
+      setTimeout(() => firstField.focus(), 200);
+    }
+  }
+
+  // Public API (if needed)
+  window.ClandestinoContact = {
+    validateField,
+    resetForm,
+    showStatus,
+    checkFormCompleteness
+  };
+
+  // Initialize when script loads
+  init();
+})();
+
+/* ----------------------------------
+   Temporary Closure Modal
+   (Spain Harvest Trip)
+----------------------------------- */
+function initClosureModal() {
+  const modal = document.getElementById('closureModal');
+  if (!modal) return;
+
+  const modalContent = modal.querySelector('.closure-modal-content');
+  if (!modalContent) return;
+
+  // Show modal
+  setTimeout(function() {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+  }, 500);
+
+  // Auto-close after 20 seconds
+  let autoCloseTimeout = setTimeout(function() {
+    closeModal();
+  }, 20000);
+
+  // Close button functionality
+  const closeElements = modal.querySelectorAll('[data-modal-close]');
+  closeElements.forEach(function(element) {
+    element.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      clearTimeout(autoCloseTimeout);
+      closeModal();
+    });
+  });
+
+  // Close when clicking on overlay (but not on content)
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      clearTimeout(autoCloseTimeout);
+      closeModal();
+    }
+  });
+
+  // Prevent closing when clicking inside modal content
+  modalContent.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // Close modal function
+  function closeModal() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    // Stop countdown when modal closes
+    if (window.closureCountdownInterval) {
+      clearInterval(window.closureCountdownInterval);
+      window.closureCountdownInterval = null;
+    }
+  }
+
+  // Initialize countdown timer
+  initCountdownTimer();
+}
+
+/* ----------------------------------
+   Countdown Timer to October 19, 2025
+----------------------------------- */
+function initCountdownTimer() {
+  // Target date: October 19, 2025 at 2:00 PM
+  const targetDate = new Date('2025-10-19T14:00:00').getTime();
+
+  const daysEl = document.getElementById('countdown-days');
+  const hoursEl = document.getElementById('countdown-hours');
+  const minutesEl = document.getElementById('countdown-minutes');
+  const secondsEl = document.getElementById('countdown-seconds');
+
+  if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    // If countdown is finished
+    if (distance < 0) {
+      daysEl.textContent = '00';
+      hoursEl.textContent = '00';
+      minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
+      
+      if (window.closureCountdownInterval) {
+        clearInterval(window.closureCountdownInterval);
+      }
+      return;
+    }
+
+    // Calculate time units
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Update DOM with zero-padding
+    daysEl.textContent = String(days).padStart(2, '0');
+    hoursEl.textContent = String(hours).padStart(2, '0');
+    minutesEl.textContent = String(minutes).padStart(2, '0');
+    secondsEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  // Update immediately
+  updateCountdown();
+
+  // Update every second
+  window.closureCountdownInterval = setInterval(updateCountdown, 1000);
+}
+
+/* ----------------------------------
+   Menu Gallery Popup Initialization
+   Initialize Magnific Popup for menu product images
+----------------------------------- */
+function initMenuGallery() {
+  // Check if jQuery and Magnific Popup are available
+  if (typeof jQuery === 'undefined' || typeof jQuery.fn.magnificPopup === 'undefined') {
+    console.warn('jQuery or Magnific Popup not loaded');
+    return;
+  }
+
+  // Initialize popup for all images with has-popup-image class
+  jQuery('.has-popup-image').magnificPopup({
+    type: 'image',
+    gallery: { 
+      enabled: true,
+      tPrev: 'Previous',
+      tNext: 'Next',
+      tCounter: '%curr% of %total%'
+    },
+    image: { 
+      verticalFit: true,
+      titleSrc: function(item) {
+        return item.el.find('img').attr('alt') || '';
+      }
+    },
+    removalDelay: 160,
+    mainClass: 'mfp-fade',
+    closeBtnInside: true,
+    closeOnContentClick: false,
+    closeOnBgClick: true,
+    showCloseBtn: true
+  });
+}
+
+// Initialize menu gallery when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Wait for jQuery and Magnific Popup to load
+    setTimeout(initMenuGallery, 500);
+  });
+} else {
+  // DOM already loaded
+  setTimeout(initMenuGallery, 500);
+}

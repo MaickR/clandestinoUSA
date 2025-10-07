@@ -24,14 +24,43 @@ header('X-XSS-Protection: 1; mode=block');
 header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
 header('Content-Security-Policy: default-src \'self\'');
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start([
+    'use_strict_mode' => true,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'Lax'
+  ]);
+}
+
+function envValue($key, $default = null) {
+  $value = getenv($key);
+  if ($value === false) {
+    $value = $_SERVER[$key] ?? $_ENV[$key] ?? null;
+  }
+  if ($value === null || $value === '') {
+    return $default;
+  }
+  return $value;
+}
+
+function respond($statusCode, array $payload) {
+  http_response_code($statusCode);
+  echo json_encode($payload);
+  exit;
+}
+
 // Configuration
-define('ENABLE_LOGGING', true); // Set to false to disable logging
-define('LOG_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_logs');
-define('RATE_LIMIT_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_rl');
-define('MAX_HOURLY_SUBMISSIONS', 8); // Reduced from 10 for better protection
-define('MAX_DAILY_SUBMISSIONS', 25);
-define('CSRF_TOKEN_LIFETIME', 3600); // 1 hour
-define('SPAM_SCORE_THRESHOLD', 7); // Block if spam score >= this value
+define('ENABLE_LOGGING', filter_var(envValue('CLX_ENABLE_LOGGING', true), FILTER_VALIDATE_BOOLEAN));
+define('LOG_DIR', envValue('CLX_LOG_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_logs'));
+define('RATE_LIMIT_DIR', envValue('CLX_RL_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_rl'));
+define('MAX_HOURLY_SUBMISSIONS', (int) envValue('CLX_MAX_HOURLY', 8));
+define('MAX_DAILY_SUBMISSIONS', (int) envValue('CLX_MAX_DAILY', 25));
+define('CSRF_TOKEN_LIFETIME', (int) envValue('CLX_CSRF_TTL', 3600));
+define('SPAM_SCORE_THRESHOLD', (int) envValue('CLX_SPAM_THRESHOLD', 7));
+define('MAIL_TO_ADDRESS', envValue('CLX_MAIL_TO', 'info@theclandestinousa.com'));
+define('MAIL_FROM_ADDRESS', envValue('CLX_MAIL_FROM', 'info@theclandestinousa.com'));
+define('MAIL_FROM_NAME', envValue('CLX_MAIL_FROM_NAME', 'The Clandestino USA Website'));
+define('MAIL_ENVELOPE_SENDER', envValue('CLX_MAIL_ENVELOPE', MAIL_FROM_ADDRESS));
 
 /**
  * Enhanced logging function
@@ -59,6 +88,39 @@ function logContactAttempt($level, $message, $data = []) {
   
   $logLine = json_encode($logEntry) . "\n";
   @file_put_contents($logFile, $logLine, FILE_APPEND | LOCK_EX);
+}
+
+/**
+ * Store failed email attempts for manual follow-up
+ */
+function storeFailedEmail($subject, array $headers, $body) {
+  if (!ENABLE_LOGGING) {
+    return null;
+  }
+
+  $dir = LOG_DIR . DIRECTORY_SEPARATOR . 'failed_emails';
+  if (!is_dir($dir)) {
+    @mkdir($dir, 0700, true);
+  }
+
+  try {
+    $token = bin2hex(random_bytes(6));
+  } catch (Exception $e) {
+    try {
+      $token = bin2hex(pack('N', random_int(0, PHP_INT_MAX)));
+    } catch (Exception $ignored) {
+      $token = substr(bin2hex(md5(uniqid('', true))), 0, 12);
+    }
+  }
+
+  $filename = $dir . DIRECTORY_SEPARATOR . sprintf('failed_%s_%s.eml', date('Ymd_His'), $token);
+  $contents = 'Subject: ' . $subject . "\r\n" . implode("\r\n", $headers) . "\r\n\r\n" . $body;
+
+  if (@file_put_contents($filename, $contents) === false) {
+    return null;
+  }
+
+  return $filename;
 }
 
 /**
@@ -172,27 +234,21 @@ function sanitizeInput($value, $type = 'text') {
 // Allow only POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   logContactAttempt('warning', 'Invalid request method', ['method' => $_SERVER['REQUEST_METHOD']]);
-  http_response_code(405);
-  echo json_encode(['success'=>false,'error'=>'method','errorMessage'=>'Method not allowed']);
-  exit;
+  respond(405, ['success'=>false,'error'=>'method','errorMessage'=>'Method not allowed']);
 }
 
 // Enhanced payload size checking
 $postSize = strlen(file_get_contents('php://input'));
 if (empty($_POST) || $postSize > 15000) { // Increased slightly for better UX
   logContactAttempt('warning', 'Payload size violation', ['size' => $postSize]);
-  http_response_code(413);
-  echo json_encode(['success'=>false,'error'=>'size','errorMessage'=>'Request too large']);
-  exit;
+  respond(413, ['success'=>false,'error'=>'size','errorMessage'=>'Request too large']);
 }
 
 // Enhanced CSRF token validation
 $csrf = $_POST['csrf_token'] ?? '';
 if (!$csrf || !preg_match('/^[A-Za-z0-9\-+\/=]{10,}$/', $csrf)) {
   logContactAttempt('warning', 'Invalid CSRF token', ['token_provided' => !empty($csrf)]);
-  http_response_code(400);
-  echo json_encode(['success'=>false,'error'=>'csrf','errorMessage'=>'Security token invalid']);
-  exit;
+  respond(400, ['success'=>false,'error'=>'csrf','errorMessage'=>'Security token invalid']);
 }
 
 // Optional: Time-based CSRF validation (decode timestamp from token if implemented)
@@ -202,9 +258,7 @@ try {
     list($timestamp, $random) = explode('.', $tokenData, 2);
     if (is_numeric($timestamp) && (time() - $timestamp) > CSRF_TOKEN_LIFETIME) {
       logContactAttempt('warning', 'Expired CSRF token', ['age' => time() - $timestamp]);
-      http_response_code(400);
-      echo json_encode(['success'=>false,'error'=>'csrf','errorMessage'=>'Security token expired. Please refresh the page.']);
-      exit;
+      respond(400, ['success'=>false,'error'=>'csrf','errorMessage'=>'Security token expired. Please refresh the page.']);
     }
   }
 } catch (Exception $e) {
@@ -217,8 +271,7 @@ foreach ($honeypotFields as $field) {
   if (!empty($_POST[$field])) {
     logContactAttempt('info', 'Honeypot triggered', ['field' => $field, 'value' => $_POST[$field]]);
     // Pretend success to avoid bot learning
-    echo json_encode(['success'=>true]);
-    exit;
+    respond(200, ['success'=>true]);
   }
 }
 
@@ -283,12 +336,11 @@ if ($subject && !in_array($subject, $allowedSubjects, true)) {
 
 if (!empty($validationErrors)) {
   logContactAttempt('info', 'Validation failed', ['errors' => $validationErrors]);
-  echo json_encode([
+  respond(422, [
     'success' => false,
     'error' => 'validation',
     'errorMessage' => implode('. ', $validationErrors)
   ]);
-  exit;
 }
 
 // Spam detection
@@ -303,12 +355,11 @@ if ($spamCheck['score'] >= SPAM_SCORE_THRESHOLD) {
   ]);
   
   // Return generic error to avoid revealing spam detection
-  echo json_encode([
+  respond(422, [
     'success' => false,
     'error' => 'validation',
     'errorMessage' => 'Your message could not be processed. Please try again later.'
   ]);
-  exit;
 }
 
 // Enhanced rate limiting with progressive delays
@@ -364,12 +415,11 @@ if ($rlData['last_submission'] > 0 && ($currentTime - $rlData['last_submission']
     'violations' => $rlData['violations']
   ]);
   
-  echo json_encode([
+  respond(429, [
     'success' => false,
     'error' => 'rate',
     'errorMessage' => 'Please wait before sending another message.'
   ]);
-  exit;
 }
 
 // Increment counters
@@ -387,12 +437,11 @@ if ($rlData['hourly_count'] > MAX_HOURLY_SUBMISSIONS) {
     'limit' => MAX_HOURLY_SUBMISSIONS
   ]);
   
-  echo json_encode([
+  respond(429, [
     'success' => false,
     'error' => 'rate',
     'errorMessage' => 'Too many messages this hour. Please try again later.'
   ]);
-  exit;
 }
 
 if ($rlData['daily_count'] > MAX_DAILY_SUBMISSIONS) {
@@ -404,19 +453,18 @@ if ($rlData['daily_count'] > MAX_DAILY_SUBMISSIONS) {
     'limit' => MAX_DAILY_SUBMISSIONS
   ]);
   
-  echo json_encode([
+  respond(429, [
     'success' => false,
     'error' => 'rate',
     'errorMessage' => 'Daily message limit reached. Please try again tomorrow.'
   ]);
-  exit;
 }
 
 // Save updated rate limit data
 @file_put_contents($rlFile, json_encode($rlData));
 
 // Enhanced email composition and sending
-$to = 'info@theclandestino.com';
+$to = MAIL_TO_ADDRESS;
 $subjectLine = '[Website Contact] ' . ($subject ?: 'General Inquiry') . ' - ' . date('M j, Y');
 
 // Build comprehensive email body with security context
@@ -449,9 +497,16 @@ $emailLines = [
 $body = implode("\n", $emailLines);
 
 // Enhanced email headers with security information
+$fromHeaderName = MAIL_FROM_NAME;
+$replyToName = str_replace('"', '', $name);
+$fromDomain = 'theclandestinousa.com';
+if (strpos(MAIL_FROM_ADDRESS, '@') !== false) {
+  $fromDomain = substr(strrchr(MAIL_FROM_ADDRESS, '@'), 1);
+}
+
 $headers = [
-  'From: "The Clandestino USA Website" <noreply@theclandestino.com>',
-  'Reply-To: "' . str_replace('"', '', $name) . '" <' . $email . '>',
+  'From: "' . $fromHeaderName . '" <' . MAIL_FROM_ADDRESS . '>',
+  'Reply-To: "' . $replyToName . '" <' . $email . '>',
   'MIME-Version: 1.0',
   'Content-Type: text/plain; charset=UTF-8',
   'Content-Transfer-Encoding: 8bit',
@@ -459,14 +514,21 @@ $headers = [
   'X-Originating-IP: ' . $ip,
   'X-Contact-Form: true',
   'X-Spam-Score: ' . $spamCheck['score'],
-  'Message-ID: <' . md5(uniqid(rand(), true)) . '@theclandestino.com>',
+  'Message-ID: <' . md5(uniqid(rand(), true)) . '@' . $fromDomain . '>',
   'Date: ' . date('r')
 ];
 
 // Attempt to send email with better error handling
 $mailResult = false;
+$fallbackPath = null;
+$headerString = implode("\r\n", $headers);
+$envelopeSender = MAIL_ENVELOPE_SENDER ? sprintf('-f%s', MAIL_ENVELOPE_SENDER) : '';
 try {
-  $mailResult = @mail($to, $subjectLine, $body, implode("\r\n", $headers));
+  if ($envelopeSender) {
+    $mailResult = @mail($to, $subjectLine, $body, $headerString, $envelopeSender);
+  } else {
+    $mailResult = @mail($to, $subjectLine, $body, $headerString);
+  }
   
   if ($mailResult) {
     logContactAttempt('info', 'Message sent successfully', [
@@ -474,37 +536,44 @@ try {
       'email' => $email,
       'subject' => $subject,
       'spam_score' => $spamCheck['score'],
-      'message_length' => strlen($message)
+      'message_length' => strlen($message),
+      'delivery_method' => 'php_mail'
     ]);
   } else {
+    $fallbackPath = storeFailedEmail($subjectLine, $headers, $body);
     logContactAttempt('error', 'Failed to send email', [
       'error' => error_get_last(),
       'name' => $name,
-      'email' => $email
+      'email' => $email,
+      'fallback_saved_to' => $fallbackPath
     ]);
   }
 } catch (Exception $e) {
+  $fallbackPath = storeFailedEmail($subjectLine, $headers, $body);
   logContactAttempt('error', 'Email sending exception', [
     'exception' => $e->getMessage(),
     'name' => $name,
-    'email' => $email
+    'email' => $email,
+    'fallback_saved_to' => $fallbackPath
   ]);
 }
 
 if (!$mailResult) {
-  echo json_encode([
+  $errorMessage = 'We could not send your message automatically. Please try again later or call us directly.';
+  if ($fallbackPath) {
+    $errorMessage = 'We logged your message, but the mail system is unavailable. Please call us to confirm while we follow up.';
+  }
+
+  respond(502, [
     'success' => false,
     'error' => 'send',
-    'errorMessage' => 'Unable to send your message at this time. Please try again later or call us directly.'
+    'errorMessage' => $errorMessage
   ]);
-  exit;
 }
 
 // Success response
-echo json_encode([
+respond(200, [
   'success' => true,
   'message' => 'Thank you for contacting The Clandestino USA! We\'ll get back to you soon.'
 ]);
-
-exit;
 ?>

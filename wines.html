@@ -27,7 +27,7 @@
   <title>Wine List — The Clandestino USA | Spanish & Mediterranean Wines</title>
   <meta name="title" content="Wine List — The Clandestino USA | Spanish & Mediterranean Wines">
   <meta name="description" content="Explore our curated Spanish & Mediterranean wine list: reds, whites, rosés, cava, vermouth & pairings for tapas in Mount Shasta, California.">
-  <meta name="keywords" content="Spanish wines, wine list Mount Shasta, cava, vermouth, Spanish red wine, Mediterranean wine bar, wine pairings tapas">
+  <meta name="keywords" content="Spanish wine list Mount Shasta, Ribera del Duero wines California, Albariño tasting Mount Shasta, cava and vermouth bar Shasta, wine club Northern California, tapas wine pairings Mount Shasta">
   <meta name="author" content="The Clandestino USA">
   <meta name="copyright" content="© 2025 The Clandestino USA. All rights reserved.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -129,6 +129,74 @@
     {"@type": "MenuSection", "name": "Rosés"},
     {"@type": "MenuSection", "name": "Cava & Sparkling"},
     {"@type": "MenuSection", "name": "Vermouth & Aperitifs"}
+  ],
+  "offers": {"@type": "Offer", "priceCurrency": "USD"},
+  "hasMenuItem": [
+    {
+      "@type": "MenuItem",
+      "name": "Adaro",
+      "description": "Elegant Ribera del Duero Tempranillo with silky tannins and red plum notes.",
+      "menuSection": "Reds",
+      "image": "https://theclandestinousa.com/assets/images/wines/ADARO.jpeg",
+      "offers": {
+        "@type": "Offer",
+        "price": "50.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Mystic",
+      "description": "Lees-aged Garnacha and Syrah blend delivering dark fruit and subtle spice.",
+      "menuSection": "Reds",
+      "image": "https://theclandestinousa.com/assets/images/wines/MYSTIC.jpeg",
+      "offers": {
+        "@type": "Offer",
+        "price": "29.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Fagus",
+      "description": "Flagship Aragón Garnacha showcasing bold berries and refined structure.",
+      "menuSection": "Reds",
+      "image": "https://theclandestinousa.com/assets/images/wines/fagus.png",
+      "offers": {
+        "@type": "Offer",
+        "price": "40.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Oceanico",
+      "description": "Atlantic Albariño with saline freshness and bright citrus energy.",
+      "menuSection": "Whites",
+      "image": "https://theclandestinousa.com/assets/images/wines/oceanico.jpg",
+      "offers": {
+        "@type": "Offer",
+        "price": "36.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@type": "MenuItem",
+      "name": "Dionysus",
+      "description": "Creamy sparkling blend of Xarel·lo, Chardonnay, and Macabeo with citrus zest.",
+      "menuSection": "Cava & Sparkling",
+  "image": "https://theclandestinousa.com/assets/images/wines/dyonisus.jpg",
+      "offers": {
+        "@type": "Offer",
+        "price": "28.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
   ]
 }
   </script>
@@ -286,8 +354,12 @@
             <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
+          <li class="navbar-item has-submenu" role="none">
             <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -425,8 +497,8 @@
         <div class="reservation-decor" aria-hidden="true">
           <span class="reservation-orb orb-1"></span>
           <span class="reservation-orb orb-2"></span>
-          <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim">
-          <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim">
+          <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim" role="presentation" aria-hidden="true">
+          <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim" role="presentation" aria-hidden="true">
         </div>
       </div>
   </section>

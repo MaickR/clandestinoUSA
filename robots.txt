@@ -37,7 +37,7 @@ Allow: /assets/css/
 Allow: /assets/js/
 Allow: /assets/images/
 Allow: /assets/favicon/
-Allow: /sw.js
+Allow: /assets/js/swc-carousel.js
 
 # Crawl pacing (advisory; Google ignores Crawl-delay)
 Crawl-delay: 1

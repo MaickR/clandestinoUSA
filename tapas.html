@@ -27,7 +27,7 @@
 	<title>Tapas Menu — The Clandestino USA | Authentic Spanish Small Plates & Conservas</title>
 	<meta name="title" content="Tapas Menu — The Clandestino USA | Authentic Spanish Small Plates & Conservas">
 	<meta name="description" content="Discover authentic Spanish tapas: artisanal charcuterie, farm cheeses, olives, conservas, seasonal plates & chocolate pairings in Mount Shasta, CA.">
-	<meta name="keywords" content="authentic Spanish tapas, tapas Mount Shasta, Spanish charcuterie, Spanish cheeses, conservas, small plates California, tapas bar Northern California">
+	<meta name="keywords" content="authentic Spanish tapas Mount Shasta, Northern California tapas bar, artisan charcuterie takeaway Shasta, gourmet conservas Mount Shasta, Spanish cheese plates California, chocolate pairings Mount Shasta">
 	<meta name="author" content="The Clandestino USA">
 	<meta name="copyright" content="© 2025 The Clandestino USA. All rights reserved.">
 	<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -127,8 +127,59 @@
     {"@type": "MenuSection", "name": "Charcuterie"},
     {"@type": "MenuSection", "name": "Cheeses"},
     {"@type": "MenuSection", "name": "Olives & Conservas"},
-    {"@type": "MenuSection", "name": "Seasonal Specials"}
-  ]
+		{"@type": "MenuSection", "name": "Seasonal Specials"}
+	],
+	"offers": {"@type": "Offer", "priceCurrency": "USD"},
+	"hasMenuItem": [
+		{
+			"@type": "MenuItem",
+			"name": "Mixed Tapas Board",
+			"description": "Curated selection of artisan cheeses and charcuterie for two guests.",
+			"offers": {"@type": "Offer", "price": "24.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/gallery/tapas/the-clandestino-tapas-6.jpeg",
+			"menuSection": "Tapas"
+		},
+		{
+			"@type": "MenuItem",
+			"name": "Sandwich",
+			"description": "Artisanal sandwich featuring premium Spanish sausage or cheese.",
+			"offers": {"@type": "Offer", "price": "14.90", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/bocatas/clandestino-sandwich-15.jpeg",
+			"menuSection": "Tapas"
+		},
+		{
+			"@type": "MenuItem",
+			"name": "Chorizo Sticks",
+			"description": "Premium cured Spanish chorizo snack sticks.",
+			"offers": {"@type": "Offer", "price": "12.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/gallery/tapas/the-clandestino-chorizo.jpeg",
+			"menuSection": "Tapas"
+		},
+		{
+			"@type": "MenuItem",
+			"name": "Olives – Mussels",
+			"description": "Handpicked olives paired with delicately seasoned Mediterranean mussels.",
+			"offers": {"@type": "Offer", "price": "14.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/bocatas/olivas.jpg",
+			"menuSection": "Olives & Conservas"
+		},
+		{
+			"@type": "MenuItem",
+			"name": "Manchego Cheese",
+			"description": "Classic Spanish Manchego wedge with a rich, nutty profile.",
+			"offers": {"@type": "Offer", "price": "24.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/gallery/quesos/manchego.jpg",
+			"menuSection": "Cheeses"
+		},
+		{
+			"@type": "MenuItem",
+			"name": "Artisanal Chocolate",
+			"description": "Handcrafted gourmet chocolate bars in salt, gold, and extra dark varieties.",
+			"offers": {"@type": "Offer", "price": "5.50", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+			"image": "https://theclandestinousa.com/assets/images/chocolate/Clandestino-Chocolate.jpeg",
+			"menuSection": "Seasonal Specials"
+		}
+	]
 }
 	</script>
 	<!-- Breadcrumb -->
@@ -201,7 +252,13 @@
 					</li>
 					<li class="navbar-item" role="none"><a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a></li>
 					<li class="navbar-item" role="none"><a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a></li>
-					<li class="navbar-item" role="none"><a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a></li>
+					<li class="navbar-item has-submenu" role="none">
+						<a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+						<ul class="submenu">
+							<li><a href="contact.html#contact-form">Contact Form</a></li>
+							<li><a href="contact.html#faq">FAQ</a></li>
+						</ul>
+					</li>
 				</ul>
 				<div class="text-center" aria-hidden="true">
 					<p class="headline-1 navbar-title">Visit Us</p>
@@ -295,8 +352,8 @@
         <div class="reservation-decor" aria-hidden="true">
           <span class="reservation-orb orb-1"></span>
           <span class="reservation-orb orb-2"></span>
-          <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim">
-          <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim">
+		  <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" class="shape shape-1 move-anim" role="presentation" aria-hidden="true">
+		  <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" class="shape shape-2 move-anim" role="presentation" aria-hidden="true">
         </div>
       </div>
   </section>

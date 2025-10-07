@@ -2,12 +2,14 @@
   "name": "clandestino-usa",
   "version": "1.0.0",
   "description": "<div align=\"center\">",
-  "main": "sw.js",
+  "main": "assets/js/script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "postcss assets/css/style.css -o assets/css/style.min.css",
     "purge:css": "postcss assets/css/style.css -o assets/css/style.purged.css",
-  "purge:report": "purgecss --css assets/css/style.css --content **/*.html assets/js/**/*.js --out assets/css/purge-report",
-  "build:css": "postcss assets/css/style.css -o assets/css/style.min.css"
+    "purge:report": "purgecss --css assets/css/style.css --content \"**/*.html\" assets/js/**/*.js --out assets/css/purge-report",
+    "lint": "echo \"Configura ESLint y Stylelint aquí\"",
+    "format": "echo \"Configura Prettier aquí\"",
+    "test": "npm run lint"
   },
   "repository": {
     "type": "git",

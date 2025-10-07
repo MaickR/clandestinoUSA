@@ -60,6 +60,7 @@
 
   <!-- ==== ESTILOS ==== -->
   <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/faq-styles.css">
   
 
 
@@ -229,7 +230,7 @@
         <ul class="navbar-list" role="menubar">
 
           <li class="navbar-item" role="none">
-            <a href="#home" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+            <a href="index.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
           </li>
 
           <li class="navbar-item has-submenu" role="none">
@@ -250,8 +251,12 @@
             <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
+          <li class="navbar-item has-submenu" role="none">
             <a href="contact.html" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="#contact-form">Contact Form</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -387,10 +392,10 @@
       </div>
 
       <!-- Decorative Background Shapes (reused) -->
-      <img src="./assets/images/shape-1.png" width="25" height="25" loading="lazy" alt="" class="shape shape-1 move-anim" aria-hidden="true">
-      <img src="./assets/images/shape-1.png" width="20" height="20" loading="lazy" alt="" class="shape shape-2 move-anim" aria-hidden="true">
-      <img src="./assets/images/shape-1.png" width="15" height="15" loading="lazy" alt="" class="shape shape-3 move-anim" aria-hidden="true">
-      <img src="./assets/images/shape-1.png" width="18" height="18" loading="lazy" alt="" class="shape shape-4 move-anim" aria-hidden="true">
+  <img src="./assets/images/shape-1.png" width="25" height="25" loading="lazy" alt="" class="shape shape-1 move-anim" aria-hidden="true" role="presentation">
+  <img src="./assets/images/shape-1.png" width="20" height="20" loading="lazy" alt="" class="shape shape-2 move-anim" aria-hidden="true" role="presentation">
+  <img src="./assets/images/shape-1.png" width="15" height="15" loading="lazy" alt="" class="shape shape-3 move-anim" aria-hidden="true" role="presentation">
+  <img src="./assets/images/shape-1.png" width="18" height="18" loading="lazy" alt="" class="shape shape-4 move-anim" aria-hidden="true" role="presentation">
     </section>
 
 
@@ -497,9 +502,109 @@
               </button>
             </div>
 
-            <div class="clx-status" role="alert" aria-live="polite" aria-atomic="true"></div>
+            <div class="clx-status" role="alert" aria-live="polite" aria-atomic="true" tabindex="-1"></div>
           </form>
         </div>
+      </div>
+    </section>
+
+
+    <!-- Section FAQ -->
+    <section class="section clandestino-faq" id="faq" aria-labelledby="faq-title">
+      <div class="container">
+
+        <div class="clandestino-faq-header text-center">
+          <p class="label-2 section-subtitle">Have Any Questions?</p>
+          <h2 class="headline-1 section-title" id="faq-title">Frequently Asked Questions</h2>
+          <p class="body-3 section-text">
+            Find answers to common questions about reservations, our menu, Wine Club, and more.
+          </p>
+        </div>
+
+        <div class="clandestino-faq-items">
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+              <span class="question-text">How do I make a reservation at The Clandestino?</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-1" hidden>
+              <div class="answer-content">
+                <p>Making a reservation is easy! You can contact us via WhatsApp at <a href="https://wa.me/14086090027" target="_blank" rel="noopener">+1 408-609-0027</a>, call us directly, or use the contact form above. We recommend booking in advance, especially for weekends and special events. Our team responds promptly during business hours (2:00 PM - 8:00 PM daily).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+              <span class="question-text">What type of cuisine do you serve?</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-2" hidden>
+              <div class="answer-content">
+                <p>The Clandestino specializes in authentic Spanish tapas and Mediterranean cuisine. Our menu features traditional dishes from various regions of Spain, including Andalusian tapas, Basque pintxos, and classic paellas. We pride ourselves on using high-quality ingredients and traditional preparation methods to bring you the true flavors of Spain in Mount Shasta.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+              <span class="question-text">Tell me about your Spanish Wine Club</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-3" hidden>
+              <div class="answer-content">
+                <p>Our Spanish Wine Club offers two exclusive membership tiers: <strong>Diamond</strong> ($149/quarter) featuring 4 premium Spanish wines from renowned regions, and <strong>Gold</strong> ($99/quarter) showcasing 4 exquisite Aragonese wines. Members receive curated selections, tasting notes, pairing suggestions, and exclusive invitations to wine events. <a href="swc.html">Learn more about membership benefits</a>.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+              <span class="question-text">Do you accommodate dietary restrictions?</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-4" hidden>
+              <div class="answer-content">
+                <p>Absolutely! We're happy to accommodate various dietary needs including vegetarian, vegan, and gluten-free options. Please inform us of any allergies or dietary restrictions when making your reservation, and our chef will ensure a delicious experience tailored to your needs. Many of our tapas can be adapted to suit different dietary requirements.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+              <span class="question-text">Can you host private events or parties?</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-5" hidden>
+              <div class="answer-content">
+                <p>Yes! The Clandestino is the perfect venue for private celebrations, corporate events, wine tastings, and special occasions. We offer customized menus, dedicated service, and an intimate Spanish ambiance. Contact us to discuss your event requirements, preferred dates, and guest count. Our team will work with you to create an unforgettable experience.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="clandestino-faq-item" data-faq-item>
+            <button class="clandestino-faq-question" aria-expanded="false" aria-controls="faq-answer-6">
+              <span class="question-text">What are your hours of operation?</span>
+              <ion-icon name="chevron-down-outline" class="faq-icon" aria-hidden="true"></ion-icon>
+            </button>
+            <div class="clandestino-faq-answer" id="faq-answer-6" hidden>
+              <div class="answer-content">
+                <p>We're open daily from <strong>2:00 PM to 8:00 PM</strong>, Monday through Sunday. These hours allow us to serve you during the afternoon and evening, perfect for a leisurely Spanish-style dining experience. We recommend arriving early on weekends as we can fill up quickly. For holiday hours or special closures, please check our social media or contact us directly.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="clandestino-faq-cta text-center">
+          <p class="body-2">Still have questions?</p>
+          <a href="#contact-form" class="btn btn-secondary">
+            <span class="text text-1">Contact Us</span>
+            <span class="text text-2" aria-hidden="true">Contact Us</span>
+          </a>
+        </div>
+
       </div>
     </section>
 
@@ -618,384 +723,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" defer></script>
 
-<!-- Contact Form Script -->
-<script>
-/**
- * The Clandestino USA - Contact Form Handler
- * Professional, secure, and accessible form management
- */
-
-(function() {
-  'use strict';
-
-  // Configuration
-  const CONFIG = {
-    formId: 'clx-contact-form',
-    csrfTokenId: 'clx-csrf-token',
-    submitBtnId: 'clx-submit-btn',
-    statusClass: 'clx-status',
-    errorClass: 'clx-error',
-    loadingClass: 'loading',
-    showClass: 'show',
-    successClass: 'success',
-    errorStateClass: 'error',
-    fieldSuccessClass: 'success'
-  };
-
-  // DOM Elements
-  let elements = {};
-
-  // Validation rules
-  const validationRules = {
-    name: {
-      required: true,
-      minLength: 2,
-      maxLength: 80,
-      pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s\-'\.]+$/,
-      message: 'Please enter a valid name (letters only, 2-80 characters)'
-    },
-    email: {
-      required: true,
-      maxLength: 120,
-      pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      message: 'Please enter a valid email address'
-    },
-    tel: {
-      required: true,
-      maxLength: 30,
-      pattern: /^[0-9+()\-\s]{6,}$/,
-      message: 'Please enter a valid phone number'
-    },
-    subject: {
-      required: true,
-      message: 'Please select an inquiry type'
-    },
-    message: {
-      required: true,
-      minLength: 5,
-      maxLength: 1500,
-      message: 'Please enter a message (5-1500 characters)'
-    }
-  };
-
-  // Initialize form
-  function init() {
-    // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initForm);
-    } else {
-      initForm();
-    }
-  }
-
-  function initForm() {
-    // Cache DOM elements
-    cacheElements();
-    
-    if (!elements.form) {
-      console.warn('Contact form not found');
-      return;
-    }
-
-    // Generate CSRF token
-    generateCSRFToken();
-    
-    // Bind events
-    bindEvents();
-    
-    console.log('Clandestino contact form initialized');
-  }
-
-  function cacheElements() {
-    elements = {
-      form: document.getElementById(CONFIG.formId),
-      submitBtn: document.getElementById(CONFIG.submitBtnId),
-      csrfToken: document.getElementById(CONFIG.csrfTokenId),
-      status: document.querySelector('.' + CONFIG.statusClass),
-      fields: {}
-    };
-
-    // Cache form fields
-    if (elements.form) {
-      ['name', 'email', 'tel', 'subject', 'message'].forEach(fieldName => {
-        const field = elements.form.querySelector(`[name="${fieldName}"]`);
-        const errorEl = elements.form.querySelector(`[data-error-for="${fieldName}"]`);
-        const fieldGroup = field ? field.closest('.clx-field-group') : null;
-        
-        if (field) {
-          elements.fields[fieldName] = { field, errorEl, fieldGroup };
-        }
-      });
-    }
-  }
-
-  function generateCSRFToken() {
-    if (!elements.csrfToken) return;
-    
-    // Generate a simple token (in production, this should come from server)
-    const token = btoa(Date.now() + Math.random().toString(36));
-    elements.csrfToken.value = token;
-  }
-
-  function bindEvents() {
-    if (!elements.form || !elements.submitBtn) return;
-
-    // Form submission
-    elements.form.addEventListener('submit', handleSubmit);
-    // Disable submit initially
-    setSubmitEnabled(false);
-
-    // Real-time validation
-    Object.keys(elements.fields).forEach(fieldName => {
-      const { field } = elements.fields[fieldName];
-      if (field) {
-        field.addEventListener('blur', () => {
-          validateField(fieldName);
-          evaluateFormValidity();
-        });
-        field.addEventListener('input', () => {
-          clearFieldError(fieldName);
-          validateField(fieldName); // live validation for better UX
-          evaluateFormValidity();
-        });
-      }
-    });
-
-    // Prevent form resubmission on refresh
-    window.addEventListener('beforeunload', () => {
-      if (elements.submitBtn.classList.contains(CONFIG.loadingClass)) {
-        return 'Form is being submitted. Are you sure you want to leave?';
-      }
-    });
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    
-    if (elements.submitBtn.classList.contains(CONFIG.loadingClass)) {
-      return; // Already submitting
-    }
-
-    if (!evaluateFormValidity(true)) return; // will handle status + focus
-
-    // Submit form
-    submitForm();
-  }
-
-  function validateField(fieldName) {
-    const { field, errorEl, fieldGroup } = elements.fields[fieldName] || {};
-    if (!field || !errorEl || !fieldGroup) return true;
-
-    const rule = validationRules[fieldName];
-    const value = field.value.trim();
-
-    // Clear previous state
-    clearFieldError(fieldName);
-
-    // Required validation
-    if (rule.required && !value) {
-      showFieldError(fieldName, rule.message || `${fieldName} is required`);
-      return false;
-    }
-
-    // Skip other validations if field is empty and not required
-    if (!value && !rule.required) {
-      return true;
-    }
-
-    // Length validation
-    if (rule.minLength && value.length < rule.minLength) {
-      showFieldError(fieldName, `Minimum ${rule.minLength} characters required`);
-      return false;
-    }
-
-    if (rule.maxLength && value.length > rule.maxLength) {
-      showFieldError(fieldName, `Maximum ${rule.maxLength} characters allowed`);
-      return false;
-    }
-
-    // Pattern validation
-    if (rule.pattern && !rule.pattern.test(value)) {
-      showFieldError(fieldName, rule.message);
-      return false;
-    }
-
-    // Field-specific validation
-    if (fieldName === 'subject' && value === '') {
-      showFieldError(fieldName, 'Please select an inquiry type');
-      return false;
-    }
-
-    // Mark as valid
-    fieldGroup.classList.add(CONFIG.fieldSuccessClass);
-    return true;
-  }
-
-  function showFieldError(fieldName, message) {
-    const { errorEl, fieldGroup } = elements.fields[fieldName] || {};
-    if (!errorEl || !fieldGroup) return;
-
-    errorEl.textContent = message;
-    fieldGroup.classList.add(CONFIG.errorStateClass);
-    fieldGroup.classList.remove(CONFIG.fieldSuccessClass);
-  }
-
-  function clearFieldError(fieldName) {
-    const { errorEl, fieldGroup } = elements.fields[fieldName] || {};
-    if (!errorEl || !fieldGroup) return;
-
-    errorEl.textContent = '';
-    fieldGroup.classList.remove(CONFIG.errorStateClass);
-  }
-
-  async function submitForm() {
-    setLoadingState(true);
-    
-    try {
-      const formData = new FormData(elements.form);
-      
-      const response = await fetch('contact.php', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        showStatus('¡Thank you! Your message has been sent successfully. We\'ll get back to you soon.', 'success');
-        resetForm();
-        
-        // Analytics tracking (if implemented)
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'contact_form_submit', {
-            'event_category': 'Contact',
-            'event_label': formData.get('subject') || 'General'
-          });
-        }
-      } else {
-        let errorMessage = 'There was an error sending your message. Please try again.';
-        
-        if (result.errorMessage) {
-          errorMessage = result.errorMessage;
-        }
-        
-        showStatus(errorMessage, 'error');
-        
-        // Handle specific field errors
-        if (result.error === 'validation') {
-          // Could implement field-specific error highlighting here
-        }
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      showStatus('Network error. Please check your connection and try again.', 'error');
-    } finally {
-      setLoadingState(false);
-    }
-  }
-
-  function setLoadingState(loading) {
-    if (!elements.submitBtn) return;
-
-    if (loading) {
-      elements.submitBtn.classList.add(CONFIG.loadingClass);
-      elements.submitBtn.disabled = true;
-    } else {
-      elements.submitBtn.classList.remove(CONFIG.loadingClass);
-      elements.submitBtn.disabled = false;
-    }
-  }
-
-  function showStatus(message, type) {
-    if (!elements.status) return;
-    const icon = type === 'success' ? 'checkmark-circle-outline' : (type === 'error' ? 'alert-circle-outline' : 'information-circle-outline');
-    elements.status.innerHTML = `<div class="clx-status-inner"><ion-icon name="${icon}" aria-hidden="true"></ion-icon><span>${message}</span></div>`;
-    elements.status.className = `${CONFIG.statusClass} ${CONFIG.showClass} ${type}`;
-
-    // Auto-hide success messages after 8 seconds
-    if (type === 'success') {
-      setTimeout(() => {
-        hideStatus();
-      }, 8000);
-    }
-
-    // Scroll to status message
-    elements.status.scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'nearest' 
-    });
-  }
-
-  function hideStatus() {
-    if (!elements.status) return;
-
-    elements.status.classList.remove(CONFIG.showClass);
-  }
-
-  function evaluateFormValidity(scrollToError = false) {
-    let allValid = true;
-    Object.keys(validationRules).forEach(fieldName => {
-      if (!validateField(fieldName)) allValid = false;
-    });
-    setSubmitEnabled(allValid);
-
-    if (!allValid && scrollToError) {
-      showStatus('Please correct the highlighted fields.', 'error');
-      const firstErrorField = elements.form.querySelector('.clx-field-group.error input, .clx-field-group.error select, .clx-field-group.error textarea');
-      if (firstErrorField) {
-        firstErrorField.focus({ preventScroll: false });
-      }
-      return false;
-    }
-    return allValid;
-  }
-
-  function setSubmitEnabled(enabled) {
-    if (!elements.submitBtn) return;
-    elements.submitBtn.disabled = !enabled;
-    elements.submitBtn.classList.toggle('disabled', !enabled);
-    elements.submitBtn.setAttribute('aria-disabled', !enabled ? 'true' : 'false');
-  }
-
-  function resetForm() {
-    if (!elements.form) return;
-
-    // Reset form fields
-    elements.form.reset();
-    
-    // Clear validation states
-    Object.keys(elements.fields).forEach(fieldName => {
-      clearFieldError(fieldName);
-      const { fieldGroup } = elements.fields[fieldName] || {};
-      if (fieldGroup) {
-        fieldGroup.classList.remove(CONFIG.fieldSuccessClass);
-      }
-    });
-
-    // Generate new CSRF token
-    generateCSRFToken();
-    
-    // Focus first field
-    const firstField = elements.form.querySelector('input, select, textarea');
-    if (firstField) {
-      setTimeout(() => firstField.focus(), 100);
-    }
-  }
-
-  // Public API (if needed)
-  window.ClandestinoContact = {
-    validateField,
-    resetForm,
-    showStatus
-  };
-
-  // Initialize when script loads
-  init();
-})();
-</script>
+<!-- Contact Form functionality is handled in assets/js/script.js -->
     
 
   <!-- 
@@ -1006,12 +734,141 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" defer></script>
 
   <script type="module" src="./assets/js/script.js" defer></script>
+
+  <!-- FAQ Functionality -->
+  <script>
+    /**
+     * The Clandestino FAQ Accordion
+     * Elegant, accessible, smooth animations
+     */
+    (function() {
+      'use strict';
+
+      // Wait for DOM to be ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFAQ);
+      } else {
+        initFAQ();
+      }
+
+      function initFAQ() {
+        const faqItems = document.querySelectorAll('[data-faq-item]');
+        
+        if (!faqItems.length) {
+          console.warn('No FAQ items found');
+          return;
+        }
+
+        // Initialize each FAQ item
+        faqItems.forEach(item => {
+          const question = item.querySelector('.clandestino-faq-question');
+          const answer = item.querySelector('.clandestino-faq-answer');
+
+          if (!question || !answer) return;
+
+          // Add click handler
+          question.addEventListener('click', () => toggleFAQ(item, question, answer));
+
+          // Keyboard accessibility
+          question.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleFAQ(item, question, answer);
+            }
+          });
+        });
+
+        // Optional: Open first item by default
+        // const firstItem = faqItems[0];
+        // if (firstItem) {
+        //   const firstQuestion = firstItem.querySelector('.clandestino-faq-question');
+        //   const firstAnswer = firstItem.querySelector('.clandestino-faq-answer');
+        //   if (firstQuestion && firstAnswer) {
+        //     openFAQ(firstItem, firstQuestion, firstAnswer);
+        //   }
+        // }
+
+        console.log('Clandestino FAQ initialized with', faqItems.length, 'items');
+      }
+
+      function toggleFAQ(item, question, answer) {
+        const isExpanded = question.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+          closeFAQ(item, question, answer);
+        } else {
+          // Optional: Close other open items (accordion behavior)
+          closeAllFAQs();
+          openFAQ(item, question, answer);
+        }
+      }
+
+      function openFAQ(item, question, answer) {
+        // Update attributes
+        question.setAttribute('aria-expanded', 'true');
+        answer.removeAttribute('hidden');
+        item.setAttribute('data-faq-active', '');
+
+        // Smooth scroll to item if needed
+        const rect = item.getBoundingClientRect();
+        const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        
+        if (!isInViewport) {
+          setTimeout(() => {
+            item.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'nearest' 
+            });
+          }, 100);
+        }
+      }
+
+      function closeFAQ(item, question, answer) {
+        question.setAttribute('aria-expanded', 'false');
+        answer.setAttribute('hidden', '');
+        item.removeAttribute('data-faq-active');
+      }
+
+      function closeAllFAQs() {
+        const openItems = document.querySelectorAll('[data-faq-item][data-faq-active]');
+        openItems.forEach(item => {
+          const question = item.querySelector('.clandestino-faq-question');
+          const answer = item.querySelector('.clandestino-faq-answer');
+          if (question && answer) {
+            closeFAQ(item, question, answer);
+          }
+        });
+      }
+
+      // Public API (if needed)
+      window.ClandestinoFAQ = {
+        openAll: function() {
+          document.querySelectorAll('[data-faq-item]').forEach(item => {
+            const question = item.querySelector('.clandestino-faq-question');
+            const answer = item.querySelector('.clandestino-faq-answer');
+            if (question && answer) openFAQ(item, question, answer);
+          });
+        },
+        closeAll: closeAllFAQs
+      };
+    })();
+  </script>
+
   <noscript>
     <style>
       /* Keep content visible and readable if JS is disabled */
       .clandestino-preloader{display:none!important}
+      /* Show all FAQ answers when JS is disabled */
+      .clandestino-faq-answer {
+        max-height: none !important;
+        opacity: 1 !important;
+        padding: 0 2.4rem 2.4rem !important;
+      }
+      .clandestino-faq-question .faq-icon {
+        display: none;
+      }
     </style>
-    <p style="text-align:center;padding:1rem" class="body-3">JavaScript is disabled. Wine filtering and the image gallery require JavaScript to function.</p>
+    <p style="text-align:center;padding:1rem" class="body-3">JavaScript is disabled. FAQ functionality and form validation require JavaScript.</p>
   </noscript>
 </body>
 </html>

@@ -189,7 +189,13 @@
           </li>
           <li class="navbar-item" role="none"><a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a></li>
           <li class="navbar-item" role="none"><a href="swc.html" class="navbar-link hover-underline active" aria-current="page" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a></li>
-          <li class="navbar-item" role="none"><a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a></li>
+          <li class="navbar-item has-submenu" role="none">
+            <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
+          </li>
         </ul>
 				<div class="text-center" aria-hidden="true">
 					<p class="headline-1 navbar-title">Visit Us</p>
@@ -246,12 +252,12 @@
           </h3>
         </div>
 
-        <div class="clandestino-swc-carousel">
-          <div class="swiper-container">
-            <div class="swiper-wrapper">
+        <div class="clandestino-swc-carousel" role="region" aria-roledescription="carousel" aria-label="Spanish Wine Club highlights" aria-live="polite">
+          <div class="swiper-container" tabindex="0">
+            <div class="swiper-wrapper" role="presentation">
 
               <!-- Slide 1: SWC Spirit -->
-              <div class="swiper-slide">
+              <div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="Slide 1 of 4">
                 <div class="clandestino-swc-item element-anim-1 scroll-animate" data-animate="active">
                   <div class="image">
                     <picture>
@@ -274,7 +280,7 @@
               </div>
 
               <!-- Slide 2: Denominations & Origin -->
-              <div class="swiper-slide">
+              <div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="Slide 2 of 4">
                 <div class="clandestino-swc-item element-anim-1 scroll-animate" data-animate="active">
                   <div class="image">
                     <img src="./assets/images/wines.jpeg" alt="Map of Spanish appellations explored in the club" loading="lazy">
@@ -293,7 +299,7 @@
               </div>
 
               <!-- Slide 3: Culture & Experience -->
-              <div class="swiper-slide">
+              <div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="Slide 3 of 4">
                 <div class="clandestino-swc-item element-anim-1 scroll-animate" data-animate="active">
                   <div class="image">
                     <picture>
@@ -316,7 +322,7 @@
               </div>
 
               <!-- Slide 4: VIP Membership -->
-              <div class="swiper-slide">
+              <div class="swiper-slide" role="group" aria-roledescription="slide" aria-label="Slide 4 of 4">
                 <div class="clandestino-swc-item element-anim-1 scroll-animate" data-animate="active">
                   <div class="image">
                     <picture>
@@ -339,7 +345,9 @@
               </div>
 
             </div>
-            <!-- Controls removed per request (pagination & navigation) -->
+            <div class="swiper-pagination" aria-hidden="true"></div>
+            <button class="swiper-button-prev" type="button" aria-label="View previous highlight"></button>
+            <button class="swiper-button-next" type="button" aria-label="View next highlight"></button>
           </div>
         </div>
 
@@ -429,8 +437,8 @@
         </ul>
 
         <!-- Decorative shapes (same as other sections) -->
-  <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" aria-hidden="true" class="shape shape-1 move-anim">
-  <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" aria-hidden="true" class="shape shape-2 move-anim">
+  <img src="./assets/images/shape-1.png" width="246" height="412" loading="lazy" alt="" aria-hidden="true" class="shape shape-1 move-anim" role="presentation">
+  <img src="./assets/images/shape-2.png" width="343" height="345" loading="lazy" alt="" aria-hidden="true" class="shape shape-2 move-anim" role="presentation">
       </div>
     </section>
 
@@ -890,12 +898,12 @@
     <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
   </a>
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" defer></script>
 
 <!-- Swiper -->
-<script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js"></script>
+<script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js" defer></script>
 
-<!-- Removed sw.js (old SWC carousel script) -->
+<script src="./assets/js/swc-carousel.js" defer></script>
 
  <script type="module" src="./assets/js/script.js" defer></script>
  <script type="module" src="./assets/js/gallery.js" defer></script>
