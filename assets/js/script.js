@@ -1318,8 +1318,8 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
       required: true,
       minLength: 2,
       maxLength: 80,
-      pattern: /^[a-zA-ZÀ-ÿ\u00f1\u00d1\s\-'\.]+$/,
-      message: 'Please enter a valid name (letters only, 2-80 characters)'
+      pattern: /^[a-zA-ZÀ-ÿ\u00c0-\u017f\s\-'\.]+$/u,
+      message: 'Please enter a valid name (2-80 characters)'
     },
     email: {
       required: true,
@@ -1494,7 +1494,12 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
     if (!field || !errorEl || !fieldGroup) return true;
 
     const rule = validationRules[fieldName];
-    const value = field.value.trim();
+    let value = field.value.trim();
+    
+    // For name field, also normalize multiple spaces to single space
+    if (fieldName === 'name') {
+      value = value.replace(/\s+/g, ' ');
+    }
 
     // Clear previous state
     if (showError) {
@@ -1504,7 +1509,12 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
     // Required validation
     if (rule.required && !value) {
       if (showError) {
-        showFieldError(fieldName, rule.message || `${fieldName} is required`);
+        const fieldLabel = fieldName === 'name' ? 'Name' : 
+                          fieldName === 'email' ? 'Email' :
+                          fieldName === 'tel' ? 'Phone number' :
+                          fieldName === 'subject' ? 'Subject' :
+                          fieldName === 'message' ? 'Message' : fieldName;
+        showFieldError(fieldName, `${fieldLabel} is required`);
       }
       return false;
     }
@@ -1517,14 +1527,20 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
     // Length validation
     if (rule.minLength && value.length < rule.minLength) {
       if (showError) {
-        showFieldError(fieldName, `Minimum ${rule.minLength} characters required`);
+        const fieldLabel = fieldName === 'name' ? 'Name' : 
+                          fieldName === 'message' ? 'Message' : 
+                          fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+        showFieldError(fieldName, `${fieldLabel} must be at least ${rule.minLength} characters`);
       }
       return false;
     }
 
     if (rule.maxLength && value.length > rule.maxLength) {
       if (showError) {
-        showFieldError(fieldName, `Maximum ${rule.maxLength} characters allowed`);
+        const fieldLabel = fieldName === 'name' ? 'Name' : 
+                          fieldName === 'message' ? 'Message' : 
+                          fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+        showFieldError(fieldName, `${fieldLabel} must be less than ${rule.maxLength} characters`);
       }
       return false;
     }
@@ -1532,7 +1548,12 @@ window.addEventListener('load', initCtaBookingAnimation); // Fallback for dynami
     // Pattern validation
     if (rule.pattern && !rule.pattern.test(value)) {
       if (showError) {
-        showFieldError(fieldName, rule.message);
+        // Special handling for name field
+        if (fieldName === 'name') {
+          showFieldError(fieldName, 'Please enter a valid name (only letters, spaces, hyphens, and apostrophes allowed)');
+        } else {
+          showFieldError(fieldName, rule.message);
+        }
       }
       return false;
     }
