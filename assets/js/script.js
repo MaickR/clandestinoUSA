@@ -1795,13 +1795,14 @@ function initClosureModal() {
   const modalContent = modal.querySelector('.closure-modal-content');
   if (!modalContent) return;
 
-  // Only show modal until October 13, 2025
+  // Check if current date is on or after October 13, 2025
   const now = new Date();
-  const stopShowingDate = new Date('2025-10-13T23:59:59');
+  const closureStartDate = new Date('2025-10-13T00:00:00');
+  const reopenDate = new Date('2025-11-20T14:00:00');
   
-  // If current date is after October 13, don't show modal
-  if (now > stopShowingDate) {
-    return;
+  // Only show modal if we're in the closure period (Oct 13 - Nov 20, 2025)
+  if (now < closureStartDate || now >= reopenDate) {
+    return; // Don't show modal outside closure period
   }
 
   // Show modal
@@ -1859,7 +1860,7 @@ function initClosureModal() {
    Countdown Timer to November 20, 2025
 ----------------------------------- */
 function initCountdownTimer() {
-  // Target date: November 20, 2025 at 2:00 PM (Reopening date)
+  // Target date: November 20, 2025 at 2:00 PM (Reopening Date)
   const targetDate = new Date('2025-11-20T14:00:00').getTime();
 
   const daysEl = document.getElementById('countdown-days');
