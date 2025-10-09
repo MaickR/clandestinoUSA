@@ -1795,6 +1795,15 @@ function initClosureModal() {
   const modalContent = modal.querySelector('.closure-modal-content');
   if (!modalContent) return;
 
+  // Only show modal until October 13, 2025
+  const now = new Date();
+  const stopShowingDate = new Date('2025-10-13T23:59:59');
+  
+  // If current date is after October 13, don't show modal
+  if (now > stopShowingDate) {
+    return;
+  }
+
   // Show modal
   setTimeout(function() {
     modal.classList.add('active');
@@ -1847,11 +1856,11 @@ function initClosureModal() {
 }
 
 /* ----------------------------------
-   Countdown Timer to October 30, 2025
+   Countdown Timer to November 20, 2025
 ----------------------------------- */
 function initCountdownTimer() {
-  // Target date: October 30, 2025 at 2:00 PM
-  const targetDate = new Date('2025-10-30T14:00:00').getTime();
+  // Target date: November 20, 2025 at 2:00 PM (Reopening date)
+  const targetDate = new Date('2025-11-20T14:00:00').getTime();
 
   const daysEl = document.getElementById('countdown-days');
   const hoursEl = document.getElementById('countdown-hours');
