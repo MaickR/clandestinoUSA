@@ -220,8 +220,9 @@ function sanitizeInput($value, $type = 'text') {
       $value = preg_replace('/[^0-9+()\-\s]/', '', $value);
       break;
     case 'name':
-      // Allow letters, spaces, hyphens, apostrophes, and dots
-      $value = preg_replace('/[^a-zA-ZÀ-ÿ\u00f1\u00d1\s\-\'\.]/', '', $value);
+      // Allow Unicode letters, spaces, hyphens, apostrophes, and dots
+      // Using \p{L} to match any Unicode letter character
+      $value = preg_replace('/[^\p{L}\s\-\'\.]/u', '', $value);
       break;
     default:
       // General text sanitization
@@ -290,8 +291,8 @@ if (mb_strlen($name) < 2) {
   $validationErrors[] = 'Name must be at least 2 characters';
 } elseif (mb_strlen($name) > 80) {
   $validationErrors[] = 'Name must be less than 80 characters';
-} elseif (!preg_match('/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s\-\'\.]+$/u', $name)) {
-  $validationErrors[] = 'Name contains invalid characters';
+} elseif (!preg_match('/^[\p{L}\s\-\'\.]+$/u', $name)) {
+  $validationErrors[] = 'Name contains invalid characters (only letters, spaces, hyphens, apostrophes, and periods allowed)';
 }
 
 // Email validation
