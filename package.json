@@ -5,6 +5,9 @@
   "main": "assets/js/script.js",
   "scripts": {
     "build:css": "postcss assets/css/style.css -o assets/css/style.min.css",
+    "build:css:faq": "postcss assets/css/faq-styles.css -o assets/css/faq-styles.min.css",
+    "minify:js": "terser assets/js/script.js -o assets/js/script.min.js -c -m && terser assets/js/gallery.js -o assets/js/gallery.min.js -c -m && terser assets/js/hampers.js -o assets/js/hampers.min.js -c -m && terser assets/js/preloader.js -o assets/js/preloader.min.js -c -m && terser assets/js/reservation.js -o assets/js/reservation.min.js -c -m && terser assets/js/swc-carousel.js -o assets/js/swc-carousel.min.js -c -m && terser assets/js/tapas.js -o assets/js/tapas.min.js -c -m && terser assets/js/utils.js -o assets/js/utils.min.js -c -m && terser assets/js/wines.js -o assets/js/wines.min.js -c -m && terser sw.js -o sw.min.js -c -m",
+    "minify:all": "npm run build:css && npm run build:css:faq && npm run minify:js",
     "purge:css": "postcss assets/css/style.css -o assets/css/style.purged.css",
     "purge:report": "purgecss --css assets/css/style.css --content \"**/*.html\" assets/js/**/*.js --out assets/css/purge-report",
     "lint": "echo \"Configura ESLint y Stylelint aquí\"",
@@ -26,9 +29,11 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
     "autoprefixer": "^10.4.21",
+    "clean-css-cli": "^5.6.3",
     "cssnano": "^7.1.1",
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
-    "purgecss": "^7.0.2"
+    "purgecss": "^7.0.2",
+    "terser": "^5.44.0"
   }
 }
