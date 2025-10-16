@@ -1847,11 +1847,11 @@ function initClosureModal() {
 }
 
 /* ----------------------------------
-   Countdown Timer to November 20, 2025
+   Countdown Timer to November 8, 2025
 ----------------------------------- */
 function initCountdownTimer() {
-  // Target date: November 20, 2025 at 2:00 PM
-  const targetDate = new Date('2025-11-20T14:00:00').getTime();
+  // Target date: November 8, 2025 at 2:00 PM
+  const targetDate = new Date('2025-11-08T14:00:00').getTime();
 
   const daysEl = document.getElementById('countdown-days');
   const hoursEl = document.getElementById('countdown-hours');
