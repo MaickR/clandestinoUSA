@@ -53,8 +53,8 @@ function respond($statusCode, array $payload) {
 define('ENABLE_LOGGING', filter_var(envValue('CLX_ENABLE_LOGGING', true), FILTER_VALIDATE_BOOLEAN));
 define('LOG_DIR', envValue('CLX_LOG_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_logs'));
 define('RATE_LIMIT_DIR', envValue('CLX_RL_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_rl'));
-define('MAX_HOURLY_SUBMISSIONS', (int) envValue('CLX_MAX_HOURLY', 8));
-define('MAX_DAILY_SUBMISSIONS', (int) envValue('CLX_MAX_DAILY', 25));
+define('MAX_HOURLY_SUBMISSIONS', (int) envValue('CLX_MAX_HOURLY', 50));
+define('MAX_DAILY_SUBMISSIONS', (int) envValue('CLX_MAX_DAILY', 100));
 define('CSRF_TOKEN_LIFETIME', (int) envValue('CLX_CSRF_TTL', 3600));
 define('SPAM_SCORE_THRESHOLD', (int) envValue('CLX_SPAM_THRESHOLD', 7));
 define('MAIL_TO_ADDRESS', envValue('CLX_MAIL_TO', 'info@theclandestinousa.com'));

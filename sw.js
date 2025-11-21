@@ -18,6 +18,6 @@
   document.head.appendChild(script);
 
   if (typeof console !== "undefined" && console.warn) {
-    console.warn("sw.js is deprecated. Use assets/js/swc-carousel.js instead.");
+    // console.warn("sw.js is deprecated. Use assets/js/swc-carousel.js instead.");
   }
 })();
