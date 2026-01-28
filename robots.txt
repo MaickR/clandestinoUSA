@@ -1,4 +1,11 @@
-﻿User-agent: *
+﻿# =============================================================================
+# robots.txt — The Clandestino USA
+# https://theclandestinousa.com
+# Last updated: 2026-01-28
+# =============================================================================
+
+# Default rules for all crawlers
+User-agent: *
 Allow: /
 
 # Disallow sensitive, backend, or documentation files
@@ -7,7 +14,7 @@ Disallow: /offline.html
 Disallow: /README.md
 Disallow: /style-guide.md
 Disallow: /CHANGELOG.md
-Disallow: /TECHNICAL_AUDIT_*.md
+Disallow: /TECHNICAL_AUDIT*.md
 Disallow: /MINIFICATION_FINAL_REPORT.md
 Disallow: /package.json
 Disallow: /package-lock.json
@@ -16,10 +23,83 @@ Disallow: /.htaccess
 Disallow: /.gitignore
 Disallow: /.git/
 Disallow: /node_modules/
+Disallow: /sw.js
 
-# Disallow source maps and raw assets if necessary (optional but recommended for clean crawling)
+# Disallow source maps (clean crawling)
 Disallow: /assets/js/*.map
 Disallow: /assets/css/*.map
 
-# Sitemap location
+# Disallow backup and legacy files
+Disallow: /*.backup
+Disallow: /*.backup.js
+
+# =============================================================================
+# Search Engine Specific Optimizations
+# =============================================================================
+
+# Googlebot — Allow full access, optimize crawl budget
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Googlebot-Image — Allow all images for Google Image Search
+User-agent: Googlebot-Image
+Allow: /assets/images/
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.png
+Allow: /*.webp
+Allow: /*.avif
+Allow: /*.svg
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 2
+
+# DuckDuckBot
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 2
+
+# Facebook crawler (for Open Graph)
+User-agent: facebookexternalhit
+Allow: /
+
+# Twitter crawler (for Twitter Cards)
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn crawler
+User-agent: LinkedInBot
+Allow: /
+
+# Pinterest crawler
+User-agent: Pinterest
+Allow: /assets/images/
+
+# Block known bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+# =============================================================================
+# Sitemap Location
+# =============================================================================
 Sitemap: https://theclandestinousa.com/sitemap.xml
+
+# =============================================================================
+# Host directive (for Yandex and some crawlers)
+# =============================================================================
+Host: https://theclandestinousa.com

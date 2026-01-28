@@ -1,81 +1,97 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://theclandestinousa.com/</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg</image:loc>
+      <image:title>The Clandestino USA Spanish Restaurant</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/menu.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg</image:loc>
+      <image:title>Spanish Tapas Menu</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/wines.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/wines.jpg</image:loc>
+      <image:title>Spanish Wine Selection</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/tapas.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg</image:loc>
+      <image:title>Tapas and Charcuterie</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/hampers.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/hampers/basket-01.webp</image:loc>
+      <image:title>Spanish Gift Hampers</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/swc.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/bg/swc.jpg</image:loc>
+      <image:title>Spanish Wine Club</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/about.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://theclandestinousa.com/assets/images/about-banner.jpg</image:loc>
+      <image:title>About The Clandestino USA</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://theclandestinousa.com/contact.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://theclandestinousa.com/links.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://theclandestinousa.com/policies.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://theclandestinousa.com/terms.html</loc>
-    <lastmod>2025-11-21</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-</urlset>
-  <url>
-    <loc>https://theclandestinousa.com/policies.html</loc>
-    <lastmod>2025-11-21</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://theclandestinousa.com/terms.html</loc>
-    <lastmod>2025-11-21</lastmod>
+    <lastmod>2026-01-28</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>

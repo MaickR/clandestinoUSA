@@ -29,7 +29,7 @@
   <meta name="description" content="Experience authentic Spanish tapas and curated wines at The Clandestino USA in Mount Shasta, California. Join our Spanish Wine Club, book private events, or reserve your table for an unforgettable Mediterranean dining experience.">
   <meta name="keywords" content="Spanish restaurant Mount Shasta, tapas California, Spanish wine Restaurant, Mediterranean food Mount Shasta, Spanish Wine Club, authentic tapas, Spanish cuisine Northern California, wine tasting Mount Shasta, Spanish restaurant California">
   <meta name="author" content="The Clandestino USA">
-  <meta name="copyright" content="© 2025 The Clandestino USA. All rights reserved.">
+  <meta name="copyright" content="© 2026 The Clandestino USA. All rights reserved.">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="googlebot" content="index, follow">
   <meta name="bingbot" content="index, follow">
@@ -54,7 +54,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="The Clandestino USA">
   <meta property="og:locale" content="en_US">
-  <meta property="og:updated_time" content="2025-08-26T00:00:00Z">
+  <meta property="og:updated_time" content="2026-01-28T00:00:00Z">
   <meta property="restaurant:contact_info:street_address" content="211 N Mt Shasta Blvd">
   <meta property="restaurant:contact_info:locality" content="Mount Shasta">
   <meta property="restaurant:contact_info:region" content="CA">
@@ -84,11 +84,14 @@
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-  <!-- Preconnect Ionicons CDN -->
+  <!-- Preconnect para CDNs externos (mejora tiempo de carga) -->
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="dns-prefetch" href="https://unpkg.com">
-
+  
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  
   <!-- 
     - custom css link
   -->
@@ -96,12 +99,12 @@
   <!-- Swiper CSS for testimonials carousel -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css">
 
-  <!-- 
-    - preload images
-  -->
-  <link rel="preload" as="image" href="./assets/images/bg/the-clandestino-usa.jpg" />
-  <link rel="preload" as="image" href="./assets/images/bg/clandestino-friends.jpg" />
-  <link rel="preload" as="image" href="./assets/images/bg/clandestino-tapas.jpg" />
+  <!-- Preload Critical Images (AVIF for performance, with fallback) -->
+  <link rel="preload" as="image" href="./assets/images/avif/bg/the-clandestino-usa.avif" type="image/avif">
+  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-friends.avif" type="image/avif">
+  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-tapas.avif" type="image/avif">
+  <!-- Preload critical CSS -->
+  <link rel="preload" as="style" href="./assets/css/style.css">
 
   <!-- JSON-LD Structured Data (Organization + WebSite + Restaurant + WebPage) -->
   <script type="application/ld+json">
@@ -156,7 +159,7 @@
         "telephone": "+1-408-609-0027",
         "acceptsReservations": true,
         "hasMenu": "https://theclandestinousa.com/menu.html",
-        "openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "14:00","closes": "20:00"}]
+        "openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday"],"opens": "00:00","closes": "00:00","description": "SWC Members & Special Events Only"},{"@type": "OpeningHoursSpecification","dayOfWeek": ["Wednesday","Sunday"],"opens": "13:00","closes": "19:00"},{"@type": "OpeningHoursSpecification","dayOfWeek": ["Thursday","Friday","Saturday"],"opens": "13:00","closes": "20:00"}]
       },
       {
         "@type": "WebPage",
@@ -166,7 +169,7 @@
         "isPartOf": {"@id": "https://theclandestinousa.com/#website"},
         "about": {"@id": "https://theclandestinousa.com/#restaurant"},
         "primaryImageOfPage": {"@id": "https://theclandestinousa.com/#logo"},
-        "dateModified": "2025-08-26T00:00:00Z",
+        "dateModified": "2026-01-28T00:00:00Z",
         "inLanguage": "en-US"
       }
     ]
@@ -226,12 +229,12 @@
       <div class="separator" aria-hidden="true" role="separator"></div>
 
       <!-- Hours with Schema -->
-      <div class="topbar-item item-2" itemprop="openingHours" content="Mo-Su 14:00-20:00">
+      <div class="topbar-item item-2" itemprop="openingHours" content="We 13:00-19:00, Th-Sa 13:00-20:00, Su 13:00-19:00">
         <div class="icon" aria-hidden="true">
           <ion-icon name="time-outline" role="img" aria-label="Opening hours"></ion-icon>
         </div>
         <span class="span">
-          <time datetime="14:00/20:00">Daily: 2:00 PM to 8:00 PM</time>
+          <time datetime="13:00/20:00">Wed-Sun: 1 PM - 7/8 PM</time>
         </span>
       </div>
 
@@ -342,7 +345,7 @@
             US 96067, US
           </address>
 
-            <p class="body-4 navbar-text">Open: Monday to Sunday, 2:00 pm - 8:00 pm</p>
+            <p class="body-4 navbar-text">Wed & Sun: 1-7 PM | Thu-Sat: 1-8 PM<br><small>Mon-Tue: SWC & Events Only</small></p>
 
           <a href="mailto:info@theclandestinousa.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">info@theclandestinousa.com</a>
 
@@ -1599,7 +1602,7 @@
       <div class="footer-bottom">
 
         <p class="copyright">
-          &copy; 2025 ByteForge. All Rights Reserved | Crafted by <a href="#" class="link" rel="noopener">ByteForge</a>
+          &copy; 2026 ByteForge. All Rights Reserved | Crafted by <a href="#" class="link" rel="noopener">ByteForge</a>
         </p>
 
       </div>

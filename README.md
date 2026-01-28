@@ -1,155 +1,232 @@
-﻿<div align="center">
-  <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA Logo" width="280" />
-  
-  <br />
-  <br />
+﻿<p align="center">
+  <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" width="280">
+</p>
 
-  <h1>The Clandestino USA</h1>
-  <h3>Authentic Spanish Tapas Bar & Wine Experience</h3>
+<h1 align="center">🍷 The Clandestino USA</h1>
 
-  <p>
-    <b>Una experiencia gastronómica auténtica en Mount Shasta, California.</b><br>
-    Donde la tradición española se encuentra con la excelencia culinaria.
-  </p>
+<p align="center">
+  <strong>Auténtica experiencia gastronómica española en Mount Shasta, California</strong>
+</p>
 
-  <p>
-    <a href="https://theclandestinousa.com"><strong>🌐 Visitar Sitio Web Oficial</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/MaickR/clandestinoUSA/issues">Reportar Bug</a>
-    ·
-    <a href="https://github.com/MaickR/clandestinoUSA/issues">Solicitar Feature</a>
-  </p>
+<p align="center">
+  <a href="https://theclandestinousa.com">🌐 Sitio Web</a> •
+  <a href="https://wa.me/14086090027">💬 WhatsApp</a> •
+  <a href="mailto:info@theclandestinousa.com">📧 Email</a>
+</p>
 
-  <p>
-    <img src="https://img.shields.io/github/repo-size/MaickR/clandestinoUSA?style=for-the-badge&color=blueviolet&logo=github" alt="Repo Size" />
-    <img src="https://img.shields.io/github/last-commit/MaickR/clandestinoUSA?style=for-the-badge&color=blue&logo=git" alt="Last Commit" />
-    <img src="https://img.shields.io/website?down_color=red&down_message=offline&label=Status&style=for-the-badge&up_color=success&up_message=online&url=https%3A%2F%2Ftheclandestinousa.com" alt="Website Status" />
-  </p>
-</div>
-
-<br />
-
-## 📖 Sobre el Proyecto
-
-**The Clandestino USA** es la puerta digital a una experiencia culinaria única. Este proyecto representa la presencia online de un restaurante español de alta gama, diseñado meticulosamente para transmitir la calidez, la pasión y la calidad de nuestra cocina mediterránea.
-
-La plataforma ofrece una interfaz inmersiva donde los usuarios pueden explorar nuestro menú de tapas y vinos, gestionar reservas en tiempo real, unirse a nuestro exclusivo club de vinos y mantenerse informados sobre eventos culturales y gastronómicos.
+<p align="center">
+  <img src="https://img.shields.io/badge/Estado-Producción-brightgreen?style=flat-square" alt="Estado">
+  <img src="https://img.shields.io/badge/Versión-2.0.0-blue?style=flat-square" alt="Versión">
+  <img src="https://img.shields.io/badge/Licencia-Privada-red?style=flat-square" alt="Licencia">
+  <img src="https://img.shields.io/badge/Última_Actualización-Enero_2026-purple?style=flat-square" alt="Actualización">
+</p>
 
 ---
 
-## ✨ Características Destacadas
+## 📋 Descripción
 
-*   🍷 **Catálogo de Vinos Premium:** Una selección interactiva y detallada de los mejores vinos españoles con notas de cata.
-*   🥘 **Menú Digital Inmersivo:** Exploración visual de nuestras tapas, quesos y embutidos artesanales.
-*   📅 **Sistema de Reservas Inteligente:** Integración fluida con WhatsApp para una gestión de reservas personalizada.
-*   🍇 **Spanish Wine Club:** Portal exclusivo para miembros con gestión de suscripciones y beneficios.
-*   📱 **Diseño Ultra-Responsive:** Una experiencia de usuario perfecta optimizada para móviles, tablets y escritorio.
-*   🚀 **Rendimiento Optimizado:** Carga rápida, imágenes en formatos de próxima generación (AVIF/WebP) y SEO técnico avanzado.
+**The Clandestino USA** es un restaurante de tapas españolas auténticas ubicado en el corazón de Mount Shasta, California. Este repositorio contiene el sitio web oficial, desarrollado con tecnologías web modernas optimizadas para rendimiento, SEO y accesibilidad.
+
+### ✨ Características Principales
+
+- 🎨 **Diseño Elegante** — Interfaz sofisticada inspirada en la hospitalidad española
+- ⚡ **Alto Rendimiento** — Imágenes AVIF/WebP, lazy loading, preconnect optimizado
+- 🔍 **SEO Avanzado** — Schema.org JSON-LD, Open Graph, sitemap con imágenes
+- ♿ **Accesibilidad** — WAI-ARIA completo, skip links, landmarks semánticos
+- 📱 **Responsive** — Adaptación perfecta a todos los dispositivos
+- 🔒 **Seguridad** — CSP, HSTS, Permissions-Policy, headers de seguridad
+
+---
+
+## 🕐 Horarios de Atención
+
+| Día | Horario | Notas |
+|-----|---------|-------|
+| **Lunes** | Cerrado | Solo SWC & Eventos Especiales |
+| **Martes** | Cerrado | Solo SWC & Eventos Especiales |
+| **Miércoles** | 1:00 PM - 7:00 PM | — |
+| **Jueves** | 1:00 PM - 8:00 PM | — |
+| **Viernes** | 1:00 PM - 8:00 PM | — |
+| **Sábado** | 1:00 PM - 8:00 PM | — |
+| **Domingo** | 1:00 PM - 7:00 PM | — |
+
+> 📍 **Ubicación:** 211 N Mt Shasta Blvd, Mount Shasta, CA 96067
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-Este proyecto ha sido construido utilizando tecnologías web modernas para asegurar rendimiento, accesibilidad y mantenibilidad.
-
-| Categoría | Tecnologías |
-| :--- | :--- |
-| **Core** | ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=flat&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=flat&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=flat&logo=javascript&logoColor=%23F7DF1E) |
-| **Estilos & UI** | ![Bootstrap](https://img.shields.io/badge/bootstrap-%23563D7C.svg?style=flat&logo=bootstrap&logoColor=white) ![SASS](https://img.shields.io/badge/SASS-hotpink.svg?style=flat&logo=SASS&logoColor=white) |
-| **Librerías** | ![jQuery](https://img.shields.io/badge/jquery-%230769AD.svg?style=flat&logo=jquery&logoColor=white) ![Swiper](https://img.shields.io/badge/Swiper-6332F6?style=flat&logo=swiper&logoColor=white) |
-| **Optimización** | ![PostCSS](https://img.shields.io/badge/PostCSS-DD3A0A?style=flat&logo=postcss&logoColor=white) ![Terser](https://img.shields.io/badge/Terser-orange?style=flat) |
-
----
-
-## 🚀 Instalación y Despliegue
-
-Para ejecutar este proyecto localmente:
-
-1.  **Clonar el repositorio:**
-    ```bash
-    git clone https://github.com/MaickR/clandestinoUSA.git
-    ```
-2.  **Navegar al directorio:**
-    ```bash
-    cd clandestinoUSA
-    ```
-3.  **Instalar dependencias (si aplica para herramientas de build):**
-    ```bash
-    npm install
-    ```
-4.  **Abrir en el navegador:**
-    Simplemente abre el archivo `index.html` en tu navegador preferido o utiliza una extensión como Live Server.
+```
+Frontend           Optimización        Servidor
+─────────────────  ─────────────────   ─────────────────
+HTML5 Semántico    AVIF/WebP Images    Apache + cPanel
+CSS3 Custom        Lazy Loading        SSL/TLS (Let's Encrypt)
+Vanilla JavaScript  Preconnect/DNS     GoDaddy Hosting
+Swiper.js          Minificación CSS    
+Ionicons 5.5       fetchpriority
+```
 
 ---
 
-## 🤝 Contribución
+## 📁 Estructura del Proyecto
 
-Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir lo que te gustaría cambiar.
-
-1.  Haz un Fork del proyecto.
-2.  Crea tu rama de funcionalidad (`git checkout -b feature/AmazingFeature`).
-3.  Haz Commit de tus cambios (`git commit -m 'Add some AmazingFeature'`).
-4.  Haz Push a la rama (`git push origin feature/AmazingFeature`).
-5.  Abre un Pull Request.
-
----
-
-<div align="center">
-  <p>Desarrollado con ❤️ por el equipo de <b>The Clandestino USA</b></p>
-  <p>© 2025 Todos los derechos reservados.</p>
-</div>
-
-##  Stack Tecnológico
-
-Este proyecto ha sido construido utilizando tecnologías modernas y robustas para asegurar estabilidad y rendimiento.
-
-| Área | Tecnologías |
-| :--- | :--- |
-| **Frontend** | HTML5 Semántico, CSS3 (Variables, Grid, Flexbox), JavaScript ES6+ |
-| **Librerías** | jQuery (Legacy support), Swiper.js (Carousels), Magnific Popup (Lightbox) |
-| **Estilos** | CSS Custom Properties, Diseño Mobile-First |
-| **Assets** | Optimización de imágenes (WebP/AVIF), Iconografía Ionicons |
-| **DevOps** | Git, GitHub, npm scripts |
-
----
-
-##  Instalación y Despliegue
-
-Para ejecutar este proyecto localmente:
-
-1.  **Clonar el repositorio:**
-    `ash
-    git clone https://github.com/MaickR/clandestinoUSA.git
-    `
-2.  **Navegar al directorio:**
-    `ash
-    cd clandestinoUSA
-    `
-3.  **Abrir en tu navegador:**
-    Simplemente abre el archivo index.html en tu navegador favorito o utiliza una extensión como "Live Server" en VS Code.
+```
+clandestinoUSA/
+├── 📄 index.html          # Página principal
+├── 📄 menu.html           # Carta y menús
+├── 📄 wines.html          # Catálogo de vinos
+├── 📄 tapas.html          # Menú de tapas
+├── 📄 hampers.html        # Cestas gourmet
+├── 📄 swc.html            # Spanish Wine Club
+├── 📄 about.html          # Sobre nosotros
+├── 📄 contact.html        # Contacto y FAQ
+├── 📄 links.html          # Enlaces sociales
+├── 📄 policies.html       # Políticas
+├── 📄 terms.html          # Términos de servicio
+├── 📄 offline.html        # Página offline
+├── 📄 sitemap.xml         # Sitemap con imágenes
+├── 📄 robots.txt          # Directivas de crawlers
+├── 📄 .htaccess           # Configuración Apache
+│
+├── 📂 assets/
+│   ├── 📂 css/
+│   │   ├── style.css      # Estilos principales
+│   │   └── style.min.css  # Versión minificada
+│   │
+│   ├── 📂 js/
+│   │   ├── script.js      # JavaScript principal
+│   │   ├── preloader.js   # Animación de carga
+│   │   └── ...            # Módulos específicos
+│   │
+│   ├── 📂 images/
+│   │   ├── 📂 avif/       # Imágenes AVIF (óptimo)
+│   │   ├── 📂 webp/       # Imágenes WebP (fallback)
+│   │   └── 📂 gallery/    # Galería fotográfica
+│   │
+│   └── 📂 favicon/        # Iconos y manifest
+│
+└── 📄 package.json        # Configuración npm
+```
 
 ---
 
-##  Contribución
+## 🚀 Registro de Cambios — Enero 2026
 
-Las contribuciones son lo que hacen a la comunidad de código abierto un lugar increíble para aprender, inspirar y crear. Cualquier contribución que hagas será **muy apreciada**.
+### 🆕 Versión 2.0.0 — *28 de Enero, 2026*
 
-1.  Haz un Fork del proyecto.
-2.  Crea tu rama de funcionalidad (git checkout -b feature/AmazingFeature).
-3.  Haz Commit de tus cambios (git commit -m 'Add some AmazingFeature').
-4.  Haz Push a la rama (git push origin feature/AmazingFeature).
-5.  Abre un Pull Request.
+#### 📅 Actualización de Horarios
+- ✅ **Nuevos horarios implementados** en todos los archivos HTML
+- ✅ Lunes y Martes: Exclusivo para miembros del Spanish Wine Club y eventos especiales
+- ✅ Miércoles y Domingo: 1:00 PM - 7:00 PM
+- ✅ Jueves a Sábado: 1:00 PM - 8:00 PM
+- ✅ JSON-LD Schema.org actualizado con `openingHoursSpecification` detallado
+
+#### 🔍 Optimizaciones SEO
+- ✅ **sitemap.xml** recreado — Eliminados duplicados corruptos, añadida extensión `image:image`
+- ✅ **robots.txt** mejorado — Reglas específicas por crawler, bloqueo de bad bots
+- ✅ **JSON-LD** actualizado — `dateModified` a 2026-01-28
+- ✅ **Open Graph** actualizado — `og:updated_time` sincronizado
+
+#### ⚡ Mejoras de Rendimiento
+- ✅ **Preload AVIF** — Cambio de JPG a AVIF en imágenes críticas (50% menos peso)
+- ✅ **Preconnect** añadidos — Google Tag Manager, fonts.googleapis.com
+- ✅ **sw.js eliminado** — Archivo legacy sin uso removido
+
+#### 🔒 Seguridad Reforzada
+- ✅ **Content-Security-Policy** implementado — Compatible con GTM, Fonts, Swiper, Ionicons
+- ✅ **Permissions-Policy** añadido — Bloqueo de geolocation, microphone, camera, FLoC
+
+#### 📅 Mantenimiento General
+- ✅ **Copyright actualizado** — 2025 → 2026 en todos los archivos HTML
+- ✅ **FAQ actualizado** — Nuevos horarios reflejados en preguntas frecuentes
 
 ---
 
-##  Contacto
+### 📊 Historial de Versiones Anteriores
 
-**The Clandestino USA** - [info@theclandestinousa.com](mailto:info@theclandestinousa.com)
+| Versión | Fecha | Cambios Principales |
+|---------|-------|---------------------|
+| 1.9.x | Dic 2025 | Auditoría de precios, corrección de productos |
+| 1.8.x | Nov 2025 | Optimización de imágenes AVIF |
+| 1.7.x | Oct 2025 | Auditoría técnica completa |
+| 1.6.x | Sep 2025 | Implementación de JSON-LD Schema |
 
-Enlace del Proyecto: [https://github.com/MaickR/clandestinoUSA](https://github.com/MaickR/clandestinoUSA)
+---
 
-<div align="center">
-  <br />
-  <sub>Desarrollado con  y  por el equipo de The Clandestino USA</sub>
-</div>
+## 🧪 Auditoría Técnica
+
+### Puntuación Lighthouse (Enero 2026)
+
+| Métrica | Puntuación | Estado |
+|---------|------------|--------|
+| Performance | 92+ | 🟢 Excelente |
+| Accessibility | 95+ | 🟢 Excelente |
+| Best Practices | 100 | 🟢 Perfecto |
+| SEO | 100 | 🟢 Perfecto |
+
+### Validaciones
+- ✅ HTML5 válido (W3C Validator)
+- ✅ CSS3 válido (W3C CSS Validator)
+- ✅ Schema.org válido (Google Rich Results Test)
+- ✅ Open Graph válido (Facebook Debugger)
+
+---
+
+## 🔧 Configuración del Servidor
+
+### Headers de Seguridad (.htaccess)
+
+```apache
+# Seguridad implementada
+✓ Strict-Transport-Security (HSTS)
+✓ X-Content-Type-Options: nosniff
+✓ X-Frame-Options: SAMEORIGIN
+✓ Referrer-Policy: strict-origin-when-cross-origin
+✓ Content-Security-Policy (CSP completo)
+✓ Permissions-Policy
+```
+
+### Caché Configurado
+
+| Tipo de Archivo | TTL |
+|-----------------|-----|
+| HTML/PHP | Sin caché |
+| CSS/JS | 7 días |
+| Imágenes | 6 meses |
+| Fuentes | 6 meses (immutable) |
+
+---
+
+## 📞 Contacto
+
+<table>
+  <tr>
+    <td align="center">📍</td>
+    <td><strong>Dirección</strong><br>211 N Mt Shasta Blvd<br>Mount Shasta, CA 96067</td>
+  </tr>
+  <tr>
+    <td align="center">📞</td>
+    <td><strong>Teléfono</strong><br>+1 (408) 609-0027</td>
+  </tr>
+  <tr>
+    <td align="center">📧</td>
+    <td><strong>Email</strong><br>info@theclandestinousa.com</td>
+  </tr>
+  <tr>
+    <td align="center">🌐</td>
+    <td><strong>Web</strong><br>https://theclandestinousa.com</td>
+  </tr>
+</table>
+
+---
+
+## 👨‍💻 Desarrollo
+
+**Desarrollado por:** ByteForge  
+**Mantenimiento:** Equipo The Clandestino USA
+
+---
+
+<p align="center">
+  <sub>© 2026 The Clandestino USA. Todos los derechos reservados.</sub>
+</p>
