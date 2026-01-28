@@ -55,7 +55,9 @@
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="dns-prefetch" href="https://unpkg.com">
 
-  <!-- Removed external Bootstrap & FontAwesome to keep navigation styling consistent -->
+  <!-- Bootstrap 5 CSS for Modal -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Removed external FontAwesome to keep navigation styling consistent -->
   <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css">
 
   <!-- ==== ESTILOS ==== -->
@@ -733,7 +735,441 @@
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" defer></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" defer></script>
 
+  <!-- Bootstrap 5 JS for Modal -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- Contact Form Modal Success/Error -->
+  <div class="modal fade" id="contactResultModal" tabindex="-1" aria-labelledby="contactResultModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content clx-modal-content">
+        <div class="modal-body clx-modal-body text-center">
+          <!-- Success Icon -->
+          <div class="clx-modal-icon clx-modal-icon-success" id="modalIconSuccess" style="display: none;">
+            <div class="clx-success-checkmark">
+              <svg class="clx-checkmark-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="clx-checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="clx-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+              </svg>
+            </div>
+          </div>
+          <!-- Error Icon -->
+          <div class="clx-modal-icon clx-modal-icon-error" id="modalIconError" style="display: none;">
+            <div class="clx-error-x">
+              <svg class="clx-x-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="clx-x-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="clx-x-line" fill="none" d="M16 16 36 36"/>
+                <path class="clx-x-line" fill="none" d="M36 16 16 36"/>
+              </svg>
+            </div>
+          </div>
+          <h3 class="clx-modal-title" id="contactResultModalLabel">Message Sent!</h3>
+          <p class="clx-modal-message" id="modalMessage">Thank you for contacting us. We'll get back to you soon.</p>
+          <div class="clx-modal-redirect-info">
+            <span class="clx-modal-countdown">Redirecting in <span id="modalCountdown">5</span> seconds...</span>
+          </div>
+          <button type="button" class="clx-modal-btn" id="modalRedirectBtn">
+            <span>Go to Home</span>
+            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Modal Styles -->
+  <style>
+    /* Modal Content Styling */
+    .clx-modal-content {
+      background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(201, 162, 39, 0.1);
+      overflow: hidden;
+    }
+    
+    .clx-modal-body {
+      padding: 3rem 2rem;
+    }
+    
+    /* Success Icon Animation */
+    .clx-modal-icon {
+      margin: 0 auto 1.5rem;
+      width: 100px;
+      height: 100px;
+    }
+    
+    .clx-success-checkmark,
+    .clx-error-x {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .clx-checkmark-svg,
+    .clx-x-svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .clx-checkmark-circle {
+      stroke: #c9a227;
+      stroke-width: 2;
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      animation: clx-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .clx-checkmark-check {
+      stroke: #c9a227;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: clx-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+    }
+    
+    /* Error X Icon */
+    .clx-x-circle {
+      stroke: #e74c3c;
+      stroke-width: 2;
+      stroke-dasharray: 166;
+      stroke-dashoffset: 166;
+      animation: clx-stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .clx-x-line {
+      stroke: #e74c3c;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 30;
+      stroke-dashoffset: 30;
+      animation: clx-stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.6s forwards;
+    }
+    
+    @keyframes clx-stroke {
+      100% { stroke-dashoffset: 0; }
+    }
+    
+    .clx-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+    
+    .clx-modal-title.success { color: #c9a227; }
+    .clx-modal-title.error { color: #e74c3c; }
+    
+    .clx-modal-message {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      max-width: 320px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .clx-modal-redirect-info {
+      margin-bottom: 1.5rem;
+    }
+    
+    .clx-modal-countdown {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.5px;
+    }
+    
+    #modalCountdown {
+      color: #c9a227;
+      font-weight: 600;
+    }
+    
+    .clx-modal-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #c9a227, #b8941f);
+      color: #1a1a1a;
+      font-family: 'Libre Bodoni', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0.875rem 2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+    }
+    
+    .clx-modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 162, 39, 0.4);
+    }
+    
+    .clx-modal-btn ion-icon {
+      font-size: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .clx-modal-btn:hover ion-icon {
+      transform: translateX(4px);
+    }
+    
+    /* Error state button */
+    .clx-modal-btn.error-btn {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    }
+    
+    .clx-modal-btn.error-btn:hover {
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    }
+    
+    /* Modal backdrop */
+    .modal-backdrop.show {
+      backdrop-filter: blur(8px);
+    }
+  </style>
+
   <script type="module" src="./assets/js/script.js" defer></script>
+
+  <!-- Contact Form Modal Handler -->
+  <script>
+    (function() {
+      'use strict';
+      
+      // Wait for DOM and Bootstrap to be ready
+      document.addEventListener('DOMContentLoaded', function() {
+        initContactFormModal();
+      });
+      
+      function initContactFormModal() {
+        const form = document.getElementById('clx-contact-form');
+        if (!form) return;
+        
+        const modalEl = document.getElementById('contactResultModal');
+        if (!modalEl) return;
+        
+        const modal = new bootstrap.Modal(modalEl);
+        const modalTitle = modalEl.querySelector('.clx-modal-title');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCountdown = document.getElementById('modalCountdown');
+        const modalBtn = document.getElementById('modalRedirectBtn');
+        const iconSuccess = document.getElementById('modalIconSuccess');
+        const iconError = document.getElementById('modalIconError');
+        const statusEl = form.querySelector('.clx-status');
+        
+        let countdownInterval = null;
+        
+        // Override the form submission
+        form.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const submitBtn = document.getElementById('clx-submit-btn');
+          if (submitBtn.classList.contains('is-loading')) return;
+          
+          // Validate form first (use existing validation)
+          if (!validateForm()) {
+            showInlineStatus('Please correct the highlighted fields.', 'error');
+            return;
+          }
+          
+          // Check honeypot
+          if (form.website && form.website.value) {
+            showInlineStatus('Unexpected error.', 'error');
+            return;
+          }
+          
+          // Show loading state
+          showInlineStatus('Sending message...', 'info', true);
+          submitBtn.classList.add('is-loading');
+          submitBtn.disabled = true;
+          
+          const formData = new FormData(form);
+          
+          try {
+            const response = await fetch(form.action, {
+              method: 'POST',
+              headers: { 'Accept': 'application/json' },
+              body: formData,
+              credentials: 'same-origin'
+            });
+            
+            const data = await response.json().catch(() => ({ success: false, error: 'parse' }));
+            
+            // Hide inline status
+            if (statusEl) {
+              statusEl.classList.remove('show');
+            }
+            
+            if (data.success) {
+              showModal(true, 'Message Sent Successfully!', 'Thank you for contacting The Clandestino USA. We will get back to you as soon as possible.');
+              form.reset();
+              regenerateCSRF();
+            } else {
+              const errorMsg = data.errorMessage || 'There was an error sending your message. Please try again or call us directly.';
+              showModal(false, 'Error Sending Message', errorMsg);
+            }
+          } catch (error) {
+            if (statusEl) {
+              statusEl.classList.remove('show');
+            }
+            showModal(false, 'Network Error', 'Unable to send your message. Please check your connection and try again, or call us directly at +1 408-609-0027.');
+          } finally {
+            submitBtn.classList.remove('is-loading');
+            submitBtn.disabled = false;
+            if (statusEl) {
+              statusEl.removeAttribute('aria-busy');
+            }
+          }
+        }, true); // Use capture to run before other handlers
+        
+        function showModal(isSuccess, title, message) {
+          // Set icon
+          iconSuccess.style.display = isSuccess ? 'block' : 'none';
+          iconError.style.display = isSuccess ? 'none' : 'block';
+          
+          // Reset SVG animations by cloning
+          resetSVGAnimations(isSuccess ? iconSuccess : iconError);
+          
+          // Set content
+          modalTitle.textContent = title;
+          modalTitle.className = 'clx-modal-title ' + (isSuccess ? 'success' : 'error');
+          modalMessage.textContent = message;
+          
+          // Set button style
+          modalBtn.className = 'clx-modal-btn' + (isSuccess ? '' : ' error-btn');
+          
+          // Show modal
+          modal.show();
+          
+          // Start countdown
+          startCountdown();
+        }
+        
+        function resetSVGAnimations(container) {
+          const svg = container.querySelector('svg');
+          if (svg) {
+            const clone = svg.cloneNode(true);
+            svg.parentNode.replaceChild(clone, svg);
+          }
+        }
+        
+        function startCountdown() {
+          let seconds = 5;
+          modalCountdown.textContent = seconds;
+          
+          if (countdownInterval) {
+            clearInterval(countdownInterval);
+          }
+          
+          countdownInterval = setInterval(function() {
+            seconds--;
+            modalCountdown.textContent = seconds;
+            
+            if (seconds <= 0) {
+              clearInterval(countdownInterval);
+              redirectToHome();
+            }
+          }, 1000);
+        }
+        
+        function redirectToHome() {
+          window.location.href = 'index.html';
+        }
+        
+        // Button click handler
+        modalBtn.addEventListener('click', function() {
+          if (countdownInterval) {
+            clearInterval(countdownInterval);
+          }
+          redirectToHome();
+        });
+        
+        // Clear countdown if modal is closed by other means
+        modalEl.addEventListener('hidden.bs.modal', function() {
+          if (countdownInterval) {
+            clearInterval(countdownInterval);
+          }
+        });
+        
+        // Simple inline status for loading state
+        function showInlineStatus(message, type, isBusy) {
+          if (!statusEl) return;
+          statusEl.textContent = message;
+          statusEl.className = 'clx-status show ' + type;
+          if (isBusy) {
+            statusEl.setAttribute('aria-busy', 'true');
+          }
+        }
+        
+        // Basic validation function
+        function validateForm() {
+          let valid = true;
+          const fields = ['name', 'email', 'tel', 'subject', 'message'];
+          
+          fields.forEach(function(fieldName) {
+            const field = form.querySelector('[name="' + fieldName + '"]');
+            const errorEl = form.querySelector('[data-error-for="' + fieldName + '"]');
+            const fieldGroup = field ? field.closest('.clx-field-group') : null;
+            
+            if (field && errorEl && fieldGroup) {
+              // Clear previous error
+              errorEl.textContent = '';
+              fieldGroup.classList.remove('error', 'clx-has-error');
+              field.removeAttribute('aria-invalid');
+              
+              const value = field.value.trim();
+              let error = '';
+              
+              switch(fieldName) {
+                case 'name':
+                  if (value.length < 2) error = 'Enter your full name';
+                  break;
+                case 'email':
+                  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Valid email required';
+                  break;
+                case 'tel':
+                  if (value && /[^0-9+()\-\s]/.test(value)) error = 'Invalid characters in phone';
+                  else if (value.length < 6) error = 'Valid phone number required';
+                  break;
+                case 'subject':
+                  if (!value) error = 'Please select a subject';
+                  break;
+                case 'message':
+                  if (value.length < 5) error = 'Message too short';
+                  break;
+              }
+              
+              if (error) {
+                errorEl.textContent = error;
+                fieldGroup.classList.add('error');
+                field.setAttribute('aria-invalid', 'true');
+                valid = false;
+              }
+            }
+          });
+          
+          return valid;
+        }
+        
+        // Regenerate CSRF token
+        function regenerateCSRF() {
+          const csrfToken = document.getElementById('clx-csrf-token');
+          if (csrfToken) {
+            const timestamp = Math.floor(Date.now() / 1000);
+            const random = Math.random().toString(36).substring(2);
+            csrfToken.value = btoa(timestamp + '.' + random);
+          }
+        }
+      }
+    })();
+  </script>
 
   <!-- FAQ Functionality -->
   <script>
