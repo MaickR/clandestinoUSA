@@ -466,36 +466,144 @@ if ($rlData['daily_count'] > MAX_DAILY_SUBMISSIONS) {
 
 // Enhanced email composition and sending
 $to = MAIL_TO_ADDRESS;
-$subjectLine = '[Website Contact] ' . ($subject ?: 'General Inquiry') . ' - ' . date('M j, Y');
+$subjectLine = '📩 ' . ($subject ?: 'General Inquiry') . ' — ' . $name . ' | ' . date('M j');
 
-// Build comprehensive email body with security context
-$emailLines = [
-  '=== THE CLANDESTINO USA CONTACT FORM ===',
-  '',
-  'Name: ' . $name,
-  'Email: ' . $email,
-  'Phone: ' . ($telRaw ?: 'Not provided'),
-  'Subject: ' . ($subject ?: 'General Inquiry'),
-  'Submitted: ' . date('F j, Y \a\t g:i A T'),
-  '',
-  '=== SECURITY INFORMATION ===',
-  'IP Address: ' . $ip,
-  'User Agent: ' . ($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown'),
-  'Referrer: ' . ($_SERVER['HTTP_REFERER'] ?? 'Direct'),
-  'Spam Score: ' . $spamCheck['score'] . '/10',
-  'Rate Limit Status: ' . $rlData['hourly_count'] . '/' . MAX_HOURLY_SUBMISSIONS . ' (hourly), ' . 
-                           $rlData['daily_count'] . '/' . MAX_DAILY_SUBMISSIONS . ' (daily)',
-  '',
-  '=== MESSAGE ===',
-  wordwrap($message, 75, "\n", true),
-  '',
-  '--- End of Message ---',
-  '',
-  'This message was sent via The Clandestino USA website contact form.',
-  'Please reply directly to the customer\'s email address: ' . $email
-];
+// Build professional HTML email body
+$phoneDisplay = $telRaw ?: 'No proporcionado';
+$phoneLink = $telRaw ? '<a href="tel:' . preg_replace('/[^0-9+]/', '', $telRaw) . '" style="color:#c9a227;text-decoration:none;">' . htmlspecialchars($telRaw) . '</a>' : '<span style="color:#888;">No proporcionado</span>';
+$messageFormatted = nl2br(htmlspecialchars($message));
+$spamColor = $spamCheck['score'] <= 3 ? '#4CAF50' : ($spamCheck['score'] <= 6 ? '#FF9800' : '#f44336');
+$submittedDate = date('j \d\e F, Y');
+$submittedTime = date('g:i A') . ' (hora del servidor)';
 
-$body = implode("\n", $emailLines);
+$body = '<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background-color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,\'Helvetica Neue\',Arial,sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#1a1a1a;padding:20px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background-color:#242424;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#c9a227 0%,#8b6914 100%);padding:30px 40px;text-align:center;">
+              <h1 style="margin:0;color:#fff;font-size:24px;font-weight:600;letter-spacing:1px;">THE CLANDESTINO USA</h1>
+              <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:13px;text-transform:uppercase;letter-spacing:2px;">Nuevo Mensaje del Sitio Web</p>
+            </td>
+          </tr>
+          
+          <!-- Contact Info Card -->
+          <tr>
+            <td style="padding:30px 40px 20px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#2d2d2d;border-radius:8px;border-left:4px solid #c9a227;">
+                <tr>
+                  <td style="padding:20px 25px;">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="padding-bottom:12px;">
+                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Remitente</span>
+                          <p style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:600;">' . htmlspecialchars($name) . '</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom:12px;">
+                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Email</span>
+                          <p style="margin:4px 0 0;"><a href="mailto:' . htmlspecialchars($email) . '" style="color:#c9a227;font-size:15px;text-decoration:none;">' . htmlspecialchars($email) . '</a></p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding-bottom:12px;">
+                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Teléfono</span>
+                          <p style="margin:4px 0 0;font-size:15px;">' . $phoneLink . '</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Asunto</span>
+                          <p style="margin:4px 0 0;color:#fff;font-size:15px;">' . htmlspecialchars($subject ?: 'Consulta General') . '</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Message Content -->
+          <tr>
+            <td style="padding:0 40px 30px;">
+              <h2 style="margin:0 0 15px;color:#c9a227;font-size:14px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">💬 Mensaje</h2>
+              <div style="background-color:#2d2d2d;border-radius:8px;padding:25px;color:#e0e0e0;font-size:15px;line-height:1.7;">
+                ' . $messageFormatted . '
+              </div>
+            </td>
+          </tr>
+          
+          <!-- Quick Actions -->
+          <tr>
+            <td style="padding:0 40px 30px;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center" style="padding-right:10px;" width="50%">
+                    <a href="mailto:' . htmlspecialchars($email) . '?subject=Re: ' . rawurlencode($subject ?: 'Tu mensaje en The Clandestino') . '" style="display:block;background-color:#c9a227;color:#000;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:14px;text-align:center;">✉️ Responder por Email</a>
+                  </td>
+                  <td align="center" style="padding-left:10px;" width="50%">
+                    <a href="https://wa.me/' . preg_replace('/[^0-9]/', '', $telRaw ?: '14086090027') . '?text=' . rawurlencode('Hola ' . $name . ', gracias por contactar The Clandestino USA...') . '" style="display:block;background-color:#25D366;color:#fff;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:14px;text-align:center;">💬 WhatsApp</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 40px;">
+              <hr style="border:none;border-top:1px solid #3a3a3a;margin:0;">
+            </td>
+          </tr>
+          
+          <!-- Security Info (Collapsible look) -->
+          <tr>
+            <td style="padding:20px 40px;">
+              <details style="color:#666;font-size:12px;">
+                <summary style="cursor:pointer;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🔒 Información de Seguridad</summary>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:10px;">
+                  <tr>
+                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Fecha:</strong> ' . $submittedDate . ' a las ' . $submittedTime . '</td>
+                  </tr>
+                  <tr>
+                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>IP:</strong> ' . htmlspecialchars($ip) . '</td>
+                  </tr>
+                  <tr>
+                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Spam Score:</strong> <span style="color:' . $spamColor . ';font-weight:600;">' . $spamCheck['score'] . '/10</span></td>
+                  </tr>
+                  <tr>
+                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Rate Limit:</strong> ' . $rlData['hourly_count'] . '/' . MAX_HOURLY_SUBMISSIONS . ' (hora) • ' . $rlData['daily_count'] . '/' . MAX_DAILY_SUBMISSIONS . ' (día)</td>
+                  </tr>
+                </table>
+              </details>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#1a1a1a;padding:25px 40px;text-align:center;border-top:1px solid #3a3a3a;">
+              <p style="margin:0 0 8px;color:#666;font-size:12px;">Este mensaje fue enviado desde el formulario de contacto de</p>
+              <p style="margin:0;color:#c9a227;font-size:13px;font-weight:600;">theclandestinousa.com</p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
 
 // Enhanced email headers with security information
 $fromHeaderName = MAIL_FROM_NAME;
@@ -505,16 +613,20 @@ if (strpos(MAIL_FROM_ADDRESS, '@') !== false) {
   $fromDomain = substr(strrchr(MAIL_FROM_ADDRESS, '@'), 1);
 }
 
+// Generate boundary for multipart email
+$boundary = md5(uniqid(time()));
+
 $headers = [
   'From: "' . $fromHeaderName . '" <' . MAIL_FROM_ADDRESS . '>',
   'Reply-To: "' . $replyToName . '" <' . $email . '>',
   'MIME-Version: 1.0',
-  'Content-Type: text/plain; charset=UTF-8',
+  'Content-Type: text/html; charset=UTF-8',
   'Content-Transfer-Encoding: 8bit',
-  'X-Mailer: The Clandestino USA Contact Form v2.0',
+  'X-Mailer: The Clandestino USA Contact Form v2.1',
   'X-Originating-IP: ' . $ip,
   'X-Contact-Form: true',
   'X-Spam-Score: ' . $spamCheck['score'],
+  'X-Priority: 3',
   'Message-ID: <' . md5(uniqid(rand(), true)) . '@' . $fromDomain . '>',
   'Date: ' . date('r')
 ];
