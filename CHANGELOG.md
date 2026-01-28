@@ -7,6 +7,59 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 
 ---
 
+## [2.1.0] - 2026-01-28
+
+### 🐛 Correcciones de Errores CSP
+
+#### Content Security Policy Actualizada
+- **Problema**: Múltiples errores de CSP bloqueaban scripts e iconos en producción
+- **Solución**: Actualización completa de la política CSP en `.htaccess`:
+  - ✅ Agregado `https://cdnjs.cloudflare.com` a script-src
+  - ✅ Agregado `https://static.cloudflareinsights.com` a script-src  
+  - ✅ Agregado `https://*.wsimg.com` y `https://*.godaddy.com` a script-src
+  - ✅ Agregado `https://cdn.jsdelivr.net` a style-src y font-src
+  - ✅ Agregado `https://unpkg.com` y `https://cdn.jsdelivr.net` a connect-src
+  - ✅ Agregado `https://*.cloudflare.com` a connect-src
+
+### 🎨 Modal de Contacto Mejorado
+
+#### Rediseño Completo del Modal Bootstrap 5
+- **Centrado perfecto** en pantalla con `modal-dialog-centered`
+- **Z-index máximo** (99999) para garantizar visibilidad sobre todos los elementos
+- **Diseño responsivo** mejorado:
+  - Mobile-first con breakpoints en 576px y 375px
+  - Botón de ancho completo en móviles
+  - Tamaños de fuente con `clamp()` para escalado fluido
+- **Estética refinada**:
+  - Gradiente de fondo oscuro elegante (#1e1e1e → #0a0a0a)
+  - Borde dorado con glow sutil
+  - Iconos animados con efecto de drop-shadow
+  - Botón con efecto shimmer al hover
+  - Contador de redirección con fondo semi-transparente
+- **Backdrop mejorado** con blur de 10px y opacidad 0.85
+
+---
+
+## [2.0.0] - 2026-01-28
+
+### ✨ Modal Bootstrap 5 para Formulario de Contacto
+- Modal centrado con animaciones SVG para éxito (✓) y error (✗)
+- Cuenta regresiva de 5 segundos con redirección automática a index.html
+- Diseño consistente con la paleta de colores del sitio
+
+### 📧 Rediseño del Email de Contacto
+- Template HTML profesional con tema oscuro y acentos dorados
+- Botones de acción rápida (Responder por email, WhatsApp)
+- Información de seguridad colapsable
+
+### 🕐 Actualización de Horarios
+- Lun-Mar: Solo SWC y eventos especiales
+- Mié y Dom: 1 PM - 7 PM
+- Jue-Sáb: 1 PM - 8 PM
+- Actualizado en todas las páginas HTML, JSON-LD y FAQ
+
+---
+
 ## [1.2.0] - 2025-10-07
 
 ### 🎨 Mejoras de Diseño Responsivo
