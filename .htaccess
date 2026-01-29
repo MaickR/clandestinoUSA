@@ -156,9 +156,10 @@ FileETag MTime Size
 # ------------------------------------------------------------
 # Content Security Policy — configuración permisiva para CDNs
 # Permite Google Tag Manager, Fonts, Swiper, Ionicons, Bootstrap, etc.
+# Incluye dominios de GoDaddy/cPanel para soporte completo
 # ------------------------------------------------------------
 <IfModule mod_headers.c>
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com https://*.wsimg.com https://*.godaddy.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://unpkg.com https://cdn.jsdelivr.net https://*.cloudflare.com; frame-src 'self' https://www.google.com https://www.youtube.com https://youtube.com; frame-ancestors 'self'; upgrade-insecure-requests; base-uri 'self'; form-action 'self'"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://static.cloudflareinsights.com https://*.wsimg.com https://*.godaddy.com https://csp.secureserver.net https://secureserver.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://unpkg.com https://cdn.jsdelivr.net https://*.cloudflare.com https://csp.secureserver.net https://secureserver.net https://*.godaddy.com; frame-src 'self' https://www.google.com https://www.youtube.com https://youtube.com; frame-ancestors 'self'; upgrade-insecure-requests; base-uri 'self'; form-action 'self'"
 </IfModule>
 
 # Permissions-Policy para privacidad y rendimiento

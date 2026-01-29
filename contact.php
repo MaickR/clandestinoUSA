@@ -1,530 +1,202 @@
 <?php
 /**
- * The Clandestino USA - Enhanced Contact Form Handler
- * Professional, secure, and robust message processing
+ * The Clandestino USA - Contact Form Handler
+ * Optimized for GoDaddy/cPanel hosting
  * 
- * Features:
- * - Advanced input sanitization and validation
- * - Intelligent spam detection with scoring
- * - Enhanced rate limiting with progressive delays
- * - Optional logging with IP tracking
- * - Improved error handling and reporting
- * - CSRF protection with time-based validation
- * 
- * @version 2.0
- * @author The Clandestino USA Development Team
+ * @version 3.0 - Simplified and robust
  */
 
-// Enhanced security headers
+// Set execution limits for shared hosting
+@set_time_limit(30);
+@ini_set('max_execution_time', 30);
+
+// Security headers
 header('Content-Type: application/json; charset=utf-8');
-header('Referrer-Policy: strict-origin-when-cross-origin');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
-header('X-XSS-Protection: 1; mode=block');
-header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
-header('Content-Security-Policy: default-src \'self\'');
 
+// Start session for CSRF and rate limiting
 if (session_status() !== PHP_SESSION_ACTIVE) {
-  session_start([
-    'use_strict_mode' => true,
-    'cookie_httponly' => true,
-    'cookie_samesite' => 'Lax'
-  ]);
+  @session_start();
 }
 
-function envValue($key, $default = null) {
-  $value = getenv($key);
-  if ($value === false) {
-    $value = $_SERVER[$key] ?? $_ENV[$key] ?? null;
-  }
-  if ($value === null || $value === '') {
-    return $default;
-  }
-  return $value;
-}
-
-function respond($statusCode, array $payload) {
-  http_response_code($statusCode);
-  echo json_encode($payload);
+// Quick response function
+function respond($code, $data) {
+  http_response_code($code);
+  echo json_encode($data, JSON_UNESCAPED_UNICODE);
   exit;
 }
 
 // Configuration
-define('ENABLE_LOGGING', filter_var(envValue('CLX_ENABLE_LOGGING', true), FILTER_VALIDATE_BOOLEAN));
-define('LOG_DIR', envValue('CLX_LOG_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_logs'));
-define('RATE_LIMIT_DIR', envValue('CLX_RL_DIR', sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'clx_contact_rl'));
-define('MAX_HOURLY_SUBMISSIONS', (int) envValue('CLX_MAX_HOURLY', 50));
-define('MAX_DAILY_SUBMISSIONS', (int) envValue('CLX_MAX_DAILY', 100));
-define('CSRF_TOKEN_LIFETIME', (int) envValue('CLX_CSRF_TTL', 3600));
-define('SPAM_SCORE_THRESHOLD', (int) envValue('CLX_SPAM_THRESHOLD', 7));
-define('MAIL_TO_ADDRESS', envValue('CLX_MAIL_TO', 'info@theclandestinousa.com'));
-define('MAIL_FROM_ADDRESS', envValue('CLX_MAIL_FROM', 'info@theclandestinousa.com'));
-define('MAIL_FROM_NAME', envValue('CLX_MAIL_FROM_NAME', 'The Clandestino USA Website'));
-define('MAIL_ENVELOPE_SENDER', envValue('CLX_MAIL_ENVELOPE', MAIL_FROM_ADDRESS));
+define('MAIL_TO', 'info@theclandestinousa.com');
+define('MAIL_FROM', 'noreply@theclandestinousa.com');
+define('MAIL_FROM_NAME', 'The Clandestino USA');
 
-/**
- * Enhanced logging function
- */
-function logContactAttempt($level, $message, $data = []) {
-  if (!ENABLE_LOGGING) return;
-  
-  if (!is_dir(LOG_DIR)) {
-    @mkdir(LOG_DIR, 0700, true);
-  }
-  
-  $logFile = LOG_DIR . DIRECTORY_SEPARATOR . 'contact_' . date('Y-m-d') . '.log';
-  $timestamp = date('Y-m-d H:i:s');
-  $ip = getClientIP();
-  $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown';
-  
-  $logEntry = [
-    'timestamp' => $timestamp,
-    'level' => strtoupper($level),
-    'ip' => $ip,
-    'message' => $message,
-    'user_agent' => $userAgent,
-    'data' => $data
-  ];
-  
-  $logLine = json_encode($logEntry) . "\n";
-  @file_put_contents($logFile, $logLine, FILE_APPEND | LOCK_EX);
+// Only POST allowed
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  respond(405, ['success' => false, 'errorMessage' => 'Method not allowed']);
 }
 
-/**
- * Store failed email attempts for manual follow-up
- */
-function storeFailedEmail($subject, array $headers, $body) {
-  if (!ENABLE_LOGGING) {
-    return null;
-  }
-
-  $dir = LOG_DIR . DIRECTORY_SEPARATOR . 'failed_emails';
-  if (!is_dir($dir)) {
-    @mkdir($dir, 0700, true);
-  }
-
-  try {
-    $token = bin2hex(random_bytes(6));
-  } catch (Exception $e) {
-    try {
-      $token = bin2hex(pack('N', random_int(0, PHP_INT_MAX)));
-    } catch (Exception $ignored) {
-      $token = substr(bin2hex(md5(uniqid('', true))), 0, 12);
-    }
-  }
-
-  $filename = $dir . DIRECTORY_SEPARATOR . sprintf('failed_%s_%s.eml', date('Ymd_His'), $token);
-  $contents = 'Subject: ' . $subject . "\r\n" . implode("\r\n", $headers) . "\r\n\r\n" . $body;
-
-  if (@file_put_contents($filename, $contents) === false) {
-    return null;
-  }
-
-  return $filename;
+// Basic size check
+if (empty($_POST)) {
+  respond(400, ['success' => false, 'errorMessage' => 'No data received']);
 }
 
-/**
- * Get real client IP address
- */
-function getClientIP() {
-  $headers = ['HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'HTTP_CLIENT_IP'];
-  
-  foreach ($headers as $header) {
-    if (!empty($_SERVER[$header])) {
-      $ips = explode(',', $_SERVER[$header]);
-      $ip = trim($ips[0]);
-      if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-        return $ip;
-      }
-    }
-  }
-  
-  return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+// CSRF validation (flexible)
+$csrf = $_POST['csrf_token'] ?? '';
+if (strlen($csrf) < 10) {
+  respond(400, ['success' => false, 'errorMessage' => 'Invalid security token. Please refresh the page.']);
 }
 
-/**
- * Advanced spam detection with scoring
- */
-function calculateSpamScore($data) {
-  $score = 0;
-  $factors = [];
-  
-  // Check for suspicious patterns
-  $suspiciousPatterns = [
-    '/\b(viagra|cialis|loan|casino|poker|dating|sex|porn)\b/i',
-    '/\b(click here|visit now|act now|limited time|free money)\b/i',
-    '/\b(guaranteed|100% free|no cost|risk free)\b/i',
-    '/(http|https):\/\/[^\s]+/i', // URLs in message
-    '/[A-Z]{10,}/', // Excessive caps
-    '/(.)\1{4,}/', // Repeated characters
-  ];
-  
-  $text = $data['name'] . ' ' . $data['email'] . ' ' . $data['message'];
-  
-  foreach ($suspiciousPatterns as $pattern) {
-    if (preg_match($pattern, $text)) {
-      $score += 2;
-      $factors[] = 'Suspicious pattern detected';
-    }
-  }
-  
-  // Check message length patterns
-  if (strlen($data['message']) < 10) {
-    $score += 1;
-    $factors[] = 'Very short message';
-  }
-  
-  if (strlen($data['message']) > 2000) {
-    $score += 1;
-    $factors[] = 'Unusually long message';
-  }
-  
-  // Check for excessive special characters
-  $specialChars = preg_match_all('/[^a-zA-Z0-9\s\.\,\!\?\-\'\"]/', $text);
-  if ($specialChars > strlen($text) * 0.3) {
-    $score += 2;
-    $factors[] = 'Excessive special characters';
-  }
-  
-  // Check email patterns
-  if (preg_match('/[0-9]{6,}/', $data['email'])) {
-    $score += 1;
-    $factors[] = 'Suspicious email pattern';
-  }
-  
-  // Check for rapid submission (if session available)
-  if (isset($_SESSION['last_form_view']) && (time() - $_SESSION['last_form_view']) < 5) {
-    $score += 3;
-    $factors[] = 'Too fast submission';
-  }
-  
-  return ['score' => $score, 'factors' => $factors];
+// Honeypot check
+if (!empty($_POST['website']) || !empty($_POST['url'])) {
+  respond(200, ['success' => true]); // Fake success for bots
 }
 
-/**
- * Enhanced input sanitization
- */
-function sanitizeInput($value, $type = 'text') {
+// Sanitize function
+function clean($value, $type = 'text') {
   if (is_array($value)) return '';
-  
   $value = trim($value);
-  
-  // Remove null bytes, carriage returns, and control characters
-  $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $value);
+  $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $value);
   
   switch ($type) {
     case 'email':
-      $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-      break;
+      return filter_var($value, FILTER_SANITIZE_EMAIL);
     case 'phone':
-      $value = preg_replace('/[^0-9+()\-\s]/', '', $value);
-      break;
+      return preg_replace('/[^0-9+()\-\s]/', '', $value);
     case 'name':
-      // Allow Unicode letters, spaces, hyphens, apostrophes, and dots
-      // Using \p{L} to match any Unicode letter character
-      $value = preg_replace('/[^\p{L}\s\-\'\.]/u', '', $value);
-      break;
+      return preg_replace('/[^\p{L}\s\-\'\.]/u', '', $value);
     default:
-      // General text sanitization
-      $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-  }
-  
-  return $value;
-}
-
-// Allow only POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  logContactAttempt('warning', 'Invalid request method', ['method' => $_SERVER['REQUEST_METHOD']]);
-  respond(405, ['success'=>false,'error'=>'method','errorMessage'=>'Method not allowed']);
-}
-
-// Enhanced payload size checking
-$postSize = strlen(file_get_contents('php://input'));
-if (empty($_POST) || $postSize > 15000) { // Increased slightly for better UX
-  logContactAttempt('warning', 'Payload size violation', ['size' => $postSize]);
-  respond(413, ['success'=>false,'error'=>'size','errorMessage'=>'Request too large']);
-}
-
-// Enhanced CSRF token validation
-$csrf = $_POST['csrf_token'] ?? '';
-if (!$csrf || !preg_match('/^[A-Za-z0-9\-+\/=]{10,}$/', $csrf)) {
-  logContactAttempt('warning', 'Invalid CSRF token', ['token_provided' => !empty($csrf)]);
-  respond(400, ['success'=>false,'error'=>'csrf','errorMessage'=>'Security token invalid']);
-}
-
-// Optional: Time-based CSRF validation (decode timestamp from token if implemented)
-try {
-  $tokenData = base64_decode($csrf);
-  if ($tokenData && strpos($tokenData, '.') !== false) {
-    list($timestamp, $random) = explode('.', $tokenData, 2);
-    if (is_numeric($timestamp) && (time() - $timestamp) > CSRF_TOKEN_LIFETIME) {
-      logContactAttempt('warning', 'Expired CSRF token', ['age' => time() - $timestamp]);
-      respond(400, ['success'=>false,'error'=>'csrf','errorMessage'=>'Security token expired. Please refresh the page.']);
-    }
-  }
-} catch (Exception $e) {
-  // Token format doesn't match expected pattern, continue with basic validation
-}
-
-// Enhanced honeypot with multiple traps
-$honeypotFields = ['website', 'url', 'homepage', 'company_website'];
-foreach ($honeypotFields as $field) {
-  if (!empty($_POST[$field])) {
-    logContactAttempt('info', 'Honeypot triggered', ['field' => $field, 'value' => $_POST[$field]]);
-    // Pretend success to avoid bot learning
-    respond(200, ['success'=>true]);
+      return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
   }
 }
 
-// Enhanced input processing and validation
-$name = sanitizeInput($_POST['name'] ?? '', 'name');
-$email = sanitizeInput($_POST['email'] ?? '', 'email');
-$telRaw = sanitizeInput($_POST['tel'] ?? '', 'phone');
-$subject = sanitizeInput($_POST['subject'] ?? '');
-$message = sanitizeInput($_POST['message'] ?? '');
+// Get and sanitize inputs
+$name = clean($_POST['name'] ?? '', 'name');
+$email = clean($_POST['email'] ?? '', 'email');
+$phone = clean($_POST['tel'] ?? '', 'phone');
+$subject = clean($_POST['subject'] ?? '');
+$message = clean($_POST['message'] ?? '');
 
-// Comprehensive validation with better error messages
-$validationErrors = [];
+// Validation
+$errors = [];
 
-// Name validation
-if (mb_strlen($name) < 2) {
-  $validationErrors[] = 'Name must be at least 2 characters';
-} elseif (mb_strlen($name) > 80) {
-  $validationErrors[] = 'Name must be less than 80 characters';
-} elseif (!preg_match('/^[\p{L}\s\-\'\.]+$/u', $name)) {
-  $validationErrors[] = 'Name contains invalid characters (only letters, spaces, hyphens, apostrophes, and periods allowed)';
+if (mb_strlen($name) < 2 || mb_strlen($name) > 80) {
+  $errors[] = 'Name must be 2-80 characters';
 }
 
-// Email validation
-if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  $validationErrors[] = 'Please provide a valid email address';
-} elseif (mb_strlen($email) > 120) {
-  $validationErrors[] = 'Email address is too long';
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $errors[] = 'Valid email required';
 }
 
-// Subject validation
-if (mb_strlen($subject) < 1) {
-  $validationErrors[] = 'Please select an inquiry type';
+if (mb_strlen($phone) < 6) {
+  $errors[] = 'Valid phone required';
 }
 
-// Message validation
-if (mb_strlen($message) < 5) {
-  $validationErrors[] = 'Message must be at least 5 characters';
-} elseif (mb_strlen($message) > 1500) {
-  $validationErrors[] = 'Message must be less than 1500 characters';
+if (empty($subject)) {
+  $errors[] = 'Please select a subject';
 }
 
-// Phone validation (now required)
-if (!$telRaw) {
-  $validationErrors[] = 'Phone number is required';
-} elseif (!preg_match('/^[0-9+()\-\s]{6,30}$/', $telRaw)) {
-  $validationErrors[] = 'Phone number format is invalid';
+if (mb_strlen($message) < 5 || mb_strlen($message) > 1500) {
+  $errors[] = 'Message must be 5-1500 characters';
 }
 
-// Subject allowlist enforcement
-$allowedSubjects = [
-  'Table Reservation',
-  'Wine Club Membership',
-  'Private Event',
-  'Catering Services',
-  'Product Information',
-  'General Question',
-  'Other'
-];
-if ($subject && !in_array($subject, $allowedSubjects, true)) {
-  $validationErrors[] = 'Invalid subject selection';
+// Allowed subjects
+$allowed = ['Table Reservation', 'Wine Club Membership', 'Private Event', 'Catering Services', 'Product Information', 'General Question', 'Other'];
+if ($subject && !in_array($subject, $allowed, true)) {
+  $errors[] = 'Invalid subject';
 }
 
-if (!empty($validationErrors)) {
-  logContactAttempt('info', 'Validation failed', ['errors' => $validationErrors]);
+if (!empty($errors)) {
   respond(422, [
     'success' => false,
     'error' => 'validation',
-    'errorMessage' => implode('. ', $validationErrors)
+    'errorMessage' => implode('. ', $errors)
   ]);
 }
 
-// Spam detection
-$formData = compact('name', 'email', 'subject', 'message');
-$spamCheck = calculateSpamScore($formData);
+// Simple rate limiting using session
+$now = time();
+$lastSubmit = $_SESSION['clx_last_submit'] ?? 0;
+$submitCount = $_SESSION['clx_submit_count'] ?? 0;
 
-if ($spamCheck['score'] >= SPAM_SCORE_THRESHOLD) {
-  logContactAttempt('warning', 'High spam score detected', [
-    'score' => $spamCheck['score'],
-    'factors' => $spamCheck['factors'],
-    'data' => $formData
-  ]);
-  
-  // Return generic error to avoid revealing spam detection
-  respond(422, [
-    'success' => false,
-    'error' => 'validation',
-    'errorMessage' => 'Your message could not be processed. Please try again later.'
-  ]);
+// Reset counter each hour
+if ($now - $lastSubmit > 3600) {
+  $submitCount = 0;
 }
 
-// Enhanced rate limiting with progressive delays
-$ip = getClientIP();
-if (!is_dir(RATE_LIMIT_DIR)) {
-  @mkdir(RATE_LIMIT_DIR, 0700, true);
-}
-
-$rlFile = RATE_LIMIT_DIR . DIRECTORY_SEPARATOR . md5($ip) . '.json';
-$currentTime = time();
-$rlData = [
-  'hourly_count' => 0,
-  'daily_count' => 0,
-  'hourly_reset' => $currentTime + 3600,
-  'daily_reset' => strtotime('tomorrow 00:00:00'),
-  'last_submission' => 0,
-  'violations' => 0
-];
-
-if (is_file($rlFile)) {
-  $json = @file_get_contents($rlFile);
-  $tmp = json_decode($json, true);
-  if (is_array($tmp)) {
-    $rlData = array_merge($rlData, $tmp);
-  }
-}
-
-// Reset counters if time windows have passed
-if ($currentTime > $rlData['hourly_reset']) {
-  $rlData['hourly_count'] = 0;
-  $rlData['hourly_reset'] = $currentTime + 3600;
-}
-
-if ($currentTime > $rlData['daily_reset']) {
-  $rlData['daily_count'] = 0;
-  $rlData['daily_reset'] = strtotime('tomorrow 00:00:00');
-  $rlData['violations'] = 0; // Reset violations daily
-}
-
-// Check for too frequent submissions (progressive delay)
-$minDelay = 30; // Base minimum delay in seconds
-if ($rlData['violations'] > 0) {
-  $minDelay *= (1 + $rlData['violations']); // Increase delay with each violation
-}
-
-if ($rlData['last_submission'] > 0 && ($currentTime - $rlData['last_submission']) < $minDelay) {
-  $rlData['violations']++;
-  @file_put_contents($rlFile, json_encode($rlData));
-  
-  logContactAttempt('warning', 'Rate limit - too frequent', [
-    'delay_required' => $minDelay,
-    'actual_delay' => $currentTime - $rlData['last_submission'],
-    'violations' => $rlData['violations']
-  ]);
-  
+// Check rate (max 10 per hour, no delay for first)
+if ($submitCount >= 10) {
   respond(429, [
     'success' => false,
     'error' => 'rate',
-    'errorMessage' => 'Please wait before sending another message.'
+    'errorMessage' => 'Too many messages. Please try again later.'
   ]);
 }
 
-// Increment counters
-$rlData['hourly_count']++;
-$rlData['daily_count']++;
-$rlData['last_submission'] = $currentTime;
+// Update session
+$_SESSION['clx_last_submit'] = $now;
+$_SESSION['clx_submit_count'] = $submitCount + 1;
 
-// Check limits
-if ($rlData['hourly_count'] > MAX_HOURLY_SUBMISSIONS) {
-  $rlData['violations']++;
-  @file_put_contents($rlFile, json_encode($rlData));
-  
-  logContactAttempt('warning', 'Rate limit - hourly exceeded', [
-    'hourly_count' => $rlData['hourly_count'],
-    'limit' => MAX_HOURLY_SUBMISSIONS
-  ]);
-  
-  respond(429, [
-    'success' => false,
-    'error' => 'rate',
-    'errorMessage' => 'Too many messages this hour. Please try again later.'
-  ]);
-}
+// Build professional HTML email
+$date = date('F j, Y');
+$time = date('g:i A');
+$nameSafe = htmlspecialchars($name);
+$emailSafe = htmlspecialchars($email);
+$phoneSafe = htmlspecialchars($phone);
+$subjectSafe = htmlspecialchars($subject ?: 'General Question');
+$messageSafe = nl2br(htmlspecialchars($message));
 
-if ($rlData['daily_count'] > MAX_DAILY_SUBMISSIONS) {
-  $rlData['violations']++;
-  @file_put_contents($rlFile, json_encode($rlData));
-  
-  logContactAttempt('warning', 'Rate limit - daily exceeded', [
-    'daily_count' => $rlData['daily_count'],
-    'limit' => MAX_DAILY_SUBMISSIONS
-  ]);
-  
-  respond(429, [
-    'success' => false,
-    'error' => 'rate',
-    'errorMessage' => 'Daily message limit reached. Please try again tomorrow.'
-  ]);
-}
-
-// Save updated rate limit data
-@file_put_contents($rlFile, json_encode($rlData));
-
-// Enhanced email composition and sending
-$to = MAIL_TO_ADDRESS;
-$subjectLine = '📩 ' . ($subject ?: 'General Inquiry') . ' — ' . $name . ' | ' . date('M j');
-
-// Build professional HTML email body
-$phoneDisplay = $telRaw ?: 'No proporcionado';
-$phoneLink = $telRaw ? '<a href="tel:' . preg_replace('/[^0-9+]/', '', $telRaw) . '" style="color:#c9a227;text-decoration:none;">' . htmlspecialchars($telRaw) . '</a>' : '<span style="color:#888;">No proporcionado</span>';
-$messageFormatted = nl2br(htmlspecialchars($message));
-$spamColor = $spamCheck['score'] <= 3 ? '#4CAF50' : ($spamCheck['score'] <= 6 ? '#FF9800' : '#f44336');
-$submittedDate = date('j \d\e F, Y');
-$submittedTime = date('g:i A') . ' (hora del servidor)';
-
-$body = '<!DOCTYPE html>
-<html lang="es">
+$emailBody = <<<HTML
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Contact - {$nameSafe}</title>
 </head>
-<body style="margin:0;padding:0;background-color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,\'Helvetica Neue\',Arial,sans-serif;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#1a1a1a;padding:20px 0;">
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:30px 15px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background-color:#242424;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
           
           <!-- Header -->
           <tr>
-            <td style="background:linear-gradient(135deg,#c9a227 0%,#8b6914 100%);padding:30px 40px;text-align:center;">
-              <h1 style="margin:0;color:#fff;font-size:24px;font-weight:600;letter-spacing:1px;">THE CLANDESTINO USA</h1>
-              <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:13px;text-transform:uppercase;letter-spacing:2px;">Nuevo Mensaje del Sitio Web</p>
+            <td style="background-color:#1a1a1a;padding:25px 30px;border-bottom:3px solid #c9a227;">
+              <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:600;">THE CLANDESTINO USA</h1>
+              <p style="margin:6px 0 0;color:#c9a227;font-size:13px;letter-spacing:0.5px;">New Website Inquiry</p>
             </td>
           </tr>
           
-          <!-- Contact Info Card -->
+          <!-- Subject Banner -->
           <tr>
-            <td style="padding:30px 40px 20px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#2d2d2d;border-radius:8px;border-left:4px solid #c9a227;">
+            <td style="background-color:#c9a227;padding:14px 30px;">
+              <p style="margin:0;color:#000000;font-size:15px;font-weight:600;">{$subjectSafe}</p>
+            </td>
+          </tr>
+          
+          <!-- Contact Details -->
+          <tr>
+            <td style="padding:28px 30px 20px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="padding:20px 25px;">
-                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <td style="padding-bottom:16px;border-bottom:1px solid #eeeeee;">
+                    <p style="margin:0 0 4px;color:#888888;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">From</p>
+                    <p style="margin:0;color:#1a1a1a;font-size:17px;font-weight:600;">{$nameSafe}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:16px 0;border-bottom:1px solid #eeeeee;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
-                        <td style="padding-bottom:12px;">
-                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Remitente</span>
-                          <p style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:600;">' . htmlspecialchars($name) . '</p>
+                        <td width="50%" style="vertical-align:top;">
+                          <p style="margin:0 0 4px;color:#888888;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Email</p>
+                          <a href="mailto:{$emailSafe}" style="color:#c9a227;font-size:14px;text-decoration:none;">{$emailSafe}</a>
                         </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-bottom:12px;">
-                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Email</span>
-                          <p style="margin:4px 0 0;"><a href="mailto:' . htmlspecialchars($email) . '" style="color:#c9a227;font-size:15px;text-decoration:none;">' . htmlspecialchars($email) . '</a></p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding-bottom:12px;">
-                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Teléfono</span>
-                          <p style="margin:4px 0 0;font-size:15px;">' . $phoneLink . '</p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <span style="color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;">Asunto</span>
-                          <p style="margin:4px 0 0;color:#fff;font-size:15px;">' . htmlspecialchars($subject ?: 'Consulta General') . '</p>
+                        <td width="50%" style="vertical-align:top;">
+                          <p style="margin:0 0 4px;color:#888888;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Phone</p>
+                          <a href="tel:{$phoneSafe}" style="color:#c9a227;font-size:14px;text-decoration:none;">{$phoneSafe}</a>
                         </td>
                       </tr>
                     </table>
@@ -534,67 +206,38 @@ $body = '<!DOCTYPE html>
             </td>
           </tr>
           
-          <!-- Message Content -->
+          <!-- Message -->
           <tr>
-            <td style="padding:0 40px 30px;">
-              <h2 style="margin:0 0 15px;color:#c9a227;font-size:14px;text-transform:uppercase;letter-spacing:1px;font-weight:600;">💬 Mensaje</h2>
-              <div style="background-color:#2d2d2d;border-radius:8px;padding:25px;color:#e0e0e0;font-size:15px;line-height:1.7;">
-                ' . $messageFormatted . '
+            <td style="padding:0 30px 28px;">
+              <p style="margin:0 0 10px;color:#888888;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;">Message</p>
+              <div style="background-color:#fafafa;border:1px solid #eeeeee;border-radius:6px;padding:18px 20px;color:#333333;font-size:14px;line-height:1.65;">
+                {$messageSafe}
               </div>
             </td>
           </tr>
           
-          <!-- Quick Actions -->
+          <!-- Action Buttons -->
           <tr>
-            <td style="padding:0 40px 30px;">
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+            <td style="padding:0 30px 25px;">
+              <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td align="center" style="padding-right:10px;" width="50%">
-                    <a href="mailto:' . htmlspecialchars($email) . '?subject=Re: ' . rawurlencode($subject ?: 'Tu mensaje en The Clandestino') . '" style="display:block;background-color:#c9a227;color:#000;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:14px;text-align:center;">✉️ Responder por Email</a>
+                  <td width="48%" style="padding-right:2%;">
+                    <a href="mailto:{$emailSafe}?subject=Re: {$subjectSafe}" style="display:block;background-color:#c9a227;color:#000000;text-decoration:none;padding:12px 15px;border-radius:5px;font-weight:600;font-size:13px;text-align:center;">Reply by Email</a>
                   </td>
-                  <td align="center" style="padding-left:10px;" width="50%">
-                    <a href="https://wa.me/' . preg_replace('/[^0-9]/', '', $telRaw ?: '14086090027') . '?text=' . rawurlencode('Hola ' . $name . ', gracias por contactar The Clandestino USA...') . '" style="display:block;background-color:#25D366;color:#fff;text-decoration:none;padding:14px 20px;border-radius:6px;font-weight:600;font-size:14px;text-align:center;">💬 WhatsApp</a>
+                  <td width="48%" style="padding-left:2%;">
+                    <a href="https://wa.me/{$phoneSafe}" style="display:block;background-color:#25D366;color:#ffffff;text-decoration:none;padding:12px 15px;border-radius:5px;font-weight:600;font-size:13px;text-align:center;">WhatsApp</a>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
           
-          <!-- Divider -->
-          <tr>
-            <td style="padding:0 40px;">
-              <hr style="border:none;border-top:1px solid #3a3a3a;margin:0;">
-            </td>
-          </tr>
-          
-          <!-- Security Info (Collapsible look) -->
-          <tr>
-            <td style="padding:20px 40px;">
-              <details style="color:#666;font-size:12px;">
-                <summary style="cursor:pointer;color:#888;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🔒 Información de Seguridad</summary>
-                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:10px;">
-                  <tr>
-                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Fecha:</strong> ' . $submittedDate . ' a las ' . $submittedTime . '</td>
-                  </tr>
-                  <tr>
-                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>IP:</strong> ' . htmlspecialchars($ip) . '</td>
-                  </tr>
-                  <tr>
-                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Spam Score:</strong> <span style="color:' . $spamColor . ';font-weight:600;">' . $spamCheck['score'] . '/10</span></td>
-                  </tr>
-                  <tr>
-                    <td style="color:#666;font-size:12px;padding:4px 0;"><strong>Rate Limit:</strong> ' . $rlData['hourly_count'] . '/' . MAX_HOURLY_SUBMISSIONS . ' (hora) • ' . $rlData['daily_count'] . '/' . MAX_DAILY_SUBMISSIONS . ' (día)</td>
-                  </tr>
-                </table>
-              </details>
-            </td>
-          </tr>
-          
           <!-- Footer -->
           <tr>
-            <td style="background-color:#1a1a1a;padding:25px 40px;text-align:center;border-top:1px solid #3a3a3a;">
-              <p style="margin:0 0 8px;color:#666;font-size:12px;">Este mensaje fue enviado desde el formulario de contacto de</p>
-              <p style="margin:0;color:#c9a227;font-size:13px;font-weight:600;">theclandestinousa.com</p>
+            <td style="background-color:#f9f9f9;padding:18px 30px;border-top:1px solid #eeeeee;">
+              <p style="margin:0;color:#999999;font-size:11px;text-align:center;">
+                Received on {$date} at {$time} &bull; theclandestinousa.com
+              </p>
             </td>
           </tr>
           
@@ -603,90 +246,74 @@ $body = '<!DOCTYPE html>
     </tr>
   </table>
 </body>
-</html>';
+</html>
+HTML;
 
-// Enhanced email headers with security information
-$fromHeaderName = MAIL_FROM_NAME;
-$replyToName = str_replace('"', '', $name);
-$fromDomain = 'theclandestinousa.com';
-if (strpos(MAIL_FROM_ADDRESS, '@') !== false) {
-  $fromDomain = substr(strrchr(MAIL_FROM_ADDRESS, '@'), 1);
-}
-
-// Generate boundary for multipart email
-$boundary = md5(uniqid(time()));
+// Prepare email
+$to = MAIL_TO;
+$emailSubject = ($subject ?: 'Contact') . ' - ' . $name;
 
 $headers = [
-  'From: "' . $fromHeaderName . '" <' . MAIL_FROM_ADDRESS . '>',
-  'Reply-To: "' . $replyToName . '" <' . $email . '>',
+  'From: ' . MAIL_FROM_NAME . ' <' . MAIL_FROM . '>',
+  'Reply-To: ' . $name . ' <' . $email . '>',
   'MIME-Version: 1.0',
   'Content-Type: text/html; charset=UTF-8',
-  'Content-Transfer-Encoding: 8bit',
-  'X-Mailer: The Clandestino USA Contact Form v2.1',
-  'X-Originating-IP: ' . $ip,
-  'X-Contact-Form: true',
-  'X-Spam-Score: ' . $spamCheck['score'],
-  'X-Priority: 3',
-  'Message-ID: <' . md5(uniqid(rand(), true)) . '@' . $fromDomain . '>',
-  'Date: ' . date('r')
+  'X-Mailer: ClandestinoUSA/3.0'
 ];
 
-// Attempt to send email with better error handling
-$mailResult = false;
-$fallbackPath = null;
 $headerString = implode("\r\n", $headers);
-$envelopeSender = MAIL_ENVELOPE_SENDER ? sprintf('-f%s', MAIL_ENVELOPE_SENDER) : '';
+
+// Try to send email
+$mailSent = false;
+$lastError = null;
+
 try {
-  if ($envelopeSender) {
-    $mailResult = @mail($to, $subjectLine, $body, $headerString, $envelopeSender);
-  } else {
-    $mailResult = @mail($to, $subjectLine, $body, $headerString);
-  }
+  // Use -f parameter for envelope sender (helps with GoDaddy)
+  $mailSent = @mail($to, $emailSubject, $emailBody, $headerString, '-f' . MAIL_FROM);
   
-  if ($mailResult) {
-    logContactAttempt('info', 'Message sent successfully', [
-      'name' => $name,
-      'email' => $email,
-      'subject' => $subject,
-      'spam_score' => $spamCheck['score'],
-      'message_length' => strlen($message),
-      'delivery_method' => 'php_mail'
-    ]);
-  } else {
-    $fallbackPath = storeFailedEmail($subjectLine, $headers, $body);
-    logContactAttempt('error', 'Failed to send email', [
-      'error' => error_get_last(),
-      'name' => $name,
-      'email' => $email,
-      'fallback_saved_to' => $fallbackPath
-    ]);
+  if (!$mailSent) {
+    $lastError = error_get_last();
   }
 } catch (Exception $e) {
-  $fallbackPath = storeFailedEmail($subjectLine, $headers, $body);
-  logContactAttempt('error', 'Email sending exception', [
-    'exception' => $e->getMessage(),
-    'name' => $name,
-    'email' => $email,
-    'fallback_saved_to' => $fallbackPath
-  ]);
+  $lastError = ['message' => $e->getMessage()];
 }
 
-if (!$mailResult) {
-  $errorMessage = 'We could not send your message automatically. Please try again later or call us directly.';
-  if ($fallbackPath) {
-    $errorMessage = 'We logged your message, but the mail system is unavailable. Please call us to confirm while we follow up.';
-  }
+// If mail failed, try alternative method (simpler headers)
+if (!$mailSent) {
+  $simpleHeaders = "From: " . MAIL_FROM . "\r\n";
+  $simpleHeaders .= "Reply-To: " . $email . "\r\n";
+  $simpleHeaders .= "MIME-Version: 1.0\r\n";
+  $simpleHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
+  
+  $mailSent = @mail($to, $emailSubject, $emailBody, $simpleHeaders);
+}
 
+// If still failed, try plain text as last resort
+if (!$mailSent) {
+  $plainBody = "NEW CONTACT MESSAGE\n";
+  $plainBody .= "==================\n\n";
+  $plainBody .= "From: {$name}\n";
+  $plainBody .= "Email: {$email}\n";
+  $plainBody .= "Phone: {$phone}\n";
+  $plainBody .= "Subject: {$subject}\n\n";
+  $plainBody .= "Message:\n{$message}\n\n";
+  $plainBody .= "---\n";
+  $plainBody .= "Received: {$date} at {$time}";
+  
+  $plainHeaders = "From: " . MAIL_FROM . "\r\nReply-To: " . $email;
+  $mailSent = @mail($to, $emailSubject, $plainBody, $plainHeaders);
+}
+
+// Response
+if ($mailSent) {
+  respond(200, [
+    'success' => true,
+    'message' => 'Thank you for contacting The Clandestino USA! We\'ll get back to you soon.'
+  ]);
+} else {
   respond(502, [
     'success' => false,
     'error' => 'send',
-    'errorMessage' => $errorMessage
+    'errorMessage' => 'Unable to send your message. Please call us directly at +1 408-609-0027 or email info@theclandestinousa.com'
   ]);
 }
-
-// Success response
-respond(200, [
-  'success' => true,
-  'message' => 'Thank you for contacting The Clandestino USA! We\'ll get back to you soon.'
-]);
-?>

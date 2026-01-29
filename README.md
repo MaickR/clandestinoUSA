@@ -16,7 +16,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/Estado-Producción-brightgreen?style=flat-square" alt="Estado">
-  <img src="https://img.shields.io/badge/Versión-2.0.0-blue?style=flat-square" alt="Versión">
+  <img src="https://img.shields.io/badge/Versión-3.0.0-blue?style=flat-square" alt="Versión">
   <img src="https://img.shields.io/badge/Licencia-Privada-red?style=flat-square" alt="Licencia">
   <img src="https://img.shields.io/badge/Última_Actualización-Enero_2026-purple?style=flat-square" alt="Actualización">
 </p>

@@ -7,6 +7,49 @@ y este proyecto adhiere al [Versionado Semántico](https://semver.org/lang/es/).
 
 ---
 
+## [3.0.0] - 2026-01-28
+
+### 🚀 Contact.php Reescrito Completamente
+
+#### Problema Solucionado: Error 502 Bad Gateway
+- **Causa**: El script PHP anterior era demasiado complejo (697 líneas) y causaba timeouts en GoDaddy
+- **Solución**: Reescritura completa con enfoque minimalista y robusto
+
+#### Cambios Principales
+- ✅ Reducido de 697 líneas a ~320 líneas (54% más ligero)
+- ✅ Límite de ejecución de 30 segundos
+- ✅ Sistema de fallback triple para envío de email:
+  1. HTML con headers completos y envelope sender
+  2. HTML con headers simples
+  3. Texto plano como último recurso
+- ✅ Rate limiting basado en sesión (más eficiente que archivos)
+- ✅ Máximo 10 mensajes por hora (sin delay para primer mensaje)
+- ✅ Eliminadas operaciones I/O innecesarias
+- ✅ Removida función `getIP()` y tracking de IP
+- ✅ Removido logging de emails fallidos a directorio temporal
+
+#### 📧 Email HTML Profesional Rediseñado
+Template completamente nuevo con diseño profesional:
+- **Header**: Logo "THE CLANDESTINO USA" con subtítulo "New Website Inquiry"
+- **Banner de Subject**: Fondo dorado (#c9a227) con el asunto seleccionado
+- **Sección de Contacto**: Layout de dos columnas (Email | Phone)
+- **Mensaje**: Caja con fondo gris claro y borde redondeado
+- **Botones de Acción**: "Reply by Email" (dorado) y "WhatsApp" (verde)
+- **Footer**: Fecha/hora de recepción centrado
+- **Tema**: Claro y limpio (fondo blanco) para mejor legibilidad
+
+#### JavaScript del Frontend Mejorado
+- ✅ Agregado timeout de 25 segundos con AbortController
+- ✅ Manejo específico para errores de timeout vs errores de red
+- ✅ Mensajes de error más informativos
+
+#### Modal de Feedback
+- ✅ Muestra éxito SOLO si el email se envió correctamente
+- ✅ Muestra error si hay cualquier problema (red, timeout, servidor)
+- ✅ Ambos estados redirigen a index.html después de 5 segundos
+
+---
+
 ## [2.1.0] - 2026-01-28
 
 ### 🐛 Correcciones de Errores CSP
