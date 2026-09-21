@@ -1,232 +1,143 @@
 ﻿<p align="center">
-  <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" width="280">
+  <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" width="220">
 </p>
 
-<h1 align="center">🍷 The Clandestino USA</h1>
+<h1 align="center">The Clandestino USA</h1>
 
 <p align="center">
-  <strong>Auténtica experiencia gastronómica española en Mount Shasta, California</strong>
-</p>
-
-<p align="center">
-  <a href="https://theclandestinousa.com">🌐 Sitio Web</a> •
-  <a href="https://wa.me/14086090027">💬 WhatsApp</a> •
-  <a href="mailto:info@theclandestinousa.com">📧 Email</a>
+  <em>Escape to Spain without leaving California</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Estado-Producción-brightgreen?style=flat-square" alt="Estado">
-  <img src="https://img.shields.io/badge/Versión-3.0.0-blue?style=flat-square" alt="Versión">
-  <img src="https://img.shields.io/badge/Licencia-Privada-red?style=flat-square" alt="Licencia">
-  <img src="https://img.shields.io/badge/Última_Actualización-Enero_2026-purple?style=flat-square" alt="Actualización">
+  Sitio oficial del restaurante español en Mount Shasta, CA.<br>
+  Refactorización incremental del código en producción hacia una plataforma digital de reservas, Wine Shop, Wine Club y fidelización.
+</p>
+
+<p align="center">
+  <a href="https://theclandestinousa.com">Sitio web</a>
+  ·
+  <a href="mailto:info@theclandestinousa.com">Contacto</a>
+  ·
+  <a href="https://wa.me/14086090027">WhatsApp</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/estado-producción-2e7d32?style=flat-square" alt="Producción">
+  <img src="https://img.shields.io/badge/stack-HTML%20·%20SCSS%20·%20JS%20·%20PHP-1565c0?style=flat-square" alt="Stack">
+  <img src="https://img.shields.io/badge/hosting-GoDaddy%20cPanel-546e7a?style=flat-square" alt="Hosting">
+  <img src="https://img.shields.io/badge/licencia-privada-b71c1c?style=flat-square" alt="Licencia">
 </p>
 
 ---
 
-## 📋 Descripción
+## Descripción
 
-**The Clandestino USA** es un restaurante de tapas españolas auténticas ubicado en el corazón de Mount Shasta, California. Este repositorio contiene el sitio web oficial, desarrollado con tecnologías web modernas optimizadas para rendimiento, SEO y accesibilidad.
+**The Clandestino USA** es un restaurante de tapas y vinos españoles en Mount Shasta, California. Este repositorio mantiene el sitio en producción y lo evoluciona —sobre el código propio existente, sin plantillas de terceros— hacia una experiencia de venta digital: gift cards, reservas, catálogo de vinos, Spanish Wine Club, eventos y cuentas de usuario.
 
-### ✨ Características Principales
-
-- 🎨 **Diseño Elegante** — Interfaz sofisticada inspirada en la hospitalidad española
-- ⚡ **Alto Rendimiento** — Imágenes AVIF/WebP, lazy loading, preconnect optimizado
-- 🔍 **SEO Avanzado** — Schema.org JSON-LD, Open Graph, sitemap con imágenes
-- ♿ **Accesibilidad** — WAI-ARIA completo, skip links, landmarks semánticos
-- 📱 **Responsive** — Adaptación perfecta a todos los dispositivos
-- 🔒 **Seguridad** — CSP, HSTS, Permissions-Policy, headers de seguridad
+| | |
+|---|---|
+| **Ubicación** | 211 N Mt Shasta Blvd, Mount Shasta, CA 96067 |
+| **Teléfono** | +1 (408) 609-0027 |
+| **Email** | info@theclandestinousa.com |
+| **Web** | [theclandestinousa.com](https://theclandestinousa.com) |
 
 ---
 
-## 🕐 Horarios de Atención
+## Stack
 
-| Día | Horario | Notas |
-|-----|---------|-------|
-| **Lunes** | Cerrado | Solo SWC & Eventos Especiales |
-| **Martes** | Cerrado | Solo SWC & Eventos Especiales |
-| **Miércoles** | 1:00 PM - 7:00 PM | — |
-| **Jueves** | 1:00 PM - 8:00 PM | — |
-| **Viernes** | 1:00 PM - 8:00 PM | — |
-| **Sábado** | 1:00 PM - 8:00 PM | — |
-| **Domingo** | 1:00 PM - 7:00 PM | — |
+| Capa | Tecnología |
+|------|------------|
+| Marcado | HTML5 semántico (migración progresiva a PHP con partials) |
+| Estilos | SCSS (patrón 7-1) + Bootstrap 5 · BEM con prefijo `cl-` |
+| Scripts | JavaScript modular (ES) · componentes Bootstrap vía `data-bs-*` |
+| Backend | PHP en capas (Controllers → Services → Repositories → Models) |
+| Build | Gulp · Sass · PostCSS · esbuild · optimización de imágenes |
+| Hosting | GoDaddy Web Hosting Deluxe (cPanel, Apache) |
 
-> 📍 **Ubicación:** 211 N Mt Shasta Blvd, Mount Shasta, CA 96067
+> No se contempla migrar a React ni Laravel en esta fase. El trabajo parte del código ya desplegado.
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Inicio rápido
 
+```bash
+# Clonar e instalar
+git clone https://github.com/MaickR/clandestinoUSA.git
+cd clandestinoUSA
+npm install
+
+# Variables de entorno
+cp .env.example .env
+
+# Desarrollo (watch + BrowserSync)
+npm run dev
+
+# Build de assets
+npm run build
 ```
-Frontend           Optimización        Servidor
-─────────────────  ─────────────────   ─────────────────
-HTML5 Semántico    AVIF/WebP Images    Apache + cPanel
-CSS3 Custom        Lazy Loading        SSL/TLS (Let's Encrypt)
-Vanilla JavaScript  Preconnect/DNS     GoDaddy Hosting
-Swiper.js          Minificación CSS    
-Ionicons 5.5       fetchpriority
-```
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm run dev` | Compilación en watch y servidor local |
+| `npm run build` | CSS, JS, imágenes y sitemap |
+| `npm run lint:css` | Stylelint sobre SCSS |
+| `npm run lint:js` | ESLint sobre JavaScript |
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura
 
 ```
 clandestinoUSA/
-├── 📄 index.html          # Página principal
-├── 📄 menu.html           # Carta y menús
-├── 📄 wines.html          # Catálogo de vinos
-├── 📄 tapas.html          # Menú de tapas
-├── 📄 hampers.html        # Cestas gourmet
-├── 📄 swc.html            # Spanish Wine Club
-├── 📄 about.html          # Sobre nosotros
-├── 📄 contact.html        # Contacto y FAQ
-├── 📄 links.html          # Enlaces sociales
-├── 📄 policies.html       # Políticas
-├── 📄 terms.html          # Términos de servicio
-├── 📄 offline.html        # Página offline
-├── 📄 sitemap.xml         # Sitemap con imágenes
-├── 📄 robots.txt          # Directivas de crawlers
-├── 📄 .htaccess           # Configuración Apache
-│
-├── 📂 assets/
-│   ├── 📂 css/
-│   │   ├── style.css      # Estilos principales
-│   │   └── style.min.css  # Versión minificada
-│   │
-│   ├── 📂 js/
-│   │   ├── script.js      # JavaScript principal
-│   │   ├── preloader.js   # Animación de carga
-│   │   └── ...            # Módulos específicos
-│   │
-│   ├── 📂 images/
-│   │   ├── 📂 avif/       # Imágenes AVIF (óptimo)
-│   │   ├── 📂 webp/       # Imágenes WebP (fallback)
-│   │   └── 📂 gallery/    # Galería fotográfica
-│   │
-│   └── 📂 favicon/        # Iconos y manifest
-│
-└── 📄 package.json        # Configuración npm
+├── index.html … contact.html   # Páginas públicas actuales
+├── assets/
+│   ├── scss/                   # Fuente de estilos (7-1)
+│   ├── css/                    # CSS compilado / legado en producción
+│   ├── js/                     # Módulos JavaScript
+│   └── images/                 # AVIF · WebP · originales
+├── docs/                       # Estándares, mapa del sitio y briefing
+├── .agents/skills/             # Procedimientos para agentes de IA
+├── AGENTS.md                   # Fuente de verdad transversal para agentes
+├── gulpfile.mjs                # Pipeline de assets
+└── package.json
 ```
 
 ---
 
-## 🚀 Registro de Cambios — Enero 2026
+## Documentación
 
-### 🆕 Versión 2.0.0 — *28 de Enero, 2026*
-
-#### 📅 Actualización de Horarios
-- ✅ **Nuevos horarios implementados** en todos los archivos HTML
-- ✅ Lunes y Martes: Exclusivo para miembros del Spanish Wine Club y eventos especiales
-- ✅ Miércoles y Domingo: 1:00 PM - 7:00 PM
-- ✅ Jueves a Sábado: 1:00 PM - 8:00 PM
-- ✅ JSON-LD Schema.org actualizado con `openingHoursSpecification` detallado
-
-#### 🔍 Optimizaciones SEO
-- ✅ **sitemap.xml** recreado — Eliminados duplicados corruptos, añadida extensión `image:image`
-- ✅ **robots.txt** mejorado — Reglas específicas por crawler, bloqueo de bad bots
-- ✅ **JSON-LD** actualizado — `dateModified` a 2026-01-28
-- ✅ **Open Graph** actualizado — `og:updated_time` sincronizado
-
-#### ⚡ Mejoras de Rendimiento
-- ✅ **Preload AVIF** — Cambio de JPG a AVIF en imágenes críticas (50% menos peso)
-- ✅ **Preconnect** añadidos — Google Tag Manager, fonts.googleapis.com
-- ✅ **sw.js eliminado** — Archivo legacy sin uso removido
-
-#### 🔒 Seguridad Reforzada
-- ✅ **Content-Security-Policy** implementado — Compatible con GTM, Fonts, Swiper, Ionicons
-- ✅ **Permissions-Policy** añadido — Bloqueo de geolocation, microphone, camera, FLoC
-
-#### 📅 Mantenimiento General
-- ✅ **Copyright actualizado** — 2025 → 2026 en todos los archivos HTML
-- ✅ **FAQ actualizado** — Nuevos horarios reflejados en preguntas frecuentes
+| Documento | Contenido |
+|-----------|-----------|
+| [`AGENTS.md`](./AGENTS.md) | Reglas del proyecto para cualquier agente de IA |
+| [`docs/ESTANDARES-DE-CODIGO.md`](./docs/ESTANDARES-DE-CODIGO.md) | Convenciones HTML, SCSS, JS y PHP |
+| [`docs/MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md`](./docs/MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md) | Páginas, secciones y orden de trabajo |
+| [`docs/BRIEFING-PROYECTO-PARA-OTRA-IA.md`](./docs/BRIEFING-PROYECTO-PARA-OTRA-IA.md) | Contexto completo del producto |
+| [`README-SETUP-AGENTES.md`](./README-SETUP-AGENTES.md) | Configuración del entorno de agentes |
 
 ---
 
-### 📊 Historial de Versiones Anteriores
+## Principios de desarrollo
 
-| Versión | Fecha | Cambios Principales |
-|---------|-------|---------------------|
-| 1.9.x | Dic 2025 | Auditoría de precios, corrección de productos |
-| 1.8.x | Nov 2025 | Optimización de imágenes AVIF |
-| 1.7.x | Oct 2025 | Auditoría técnica completa |
-| 1.6.x | Sep 2025 | Implementación de JSON-LD Schema |
+1. **Simplicidad primero** — la solución más simple que cumple el objetivo.
+2. **Cambios quirúrgicos** — tocar solo lo que la tarea requiere.
+3. **Sin asunciones silenciosas** — aclarar ambigüedades antes de codificar.
+4. **Criterio de éxito** — cada cambio debe poder verificarse en navegador o con un comando concreto.
 
----
-
-## 🧪 Auditoría Técnica
-
-### Puntuación Lighthouse (Enero 2026)
-
-| Métrica | Puntuación | Estado |
-|---------|------------|--------|
-| Performance | 92+ | 🟢 Excelente |
-| Accessibility | 95+ | 🟢 Excelente |
-| Best Practices | 100 | 🟢 Perfecto |
-| SEO | 100 | 🟢 Perfecto |
-
-### Validaciones
-- ✅ HTML5 válido (W3C Validator)
-- ✅ CSS3 válido (W3C CSS Validator)
-- ✅ Schema.org válido (Google Rich Results Test)
-- ✅ Open Graph válido (Facebook Debugger)
+Convenciones clave: documentation y código en **español**; texto visible al usuario en **inglés**; CSS BEM `cl-bloque__elemento--modificador`; commits Conventional Commits; Git Flow (`main` / `develop` / `feature/…`).
 
 ---
 
-## 🔧 Configuración del Servidor
+## Horarios
 
-### Headers de Seguridad (.htaccess)
-
-```apache
-# Seguridad implementada
-✓ Strict-Transport-Security (HSTS)
-✓ X-Content-Type-Options: nosniff
-✓ X-Frame-Options: SAMEORIGIN
-✓ Referrer-Policy: strict-origin-when-cross-origin
-✓ Content-Security-Policy (CSP completo)
-✓ Permissions-Policy
-```
-
-### Caché Configurado
-
-| Tipo de Archivo | TTL |
-|-----------------|-----|
-| HTML/PHP | Sin caché |
-| CSS/JS | 7 días |
-| Imágenes | 6 meses |
-| Fuentes | 6 meses (immutable) |
-
----
-
-## 📞 Contacto
-
-<table>
-  <tr>
-    <td align="center">📍</td>
-    <td><strong>Dirección</strong><br>211 N Mt Shasta Blvd<br>Mount Shasta, CA 96067</td>
-  </tr>
-  <tr>
-    <td align="center">📞</td>
-    <td><strong>Teléfono</strong><br>+1 (408) 609-0027</td>
-  </tr>
-  <tr>
-    <td align="center">📧</td>
-    <td><strong>Email</strong><br>info@theclandestinousa.com</td>
-  </tr>
-  <tr>
-    <td align="center">🌐</td>
-    <td><strong>Web</strong><br>https://theclandestinousa.com</td>
-  </tr>
-</table>
-
----
-
-## 👨‍💻 Desarrollo
-
-**Desarrollado por:** ByteForge  
-**Mantenimiento:** Equipo The Clandestino USA
+| Día | Horario |
+|-----|---------|
+| Lunes – Martes | Cerrado (SWC y eventos especiales) |
+| Miércoles | 1:00 PM – 7:00 PM |
+| Jueves – Sábado | 1:00 PM – 8:00 PM |
+| Domingo | 1:00 PM – 7:00 PM |
 
 ---
 
 <p align="center">
-  <sub>© 2026 The Clandestino USA. Todos los derechos reservados.</sub>
+  <sub>© 2026 The Clandestino USA · Todos los derechos reservados</sub>
 </p>

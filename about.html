@@ -85,6 +85,7 @@
 
 	<!-- Styles (only what we use here) -->
 	<link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/style.new.css">
 
     <!-- (Removed Magnific Popup stylesheet; custom gallery implemented) -->
 
@@ -170,22 +171,38 @@
 		</div>
 	</div>
 
-	<div class="topbar" role="banner" itemscope itemtype="https://schema.org/Restaurant">
-		<div class="container">
-			<address class="topbar-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-				<div class="icon" aria-hidden="true"><ion-icon name="location-outline"></ion-icon></div>
-				<span class="span"><a href="https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA" target="_blank" rel="noopener">211 N Mt Shasta Blvd, California, US 96067, US</a></span>
-			</address>
-			<div class="separator" aria-hidden="true"></div>
-			<div class="topbar-item item-2" itemprop="openingHours" content="We 13:00-19:00, Th-Sa 13:00-20:00, Su 13:00-19:00">
-				<div class="icon" aria-hidden="true"><ion-icon name="time-outline"></ion-icon></div>
-				<span class="span"><time datetime="13:00/20:00">Wed-Sun: 1 PM - 7/8 PM</time></span>
-			</div>
-			<a href="tel:+14086090027" class="topbar-item link" itemprop="telephone"><div class="icon" aria-hidden="true"><ion-icon name="call-outline"></ion-icon></div><span class="span">+1 (408) 609-0027</span></a>
-			<div class="separator" aria-hidden="true"></div>
-			<a href="mailto:info@theclandestinousa.com" class="topbar-item link" itemprop="email"><div class="icon" aria-hidden="true"><ion-icon name="mail-outline"></ion-icon></div><span class="span">info@theclandestinousa.com</span></a>
-		</div>
-	</div>
+    <div class="cl-topbar" role="region" aria-label="Operational information">
+        <div class="container">
+            <div class="cl-topbar__operacional">
+                <a class="cl-topbar__item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
+                    <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+                    <span class="cl-topbar__texto">211 N Mt Shasta Blvd, California, US</span>
+                </a>
+                <div class="cl-topbar__item" aria-label="Business hours">
+                    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                    <time class="cl-topbar__texto" datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
+                </div>
+            </div>
+
+            <ul class="cl-topbar__sociales" aria-label="Social media links">
+                <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Instagram"><ion-icon name="logo-instagram" aria-hidden="true"></ion-icon></a></li>
+                <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Facebook"><ion-icon name="logo-facebook" aria-hidden="true"></ion-icon></a></li>
+                <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="WhatsApp"><ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon></a></li>
+                <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="TikTok"><ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon></a></li>
+            </ul>
+
+            <div class="cl-topbar__contacto">
+                <a class="cl-topbar__item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
+                    <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
+                    <span class="cl-topbar__texto">+1 (408) 609-0027</span>
+                </a>
+                <a class="cl-topbar__item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
+                    <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+                    <span class="cl-topbar__texto">info@theclandestinousa.com</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
 	<header class="header" data-header role="banner" aria-label="Site header" itemscope itemtype="https://schema.org/WPHeader">
 		<div class="container">
@@ -196,24 +213,14 @@
 				<a href="index.html" class="logo" aria-hidden="true"><img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA Logo"></a>
 				<ul class="navbar-list" role="menubar">
                     <li class="navbar-item" role="none"><a href="index.html#home" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a></li>
-					<li class="navbar-item has-submenu" role="none">
-						<a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Menus</span></a>
-						<ul class="submenu">
-							<li><a href="menu.html">General Menu</a></li>
-							<li><a href="tapas.html">Tapas</a></li>
-							<li><a href="wines.html">Wines</a></li>
-							<li><a href="hampers.html">Hampers</a></li>
-						</ul>
-					</li>
-                    <li class="navbar-item" role="none"><a href="about.html" class="navbar-link hover-underline active" aria-current="page" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a></li>
-                    <li class="navbar-item" role="none"><a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a></li>
-                    <li class="navbar-item has-submenu" role="none">
-                        <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
-                        <ul class="submenu">
-                            <li><a href="contact.html#contact-form">Contact Form</a></li>
-                            <li><a href="contact.html#faq">FAQ</a></li>
-                        </ul>
-                    </li>
+                    <li class="navbar-item" role="none"><a href="index.html#services" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Experiences</span></a></li>
+                    <li class="navbar-item" role="none"><a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Restaurant</span></a></li>
+                    <li class="navbar-item" role="none"><a href="wines.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Wine Shop</span></a></li>
+                    <li class="navbar-item" role="none"><a href="hampers.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Gift Cards</span></a></li>
+                    <li class="navbar-item" role="none"><a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Wine Club</span></a></li>
+                    <li class="navbar-item" role="none"><a href="index.html#events" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Events</span></a></li>
+                    <li class="navbar-item" role="none"><a href="index.html#reservation" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Reserve</span></a></li>
+                    <li class="navbar-item" role="none"><a href="contact.html#contact-form" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">My Account</span></a></li>
 				</ul>
 				<div class="text-center" aria-hidden="true">
 					<p class="headline-1 navbar-title">Visit Us</p>

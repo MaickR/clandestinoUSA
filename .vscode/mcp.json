@@ -1,0 +1,25 @@
+{
+  "servers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "stripe": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@stripe/mcp", "--tools=all"],
+      "env": {
+        "STRIPE_SECRET_KEY": "${input:stripe_secret_key}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "id": "stripe_secret_key",
+      "type": "promptString",
+      "description": "Stripe secret key (usar una Restricted API Key, no la clave completa de la cuenta)",
+      "password": true
+    }
+  ]
+}

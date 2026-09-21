@@ -95,173 +95,46 @@
   <!-- 
     - custom css link
   -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
-  <!-- Swiper CSS for testimonials carousel -->
-  <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css">
-
-  <!-- Preload Critical Images (AVIF for performance, with fallback) -->
-  <link rel="preload" as="image" href="./assets/images/avif/bg/the-clandestino-usa.avif" type="image/avif">
-  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-friends.avif" type="image/avif">
-  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-tapas.avif" type="image/avif">
-  <!-- Preload critical CSS -->
-  <link rel="preload" as="style" href="./assets/css/style.css">
-
-  <!-- JSON-LD Structured Data (Organization + WebSite + Restaurant + WebPage) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        "@id": "https://theclandestinousa.com/#organization",
-        "name": "The Clandestino USA",
-        "alternateName": "Clandestino",
-        "url": "https://theclandestinousa.com/",
-        "logo": {"@type": "ImageObject", "@id": "https://theclandestinousa.com/#logo", "url": "https://theclandestinousa.com/assets/images/clandestino-logo.svg", "width": 160, "height": 50},
-        "image": [
-          "https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg",
-          "https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg",
-          "https://theclandestinousa.com/assets/images/bg/clandestino-wine-friends.jpg"
-        ],
-        "sameAs": [
-          "https://www.facebook.com/profile.php?id=61559740614798",
-          "https://www.instagram.com/theclandestinousa/",
-          "https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA"
-        ],
-        "contactPoint": [{"@type": "ContactPoint", "telephone": "+1-408-609-0027", "contactType": "customer service", "areaServed": "US", "availableLanguage": ["en","es"]}]
-      },
-      {
-        "@type": "WebSite",
-        "@id": "https://theclandestinousa.com/#website",
-        "url": "https://theclandestinousa.com/",
-        "name": "The Clandestino USA",
-        "publisher": {"@id": "https://theclandestinousa.com/#organization"},
-        "inLanguage": "en-US",
-        "potentialAction": {"@type": "SearchAction","target": "https://theclandestinousa.com/?s={search_term_string}","query-input": "required name=search_term_string"}
-      },
-      {
-        "@type": "Restaurant",
-        "@id": "https://theclandestinousa.com/#restaurant",
-        "name": "The Clandestino USA",
-        "alternateName": "Clandestino",
-        "servesCuisine": ["Spanish","Mediterranean","Tapas","Wine Bar"],
-        "priceRange": "$$",
-        "url": "https://theclandestinousa.com/",
-        "logo": {"@id": "https://theclandestinousa.com/#logo"},
-        "image": [
-          "https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg",
-          "https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg",
-          "https://theclandestinousa.com/assets/images/bg/clandestino-wine-friends.jpg"
-        ],
-        "description": "Authentic Spanish tapas & wine restaurant in Mount Shasta, California. Experience Mediterranean flavors, curated wines, and warm Spanish hospitality.",
-        "address": {"@type": "PostalAddress","streetAddress": "211 N Mt Shasta Blvd","addressLocality": "Mount Shasta","addressRegion": "CA","postalCode": "96067","addressCountry": "US"},
-        "geo": {"@type": "GeoCoordinates","latitude": 41.3099, "longitude": -122.3053},
-        "telephone": "+1-408-609-0027",
-        "acceptsReservations": true,
-        "hasMenu": "https://theclandestinousa.com/menu.html",
-        "openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Monday","Tuesday"],"opens": "00:00","closes": "00:00","description": "SWC Members & Special Events Only"},{"@type": "OpeningHoursSpecification","dayOfWeek": ["Wednesday","Sunday"],"opens": "13:00","closes": "19:00"},{"@type": "OpeningHoursSpecification","dayOfWeek": ["Thursday","Friday","Saturday"],"opens": "13:00","closes": "20:00"}]
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://theclandestinousa.com/#webpage",
-        "url": "https://theclandestinousa.com/",
-        "name": "Home — The Clandestino USA",
-        "isPartOf": {"@id": "https://theclandestinousa.com/#website"},
-        "about": {"@id": "https://theclandestinousa.com/#restaurant"},
-        "primaryImageOfPage": {"@id": "https://theclandestinousa.com/#logo"},
-        "dateModified": "2026-01-28T00:00:00Z",
-        "inLanguage": "en-US"
-      }
-    ]
-  }
-  </script>
-
-</head>
-
+  <link rel="stylesheet" href="./assets/css/style.new.css">
+  </head>
 <body id="top">
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MVF7WM94"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <!-- Accessibility -->
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-
-<!-- Clandestino Preloader -->
-  <div class="clandestino-preloader" aria-hidden="true">
-    <div class="clandestino-preloader-centrize clandestino-preloader-full-width">
-      <div class="clandestino-preloader-vertical-center">
-        <div class="clandestino-preloader-spinner-logo">
-          <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" />
-        </div>
-      </div>
-    </div>
-    <!-- Barra de progreso -->
-    <div class="clandestino-preloader-progress">
-      <div class="clandestino-preloader-progress-bar"></div>
-      <div class="clandestino-preloader-progress-text">Cargando experiencia gastronómica...</div>
-    </div>
-  </div>
-
-
   <!-- 
     - #TOP BAR
   -->
 
-  <div class="topbar" role="banner" itemscope itemtype="https://schema.org/Restaurant">
+  <div class="cl-topbar" role="region" aria-label="Operational information">
     <div class="container">
-
-      <address class="topbar-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-        <div class="icon" aria-hidden="true">
-          <ion-icon name="location-outline" role="img" aria-label="Location"></ion-icon>
+      <div class="cl-topbar__operacional">
+        <a class="cl-topbar__item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
+          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
+          <span class="cl-topbar__texto">211 N Mt Shasta Blvd, California, US</span>
+        </a>
+        <div class="cl-topbar__item" aria-label="Business hours">
+          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+          <time class="cl-topbar__texto" datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
         </div>
-
-        <span class="span">
-          <a href="https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             aria-label="View our location on Google Maps"
-             itemprop="url">
-            211 N Mt Shasta Blvd, California, US 96067, US
-          </a>
-        </span>
-      </address>
-
-      <div class="separator" aria-hidden="true" role="separator"></div>
-
-      <!-- Hours with Schema -->
-      <div class="topbar-item item-2" itemprop="openingHours" content="We 13:00-19:00, Th-Sa 13:00-20:00, Su 13:00-19:00">
-        <div class="icon" aria-hidden="true">
-          <ion-icon name="time-outline" role="img" aria-label="Opening hours"></ion-icon>
-        </div>
-        <span class="span">
-          <time datetime="13:00/20:00">Wed-Sun: 1 PM - 7/8 PM</time>
-        </span>
       </div>
 
-      <!-- Phone with Schema -->
-      <a href="tel:+14086090027" 
-         class="topbar-item link" 
-         itemprop="telephone"
-         aria-label="Call us at +1 408-609-0027">
-        <div class="icon" aria-hidden="true">
-          <ion-icon name="call-outline" role="img" aria-label="Phone"></ion-icon>
-        </div>
-        <span class="span">+1 (408) 609-0027</span>
-      </a>
+      <ul class="cl-topbar__sociales" aria-label="Social media links">
+        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Instagram"><ion-icon name="logo-instagram" aria-hidden="true"></ion-icon></a></li>
+        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Facebook"><ion-icon name="logo-facebook" aria-hidden="true"></ion-icon></a></li>
+        <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="WhatsApp"><ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon></a></li>
+        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="TikTok"><ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon></a></li>
+      </ul>
 
-      <div class="separator" aria-hidden="true" role="separator"></div>
-
-      <!-- Email with Schema -->
-      <a href="mailto:info@theclandestinousa.com" 
-         class="topbar-item link"
-         itemprop="email"
-         aria-label="Send us an email">
-        <div class="icon" aria-hidden="true">
-          <ion-icon name="mail-outline" role="img" aria-label="Email"></ion-icon>
-        </div>
-        <span class="span">info@theclandestinousa.com</span>
-      </a>
-
+      <div class="cl-topbar__contacto">
+        <a class="cl-topbar__item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
+          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
+          <span class="cl-topbar__texto">+1 (408) 609-0027</span>
+        </a>
+        <a class="cl-topbar__item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
+          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
+          <span class="cl-topbar__texto">info@theclandestinousa.com</span>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -270,111 +143,130 @@
     - #HEADER
   -->
 
-  <header class="header" data-header role="banner"  aria-label="Site header"
+  <header class="header cl-header" data-header role="banner"  aria-label="Site header"
           itemscope 
           itemtype="https://schema.org/WPHeader">
-    <div class="container">
+    <div class="container cl-header__layout">
 
-  <a href="index.html" class="logo"  aria-label="The Clandestino USA - Return to homepage"
-         itemprop="logo"
-         itemscope
-         itemtype="https://schema.org/ImageObject">
-        <img src="./assets/images/clandestino-logo.svg" width="120" height="50" 
-            alt="The Clandestino USA - Spanish Tapas & Wine Restaurant Logo"
-             itemprop="url"
-             fetchpriority="high"
-             decoding="async">
+      <a href="index.html" class="logo cl-header__brand" aria-label="The Clandestino USA - Return to homepage" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+        <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA - Spanish Tapas & Wine Restaurant Logo" itemprop="url" fetchpriority="high" decoding="async">
       </a>
 
-      <!--? Accessible nav -->
-      <nav class="navbar" data-navbar 
-           aria-label="Main navigation"
-           id="navigation"
-           role="navigation"
-           itemscope
-           itemtype="https://schema.org/SiteNavigationElement">
-
-        <button class="close-btn" aria-label="close menu" data-nav-toggler>
-          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-        </button>
-
-        <!--? Secondary logo shown in mobile menu -->
-  <a href="index.html" class="logo" aria-hidden="true">
-          <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA Logo">
-        </a>
-
-        <ul class="navbar-list" role="menubar">
-
-          <li class="navbar-item" role="none">
-            <a href="#home" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+      <nav class="cl-header__desktop-nav" aria-label="Main navigation">
+        <ul class="navbar-nav flex-row align-items-center cl-header__menu">
+          <li class="nav-item" role="none">
+            <a href="index.html#home" class="nav-link cl-header__link active" role="menuitem" aria-current="page">Home</a>
           </li>
-
-          <li class="navbar-item has-submenu" role="none">
-            <a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Menus</span></a>
-            <ul class="submenu">
-              <li><a href="menu.html">General Menu</a></li>
-              <li><a href="tapas.html">Tapas</a></li>
-              <li><a href="wines.html">Wines</a></li>
-              <li><a href="hampers.html">Hampers</a></li>
+          <li class="nav-item" role="none">
+            <a href="index.html#services" class="nav-link cl-header__link" role="menuitem">Experiences</a>
+          </li>
+          <li class="nav-item" role="none">
+            <a href="menu.html" class="nav-link cl-header__link" role="menuitem">Restaurant</a>
+          </li>
+          <li class="nav-item dropdown" role="none">
+            <button class="nav-link dropdown-toggle cl-header__dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Discover</button>
+            <ul class="dropdown-menu cl-header__dropdown-menu">
+              <li><a class="dropdown-item cl-header__dropdown-item" href="wines.html">Wine Shop</a></li>
+              <li><a class="dropdown-item cl-header__dropdown-item" href="hampers.html">Gift Cards</a></li>
+              <li><a class="dropdown-item cl-header__dropdown-item" href="swc.html">Wine Club</a></li>
             </ul>
           </li>
-
-          <li class="navbar-item" role="none">
-            <a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a>
+          <li class="nav-item" role="none">
+            <a href="index.html#events" class="nav-link cl-header__link" role="menuitem">Events</a>
           </li>
-
-          <li class="navbar-item" role="none">
-            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
-          </li>
-
-          <li class="navbar-item has-submenu" role="none">
-            <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
-            <ul class="submenu">
-              <li><a href="contact.html#contact-form">Contact Form</a></li>
-              <li><a href="contact.html#faq">FAQ</a></li>
-            </ul>
-          </li>
-
         </ul>
-
-        <div class="text-center" aria-hidden="true">
-          <p class="headline-1 navbar-title">Visit Us</p>
-
-          <address class="body-4">
-            211 N Mt Shasta Blvd, California, <br>
-            US 96067, US
-          </address>
-
-            <p class="body-4 navbar-text">Wed & Sun: 1-7 PM | Thu-Sat: 1-8 PM<br><small>Mon-Tue: SWC & Events Only</small></p>
-
-          <a href="mailto:info@theclandestinousa.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">info@theclandestinousa.com</a>
-
-          <div class="separator" aria-hidden="true"></div>
-
-            <p class="contact-label">Booking Request</p>
-
-            <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" 
-            target="_blank" rel="noopener noreferrer" class="body-1 contact-number hover-underline">
-            +1 408-609-0027
-            </a>
-            <div class="separator" aria-hidden="true"></div>
-        </div>
 
       </nav>
 
-      <a href="#reservation" class="btn btn-secondary">
-        <span class="text text-1">Find A Table</span>
+      <div class="cl-header__actions">
+        <button type="button" class="cl-header__account" aria-label="Open account sign in" data-bs-toggle="modal" data-bs-target="#authModal">
+          <i class="bi bi-person-circle" aria-hidden="true"></i>
+        </button>
+        <a href="index.html#reservation" class="btn btn-secondary cl-header__reserve">
+          <span class="text text-1">Reserve</span>
+          <span class="text text-2" aria-hidden="true">Reserve</span>
+        </a>
+      </div>
 
-        <span class="text text-2" aria-hidden="true">Find A Table</span>
-      </a>
+      <div class="cl-header__mobile">
+        <button class="cl-header__toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#siteMenuOffcanvas" aria-controls="siteMenuOffcanvas" aria-label="Open menu">
+          <i class="bi bi-list cl-header__toggle-icon" aria-hidden="true"></i>
+        </button>
+      </div>
 
-      <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
-        <span class="line line-1"></span>
-        <span class="line line-2"></span>
-        <span class="line line-3"></span>
-      </button>
+      <div class="offcanvas offcanvas-end cl-header__offcanvas" tabindex="-1" id="siteMenuOffcanvas" aria-labelledby="siteMenuOffcanvasLabel">
+        <div class="offcanvas-header">
+          <a href="index.html" class="logo cl-header__brand" id="siteMenuOffcanvasLabel" aria-label="The Clandestino USA - Return to homepage">
+            <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA Logo" decoding="async">
+          </a>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
+        </div>
 
-      <div class="overlay" data-nav-toggler data-overlay aria-hidden="true"></div>
+        <div class="offcanvas-body cl-header__offcanvas-body">
+          <div class="cl-header__operacional-grid" aria-label="Operational information">
+            <a class="cl-header__operacional-item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
+              <i class="bi bi-geo-alt" aria-hidden="true"></i>
+              <span class="cl-header__operacional-texto">211 N Mt Shasta Blvd, California, US</span>
+            </a>
+            <div class="cl-header__operacional-item" aria-label="Business hours">
+              <i class="bi bi-clock" aria-hidden="true"></i>
+              <time datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
+            </div>
+            <a class="cl-header__operacional-item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
+              <i class="bi bi-whatsapp" aria-hidden="true"></i>
+              <span class="cl-header__operacional-texto">+1 (408) 609-0027</span>
+            </a>
+            <a class="cl-header__operacional-item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
+              <i class="bi bi-envelope" aria-hidden="true"></i>
+              <span class="cl-header__operacional-texto">info@theclandestinousa.com</span>
+            </a>
+          </div>
+
+          <nav aria-label="Mobile navigation">
+            <ul class="navbar-nav cl-header__mobile-nav">
+              <li class="nav-item"><a href="index.html#home" class="nav-link cl-header__mobile-link active" aria-current="page">Home</a></li>
+              <li class="nav-item"><a href="index.html#services" class="nav-link cl-header__mobile-link">Experiences</a></li>
+              <li class="nav-item"><a href="menu.html" class="nav-link cl-header__mobile-link">Restaurant</a></li>
+              <li class="nav-item">
+                <button class="cl-header__submenu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#discoverCollapseHome" aria-expanded="false" aria-controls="discoverCollapseHome">
+                  <span>Discover</span>
+                  <i class="bi bi-chevron-down cl-header__submenu-toggle-icon" aria-hidden="true"></i>
+                </button>
+                <div class="collapse cl-header__collapse" id="discoverCollapseHome">
+                  <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="wines.html">Wine Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="hampers.html">Gift Cards</a></li>
+                    <li class="nav-item"><a class="nav-link" href="swc.html">Wine Club</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item"><a href="index.html#events" class="nav-link cl-header__mobile-link">Events</a></li>
+            </ul>
+          </nav>
+
+          <div class="cl-header__mobile-footer">
+            <div class="cl-header__mobile-toolbar" aria-label="Quick actions">
+              <button type="button" class="cl-header__mobile-account cl-header__mobile-action" aria-label="Open account sign in" data-bs-toggle="modal" data-bs-target="#authModal">
+                <i class="bi bi-person-circle" aria-hidden="true"></i>
+                <span>Account</span>
+              </button>
+
+              <a href="index.html#reservation" class="btn btn-secondary cl-header__mobile-reserve cl-header__mobile-action">
+                <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                <span class="text text-1">Reserve</span>
+                <span class="text text-2" aria-hidden="true">Reserve</span>
+              </a>
+            </div>
+
+            <ul class="cl-header__mobile-socials" aria-label="The Clandestino social links">
+              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
+              <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
+              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
     </div>
   </header>
@@ -1229,7 +1121,7 @@
         - #EVENT
       -->
 
-      <section class="section event bg-black-10" aria-label="event">
+      <section class="section event bg-black-10" aria-label="event" id="events">
         <div class="container">
 
           <p class="section-subtitle label-2 text-center">Special Experiences</p>
@@ -1630,6 +1522,7 @@
     - custom js link
   -->
   <!-- Load as module and defer for non-blocking parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
   <script type="module" src="./assets/js/script.js" defer></script>
   <script>
     // Preloader fail-safe: in case module script blocked (e.g. file:// CORS), hide after 4s
@@ -1645,6 +1538,21 @@
       .clandestino-preloader{display:none !important;}
     </style>
   </noscript>
+
+  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content cl-header__auth-modal">
+        <div class="modal-header cl-header__auth-modal-header">
+          <h2 class="modal-title" id="authModalLabel">My Account</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close modal"></button>
+        </div>
+        <div class="modal-body cl-header__auth-modal-body">
+          <p class="mb-3">Authentication is being prepared. This experience will host sign in and member access soon.</p>
+          <button type="button" class="btn btn-secondary w-100" disabled>Coming soon</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- 
     - ionicon link
