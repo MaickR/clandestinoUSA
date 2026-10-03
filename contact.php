@@ -1,9 +1,24 @@
 <?php
 /**
- * The Clandestino USA - Contact Form Handler
+ * The Clandestino USA - Contact Form Handler (hardened anti-spam)
  * Optimized for GoDaddy/cPanel hosting
- * 
- * @version 3.0 - Simplified and robust
+ *
+ * Recipients:
+ *  - To (primary / preferred public contact): ntcusa@nicolastena.com
+ *  - Cc (public secondary):                    info@theclandestinousa.com
+ *  - Bcc (internal, NEVER published on site):  msrl.dev420@gmail.com
+ *
+ * Anti-spam layers (server side, authoritative):
+ *  1. Multiple honeypot fields (bots fill them, humans never see them)
+ *  2. Time-trap (form_loaded_at): rejects instant/bot-speed submissions via scoring
+ *  3. Header-injection guard (rejects \r \n in name/email/subject/phone)
+ *  4. Disposable / temporary email domain blocklist (scoring)
+ *  5. Content scoring: links, spam keywords, repeated chars, ALL CAPS
+ *  6. Origin / Referer same-site check (scoring)
+ *  7. Rate limiting: session (10/hour) + per-IP file throttle (4 / 15 min, min 20s gap)
+ *  8. Bots receive a FAKE success response so they move on instead of retrying
+ *
+ * @version 4.0 - multi-recipient + hardened
  */
 
 // Set execution limits for shared hosting
@@ -14,6 +29,7 @@
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
+header('Referrer-Policy: same-origin');
 
 // Start session for CSRF and rate limiting
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -27,12 +43,56 @@ function respond($code, $data) {
   exit;
 }
 
+/**
+ * Fake success for bots: looks like a real delivery so automated
+ * spammers do not retry or adapt. NEVER reveals that we detected them.
+ */
+function fakeSuccess() {
+  respond(200, [
+    'success' => true,
+    'message' => 'Thank you for contacting The Clandestino USA! We\'ll get back to you soon.'
+  ]);
+}
+
+// ---------------------------------------------------------------------------
 // Configuration
-define('MAIL_TO', 'info@theclandestinousa.com');
+// ---------------------------------------------------------------------------
+define('MAIL_TO_PRIMARY', 'ntcusa@nicolastena.com');   // preferred public contact
+define('MAIL_TO_COPY', 'info@theclandestinousa.com');  // public secondary
+define('MAIL_TO_BCC', 'msrl.dev420@gmail.com');        // internal only, never public
 define('MAIL_FROM', 'noreply@theclandestinousa.com');
 define('MAIL_FROM_NAME', 'The Clandestino USA');
 
+// Spam score threshold: >= this value = treated as bot (fake success)
+define('SPAM_THRESHOLD', 4);
+
+// Disposable / temporary email domains (bots love these)
+$DISPOSABLE_DOMAINS = [
+  'mailinator.com', 'mailinator.net', 'tempmail.com', 'temp-mail.org',
+  'guerrillamail.com', 'guerrillamail.net', '10minutemail.com', '10minutemail.net',
+  'yopmail.com', 'yopmail.net', 'trashmail.com', 'trashmail.net', 'dispostable.com',
+  'throwawaymail.com', 'fakeinbox.com', 'getnada.com', 'mohmal.com', 'tempail.com',
+  'emailondeck.com', 'sharklasers.com', 'grr.la', 'mintemail.com', 'mytrashmail.com',
+  'spamgourmet.com', 'maildrop.cc', 'harakirimail.com', 'cryptogmail.com',
+];
+
+// Classic form-spam keywords (pharma / casino / seo / money schemes / adult)
+$SPAM_KEYWORDS = [
+  'viagra', 'cialis', 'levitra', 'phentermine', 'tramadol', 'oxycodone',
+  'casino', 'poker', 'blackjack', 'lottery', 'jackpot', 'betting', 'sportsbook',
+  'forex', 'binary option', 'crypto doubler', 'bitcoin doubler', 'investment opportunity',
+  'backlink', 'link building', 'domain authority', 'page rank', 'pagerank',
+  'seo service', 'seo expert', 'rank #1', 'rank no.1', 'first page of google',
+  'website traffic', 'buy traffic', 'cheap traffic', 'social followers', 'buy followers',
+  'instagram followers', 'youtube views', 'make money fast', 'work from home',
+  'weight loss', 'lose weight fast', 'payday loan', 'quick loan', 'debt relief',
+  'porn', 'xxx', 'escort', 'sexdoll', 'hack', 'hacker for hire', 'spy app',
+  'replica watch', 'replica bag', 'canada pharmacy', 'online pharmacy',
+];
+
+// ---------------------------------------------------------------------------
 // Only POST allowed
+// ---------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   respond(405, ['success' => false, 'errorMessage' => 'Method not allowed']);
 }
@@ -42,23 +102,58 @@ if (empty($_POST)) {
   respond(400, ['success' => false, 'errorMessage' => 'No data received']);
 }
 
-// CSRF validation (flexible)
-$csrf = $_POST['csrf_token'] ?? '';
-if (strlen($csrf) < 10) {
-  respond(400, ['success' => false, 'errorMessage' => 'Invalid security token. Please refresh the page.']);
+$now = time();
+$spamScore = 0;
+
+// ---------------------------------------------------------------------------
+// Honeypot check (multiple traps — humans never see these fields)
+// Any filled trap = certain bot -> fake success, no further processing.
+// ---------------------------------------------------------------------------
+foreach (['website', 'url', 'company'] as $trap) {
+  if (!empty($_POST[$trap])) {
+    fakeSuccess();
+  }
 }
 
-// Honeypot check
-if (!empty($_POST['website']) || !empty($_POST['url'])) {
-  respond(200, ['success' => true]); // Fake success for bots
+// ---------------------------------------------------------------------------
+// Time-trap: form_loaded_at is set by JS when the page loads.
+// Bots submit instantly (< 3s) or forge/omit the stamp.
+// NOTE: a single weak signal never blocks alone (autofill users are fast);
+// it only adds score combined with other signals.
+// ---------------------------------------------------------------------------
+$loadedAt = intval($_POST['form_loaded_at'] ?? 0);
+if ($loadedAt <= 0) {
+  $spamScore += 2; // no JS stamp: bot or forged request
+} else {
+  $elapsed = $now - $loadedAt;
+  if ($elapsed < 0 || $elapsed > 3 * 3600) {
+    respond(400, ['success' => false, 'errorMessage' => 'Form expired. Please refresh the page and try again.']);
+  }
+  if ($elapsed < 3) {
+    $spamScore += 2; // inhuman speed
+  }
 }
 
-// Sanitize function
+// ---------------------------------------------------------------------------
+// Same-site check: legitimate fetch() requests carry our Origin/Referer.
+// ---------------------------------------------------------------------------
+$host = strtolower($_SERVER['HTTP_HOST'] ?? '');
+$originHost = strtolower(parse_url($_SERVER['HTTP_ORIGIN'] ?? '', PHP_URL_HOST) ?: '');
+$refererHost = strtolower(parse_url($_SERVER['HTTP_REFERER'] ?? '', PHP_URL_HOST) ?: '');
+if (($originHost !== '' && $originHost !== $host) || ($refererHost !== '' && $refererHost !== $host)) {
+  $spamScore += 2; // cross-site forgery attempt
+} elseif ($originHost === '' && $refererHost === '') {
+  $spamScore += 1; // missing entirely: slightly suspicious (browsers always send it)
+}
+
+// ---------------------------------------------------------------------------
+// Sanitizers
+// ---------------------------------------------------------------------------
 function clean($value, $type = 'text') {
   if (is_array($value)) return '';
   $value = trim($value);
   $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $value);
-  
+
   switch ($type) {
     case 'email':
       return filter_var($value, FILTER_SANITIZE_EMAIL);
@@ -71,6 +166,17 @@ function clean($value, $type = 'text') {
   }
 }
 
+/** Header-injection guard: CR/LF characters are never legitimate here. */
+function hasInjection($value) {
+  return is_string($value) && preg_match('/[\r\n]/', $value);
+}
+
+foreach (['name', 'email', 'tel', 'subject'] as $field) {
+  if (isset($_POST[$field]) && hasInjection($_POST[$field])) {
+    respond(422, ['success' => false, 'errorMessage' => 'Invalid characters in submission.']);
+  }
+}
+
 // Get and sanitize inputs
 $name = clean($_POST['name'] ?? '', 'name');
 $email = clean($_POST['email'] ?? '', 'email');
@@ -78,14 +184,16 @@ $phone = clean($_POST['tel'] ?? '', 'phone');
 $subject = clean($_POST['subject'] ?? '');
 $message = clean($_POST['message'] ?? '');
 
-// Validation
+// ---------------------------------------------------------------------------
+// Validation (honest errors for real users)
+// ---------------------------------------------------------------------------
 $errors = [];
 
 if (mb_strlen($name) < 2 || mb_strlen($name) > 80) {
   $errors[] = 'Name must be 2-80 characters';
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 120) {
   $errors[] = 'Valid email required';
 }
 
@@ -115,17 +223,87 @@ if (!empty($errors)) {
   ]);
 }
 
-// Simple rate limiting using session
-$now = time();
+// ---------------------------------------------------------------------------
+// Content scoring (spam / promo bots)
+// ---------------------------------------------------------------------------
+
+// Disposable email domains
+$emailDomain = strtolower(substr(strrchr($email, '@'), 1) ?: '');
+if ($emailDomain !== '' && in_array($emailDomain, $DISPOSABLE_DOMAINS, true)) {
+  $spamScore += 2;
+}
+
+// Links in the message: real guests rarely paste links; spammers always do
+$linkCount = preg_match_all('#https?://|www\.#i', $message, $m);
+if ($linkCount >= 2) {
+  $spamScore += 3;
+} elseif ($linkCount === 1 && mb_strlen($message) < 60) {
+  $spamScore += 2; // short message whose only purpose is a link
+}
+
+// Spam keywords (name + subject + message)
+$haystack = mb_strtolower($name . ' ' . $subject . ' ' . $message, 'UTF-8');
+foreach ($SPAM_KEYWORDS as $kw) {
+  if (mb_strpos($haystack, $kw) !== false) {
+    $spamScore += 3;
+    break;
+  }
+}
+
+// Obvious bot gibberish: 6+ repeated characters, or ALL CAPS shouting
+if (preg_match('/(.)\\1{5,}/u', $message)) {
+  $spamScore += 1;
+}
+if (mb_strlen($message) > 20 && mb_strtoupper($message, 'UTF-8') === $message && preg_match('/[A-Z]{10,}/', $message)) {
+  $spamScore += 1;
+}
+
+// Verdict: suspected bot -> fake success (they think it was delivered)
+if ($spamScore >= SPAM_THRESHOLD) {
+  fakeSuccess();
+}
+
+// ---------------------------------------------------------------------------
+// Rate limiting
+// ---------------------------------------------------------------------------
+
+// Layer 1: per-IP file throttle (survives session resets; bots rotate sessions, not IPs)
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+$rlFile = sys_get_temp_dir() . '/clx_rl_' . md5('clandestino-usa|' . $ip) . '.json';
+$rl = ['window' => $now, 'count' => 0, 'last' => 0];
+if (is_readable($rlFile)) {
+  $decoded = json_decode(@file_get_contents($rlFile), true);
+  if (is_array($decoded)) {
+    $rl = array_merge($rl, $decoded);
+  }
+}
+if ($now - (int)$rl['window'] > 900) { // 15-minute window
+  $rl = ['window' => $now, 'count' => 0, 'last' => (int)$rl['last']];
+}
+if ((int)$rl['count'] >= 4) {
+  respond(429, [
+    'success' => false,
+    'error' => 'rate',
+    'errorMessage' => 'Too many messages from this connection. Please try again later or call us at +1 408-609-0027.'
+  ]);
+}
+if ($now - (int)$rl['last'] < 20 && (int)$rl['last'] > 0) {
+  respond(429, [
+    'success' => false,
+    'error' => 'rate',
+    'errorMessage' => 'Please wait a few seconds before sending another message.'
+  ]);
+}
+$rl['count']++;
+$rl['last'] = $now;
+@file_put_contents($rlFile, json_encode($rl), LOCK_EX);
+
+// Layer 2: session throttle (max 10 per hour)
 $lastSubmit = $_SESSION['clx_last_submit'] ?? 0;
 $submitCount = $_SESSION['clx_submit_count'] ?? 0;
-
-// Reset counter each hour
 if ($now - $lastSubmit > 3600) {
   $submitCount = 0;
 }
-
-// Check rate (max 10 per hour, no delay for first)
 if ($submitCount >= 10) {
   respond(429, [
     'success' => false,
@@ -133,12 +311,12 @@ if ($submitCount >= 10) {
     'errorMessage' => 'Too many messages. Please try again later.'
   ]);
 }
-
-// Update session
 $_SESSION['clx_last_submit'] = $now;
 $_SESSION['clx_submit_count'] = $submitCount + 1;
 
+// ---------------------------------------------------------------------------
 // Build professional HTML email
+// ---------------------------------------------------------------------------
 $date = date('F j, Y');
 $time = date('g:i A');
 $nameSafe = htmlspecialchars($name);
@@ -160,7 +338,7 @@ $emailBody = <<<HTML
     <tr>
       <td align="center">
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
-          
+
           <!-- Header -->
           <tr>
             <td style="background-color:#1a1a1a;padding:25px 30px;border-bottom:3px solid #c9a227;">
@@ -168,14 +346,14 @@ $emailBody = <<<HTML
               <p style="margin:6px 0 0;color:#c9a227;font-size:13px;letter-spacing:0.5px;">New Website Inquiry</p>
             </td>
           </tr>
-          
+
           <!-- Subject Banner -->
           <tr>
             <td style="background-color:#c9a227;padding:14px 30px;">
               <p style="margin:0;color:#000000;font-size:15px;font-weight:600;">{$subjectSafe}</p>
             </td>
           </tr>
-          
+
           <!-- Contact Details -->
           <tr>
             <td style="padding:28px 30px 20px;">
@@ -205,7 +383,7 @@ $emailBody = <<<HTML
               </table>
             </td>
           </tr>
-          
+
           <!-- Message -->
           <tr>
             <td style="padding:0 30px 28px;">
@@ -215,7 +393,7 @@ $emailBody = <<<HTML
               </div>
             </td>
           </tr>
-          
+
           <!-- Action Buttons -->
           <tr>
             <td style="padding:0 30px 25px;">
@@ -231,7 +409,7 @@ $emailBody = <<<HTML
               </table>
             </td>
           </tr>
-          
+
           <!-- Footer -->
           <tr>
             <td style="background-color:#f9f9f9;padding:18px 30px;border-top:1px solid #eeeeee;">
@@ -240,7 +418,7 @@ $emailBody = <<<HTML
               </p>
             </td>
           </tr>
-          
+
         </table>
       </td>
     </tr>
@@ -249,71 +427,48 @@ $emailBody = <<<HTML
 </html>
 HTML;
 
-// Prepare email
-$to = MAIL_TO;
-$emailSubject = ($subject ?: 'Contact') . ' - ' . $name;
+// ---------------------------------------------------------------------------
+// One message per inbox. Cc/Bcc is dropped by some hosts, so each
+// address gets its own delivery. Success only when all three accept it.
+// ---------------------------------------------------------------------------
+function deliver_all($subject, $html, $plain, $replyTo) {
+  $subject = str_replace(["\r", "\n"], ' ', $subject);
+  $replyTo = str_replace(["\r", "\n"], '', $replyTo);
+  $recipients = [MAIL_TO_PRIMARY, MAIL_TO_COPY, MAIL_TO_BCC];
 
-$headers = [
-  'From: ' . MAIL_FROM_NAME . ' <' . MAIL_FROM . '>',
-  'Reply-To: ' . $name . ' <' . $email . '>',
-  'MIME-Version: 1.0',
-  'Content-Type: text/html; charset=UTF-8',
-  'X-Mailer: ClandestinoUSA/3.0'
-];
-
-$headerString = implode("\r\n", $headers);
-
-// Try to send email
-$mailSent = false;
-$lastError = null;
-
-try {
-  // Use -f parameter for envelope sender (helps with GoDaddy)
-  $mailSent = @mail($to, $emailSubject, $emailBody, $headerString, '-f' . MAIL_FROM);
-  
-  if (!$mailSent) {
-    $lastError = error_get_last();
+  foreach ($recipients as $addr) {
+    $headers = implode("\r\n", [
+      'From: ' . MAIL_FROM_NAME . ' <' . MAIL_FROM . '>',
+      'Reply-To: ' . $replyTo,
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=UTF-8',
+      'X-Mailer: ClandestinoUSA/4.1'
+    ]);
+    $sent = @mail($addr, $subject, $html, $headers, '-f' . MAIL_FROM);
+    if (!$sent) {
+      $plainHeaders = 'From: ' . MAIL_FROM . "\r\nReply-To: " . $replyTo . "\r\nContent-Type: text/plain; charset=UTF-8";
+      $sent = @mail($addr, $subject, $plain, $plainHeaders);
+    }
+    if (!$sent) {
+      return false;
+    }
   }
-} catch (Exception $e) {
-  $lastError = ['message' => $e->getMessage()];
+  return true;
 }
 
-// If mail failed, try alternative method (simpler headers)
-if (!$mailSent) {
-  $simpleHeaders = "From: " . MAIL_FROM . "\r\n";
-  $simpleHeaders .= "Reply-To: " . $email . "\r\n";
-  $simpleHeaders .= "MIME-Version: 1.0\r\n";
-  $simpleHeaders .= "Content-Type: text/html; charset=UTF-8\r\n";
-  
-  $mailSent = @mail($to, $emailSubject, $emailBody, $simpleHeaders);
-}
+$emailSubject = ($subject ?: 'Contact') . ' - ' . $name;
+$replyTo = $name . ' <' . $email . '>';
+$plainBody = "NEW CONTACT MESSAGE\n==================\n\nFrom: {$name}\nEmail: {$email}\nPhone: {$phone}\nSubject: {$subject}\n\nMessage:\n{$message}\n\nReceived: {$date} at {$time}";
 
-// If still failed, try plain text as last resort
-if (!$mailSent) {
-  $plainBody = "NEW CONTACT MESSAGE\n";
-  $plainBody .= "==================\n\n";
-  $plainBody .= "From: {$name}\n";
-  $plainBody .= "Email: {$email}\n";
-  $plainBody .= "Phone: {$phone}\n";
-  $plainBody .= "Subject: {$subject}\n\n";
-  $plainBody .= "Message:\n{$message}\n\n";
-  $plainBody .= "---\n";
-  $plainBody .= "Received: {$date} at {$time}";
-  
-  $plainHeaders = "From: " . MAIL_FROM . "\r\nReply-To: " . $email;
-  $mailSent = @mail($to, $emailSubject, $plainBody, $plainHeaders);
-}
-
-// Response
-if ($mailSent) {
+if (deliver_all($emailSubject, $emailBody, $plainBody, $replyTo)) {
   respond(200, [
     'success' => true,
-    'message' => 'Thank you for contacting The Clandestino USA! We\'ll get back to you soon.'
-  ]);
-} else {
-  respond(502, [
-    'success' => false,
-    'error' => 'send',
-    'errorMessage' => 'Unable to send your message. Please call us directly at +1 408-609-0027 or email info@theclandestinousa.com'
+    'message' => 'Thank you for contacting The Clandestino USA. We will get back to you soon.'
   ]);
 }
+
+respond(502, [
+  'success' => false,
+  'error' => 'send',
+  'errorMessage' => 'We could not send your message. Please call +1 408-609-0027 or email ntcusa@nicolastena.com.'
+]);

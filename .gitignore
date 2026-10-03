@@ -1,16 +1,19 @@
+# Node and build artifacts
 node_modules/
-vendor/
-.env
-*.log
-/dist
-/build
-assets/js/dist/
+.dist/
+build/
+dist/
 
-# El CSS real en producción (style.css / style.min.css) SÍ se versiona normalmente —
-# no es output generado todavía, es la fuente de verdad hasta que se complete la
-# migración a SCSS. Solo se ignora el archivo del pipeline nuevo mientras se construye:
-assets/css/style.new.css
-assets/css/style.new.css.map
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
+# System files
 .DS_Store
-.playwright-mcp/
+Thumbs.db
+
+# Environment files
+.env
+.env.local

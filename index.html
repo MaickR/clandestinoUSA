@@ -26,7 +26,7 @@
   <!-- - Primary SEO -->
    <title>The Clandestino USA — Authentic Spanish Tapas & Wine Restaurant | Mount Shasta, CA</title>
   <meta name="title" content="The Clandestino USA — Authentic Spanish Tapas & Wine Restaurant | Mount Shasta, CA">
-  <meta name="description" content="Experience authentic Spanish tapas and curated wines at The Clandestino USA in Mount Shasta, California. Join our Spanish Wine Club, book private events, or reserve your table for an unforgettable Mediterranean dining experience.">
+  <meta name="description" content="Authentic Spanish tapas and curated wines at The Clandestino USA, 211 N Mt Shasta Blvd, Mount Shasta, CA. Open Tuesday–Sunday, 4–8 PM Pacific. Reserve a table, book a private event, or join the Spanish Wine Club.">
   <meta name="keywords" content="Spanish restaurant Mount Shasta, tapas California, Spanish wine Restaurant, Mediterranean food Mount Shasta, Spanish Wine Club, authentic tapas, Spanish cuisine Northern California, wine tasting Mount Shasta, Spanish restaurant California">
   <meta name="author" content="The Clandestino USA">
   <meta name="copyright" content="© 2026 The Clandestino USA. All rights reserved.">
@@ -46,7 +46,7 @@
   <!-- Open Graph Protocol (Facebook, LinkedIn, etc.) -->
   <meta property="og:type" content="restaurant">
   <meta property="og:title" content="The Clandestino USA — Authentic Spanish Tapas & Wine Restaurant">
-  <meta property="og:description" content="Experience authentic Spanish tapas and curated wines in Mount Shasta. Join our Wine Club, book events, or reserve your table for an unforgettable Mediterranean dining experience.">
+  <meta property="og:description" content="Spanish tapas and curated wines in Mount Shasta. Open Tuesday–Sunday, 4–8 PM Pacific. Reserve a table, book a private evening, or join the Wine Club.">
   <meta property="og:url" content="https://theclandestinousa.com/">
   <meta property="og:image" content="https://theclandestinousa.com/assets/images/wines.jpeg">
   <meta property="og:image:alt" content="The Clandestino USA restaurant interior with Spanish tapas and wine">
@@ -95,46 +95,208 @@
   <!-- 
     - custom css link
   -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/style.new.css">
-  </head>
+  <link rel="stylesheet" href="./assets/css/whatsapp-float.css?v=20260923">
+  <link rel="stylesheet" href="./assets/css/form-feedback.css">
+  <link rel="stylesheet" href="./assets/css/pure-soul.css?v=20261002">
+  <!-- Swiper CSS for testimonials carousel -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css">
+
+  <!-- Preload Critical Images (AVIF for performance, with fallback) -->
+  <link rel="preload" as="image" href="./assets/images/avif/bg/the-clandestino-usa.avif" type="image/avif">
+  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-friends.avif" type="image/avif">
+  <link rel="preload" as="image" href="./assets/images/avif/bg/clandestino-tapas.avif" type="image/avif">
+  <!-- Preload critical CSS -->
+  <link rel="preload" as="style" href="./assets/css/style.css">
+
+  <!-- JSON-LD Structured Data (Organization + WebSite + Restaurant + WebPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://theclandestinousa.com/#organization",
+        "name": "The Clandestino USA",
+        "alternateName": "Clandestino",
+        "url": "https://theclandestinousa.com/",
+        "logo": {"@type": "ImageObject", "@id": "https://theclandestinousa.com/#logo", "url": "https://theclandestinousa.com/assets/images/clandestino-logo.svg", "width": 160, "height": 50},
+        "image": [
+          "https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg",
+          "https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg",
+          "https://theclandestinousa.com/assets/images/bg/clandestino-wine-friends.jpg"
+        ],
+        "sameAs": [
+          "https://www.facebook.com/profile.php?id=61559740614798",
+          "https://www.instagram.com/theclandestinousa/",
+          "https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA"
+        ],
+        "contactPoint": [{"@type": "ContactPoint", "telephone": "+1-408-609-0027", "email": "ntcusa@nicolastena.com", "contactType": "customer service", "areaServed": "US", "availableLanguage": ["en","es"]}]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://theclandestinousa.com/#website",
+        "url": "https://theclandestinousa.com/",
+        "name": "The Clandestino USA",
+        "publisher": {"@id": "https://theclandestinousa.com/#organization"},
+        "inLanguage": "en-US",
+        "potentialAction": {"@type": "SearchAction","target": "https://theclandestinousa.com/?s={search_term_string}","query-input": "required name=search_term_string"}
+      },
+      {
+        "@type": "Restaurant",
+        "@id": "https://theclandestinousa.com/#restaurant",
+        "name": "The Clandestino USA",
+        "alternateName": "Clandestino",
+        "servesCuisine": ["Spanish","Mediterranean","Tapas","Wine Bar"],
+        "priceRange": "$$",
+        "url": "https://theclandestinousa.com/",
+        "logo": {"@id": "https://theclandestinousa.com/#logo"},
+        "image": [
+          "https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg",
+          "https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg",
+          "https://theclandestinousa.com/assets/images/bg/clandestino-wine-friends.jpg"
+        ],
+        "description": "Authentic Spanish tapas and wine in Mount Shasta, California. Open Tuesday through Sunday, 4:00–8:00 PM Pacific. Monday closed.",
+        "address": {"@type": "PostalAddress","streetAddress": "211 N Mt Shasta Blvd","addressLocality": "Mount Shasta","addressRegion": "CA","postalCode": "96067","addressCountry": "US"},
+        "geo": {"@type": "GeoCoordinates","latitude": 41.3099, "longitude": -122.3053},
+        "telephone": "+1-408-609-0027",
+        "acceptsReservations": true,
+        "hasMenu": "https://theclandestinousa.com/menu.html",
+        "openingHoursSpecification": [{"@type": "OpeningHoursSpecification","dayOfWeek": ["Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens": "16:00","closes": "20:00"},{"@type": "OpeningHoursSpecification","dayOfWeek": "Monday","opens": "00:00","closes": "00:00","description": "Closed"}],"email": "ntcusa@nicolastena.com"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://theclandestinousa.com/#webpage",
+        "url": "https://theclandestinousa.com/",
+        "name": "Home — The Clandestino USA",
+        "isPartOf": {"@id": "https://theclandestinousa.com/#website"},
+        "about": {"@id": "https://theclandestinousa.com/#restaurant"},
+        "primaryImageOfPage": {"@id": "https://theclandestinousa.com/#logo"},
+        "dateModified": "2026-10-02T00:00:00Z",
+        "inLanguage": "en-US"
+      },
+      {
+        "@type": "Product",
+        "@id": "https://theclandestinousa.com/#pure-soul",
+        "name": "Pure Soul 2023",
+        "category": "Red wine",
+        "brand": {"@type": "Brand", "name": "NTC & Sons"},
+        "image": [
+          "https://theclandestinousa.com/assets/images/pure-soul.png",
+          "https://theclandestinousa.com/assets/images/pure-soul.jpg"
+        ],
+        "description": "Barrel-aged limited edition red from D.O.P. Cariñena, Spain: 85% Garnacha and 15% Vidadillo from dry-farmed bush vines over 40 years old. Ripe red fruit, spice, toasted coffee and cocoa.",
+        "countryOfOrigin": {"@type": "Country", "name": "Spain"},
+        "additionalProperty": [
+          {"@type": "PropertyValue", "name": "Vintage", "value": "2023"},
+          {"@type": "PropertyValue", "name": "Grapes", "value": "85% Garnacha, 15% Vidadillo"},
+          {"@type": "PropertyValue", "name": "Appellation", "value": "D.O.P. Cariñena"},
+          {"@type": "PropertyValue", "name": "Alcohol", "value": "14.5%"},
+          {"@type": "PropertyValue", "name": "pH", "value": "3.36"},
+          {"@type": "PropertyValue", "name": "Volume", "value": "750 ml"},
+          {"@type": "PropertyValue", "name": "Serving temperature", "value": "14–16 °C"}
+        ],
+        "award": [
+          "Gold — Grenaches du Monde 2023",
+          "90 points — James Suckling 2023",
+          "Gold — Bacchus 2021",
+          "93 points — Blue Lifestyle 2021"
+        ],
+        "offers": [
+          {"@type": "Offer", "name": "Bottle (750 ml)", "price": "45.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://theclandestinousa.com/#pure-soul", "seller": {"@id": "https://theclandestinousa.com/#organization"}},
+          {"@type": "Offer", "name": "Glass", "price": "12.00", "priceCurrency": "USD", "availability": "https://schema.org/InStock", "url": "https://theclandestinousa.com/#pure-soul", "seller": {"@id": "https://theclandestinousa.com/#organization"}}
+        ]
+      }
+    ]
+  }
+  </script>
+
+</head>
+
 <body id="top">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MVF7WM94"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- Accessibility -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- Clandestino Preloader -->
+  <div class="clandestino-preloader" aria-hidden="true">
+    <div class="clandestino-preloader-centrize clandestino-preloader-full-width">
+      <div class="clandestino-preloader-vertical-center">
+        <div class="clandestino-preloader-spinner-logo">
+          <img src="./assets/images/clandestino-logo.svg" alt="The Clandestino USA" />
+        </div>
+      </div>
+    </div>
+    <!-- Barra de progreso -->
+    <div class="clandestino-preloader-progress">
+      <div class="clandestino-preloader-progress-bar"></div>
+      <div class="clandestino-preloader-progress-text">Cargando experiencia gastronómica...</div>
+    </div>
+  </div>
+
+
   <!-- 
     - #TOP BAR
   -->
 
-  <div class="cl-topbar" role="region" aria-label="Operational information">
+  <div class="topbar" role="banner" itemscope itemtype="https://schema.org/Restaurant">
     <div class="container">
-      <div class="cl-topbar__operacional">
-        <a class="cl-topbar__item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
-          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">211 N Mt Shasta Blvd, California, US</span>
-        </a>
-        <div class="cl-topbar__item" aria-label="Business hours">
-          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-          <time class="cl-topbar__texto" datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
+
+      <address class="topbar-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="location-outline" role="img" aria-label="Location"></ion-icon>
         </div>
+
+        <span class="span">
+          <a href="https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             aria-label="View our location on Google Maps"
+             itemprop="url">
+            211 N Mt Shasta Blvd, California, US 96067, US
+          </a>
+        </span>
+      </address>
+
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Hours with Schema -->
+      <div class="topbar-item item-2" itemprop="openingHours" content="Tu-Su 16:00-20:00">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="time-outline" role="img" aria-label="Opening hours"></ion-icon>
+        </div>
+        <span class="span">
+          <time datetime="16:00/20:00">Tue–Sun: 4–8 PM</time>
+        </span>
       </div>
 
-      <ul class="cl-topbar__sociales" aria-label="Social media links">
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Instagram"><ion-icon name="logo-instagram" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Facebook"><ion-icon name="logo-facebook" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="WhatsApp"><ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="TikTok"><ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon></a></li>
-      </ul>
+      <!-- Phone with Schema -->
+      <a href="tel:+14086090027" 
+         class="topbar-item link" 
+         itemprop="telephone"
+         aria-label="Call us at +1 408-609-0027">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="call-outline" role="img" aria-label="Phone"></ion-icon>
+        </div>
+        <span class="span">+1 (408) 609-0027</span>
+      </a>
 
-      <div class="cl-topbar__contacto">
-        <a class="cl-topbar__item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
-          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">+1 (408) 609-0027</span>
-        </a>
-        <a class="cl-topbar__item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
-          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">info@theclandestinousa.com</span>
-        </a>
-      </div>
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Email with Schema (preferred public inbox) -->
+      <a href="mailto:ntcusa@nicolastena.com" 
+         class="topbar-item link"
+         itemprop="email"
+         aria-label="Send us an email to ntcusa@nicolastena.com">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="mail-outline" role="img" aria-label="Email"></ion-icon>
+        </div>
+        <span class="span">ntcusa@nicolastena.com</span>
+      </a>
+
     </div>
   </div>
 
@@ -143,130 +305,111 @@
     - #HEADER
   -->
 
-  <header class="header cl-header" data-header role="banner"  aria-label="Site header"
+  <header class="header" data-header role="banner"  aria-label="Site header"
           itemscope 
           itemtype="https://schema.org/WPHeader">
-    <div class="container cl-header__layout">
+    <div class="container">
 
-      <a href="index.html" class="logo cl-header__brand" aria-label="The Clandestino USA - Return to homepage" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-        <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA - Spanish Tapas & Wine Restaurant Logo" itemprop="url" fetchpriority="high" decoding="async">
+  <a href="index.html" class="logo"  aria-label="The Clandestino USA - Return to homepage"
+         itemprop="logo"
+         itemscope
+         itemtype="https://schema.org/ImageObject">
+        <img src="./assets/images/clandestino-logo.svg" width="120" height="50" 
+            alt="The Clandestino USA - Spanish Tapas & Wine Restaurant Logo"
+             itemprop="url"
+             fetchpriority="high"
+             decoding="async">
       </a>
 
-      <nav class="cl-header__desktop-nav" aria-label="Main navigation">
-        <ul class="navbar-nav flex-row align-items-center cl-header__menu">
-          <li class="nav-item" role="none">
-            <a href="index.html#home" class="nav-link cl-header__link active" role="menuitem" aria-current="page">Home</a>
+      <!--? Accessible nav -->
+      <nav class="navbar" data-navbar 
+           aria-label="Main navigation"
+           id="navigation"
+           role="navigation"
+           itemscope
+           itemtype="https://schema.org/SiteNavigationElement">
+
+        <button class="close-btn" aria-label="close menu" data-nav-toggler>
+          <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
+        </button>
+
+        <!--? Secondary logo shown in mobile menu -->
+  <a href="index.html" class="logo" aria-hidden="true">
+          <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA Logo">
+        </a>
+
+        <ul class="navbar-list" role="menubar">
+
+          <li class="navbar-item" role="none">
+            <a href="#home" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
           </li>
-          <li class="nav-item" role="none">
-            <a href="index.html#services" class="nav-link cl-header__link" role="menuitem">Experiences</a>
-          </li>
-          <li class="nav-item" role="none">
-            <a href="menu.html" class="nav-link cl-header__link" role="menuitem">Restaurant</a>
-          </li>
-          <li class="nav-item dropdown" role="none">
-            <button class="nav-link dropdown-toggle cl-header__dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Discover</button>
-            <ul class="dropdown-menu cl-header__dropdown-menu">
-              <li><a class="dropdown-item cl-header__dropdown-item" href="wines.html">Wine Shop</a></li>
-              <li><a class="dropdown-item cl-header__dropdown-item" href="hampers.html">Gift Cards</a></li>
-              <li><a class="dropdown-item cl-header__dropdown-item" href="swc.html">Wine Club</a></li>
+
+          <li class="navbar-item has-submenu" role="none">
+            <a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Menus</span></a>
+            <ul class="submenu">
+              <li><a href="menu.html">General Menu</a></li>
+              <li><a href="tapas.html">Tapas</a></li>
+              <li><a href="wines.html">Wines</a></li>
+              <li><a href="hampers.html">Hampers</a></li>
             </ul>
           </li>
-          <li class="nav-item" role="none">
-            <a href="index.html#events" class="nav-link cl-header__link" role="menuitem">Events</a>
+
+          <li class="navbar-item" role="none">
+            <a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a>
           </li>
+
+          <li class="navbar-item" role="none">
+            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
+          </li>
+
+          <li class="navbar-item has-submenu" role="none">
+            <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
+          </li>
+
         </ul>
+
+        <div class="text-center" aria-hidden="true">
+          <p class="headline-1 navbar-title">Visit Us</p>
+
+          <address class="body-4">
+            211 N Mt Shasta Blvd, California, <br>
+            US 96067, US
+          </address>
+
+            <p class="body-4 navbar-text">Tue–Sun: 4–8 PM PT<br><small>Monday: Closed</small></p>
+
+          <a href="mailto:ntcusa@nicolastena.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">ntcusa@nicolastena.com</a>
+
+          <div class="separator" aria-hidden="true"></div>
+
+            <p class="contact-label">Booking Request</p>
+
+            <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" 
+            target="_blank" rel="noopener noreferrer" class="body-1 contact-number hover-underline">
+            +1 408-609-0027
+            </a>
+            <div class="separator" aria-hidden="true"></div>
+        </div>
 
       </nav>
 
-      <div class="cl-header__actions">
-        <button type="button" class="cl-header__account" aria-label="Open account sign in" data-bs-toggle="modal" data-bs-target="#authModal">
-          <i class="bi bi-person-circle" aria-hidden="true"></i>
-        </button>
-        <a href="index.html#reservation" class="btn btn-secondary cl-header__reserve">
-          <span class="text text-1">Reserve</span>
-          <span class="text text-2" aria-hidden="true">Reserve</span>
-        </a>
-      </div>
+      <a href="#reservation" class="btn btn-secondary">
+        <span class="text text-1">Find A Table</span>
 
-      <div class="cl-header__mobile">
-        <button class="cl-header__toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#siteMenuOffcanvas" aria-controls="siteMenuOffcanvas" aria-label="Open menu">
-          <i class="bi bi-list cl-header__toggle-icon" aria-hidden="true"></i>
-        </button>
-      </div>
+        <span class="text text-2" aria-hidden="true">Find A Table</span>
+      </a>
 
-      <div class="offcanvas offcanvas-end cl-header__offcanvas" tabindex="-1" id="siteMenuOffcanvas" aria-labelledby="siteMenuOffcanvasLabel">
-        <div class="offcanvas-header">
-          <a href="index.html" class="logo cl-header__brand" id="siteMenuOffcanvasLabel" aria-label="The Clandestino USA - Return to homepage">
-            <img src="./assets/images/clandestino-logo.svg" width="160" height="50" alt="The Clandestino USA Logo" decoding="async">
-          </a>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close menu"></button>
-        </div>
+      <button class="nav-open-btn" aria-label="open menu" data-nav-toggler>
+        <span class="line line-1"></span>
+        <span class="line line-2"></span>
+        <span class="line line-3"></span>
+      </button>
 
-        <div class="offcanvas-body cl-header__offcanvas-body">
-          <div class="cl-header__operacional-grid" aria-label="Operational information">
-            <a class="cl-header__operacional-item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
-              <i class="bi bi-geo-alt" aria-hidden="true"></i>
-              <span class="cl-header__operacional-texto">211 N Mt Shasta Blvd, California, US</span>
-            </a>
-            <div class="cl-header__operacional-item" aria-label="Business hours">
-              <i class="bi bi-clock" aria-hidden="true"></i>
-              <time datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
-            </div>
-            <a class="cl-header__operacional-item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
-              <i class="bi bi-whatsapp" aria-hidden="true"></i>
-              <span class="cl-header__operacional-texto">+1 (408) 609-0027</span>
-            </a>
-            <a class="cl-header__operacional-item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
-              <i class="bi bi-envelope" aria-hidden="true"></i>
-              <span class="cl-header__operacional-texto">info@theclandestinousa.com</span>
-            </a>
-          </div>
-
-          <nav aria-label="Mobile navigation">
-            <ul class="navbar-nav cl-header__mobile-nav">
-              <li class="nav-item"><a href="index.html#home" class="nav-link cl-header__mobile-link active" aria-current="page">Home</a></li>
-              <li class="nav-item"><a href="index.html#services" class="nav-link cl-header__mobile-link">Experiences</a></li>
-              <li class="nav-item"><a href="menu.html" class="nav-link cl-header__mobile-link">Restaurant</a></li>
-              <li class="nav-item">
-                <button class="cl-header__submenu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#discoverCollapseHome" aria-expanded="false" aria-controls="discoverCollapseHome">
-                  <span>Discover</span>
-                  <i class="bi bi-chevron-down cl-header__submenu-toggle-icon" aria-hidden="true"></i>
-                </button>
-                <div class="collapse cl-header__collapse" id="discoverCollapseHome">
-                  <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="wines.html">Wine Shop</a></li>
-                    <li class="nav-item"><a class="nav-link" href="hampers.html">Gift Cards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="swc.html">Wine Club</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item"><a href="index.html#events" class="nav-link cl-header__mobile-link">Events</a></li>
-            </ul>
-          </nav>
-
-          <div class="cl-header__mobile-footer">
-            <div class="cl-header__mobile-toolbar" aria-label="Quick actions">
-              <button type="button" class="cl-header__mobile-account cl-header__mobile-action" aria-label="Open account sign in" data-bs-toggle="modal" data-bs-target="#authModal">
-                <i class="bi bi-person-circle" aria-hidden="true"></i>
-                <span>Account</span>
-              </button>
-
-              <a href="index.html#reservation" class="btn btn-secondary cl-header__mobile-reserve cl-header__mobile-action">
-                <i class="bi bi-calendar-check" aria-hidden="true"></i>
-                <span class="text text-1">Reserve</span>
-                <span class="text text-2" aria-hidden="true">Reserve</span>
-              </a>
-            </div>
-
-            <ul class="cl-header__mobile-socials" aria-label="The Clandestino social links">
-              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
-              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
-              <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="WhatsApp"><i class="bi bi-whatsapp" aria-hidden="true"></i></a></li>
-              <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-header__mobile-social-link" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+      <div class="overlay" data-nav-toggler data-overlay aria-hidden="true"></div>
 
     </div>
   </header>
@@ -690,6 +833,120 @@
 
 
       <!-- 
+        - #PURE SOUL — FLAGSHIP WINE
+      -->
+
+      <section class="pure-soul" id="pure-soul" aria-labelledby="pure-soul-title">
+        <div class="container">
+
+          <figure class="pure-soul-media">
+            <span class="pure-soul-ribbon">Limited Edition</span>
+            <a href="./assets/images/pure-soul.jpg" target="_blank" rel="noopener" aria-label="View Pure Soul bottle on the shelf (opens in a new tab)">
+              <picture>
+                <source srcset="./assets/images/avif/pure-soul-poster.avif" type="image/avif">
+                <source srcset="./assets/images/webp/pure-soul-poster.webp" type="image/webp">
+                <img src="./assets/images/pure-soul-poster.jpg" width="768" height="1024" loading="lazy" decoding="async"
+                  alt="Bottle of Pure Soul barrel-aged red wine by NTC &amp; Sons beside a glass of red wine and black grapes">
+              </picture>
+            </a>
+          </figure>
+
+          <div class="pure-soul-content">
+            <p class="section-subtitle label-2">Our Flagship Wine</p>
+
+            <h2 id="pure-soul-title" class="headline-1 section-title">Pure Soul</h2>
+
+            <p class="pure-soul-tagline">NTC &amp; Sons · Barrel Aged · 2023</p>
+
+            <p class="pure-soul-text">
+              Born at 600–850 meters in D.O.P. Cariñena, northeast Spain, from bush-trained, dry-farmed Garnacha vines over
+              40 years old. Hand-harvested and aged eight months on its lees, Pure Soul is savory, fleshy and full of
+              personality, released in a limited edition of 3,000 bottles.
+            </p>
+
+            <div class="pure-soul-prices" role="list" aria-label="Pure Soul prices">
+              <div class="pure-soul-price" role="listitem">
+                <data value="12">$12</data>
+                <span>Glass</span>
+              </div>
+              <div class="pure-soul-price" role="listitem">
+                <data value="45">$45</data>
+                <span>Bottle · 750 ml</span>
+              </div>
+            </div>
+
+            <dl class="pure-soul-specs" aria-label="Technical sheet">
+              <div><dt>Grapes</dt><dd>85% Garnacha · 15% Vidadillo</dd></div>
+              <div><dt>Vintage</dt><dd>2023</dd></div>
+              <div><dt>Appellation</dt><dd>D.O.P. Cariñena</dd></div>
+              <div><dt>Alcohol</dt><dd>14.5%</dd></div>
+              <div><dt>pH</dt><dd>3.36</dd></div>
+              <div><dt>Serve at</dt><dd>14–16 °C</dd></div>
+            </dl>
+
+            <details class="pure-soul-details">
+              <summary>Tasting notes</summary>
+              <div>
+                <ul>
+                  <li><strong>Sight:</strong> intense cherry red with a purple rim, clean and bright.</li>
+                  <li><strong>Nose:</strong> ripe red fruit with spice, toasted coffee and cocoa.</li>
+                  <li><strong>Palate:</strong> savory and fleshy, with fruit and spice — complex and full of personality.</li>
+                  <li><strong>Pairing:</strong> red meats and jamón serrano.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="pure-soul-details">
+              <summary>Vineyard &amp; terroir</summary>
+              <div>
+                <p>
+                  Continental Mediterranean climate with under 400 mm of rain a year and the cold, dry Cierzo wind.
+                  Poor, rocky soils rich in quartzite and clay. Bush-trained, dry-farmed vines over 40 years old at
+                  2,000 vines per hectare, hand-harvested into 25 kg crates in the first two weeks of October 2023.
+                </p>
+              </div>
+            </details>
+
+            <details class="pure-soul-details">
+              <summary>Winemaking</summary>
+              <div>
+                <p>
+                  Cold pre-fermentation maceration, then fermentation at 25 °C with native yeast and a two-week
+                  maceration in 20,000 L truncated-cone tanks. Malolactic fermentation in second-use French oak, followed
+                  by eight months on lees in 300 and 500 L French barrels, a 3,000 L foudre and 3,000 L concrete spheres.
+                </p>
+              </div>
+            </details>
+
+            <ul class="pure-soul-awards" aria-label="Awards">
+              <li><strong>Gold</strong><span>Grenaches du Monde 2023</span></li>
+              <li><strong>90 pts</strong><span>James Suckling 2023</span></li>
+              <li><strong>Gold</strong><span>Bacchus 2021</span></li>
+              <li><strong>93 pts</strong><span>Blue Lifestyle 2021</span></li>
+            </ul>
+
+            <div class="pure-soul-actions">
+              <a href="https://wa.me/14086090027?text=Hello%20The%20Clandestino%20Team%2C%0A%0AI%27d%20like%20to%20order%20Pure%20Soul%202023%20(NTC%20%26%20Sons%2C%20D.O.P.%20Cari%C3%B1ena)%20%E2%80%94%20%2445%20per%20bottle.%0A%0ACould%20you%20please%20confirm%20availability%3F%0A%0AThank%20you!"
+                class="btn btn-primary" target="_blank" rel="noopener noreferrer"
+                aria-label="Order Pure Soul via WhatsApp (opens in a new tab)">
+                <span class="text text-1">Order a Bottle</span>
+                <span class="text text-2" aria-hidden="true">Order a Bottle</span>
+              </a>
+
+              <a href="#reservation" class="btn btn-secondary" aria-label="Reserve a table to taste Pure Soul by the glass">
+                <span class="text text-1">Taste It Here</span>
+                <span class="text text-2" aria-hidden="true">Taste It Here</span>
+              </a>
+            </div>
+
+            <p class="pure-soul-note">Coming soon to the best bars and restaurants in California.</p>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- 
         - #CAROUSEL     
       -->
 
@@ -799,6 +1056,41 @@
 
 
       
+
+
+      <!-- 
+        - #PRIVATE EVENTS
+      -->
+
+      <section class="special-dish text-center private-events" id="private-events" aria-labelledby="private-events-title">
+        <div class="special-dish-banner">
+          <img src="./assets/images/inside-clandestino-2.jpg" width="940" height="900" loading="lazy" decoding="async" alt="Warm dining room of The Clandestino USA with American and Spanish flags, wine shelves and oak barrels" class="img-cover">
+        </div>
+
+        <div class="special-dish-content bg-black-10">
+          <div class="container">
+            <p class="section-subtitle label-2">Private Gatherings</p>
+
+            <h2 id="private-events-title" class="headline-1 section-title">The evening, held for you</h2>
+
+            <p class="section-text">
+              Any day of the week, The Clandestino can become a private setting for your people: a celebration at our table, catering in the same spirit as the dining room, or wine chosen with care.
+            </p>
+
+            <ul class="private-events-points">
+              <li>Private celebrations</li>
+              <li>Gourmet catering</li>
+              <li>Curated wine experiences</li>
+            </ul>
+
+            <a href="#reservation" class="btn btn-primary">
+              <span class="text text-1">Request a Private Evening</span>
+              <span class="text text-2" aria-hidden="true">Request a Private Evening</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
 
 
       <!-- 
@@ -963,6 +1255,12 @@
           <div class="form reservation-form bg-black-10" role="form" aria-describedby="reservation-help">
 
             <form id="clandestino-reservation-form" class="form-left" novalidate>
+              <!-- Anti-spam: timestamp + hidden traps (humans never see these) -->
+              <input type="hidden" name="form_loaded_at" id="reservation-loaded-at" value="">
+              <div class="clx-honeypot" aria-hidden="true">
+                <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                <label>Leave this field empty <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
+              </div>
 
               <h2 class="headline-1 text-center" id="reservation-title">Online Reservation & Events</h2>
               <p class="form-text text-center" id="reservation-help">
@@ -972,8 +1270,11 @@
               <fieldset class="field-group" aria-labelledby="contact-info-legend">
                 <legend id="contact-info-legend" class="sr-only">Contact Information</legend>
                 <div class="input-wrapper">
-                  <input type="text" name="name" placeholder="Full Name *" autocomplete="name" class="input-field" required aria-required="true">
-                  <input type="tel" name="phone" placeholder="Phone Number *" autocomplete="tel" class="input-field" required aria-required="true" pattern="[0-9()+\-\s]{7,}">
+                  <input type="text" name="name" placeholder="Full Name *" autocomplete="name" class="input-field" required aria-required="true" maxlength="80">
+                  <input type="email" name="email" placeholder="Email *" autocomplete="email" class="input-field" required aria-required="true" maxlength="120">
+                </div>
+                <div class="input-wrapper">
+                  <input type="tel" name="phone" placeholder="Phone Number *" autocomplete="tel" class="input-field" required aria-required="true" maxlength="25" pattern="[0-9()+\-\s]{7,}">
                 </div>
               </fieldset>
 
@@ -1005,10 +1306,6 @@
                     <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
                     <select name="time" class="input-field" required aria-required="true" aria-label="Reservation Time">
                       <option value="" disabled selected>Time *</option>
-                      <option value="14:00">02:00 pm</option>
-                      <option value="14:30">02:30 pm</option>
-                      <option value="15:00">03:00 pm</option>
-                      <option value="15:30">03:30 pm</option>
                       <option value="16:00">04:00 pm</option>
                       <option value="16:30">04:30 pm</option>
                       <option value="17:00">05:00 pm</option>
@@ -1094,7 +1391,7 @@
                   <span class="text text-1">Request Reservation</span>
                   <span class="text text-2" aria-hidden="true">Request Reservation</span>
                 </button>
-                <p class="whatsapp-hint">Submission opens WhatsApp chat for confirmation.</p>
+                <p class="whatsapp-hint">We email the request to the team. You can close this page after the confirmation appears.</p>
               </div>
 
             </form>
@@ -1104,10 +1401,14 @@
               <p class="contact-label">Booking Request</p>
               <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" target="_blank" rel="noopener noreferrer" class="body-1 contact-number hover-underline">+1 408-609-0027</a>
               <div class="separator" aria-hidden="true"></div>
+              <p class="contact-label">Email Us</p>
+              <a href="mailto:ntcusa@nicolastena.com" class="body-1 contact-number hover-underline">ntcusa@nicolastena.com</a>
+              <p class="body-4 subtle-note">Preferred inbox &middot; also <a href="mailto:info@theclandestinousa.com" class="hover-underline">info@theclandestinousa.com</a></p>
+              <div class="separator" aria-hidden="true"></div>
               <p class="contact-label">Location</p>
               <address class="body-4">211 N Mt Shasta Blvd, California, US 96067, US</address>
               <p class="contact-label">Open Hours</p>
-              <p class="body-4">Monday to Sunday <br> 2.00 pm - 8.00 pm</p>
+              <p class="body-4">Tuesday to Sunday<br>4:00 pm – 8:00 pm PT<br><small>Monday: Closed</small></p>
               <p class="body-4 subtle-note">For events & private experiences we may extend hours upon request.</p>
             </div>
           </div>
@@ -1121,7 +1422,7 @@
         - #EVENT
       -->
 
-      <section class="section event bg-black-10" aria-label="event" id="events">
+      <section class="section event bg-black-10" aria-label="event">
         <div class="container">
 
           <p class="section-subtitle label-2 text-center">Special Experiences</p>
@@ -1421,12 +1722,14 @@
             211 N Mt Shasta Blvd, California, US 96067, US
           </address>
 
+          <a href="mailto:ntcusa@nicolastena.com" class="body-4 contact-link">ntcusa@nicolastena.com (Preferred)</a>
+
           <a href="mailto:info@theclandestinousa.com" class="body-4 contact-link">info@theclandestinousa.com</a>
 
           <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" class="body-4 contact-link" target="_blank" rel="noopener noreferrer">Booking Request : +1 408-609-0027</a>
 
           <p class="body-4">
-            Open : 02:00 pm - 08:00 pm
+            Open: Tue–Sun, 4:00–8:00 PM PT
           </p>
 
           <div class="wrapper">
@@ -1510,19 +1813,14 @@
     - #BACK TO TOP
   -->
 
-  <a href="#top" class="back-top-btn active" aria-label="back to top" data-back-top-btn>
-    <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
+  <!-- Floating WhatsApp button -->
+  <a href="https://wa.me/14086090027?text=Hello%20The%20Clandestino%20USA!%20I%20would%20like%20more%20information%20about%20reservations%20and%20events.%20Thank%20you!" class="whatsapp-float" aria-label="Chat with The Clandestino USA on WhatsApp" target="_blank" rel="noopener noreferrer" style="position:fixed;bottom:22px;right:22px;z-index:99999;width:60px;height:60px;border-radius:50%;background:#dddaba;color:#141310;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.45)">
+    <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.004 2.5C8.556 2.5 2.5 8.556 2.5 16.004c0 2.38.62 4.66 1.8 6.68L2.5 29.5l6.98-1.83a13.45 13.45 0 0 0 6.524 1.67c7.448 0 13.504-6.056 13.504-13.504S23.452 2.5 16.004 2.5zm0 24.62a11.08 11.08 0 0 1-5.64-1.55l-.404-.24-4.14 1.086 1.106-4.036-.264-.416a11.1 11.1 0 0 1-1.7-5.9c0-6.13 4.99-11.12 11.12-11.12s11.12 4.99 11.12 11.12-4.99 11.12-11.2 11.12zm6.1-8.32c-.334-.168-1.976-.976-2.282-1.086-.306-.11-.53-.168-.752.168-.224.334-.866 1.086-1.062 1.31-.196.224-.39.252-.724.084-.334-.168-1.41-.52-2.686-1.656-.993-.886-1.664-1.98-1.86-2.314-.196-.334-.02-.514.148-.682.152-.15.334-.39.5-.586.168-.196.224-.334.334-.558.112-.224.056-.42-.028-.586-.084-.168-.752-1.81-1.03-2.48-.272-.65-.548-.562-.752-.572l-.64-.012c-.224 0-.586.084-.892.42-.306.334-1.17 1.142-1.17 2.786s1.198 3.23 1.364 3.454c.168.224 2.356 3.598 5.71 5.046.798.344 1.42.55 1.906.704.8.254 1.53.218 2.106.132.642-.096 1.976-.808 2.254-1.588.278-.78.278-1.448.194-1.588-.084-.14-.306-.224-.64-.392z"/></svg>
   </a>
-
-
-
-
-
-  <!-- 
+<!-- 
     - custom js link
   -->
   <!-- Load as module and defer for non-blocking parsing -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
   <script type="module" src="./assets/js/script.js" defer></script>
   <script>
     // Preloader fail-safe: in case module script blocked (e.g. file:// CORS), hide after 4s
@@ -1533,26 +1831,126 @@
       }, 4000);
     });
   </script>
+  <script src="./assets/js/form-feedback.js" defer></script>
+  <!-- Reservation form: validate, email the team, show a dismissible result -->
+  <script>
+    (function () {
+      'use strict';
+      var FORM_ID = 'clandestino-reservation-form';
+      var ENDPOINT = 'reservation.php';
+      var SPAM_WORDS = ['viagra', 'cialis', 'casino', 'poker', 'forex', 'backlink', 'seo service', 'buy followers', 'payday loan', 'porn', 'xxx', 'escort', 'replica', 'pharmacy', 'bitcoin doubler', 'make money fast'];
+
+      function setStamp() {
+        var el = document.getElementById('reservation-loaded-at');
+        if (el && !el.value) el.value = String(Math.floor(Date.now() / 1000));
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setStamp);
+      else setStamp();
+
+      function feedback(success, title, message) {
+        if (window.ClandestinoFeedback) window.ClandestinoFeedback.open({ success: success, title: title, message: message });
+      }
+
+      function looksSpammy(text) {
+        var t = (text || '').toLowerCase();
+        if ((t.match(/https?:\/\/|www\./g) || []).length >= 2) return true;
+        for (var i = 0; i < SPAM_WORDS.length; i++) {
+          if (t.indexOf(SPAM_WORDS[i]) !== -1) return true;
+        }
+        return false;
+      }
+
+      function fieldError(form) {
+        var name = (form.name && form.name.value || '').trim();
+        var email = (form.email && form.email.value || '').trim();
+        var phone = (form.phone && form.phone.value || '').trim();
+        var guests = form.guests ? form.guests.value : '';
+        var time = form.time ? form.time.value : '';
+        var date = form.date ? form.date.value : '';
+        var eventType = form.eventType ? form.eventType.value : '';
+        if (name.length < 2) return 'Please enter your full name.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Please enter a valid email.';
+        if (phone.replace(/\D/g, '').length < 6) return 'Please enter a valid phone number.';
+        if (!guests) return 'Please select the number of guests.';
+        if (!date) return 'Please choose a date on the calendar.';
+        if (!time) return 'Please select a time.';
+        if (!eventType) return 'Please select an event type.';
+        if (eventType === 'custom' && (form.customTitle.value || '').trim().length < 2) return 'Please add a short title for the custom event.';
+        if (!form.accept || !form.accept.checked) return 'Please accept the terms and policies.';
+        return '';
+      }
+
+      document.addEventListener('submit', function (e) {
+        var form = e.target && e.target.id === FORM_ID ? e.target : null;
+        if (!form) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var btn = document.getElementById('reservation-submit');
+        if (btn && btn.getAttribute('data-sending') === '1') return;
+
+        var site = (form.website && form.website.value || '').trim();
+        var comp = (form.company && form.company.value || '').trim();
+        if (site || comp) {
+          feedback(true, 'Request sent', 'Your reservation request was sent. We will confirm by email or phone.');
+          return;
+        }
+
+        var blob = [form.name.value, form.notes ? form.notes.value : '', form.customTitle ? form.customTitle.value : '', form.budget ? form.budget.value : ''].join(' ');
+        if (looksSpammy(blob)) {
+          feedback(false, 'Please revise your note', 'Remove links or promotional wording, then send the request again.');
+          return;
+        }
+
+        var problem = fieldError(form);
+        if (problem) {
+          feedback(false, 'Check the form', problem);
+          return;
+        }
+
+        if (btn) { btn.setAttribute('data-sending', '1'); btn.disabled = true; }
+        var fd = new FormData(form);
+        var controller = new AbortController();
+        var timeout = setTimeout(function () { controller.abort(); }, 25000);
+
+        fetch(ENDPOINT, {
+          method: 'POST',
+          body: fd,
+          headers: { 'Accept': 'application/json' },
+          credentials: 'same-origin',
+          signal: controller.signal
+        }).then(function (res) {
+          return res.json().catch(function () { return { success: false, errorMessage: 'Unexpected server response.' }; });
+        }).then(function (data) {
+          if (data && data.success) {
+            feedback(true, 'Request sent', data.message || 'Your reservation request was sent. We will confirm by email or phone.');
+            form.reset();
+            setStamp();
+            var price = document.getElementById('estimated-price');
+            if (price) price.textContent = '$0';
+            var status = document.getElementById('availability-status');
+            if (status) { status.textContent = 'Select date & time.'; status.className = 'availability-status'; }
+          } else {
+            feedback(false, 'Could not send', (data && data.errorMessage) || 'Please try again, or call +1 408-609-0027.');
+          }
+        }).catch(function (err) {
+          var timedOut = err && err.name === 'AbortError';
+          feedback(false, timedOut ? 'Request timed out' : 'Connection problem', timedOut
+            ? 'The server took too long. Please try again or call +1 408-609-0027.'
+            : 'We could not reach the server. Check your connection, or call +1 408-609-0027.');
+        }).finally(function () {
+          clearTimeout(timeout);
+          if (btn) { btn.removeAttribute('data-sending'); btn.disabled = false; }
+        });
+      }, true);
+    })();
+  </script>
+
   <noscript>
     <style>
       .clandestino-preloader{display:none !important;}
     </style>
   </noscript>
-
-  <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content cl-header__auth-modal">
-        <div class="modal-header cl-header__auth-modal-header">
-          <h2 class="modal-title" id="authModalLabel">My Account</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close modal"></button>
-        </div>
-        <div class="modal-body cl-header__auth-modal-body">
-          <p class="mb-3">Authentication is being prepared. This experience will host sign in and member access soon.</p>
-          <button type="button" class="btn btn-secondary w-100" disabled>Coming soon</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- 
     - ionicon link

@@ -1,0 +1,40 @@
+.pure-soul{position:relative;padding-block:var(--section-space,70px);background:radial-gradient(ellipse at 20% 30%,hsla(350,45%,18%,.55),transparent 60%),var(--smoky-black-1,#0d0c0a);color:var(--quick-silver,#a6a6a6);overflow:hidden}
+.pure-soul .container{display:grid;gap:40px;align-items:center}
+.pure-soul-media{position:relative;margin-inline:auto;max-width:460px;width:100%}
+.pure-soul-media::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:1px solid var(--gold-crayola,#dddaba);opacity:.45;pointer-events:none}
+.pure-soul-media img{position:relative;width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;box-shadow:var(--shadow-1)}
+.pure-soul-ribbon{position:absolute;top:18px;left:-8px;z-index:1;background:var(--gold-crayola,#dddaba);color:var(--smoky-black-1,#0d0c0a);font-family:var(--fontFamily-text);font-size:1.2rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:8px 14px}
+.pure-soul-content{text-align:left}
+.pure-soul .section-subtitle,.pure-soul .section-title{text-align:left}
+.pure-soul .section-subtitle::after{margin-inline:0}
+.pure-soul-tagline{font-family:var(--fontFamily-headings);font-style:italic;color:var(--gold-crayola,#dddaba);font-size:var(--fontSize-title-3);margin-block:6px 18px}
+.pure-soul-text{font-size:var(--fontSize-body-4);line-height:var(--lineHeight-5);margin-bottom:24px}
+.pure-soul-prices{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:26px}
+.pure-soul-price{flex:1 1 140px;border:1px solid hsla(55,34%,80%,.35);padding:14px 18px;text-align:center}
+.pure-soul-price data{display:block;font-family:var(--fontFamily-headings);font-size:var(--fontSize-headline-2);color:var(--white,#fff);line-height:1.1}
+.pure-soul-price span{display:block;font-size:1.2rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-crayola,#dddaba);margin-top:4px}
+.pure-soul-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:hsla(55,34%,80%,.18);border:1px solid hsla(55,34%,80%,.18);margin-bottom:24px}
+.pure-soul-specs div{background:var(--smoky-black-1,#0d0c0a);padding:12px 14px}
+.pure-soul-specs dt{font-size:1.1rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-crayola,#dddaba)}
+.pure-soul-specs dd{color:var(--white,#fff);font-size:1.5rem;margin-top:2px}
+.pure-soul-details{border-top:1px solid hsla(55,34%,80%,.2)}
+.pure-soul-details:last-of-type{border-bottom:1px solid hsla(55,34%,80%,.2)}
+.pure-soul-details summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:14px 0;color:var(--white,#fff);font-family:var(--fontFamily-headings);font-size:var(--fontSize-title-4)}
+.pure-soul-details summary::-webkit-details-marker{display:none}
+.pure-soul-details summary::after{content:"+";color:var(--gold-crayola,#dddaba);font-size:2.2rem;transition:transform var(--transition-1,250ms ease)}
+.pure-soul-details[open] summary::after{transform:rotate(45deg)}
+.pure-soul-details summary:focus-visible{outline:2px solid var(--gold-crayola,#dddaba);outline-offset:4px}
+.pure-soul-details p,.pure-soul-details li{font-size:1.5rem;line-height:1.7}
+.pure-soul-details > div{padding-bottom:16px}
+.pure-soul-details ul li{position:relative;padding-left:18px}
+.pure-soul-details ul li::before{content:"";position:absolute;left:0;top:.75em;width:6px;height:6px;background:var(--gold-crayola,#dddaba);transform:rotate(45deg)}
+.pure-soul-awards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-block:26px}
+.pure-soul-awards li{border:1px solid hsla(55,34%,80%,.3);padding:10px 12px;text-align:center}
+.pure-soul-awards strong{display:block;font-family:var(--fontFamily-headings);color:var(--gold-crayola,#dddaba);font-size:1.8rem;font-weight:400}
+.pure-soul-awards span{display:block;font-size:1.2rem;line-height:1.4;margin-top:2px}
+.pure-soul-actions{display:flex;flex-wrap:wrap;gap:14px}
+.pure-soul-actions .btn{margin:0}
+.pure-soul-note{margin-top:16px;font-size:1.2rem;letter-spacing:.1em;font-style:italic}
+@media (min-width:992px){.pure-soul .container{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:70px}.pure-soul-specs{grid-template-columns:repeat(3,minmax(0,1fr))}.pure-soul-awards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:480px){.pure-soul-media::before{inset:10px -10px -10px 10px}.pure-soul-actions .btn{width:100%}}
+@media (prefers-reduced-motion:reduce){.pure-soul-details summary::after{transition:none}}

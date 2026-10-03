@@ -89,7 +89,7 @@
   <link rel="stylesheet" href="https://unpkg.com/splitting/dist/splitting.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/style.new.css">
+  <link rel="stylesheet" href="./assets/css/whatsapp-float.css?v=20260923">
 
   <!-- Preload Hero -->
   <link rel="preload" as="image" href="./assets/images/bg/clandestino-wine-friends.jpg" />
@@ -240,36 +240,61 @@
     - #TOP BAR
   -->
 
-  <div class="cl-topbar" role="region" aria-label="Operational information">
+  <div class="topbar" role="banner" itemscope itemtype="https://schema.org/Restaurant">
     <div class="container">
-      <div class="cl-topbar__operacional">
-        <a class="cl-topbar__item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
-          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">211 N Mt Shasta Blvd, California, US</span>
-        </a>
-        <div class="cl-topbar__item" aria-label="Business hours">
-          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-          <time class="cl-topbar__texto" datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
+
+      <address class="topbar-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="location-outline" role="img" aria-label="Location"></ion-icon>
         </div>
+
+        <span class="span">
+          <a href="https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             aria-label="View our location on Google Maps"
+             itemprop="url">
+            211 N Mt Shasta Blvd, California, US 96067, US
+          </a>
+        </span>
+      </address>
+
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Hours with Schema -->
+      <div class="topbar-item item-2" itemprop="openingHours" content="Tu-Su 16:00-20:00">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="time-outline" role="img" aria-label="Opening hours"></ion-icon>
+        </div>
+        <span class="span">
+          <time datetime="16:00/20:00">Tue–Sun: 4–8 PM</time>
+        </span>
       </div>
 
-      <ul class="cl-topbar__sociales" aria-label="Social media links">
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Instagram"><ion-icon name="logo-instagram" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Facebook"><ion-icon name="logo-facebook" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="WhatsApp"><ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="TikTok"><ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon></a></li>
-      </ul>
+      <!-- Phone with Schema -->
+      <a href="tel:+14086090027" 
+         class="topbar-item link" 
+         itemprop="telephone"
+         aria-label="Call us at +1 408-609-0027">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="call-outline" role="img" aria-label="Phone"></ion-icon>
+        </div>
+        <span class="span">+1 (408) 609-0027</span>
+      </a>
 
-      <div class="cl-topbar__contacto">
-        <a class="cl-topbar__item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
-          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">+1 (408) 609-0027</span>
-        </a>
-        <a class="cl-topbar__item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
-          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">info@theclandestinousa.com</span>
-        </a>
-      </div>
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Email with Schema -->
+      <a href="mailto:info@theclandestinousa.com" 
+         class="topbar-item link"
+         itemprop="email"
+         aria-label="Send us an email">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="mail-outline" role="img" aria-label="Email"></ion-icon>
+        </div>
+        <span class="span">info@theclandestinousa.com</span>
+      </a>
+
     </div>
   </div>
 
@@ -309,39 +334,33 @@
         <ul class="navbar-list" role="menubar">
 
           <li class="navbar-item" role="none">
-            <a href="index.html#home" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+            <a href="index.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+          </li>
+
+          <li class="navbar-item has-submenu" role="none">
+            <a href="menu.html" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Menus</span></a>
+            <ul class="submenu">
+              <li><a href="menu.html">General Menu</a></li>
+              <li><a href="tapas.html">Tapas</a></li>
+              <li><a href="wines.html">Wines</a></li>
+              <li><a href="hampers.html">Hampers</a></li>
+            </ul>
           </li>
 
           <li class="navbar-item" role="none">
-            <a href="index.html#services" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Experiences</span></a>
+            <a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a>
           </li>
 
           <li class="navbar-item" role="none">
-            <a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Restaurant</span></a>
+            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
-            <a href="wines.html" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Wine Shop</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="hampers.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Gift Cards</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Wine Club</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="index.html#events" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Events</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="index.html#reservation" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Reserve</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="contact.html#contact-form" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">My Account</span></a>
+          <li class="navbar-item has-submenu" role="none">
+            <a href="contact.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="contact.html#contact-form">Contact Form</a></li>
+              <li><a href="contact.html#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -354,7 +373,7 @@
             US 96067, US
           </address>
 
-            <p class="body-4 navbar-text">Wed & Sun: 1-7 PM | Thu-Sat: 1-8 PM<br><small>Mon-Tue: SWC & Events Only</small></p>
+            <p class="body-4 navbar-text">Tue–Sun: 4–8 PM PT<br><small>Monday: Closed</small></p>
 
           <a href="mailto:info@theclandestinousa.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">info@theclandestinousa.com</a>
 
@@ -509,7 +528,7 @@
           <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" class="body-4 contact-link" target="_blank" rel="noopener noreferrer">Booking Request : +1 408-609-0027</a>
 
           <p class="body-4">
-            Open : 02:00 pm - 08:00 pm
+            Open: Tue–Sun, 4:00–8:00 PM PT
           </p>
 
           <div class="wrapper">
@@ -601,11 +620,10 @@
     - #BACK TO TOP
   -->
 
-  <a href="#top" class="back-top-btn active" aria-label="back to top" data-back-top-btn>
-    <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
+  <!-- Floating WhatsApp button -->
+  <a href="https://wa.me/14086090027?text=Hello%20The%20Clandestino%20USA!%20I%20would%20like%20more%20information%20about%20reservations%20and%20events.%20Thank%20you!" class="whatsapp-float" aria-label="Chat with The Clandestino USA on WhatsApp" target="_blank" rel="noopener noreferrer" style="position:fixed;bottom:22px;right:22px;z-index:99999;width:60px;height:60px;border-radius:50%;background:#dddaba;color:#141310;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.45)">
+    <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.004 2.5C8.556 2.5 2.5 8.556 2.5 16.004c0 2.38.62 4.66 1.8 6.68L2.5 29.5l6.98-1.83a13.45 13.45 0 0 0 6.524 1.67c7.448 0 13.504-6.056 13.504-13.504S23.452 2.5 16.004 2.5zm0 24.62a11.08 11.08 0 0 1-5.64-1.55l-.404-.24-4.14 1.086 1.106-4.036-.264-.416a11.1 11.1 0 0 1-1.7-5.9c0-6.13 4.99-11.12 11.12-11.12s11.12 4.99 11.12 11.12-4.99 11.12-11.2 11.12zm6.1-8.32c-.334-.168-1.976-.976-2.282-1.086-.306-.11-.53-.168-.752.168-.224.334-.866 1.086-1.062 1.31-.196.224-.39.252-.724.084-.334-.168-1.41-.52-2.686-1.656-.993-.886-1.664-1.98-1.86-2.314-.196-.334-.02-.514.148-.682.152-.15.334-.39.5-.586.168-.196.224-.334.334-.558.112-.224.056-.42-.028-.586-.084-.168-.752-1.81-1.03-2.48-.272-.65-.548-.562-.752-.572l-.64-.012c-.224 0-.586.084-.892.42-.306.334-1.17 1.142-1.17 2.786s1.198 3.23 1.364 3.454c.168.224 2.356 3.598 5.71 5.046.798.344 1.42.55 1.906.704.8.254 1.53.218 2.106.132.642-.096 1.976-.808 2.254-1.588.278-.78.278-1.448.194-1.588-.084-.14-.306-.224-.64-.392z"/></svg>
   </a>
-
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" defer></script>
 <script src="https://unpkg.com/splitting/dist/splitting.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imagesloaded/4.1.4/imagesloaded.pkgd.min.js" defer></script>

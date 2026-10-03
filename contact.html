@@ -17,7 +17,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Contact & Reservations – The Clandestino USA | Spanish Tapas & Wine</title>
   <meta name="title" content="Contact & Reservations – The Clandestino USA | Spanish Tapas & Wine">
-  <meta name="description" content="Contact The Clandestino USA in Mount Shasta for table reservations, private events, Spanish Wine Club inquiries and special requests. Call, email or use our reservation section.">
+  <meta name="description" content="Contact The Clandestino USA in Mount Shasta for reservations, private events, and the Spanish Wine Club. Open Tuesday–Sunday, 4–8 PM Pacific. Email ntcusa@nicolastena.com or call +1 408-609-0027.">
   <meta name="keywords" content="contact Spanish restaurant Mount Shasta, reserve table Mount Shasta, private events Spanish wine, The Clandestino contact, reservations tapas wine bar">
   <!-- Canonical unified to non-www and actual path -->
   <link rel="canonical" href="https://theclandestinousa.com/contact.html">
@@ -62,13 +62,13 @@
 
   <!-- ==== ESTILOS ==== -->
   <link rel="stylesheet" href="./assets/css/style.css">
-  <link rel="stylesheet" href="./assets/css/style.new.css">
+  <link rel="stylesheet" href="./assets/css/whatsapp-float.css?v=20260923">
   <link rel="stylesheet" href="./assets/css/faq-styles.css">
+  <link rel="stylesheet" href="./assets/css/form-feedback.css">
   
 
 
   <!-- ==== SCRIPTS ==== -->
-  <script type="module" src="./assets/js/script.js" defer></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" defer></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js" defer></script>
 
@@ -134,36 +134,61 @@
     - #TOP BAR
   -->
 
-  <div class="cl-topbar" role="region" aria-label="Operational information">
+  <div class="topbar" role="banner" itemscope itemtype="https://schema.org/Restaurant">
     <div class="container">
-      <div class="cl-topbar__operacional">
-        <a class="cl-topbar__item" href="https://maps.app.goo.gl/giqDcUUaxscgBx5H8" target="_blank" rel="noopener noreferrer" aria-label="Open our location in Google Maps">
-          <ion-icon name="location-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">211 N Mt Shasta Blvd, California, US</span>
-        </a>
-        <div class="cl-topbar__item" aria-label="Business hours">
-          <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-          <time class="cl-topbar__texto" datetime="Tu-Su 16:00-20:00">Tue &ndash; Sun &middot; 4:00 PM &ndash; 8:00 PM</time>
+
+      <address class="topbar-item" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="location-outline" role="img" aria-label="Location"></ion-icon>
         </div>
+
+        <span class="span">
+          <a href="https://www.google.com/maps/place/211+N+Mt+Shasta+Blvd,+Mt+Shasta,+CA+96067,+USA" 
+             target="_blank" 
+             rel="noopener noreferrer"
+             aria-label="View our location on Google Maps"
+             itemprop="url">
+            211 N Mt Shasta Blvd, California, US 96067, US
+          </a>
+        </span>
+      </address>
+
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Hours with Schema -->
+      <div class="topbar-item item-2" itemprop="openingHours" content="Tu-Su 16:00-20:00">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="time-outline" role="img" aria-label="Opening hours"></ion-icon>
+        </div>
+        <span class="span">
+          <time datetime="16:00/20:00">Tue–Sun: 4–8 PM</time>
+        </span>
       </div>
 
-      <ul class="cl-topbar__sociales" aria-label="Social media links">
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Instagram"><ion-icon name="logo-instagram" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="Facebook"><ion-icon name="logo-facebook" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="WhatsApp"><ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon></a></li>
-        <li><a href="" target="_blank" rel="noopener noreferrer" class="cl-topbar__social-link" aria-label="TikTok"><ion-icon name="logo-tiktok" aria-hidden="true"></ion-icon></a></li>
-      </ul>
+      <!-- Phone with Schema -->
+      <a href="tel:+14086090027" 
+         class="topbar-item link" 
+         itemprop="telephone"
+         aria-label="Call us at +1 408-609-0027">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="call-outline" role="img" aria-label="Phone"></ion-icon>
+        </div>
+        <span class="span">+1 (408) 609-0027</span>
+      </a>
 
-      <div class="cl-topbar__contacto">
-        <a class="cl-topbar__item" href="https://wa.me/14086090027?text=Hello!%20Welcome%20to%20The%20Clandestino%20USA.%20Thank%20you%20for%20contacting%20us.%20How%20can%20we%20help%20you%20today%3F%20We%27d%20be%20happy%20to%20assist%20you%20with%20reservations%2C%20our%20menu%2C%20wines%2C%20or%20any%20questions%20you%20may%20have." target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp">
-          <ion-icon name="logo-whatsapp" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">+1 (408) 609-0027</span>
-        </a>
-        <a class="cl-topbar__item" href="mailto:info@theclandestinousa.com?subject=Inquiry%20from%20The%20Clandestino%20USA%20website&amp;body=Hello%20The%20Clandestino%20USA%20team%2C%0A%0AI%20would%20like%20more%20information%20about%20reservations%2C%20menu%20options%2C%20and%20wines.%0A%0AThank%20you%20very%20much." aria-label="Send us an email">
-          <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
-          <span class="cl-topbar__texto">info@theclandestinousa.com</span>
-        </a>
-      </div>
+      <div class="separator" aria-hidden="true" role="separator"></div>
+
+      <!-- Email with Schema (preferred public inbox) -->
+      <a href="mailto:ntcusa@nicolastena.com" 
+         class="topbar-item link"
+         itemprop="email"
+         aria-label="Send us an email to ntcusa@nicolastena.com">
+        <div class="icon" aria-hidden="true">
+          <ion-icon name="mail-outline" role="img" aria-label="Email"></ion-icon>
+        </div>
+        <span class="span">ntcusa@nicolastena.com</span>
+      </a>
+
     </div>
   </div>
 
@@ -208,39 +233,33 @@
         <ul class="navbar-list" role="menubar">
 
           <li class="navbar-item" role="none">
-            <a href="index.html#home" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+            <a href="index.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Home</span></a>
+          </li>
+
+          <li class="navbar-item has-submenu" role="none">
+            <a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Menus</span></a>
+            <ul class="submenu">
+              <li><a href="menu.html">General Menu</a></li>
+              <li><a href="tapas.html">Tapas</a></li>
+              <li><a href="wines.html">Wines</a></li>
+              <li><a href="hampers.html">Hampers</a></li>
+            </ul>
           </li>
 
           <li class="navbar-item" role="none">
-            <a href="index.html#services" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Experiences</span></a>
+            <a href="about.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">About Us</span></a>
           </li>
 
           <li class="navbar-item" role="none">
-            <a href="menu.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Restaurant</span></a>
+            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">SWC</span></a>
           </li>
 
-          <li class="navbar-item" role="none">
-            <a href="wines.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Wine Shop</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="hampers.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Gift Cards</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="swc.html" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Wine Club</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="index.html#events" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Events</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="index.html#reservation" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">Reserve</span></a>
-          </li>
-
-          <li class="navbar-item" role="none">
-            <a href="contact.html#contact-form" class="navbar-link hover-underline" role="menuitem"><div class="separator" aria-hidden="true"></div><span class="span">My Account</span></a>
+          <li class="navbar-item has-submenu" role="none">
+            <a href="contact.html" class="navbar-link hover-underline active" role="menuitem" aria-current="page"><div class="separator" aria-hidden="true"></div><span class="span">Contact</span></a>
+            <ul class="submenu">
+              <li><a href="#contact-form">Contact Form</a></li>
+              <li><a href="#faq">FAQ</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -253,9 +272,9 @@
             US 96067, US
           </address>
 
-            <p class="body-4 navbar-text">Wed & Sun: 1-7 PM | Thu-Sat: 1-8 PM<br><small>Mon-Tue: SWC & Events Only</small></p>
+            <p class="body-4 navbar-text">Tue–Sun: 4–8 PM PT<br><small>Monday: Closed</small></p>
 
-          <a href="mailto:info@theclandestinousa.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">info@theclandestinousa.com</a>
+          <a href="mailto:ntcusa@nicolastena.com" class="body-4 sidebar-link" target="_blank" rel="noopener noreferrer">ntcusa@nicolastena.com</a>
 
           <div class="separator" aria-hidden="true"></div>
 
@@ -344,7 +363,8 @@
             <div class="clandestino-stat-number" data-counter="24" data-suffix="/7">24/7</div>
             <div class="clandestino-stat-desc">
               <h5 class="clandestino-stat-name">Email Support</h5>
-             
+              <div class="clandestino-stat-subname"><a href="mailto:ntcusa@nicolastena.com" class="hover-underline">ntcusa@nicolastena.com</a> <span class="clandestino-stat-preferred">(Preferred)</span></div>
+              <div class="clandestino-stat-subname"><a href="mailto:info@theclandestinousa.com" class="hover-underline">info@theclandestinousa.com</a></div>
             </div>
           </div>
 
@@ -365,10 +385,10 @@
             <div class="clandestino-stat-icon">
               <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
             </div>
-            <div class="clandestino-stat-number" data-counter="2" data-suffix="-8">2-8</div>
+            <div class="clandestino-stat-number" data-counter="4" data-suffix="–8">4–8</div>
             <div class="clandestino-stat-desc">
               <h5 class="clandestino-stat-name">Opening Hours</h5>
-              <div class="clandestino-stat-subname">Daily: 2:00 PM – 8:00 PM</div>
+              <div class="clandestino-stat-subname">Tue–Sun: 4:00–8:00 PM PT</div>
             </div>
           </div>
 
@@ -465,16 +485,18 @@
               </div>
             </div>
 
-            <!-- Security fields -->
+            <!-- Security fields (anti-spam: timestamp + hidden traps) -->
             <input type="hidden" name="csrf_token" id="clx-csrf-token" value="" />
+            <input type="hidden" name="form_loaded_at" id="clx-loaded-at" value="" />
             <div class="clx-honeypot" aria-hidden="true">
               <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <label>Leave this field empty <input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
             </div>
 
             <div class="clx-submit-section">
               <p class="clx-form-note body-4" id="clx-submit-help">
                 <ion-icon name="information-circle-outline" aria-hidden="true"></ion-icon>
-                All fields are required. Our team responds during business hours (2:00 PM – 8:00 PM).
+                All fields are required. Our team responds during business hours (Tue–Sun, 4:00–8:00 PM PT).
               </p>
               
               <button type="submit" class="clx-submit-btn" id="clx-submit-btn" aria-describedby="clx-submit-help">
@@ -514,7 +536,7 @@
             </button>
             <div class="clandestino-faq-answer" id="faq-answer-1" hidden>
               <div class="answer-content">
-                <p>Making a reservation is easy! You can contact us via WhatsApp at <a href="https://wa.me/14086090027" target="_blank" rel="noopener">+1 408-609-0027</a>, call us directly, or use the contact form above. We recommend booking in advance, especially for weekends and special events. Our team responds promptly during business hours (Wed-Sun: 1 PM - 7/8 PM).</p>
+                <p>Making a reservation is easy. You can contact us via WhatsApp at <a href="https://wa.me/14086090027" target="_blank" rel="noopener">+1 408-609-0027</a>, call us directly, or use the contact form above. We recommend booking in advance, especially for weekends. Our team responds during business hours, Tuesday through Sunday, 4:00–8:00 PM Pacific.</p>
               </div>
             </div>
           </div>
@@ -574,7 +596,7 @@
             </button>
             <div class="clandestino-faq-answer" id="faq-answer-6" hidden>
               <div class="answer-content">
-                <p>We're open <strong>Wednesday & Sunday from 1:00 PM to 7:00 PM</strong>, and <strong>Thursday through Saturday from 1:00 PM to 8:00 PM</strong>. Monday and Tuesday are reserved exclusively for Spanish Wine Club (SWC) members and special events. These hours allow us to serve you during the afternoon and evening, perfect for a leisurely Spanish-style dining experience. We recommend arriving early on weekends as we can fill up quickly. For holiday hours or special closures, please check our social media or contact us directly.</p>
+                <p>We are open <strong>Tuesday through Sunday from 4:00 PM to 8:00 PM Pacific</strong>. Monday is closed. We recommend arriving early on weekends, when the dining room fills quickly. For holiday hours or special closures, check our social media or contact us directly.</p>
               </div>
             </div>
           </div>
@@ -613,12 +635,14 @@
             211 N Mt Shasta Blvd, California, US 96067, US
           </address>
 
+          <a href="mailto:ntcusa@nicolastena.com" class="body-4 contact-link">ntcusa@nicolastena.com (Preferred)</a>
+
           <a href="mailto:info@theclandestinousa.com" class="body-4 contact-link">info@theclandestinousa.com</a>
 
           <a href="https://wa.me/14086090027?text=Hello!%20I%20am%20visiting%20from%20theclandestinousa.com%20and%20would%20like%20to%20make%20a%20table%20reservation.%20Could%20you%20please%20help%20me%20with%20availability%20and%20booking%20details?%20Thank%20you!" class="body-4 contact-link" target="_blank" rel="noopener noreferrer">Booking Request : +1 408-609-0027</a>
 
           <p class="body-4">
-            Open : 02:00 pm - 08:00 pm
+            Open: Tue–Sun, 4:00–8:00 PM PT
           </p>
 
           <div class="wrapper">
@@ -721,7 +745,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
   <!-- Contact Form Modal Success/Error -->
-  <div class="modal fade clx-result-modal" id="contactResultModal" tabindex="-1" aria-labelledby="contactResultModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal fade clx-result-modal" id="contactResultModal" tabindex="-1" aria-labelledby="contactResultModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered clx-modal-dialog">
       <div class="modal-content clx-modal-content">
         <div class="modal-body clx-modal-body">
@@ -747,10 +771,10 @@
           <h3 class="clx-modal-title" id="contactResultModalLabel">Message Sent!</h3>
           <p class="clx-modal-message" id="modalMessage">Thank you for contacting us. We'll get back to you soon.</p>
           <div class="clx-modal-redirect-info">
-            <span class="clx-modal-countdown">Redirecting in <span id="modalCountdown">5</span> seconds...</span>
+            <span class="clx-modal-countdown">Closing in <span id="modalCountdown">8</span> seconds...</span>
           </div>
           <button type="button" class="clx-modal-btn" id="modalRedirectBtn">
-            <span>Go to Home</span>
+            <span>Close</span>
             <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
           </button>
         </div>
@@ -1048,6 +1072,7 @@
     }
   </style>
 
+  <script src="./assets/js/form-feedback.js" defer></script>
   <script type="module" src="./assets/js/script.js" defer></script>
 
   <!-- Contact Form Modal Handler -->
@@ -1063,6 +1088,13 @@
       function initContactFormModal() {
         const form = document.getElementById('clx-contact-form');
         if (!form) return;
+
+        // Anti-spam timestamp (time-trap): set when the page loads.
+        // The server scores instant submissions as bots (autofill users are never blocked client-side).
+        const loadedAtField = document.getElementById('clx-loaded-at');
+        if (loadedAtField && !loadedAtField.value) {
+          loadedAtField.value = String(Math.floor(Date.now() / 1000));
+        }
         
         const modalEl = document.getElementById('contactResultModal');
         if (!modalEl) return;
@@ -1091,9 +1123,11 @@
             return;
           }
           
-          // Check honeypot
-          if (form.website && form.website.value) {
-            showInlineStatus('Unexpected error.', 'error');
+          // Check honeypots (bots fill hidden fields humans never see)
+          const trapHit = (form.website && form.website.value) || (form.company && form.company.value);
+          if (trapHit) {
+            // Fake success so bots move on instead of retrying
+            showModal(true, 'Message Sent Successfully!', 'Thank you for contacting The Clandestino USA. We will get back to you as soon as possible.');
             return;
           }
           
@@ -1157,25 +1191,19 @@
         }, true); // Use capture to run before other handlers
         
         function showModal(isSuccess, title, message) {
-          // Set icon
+          if (window.ClandestinoFeedback) {
+            window.ClandestinoFeedback.open({ success: isSuccess, title: title, message: message });
+            return;
+          }
           iconSuccess.style.display = isSuccess ? 'block' : 'none';
           iconError.style.display = isSuccess ? 'none' : 'block';
-          
-          // Reset SVG animations by cloning
           resetSVGAnimations(isSuccess ? iconSuccess : iconError);
-          
-          // Set content
           modalTitle.textContent = title;
           modalTitle.className = 'clx-modal-title ' + (isSuccess ? 'success' : 'error');
           modalMessage.textContent = message;
-          
-          // Set button style
           modalBtn.className = 'clx-modal-btn' + (isSuccess ? '' : ' error-btn');
-          
-          // Show modal
+          modalBtn.querySelector('span').textContent = 'Close';
           modal.show();
-          
-          // Start countdown
           startCountdown();
         }
         
@@ -1188,8 +1216,10 @@
         }
         
         function startCountdown() {
-          let seconds = 5;
+          let seconds = 8;
           modalCountdown.textContent = seconds;
+          var label = modalCountdown.parentElement;
+          if (label) label.childNodes[0].textContent = 'Closing in ';
           
           if (countdownInterval) {
             clearInterval(countdownInterval);
@@ -1201,13 +1231,14 @@
             
             if (seconds <= 0) {
               clearInterval(countdownInterval);
-              redirectToHome();
+              modal.hide();
             }
           }, 1000);
         }
         
         function redirectToHome() {
-          window.location.href = 'index.html';
+          if (countdownInterval) clearInterval(countdownInterval);
+          modal.hide();
         }
         
         // Button click handler
@@ -1260,6 +1291,11 @@
                   break;
                 case 'email':
                   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) error = 'Valid email required';
+                  else {
+                    const domain = value.split('@')[1].toLowerCase();
+                    const disposable = ['mailinator.com', 'mailinator.net', 'tempmail.com', 'temp-mail.org', 'guerrillamail.com', 'guerrillamail.net', '10minutemail.com', '10minutemail.net', 'yopmail.com', 'yopmail.net', 'trashmail.com', 'trashmail.net', 'dispostable.com', 'throwawaymail.com', 'fakeinbox.com', 'getnada.com', 'mohmal.com', 'maildrop.cc'];
+                    if (disposable.indexOf(domain) !== -1) error = 'Please use a permanent email address';
+                  }
                   break;
                 case 'tel':
                   if (value && /[^0-9+()\-\s]/.test(value)) error = 'Invalid characters in phone';
@@ -1270,6 +1306,12 @@
                   break;
                 case 'message':
                   if (value.length < 5) error = 'Message too short';
+                  else {
+                    const links = (value.match(/https?:\/\/|www\./gi) || []).length;
+                    const spamWords = ['viagra', 'cialis', 'casino', 'poker', 'forex', 'backlink', 'seo service', 'buy followers', 'payday loan', 'porn', 'xxx', 'escort', 'replica', 'pharmacy', 'bitcoin doubler', 'make money fast'];
+                    const lowerMsg = value.toLowerCase();
+                    if (links >= 2 || spamWords.some(function (w) { return lowerMsg.indexOf(w) !== -1; })) error = 'Please remove links or promotional content from your message';
+                  }
                   break;
               }
               
@@ -1433,5 +1475,9 @@
     </style>
     <p style="text-align:center;padding:1rem" class="body-3">JavaScript is disabled. FAQ functionality and form validation require JavaScript.</p>
   </noscript>
+<!-- Floating WhatsApp button -->
+  <a href="https://wa.me/14086090027?text=Hello%20The%20Clandestino%20USA!%20I%20would%20like%20more%20information%20about%20reservations%20and%20events.%20Thank%20you!" class="whatsapp-float" aria-label="Chat with The Clandestino USA on WhatsApp" target="_blank" rel="noopener noreferrer" style="position:fixed;bottom:22px;right:22px;z-index:99999;width:60px;height:60px;border-radius:50%;background:#dddaba;color:#141310;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 10px 26px rgba(0,0,0,.45)">
+    <svg viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false"><path fill="currentColor" d="M16.004 2.5C8.556 2.5 2.5 8.556 2.5 16.004c0 2.38.62 4.66 1.8 6.68L2.5 29.5l6.98-1.83a13.45 13.45 0 0 0 6.524 1.67c7.448 0 13.504-6.056 13.504-13.504S23.452 2.5 16.004 2.5zm0 24.62a11.08 11.08 0 0 1-5.64-1.55l-.404-.24-4.14 1.086 1.106-4.036-.264-.416a11.1 11.1 0 0 1-1.7-5.9c0-6.13 4.99-11.12 11.12-11.12s11.12 4.99 11.12 11.12-4.99 11.12-11.2 11.12zm6.1-8.32c-.334-.168-1.976-.976-2.282-1.086-.306-.11-.53-.168-.752.168-.224.334-.866 1.086-1.062 1.31-.196.224-.39.252-.724.084-.334-.168-1.41-.52-2.686-1.656-.993-.886-1.664-1.98-1.86-2.314-.196-.334-.02-.514.148-.682.152-.15.334-.39.5-.586.168-.196.224-.334.334-.558.112-.224.056-.42-.028-.586-.084-.168-.752-1.81-1.03-2.48-.272-.65-.548-.562-.752-.572l-.64-.012c-.224 0-.586.084-.892.42-.306.334-1.17 1.142-1.17 2.786s1.198 3.23 1.364 3.454c.168.224 2.356 3.598 5.71 5.046.798.344 1.42.55 1.906.704.8.254 1.53.218 2.106.132.642-.096 1.976-.808 2.254-1.588.278-.78.278-1.448.194-1.588-.084-.14-.306-.224-.64-.392z"/></svg>
+  </a>
 </body>
 </html>
