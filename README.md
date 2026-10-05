@@ -220,6 +220,23 @@ clandestinoUSA/
 
 ---
 
+## 💻 Desarrollo local
+
+**Requisitos:** Node.js 20.19+ (probado con 24), npm y PHP CLI en el `PATH`.
+
+```bash
+npm ci          # instala dependencias
+npm run dev     # PHP :8000 + BrowserSync :3000 + watch (Ctrl+C para cerrar)
+npm run build   # genera assets/css/style.new.css y assets/js/dist/ minificados
+npm run lint    # ESLint (JS nuevo) + Stylelint (SCSS nuevo)
+```
+
+- Sitio local: http://localhost:3000/ (proxy a PHP en http://127.0.0.1:8000).
+- Los outputs generados están ignorados por git y el CSS/JS legacy no se modifica.
+- Detalle: `docs/ARQUITECTURA.md`.
+
+---
+
 ## 👨‍💻 Desarrollo
 
 **Desarrollado por:** ByteForge  

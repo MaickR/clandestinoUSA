@@ -17,3 +17,19 @@ Thumbs.db
 # Environment files
 .env
 .env.local
+
+# Backups y comprimidos
+*.log
+*.bak
+*.orig
+*.zip
+*~
+
+# Variables de entorno
+.env.*
+!.env.example
+
+# Outputs generados por el pipeline frontend (assets/scss + assets/js/main.js)
+assets/js/dist/
+assets/css/style.new.css
+assets/css/style.new.css.map
