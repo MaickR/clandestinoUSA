@@ -1,0 +1,28 @@
+.cl-acordeon {
+  border-block-start: 1px solid var(--color-borde-fuerte);
+
+  &__item { border-block-end: 1px solid var(--color-borde-fuerte); }
+  &__titulo { margin: 0; }
+
+  &__control {
+    display: flex;
+    gap: var(--espacio-3);
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: var(--espacio-4);
+    border: 0;
+    background: transparent;
+    color: var(--color-texto);
+    font-family: var(--fuente-cuerpo);
+    font-size: 1rem;
+    text-align: start;
+    cursor: pointer;
+
+    &:hover { background: var(--color-superficie); }
+    &[aria-expanded="true"] { color: var(--color-acento); }
+  }
+
+  &__contenido { padding: var(--espacio-4); }
+}

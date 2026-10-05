@@ -1,5 +1,17 @@
 <?php
 // Guía local del design system. No procesa formularios ni enlaza el CSS legacy.
+$iconos = json_decode(file_get_contents(__DIR__ . '/../scripts/iconos.json'), true, 512, JSON_THROW_ON_ERROR);
+
+/** SVG decorativo; nombres limitados al manifiesto local. */
+function iconoGuia(string $nombre): string
+{
+    global $iconos;
+    if (!in_array($nombre, array_column($iconos, 'nombre'), true)) {
+        throw new InvalidArgumentException('Icono desconocido.');
+    }
+    return '<svg class="cl-icon" aria-hidden="true" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-'
+        . htmlspecialchars($nombre, ENT_QUOTES, 'UTF-8') . '"></use></svg>';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,9 +28,25 @@
   <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.new.css">
   <link rel="stylesheet" href="../assets/css/style-guide.css">
+  <script type="module" src="../assets/js/dist/style-guide.js"></script>
 </head>
 <body>
   <a class="visually-hidden-focusable" href="#contenido">Skip to content</a>
+
+  <div class="modal fade cl-modal" id="modal-detalles" tabindex="-1" aria-labelledby="modal-detalles-titulo" aria-describedby="modal-detalles-texto" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content cl-modal__superficie">
+      <div class="modal-header cl-modal__cabecera"><h2 class="cl-modal__titulo" id="modal-detalles-titulo">Collection details</h2><button class="cl-boton-icono" id="modal-detalles-cerrar" type="button" data-bs-dismiss="modal" aria-label="Close collection details"><?= iconoGuia('cerrar') ?></button></div>
+      <div class="modal-body"><p id="modal-detalles-texto">Please arrive within the collection window shown in your confirmation.</p><p>This is a local component demonstration.</p></div>
+      <div class="modal-footer cl-modal__acciones"><button class="cl-boton" type="button" data-bs-dismiss="modal">Got it</button></div>
+    </div></div>
+  </div>
+  <div class="modal fade cl-modal cl-modal--confirmacion" id="modal-confirmacion" tabindex="-1" aria-labelledby="modal-confirmacion-titulo" aria-describedby="modal-confirmacion-texto" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content cl-modal__superficie">
+      <div class="modal-header cl-modal__cabecera"><h2 class="cl-modal__titulo" id="modal-confirmacion-titulo">Remove this item from your order?</h2><button class="cl-boton-icono" type="button" data-bs-dismiss="modal" aria-label="Close removal confirmation"><?= iconoGuia('cerrar') ?></button></div>
+      <div class="modal-body"><p id="modal-confirmacion-texto">You can add it again later. This demonstration does not change an order.</p></div>
+      <div class="modal-footer cl-modal__acciones"><button class="cl-boton cl-boton--secundario" id="conservar-item" type="button" data-bs-dismiss="modal">Keep item</button><button class="cl-boton" id="confirmar-demo" type="button">Remove item</button></div>
+    </div></div>
+  </div>
 
   <header class="cl-guia-seccion">
     <div class="container">
@@ -31,13 +59,23 @@
           <li><a class="cl-enlace" href="#colors">Colors</a></li>
           <li><a class="cl-enlace" href="#typography">Typography</a></li>
           <li><a class="cl-enlace" href="#spacing">Spacing</a></li>
-          <li><a class="cl-enlace" href="#buttons">Buttons</a></li>
-          <li><a class="cl-enlace" href="#links">Links</a></li>
-          <li><a class="cl-enlace" href="#forms">Forms</a></li>
-          <li><a class="cl-enlace" href="#cards">Cards</a></li>
-          <li><a class="cl-enlace" href="#accessibility">Accessibility</a></li>
           <li><a class="cl-enlace" href="#grid">Grid</a></li>
-          <li><a class="cl-enlace" href="#components">Components</a></li>
+          <li><a class="cl-enlace" href="#icons">Icons</a></li>
+          <li><a class="cl-enlace" href="#buttons">Buttons</a></li>
+          <li><a class="cl-enlace" href="#actions">Icon buttons &amp; quantity</a></li>
+          <li><a class="cl-enlace" href="#links">Links</a></li>
+          <li><a class="cl-enlace" href="#breadcrumbs">Breadcrumbs</a></li>
+          <li><a class="cl-enlace" href="#forms">Forms</a></li>
+          <li><a class="cl-enlace" href="#cards">Cards / surfaces</a></li>
+          <li><a class="cl-enlace" href="#components">Eyebrow &amp; divider</a></li>
+          <li><a class="cl-enlace" href="#alerts">Alerts &amp; notices</a></li>
+          <li><a class="cl-enlace" href="#status">Status labels</a></li>
+          <li><a class="cl-enlace" href="#notifications">Toast notifications</a></li>
+          <li><a class="cl-enlace" href="#modals">Modals &amp; confirmations</a></li>
+          <li><a class="cl-enlace" href="#disclosure">Accordion / disclosure</a></li>
+          <li><a class="cl-enlace" href="#loading">Loading</a></li>
+          <li><a class="cl-enlace" href="#system-states">Empty &amp; error states</a></li>
+          <li><a class="cl-enlace" href="#accessibility">Accessibility states</a></li>
         </ul>
       </nav>
     </div>
@@ -185,6 +223,36 @@
       </div>
     </section>
 
+    <section class="cl-guia-seccion cl-guia-banda" id="grid" aria-labelledby="grid-title">
+      <div class="container">
+        <h2 id="grid-title">Bootstrap grid / containers</h2>
+        <p>Containers stop at 1200px. Columns are one-up until the medium breakpoint, then the row splits. Gutters are 1.5rem.</p>
+        <div class="row cl-guia-rejilla">
+          <div class="col-12 col-md-4">
+            <div class="cl-tarjeta"><p>Column one</p></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="cl-tarjeta"><p>Column two</p></div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="cl-tarjeta"><p>Column three</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="icons" aria-labelledby="icons-title">
+      <div class="container">
+        <h2 id="icons-title">Icons</h2>
+        <p>One local SVG sprite. Icons inherit text color; decorative icons stay out of the tab order.</p>
+        <ul class="cl-guia-iconos">
+          <?php foreach ($iconos as $icono): ?>
+          <li class="cl-guia-icono"><?= iconoGuia($icono['nombre']) ?><span><?= htmlspecialchars($icono['nombre'], ENT_QUOTES, 'UTF-8') ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </section>
+
     <section class="cl-guia-seccion cl-guia-banda" id="buttons" aria-labelledby="buttons-title">
       <div class="container">
         <h2 id="buttons-title">Buttons</h2>
@@ -198,11 +266,44 @@
       </div>
     </section>
 
-    <section class="cl-guia-seccion" id="links" aria-labelledby="links-title">
+    <section class="cl-guia-seccion" id="actions" aria-labelledby="actions-title">
+      <div class="container">
+        <h2 id="actions-title">Icon buttons &amp; quantity</h2>
+        <p>Action buttons have names and a 44px minimum target at the normal browser size. Quantity uses native number input stepping.</p>
+        <div class="cl-guia-fila">
+          <button class="cl-boton-icono" type="button" aria-label="Add one item"><?= iconoGuia('sumar') ?></button>
+          <a class="cl-boton-icono" href="#breadcrumbs" aria-label="View breadcrumbs"><?= iconoGuia('volver') ?></a>
+          <button class="cl-boton-icono" type="button" aria-label="Unavailable action" disabled><?= iconoGuia('restringido') ?></button>
+        </div>
+        <div class="cl-guia-demo" id="cantidad-demo">
+          <div class="cl-campo-grupo"><label class="cl-etiqueta" for="cantidad">Quantity</label>
+          <div class="cl-cantidad">
+            <button class="cl-boton-icono" type="button" data-cl-cantidad="restar" aria-label="Decrease quantity"><?= iconoGuia('restar') ?></button>
+            <input class="cl-campo cl-cantidad__campo" id="cantidad" type="number" min="1" max="6" step="1" value="1" required aria-describedby="cantidad-ayuda cantidad-error">
+            <button class="cl-boton-icono" type="button" data-cl-cantidad="sumar" aria-label="Increase quantity"><?= iconoGuia('sumar') ?></button>
+          </div>
+          <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="cantidad-ayuda">Between 1 and 6 items. No price or stock calculation.</p>
+          <p class="cl-mensaje-campo cl-cantidad__mensaje cl-guia-resultado" id="cantidad-error" role="status"></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion cl-guia-banda" id="links" aria-labelledby="links-title">
       <div class="container">
         <h2 id="links-title">Links</h2>
         <p>Use <code>cl-enlace</code> when a content link needs the editorial underline. The native link element stays a link. Visited links shift to secondary text, which still clears 4.5:1. Hover turns them to the primary text color.</p>
         <p>Read the <a class="cl-enlace" href="#typography">typography notes</a> or return to the <a class="cl-enlace" href="#foundations">foundations</a>.</p>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="breadcrumbs" aria-labelledby="breadcrumbs-title">
+      <div class="container">
+        <h2 id="breadcrumbs-title">Breadcrumbs</h2>
+        <nav aria-label="Breadcrumb"><ol class="cl-migas">
+          <li class="cl-migas__item"><a class="cl-enlace" href="#foundations">The Clandestino</a></li>
+          <li class="cl-migas__item"><span class="cl-migas__separador" aria-hidden="true"><?= iconoGuia('siguiente') ?></span><a class="cl-enlace" href="#cards">Take away</a></li>
+          <li class="cl-migas__item"><span class="cl-migas__separador" aria-hidden="true"><?= iconoGuia('siguiente') ?></span><span aria-current="page">Your order</span></li>
+        </ol></nav>
       </div>
     </section>
 
@@ -213,8 +314,9 @@
         <div class="row cl-guia-rejilla">
           <div class="col-12 col-md-8">
             <div class="cl-campo-grupo">
-              <label class="cl-etiqueta" for="nombre">Name</label>
-              <input class="cl-campo" id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Your name">
+              <label class="cl-etiqueta" for="nombre">Name <span class="cl-texto-pequeno">— Required</span></label>
+              <input class="cl-campo" id="nombre" name="nombre" type="text" autocomplete="name" placeholder="Your name" required aria-describedby="nombre-ayuda">
+              <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="nombre-ayuda">Use the name you would give when arriving at the restaurant.</p>
             </div>
             <div class="cl-campo-grupo">
               <label class="cl-etiqueta" for="nota">Note</label>
@@ -237,6 +339,39 @@
               <label class="cl-etiqueta" for="telefono">Phone</label>
               <input class="cl-campo" id="telefono" name="telefono" type="tel" autocomplete="tel" value="530-555-0199" disabled>
             </div>
+            <div class="cl-campo-grupo">
+              <label class="cl-etiqueta" for="referencia">Reservation reference — Readonly</label>
+              <input class="cl-campo" id="referencia" value="CL-2048" readonly aria-describedby="referencia-ayuda">
+              <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="referencia-ayuda">You can select and copy this reference.</p>
+            </div>
+            <div class="cl-campo-grupo">
+              <label class="cl-etiqueta" for="correo-validado">Email — Verified example</label>
+              <input class="cl-campo cl-campo--exito" id="correo-validado" type="email" value="guest@example.com" aria-describedby="correo-exito">
+              <p class="cl-mensaje-campo cl-mensaje-campo--exito" id="correo-exito">Your email address has been confirmed.</p>
+            </div>
+            <fieldset class="cl-formulario-grupo">
+              <legend class="cl-formulario-grupo__leyenda">Collection preference</legend>
+              <label class="cl-opcion" for="recogida-temprana"><input class="cl-opcion__control" id="recogida-temprana" name="recogida" type="radio" value="early" checked><span class="cl-opcion__texto">Early collection</span></label>
+              <label class="cl-opcion" for="recogida-tarde"><input class="cl-opcion__control" id="recogida-tarde" name="recogida" type="radio" value="late"><span class="cl-opcion__texto">Later collection</span></label>
+              <label class="cl-opcion" for="recogida-agotada"><input class="cl-opcion__control" id="recogida-agotada" name="recogida" type="radio" value="unavailable" disabled><span class="cl-opcion__texto">Tonight — Unavailable</span></label>
+            </fieldset>
+            <fieldset class="cl-formulario-grupo" aria-describedby="preferencias-ayuda">
+              <legend class="cl-formulario-grupo__leyenda">Dining preferences</legend>
+              <label class="cl-opcion" for="vegetariano"><input class="cl-opcion__control" id="vegetariano" type="checkbox" checked><span class="cl-opcion__texto">Vegetarian options</span></label>
+              <label class="cl-opcion" for="sin-gluten"><input class="cl-opcion__control" id="sin-gluten" type="checkbox"><span class="cl-opcion__texto">Gluten-free options</span></label>
+              <label class="cl-opcion" for="preferencia-inactiva"><input class="cl-opcion__control" id="preferencia-inactiva" type="checkbox" disabled><span class="cl-opcion__texto">Private dining — Unavailable</span></label>
+              <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="preferencias-ayuda">Please discuss allergies with our team.</p>
+            </fieldset>
+            <fieldset class="cl-formulario-grupo" aria-describedby="preferencia-error">
+              <legend class="cl-formulario-grupo__leyenda">Collection time — Required</legend>
+              <label class="cl-opcion" for="hora-requerida"><input class="cl-opcion__control" id="hora-requerida" type="radio" name="hora-ejemplo" required aria-invalid="true" aria-describedby="preferencia-error"><span class="cl-opcion__texto">Evening collection</span></label>
+              <p class="cl-mensaje-campo" id="preferencia-error">Choose a collection time.</p>
+            </fieldset>
+            <div class="cl-formulario-grupo" id="formulario-carga" aria-busy="false">
+              <p>Availability check — Local demonstration</p>
+              <button class="cl-boton cl-boton--con-carga" id="comprobar-demo" type="button"><span class="cl-boton__reposo">Check availability</span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Checking availability…</span></button>
+            </div>
+            <p class="cl-guia-resultado" id="formulario-resultado" role="status"></p>
           </div>
         </div>
       </div>
@@ -265,7 +400,90 @@
       </div>
     </section>
 
-    <section class="cl-guia-seccion cl-guia-banda" id="accessibility" aria-labelledby="accessibility-title">
+    <section class="cl-guia-seccion cl-guia-banda" id="components" aria-labelledby="components-title">
+      <div class="container">
+        <h2 id="components-title">Eyebrow &amp; divider</h2>
+        <p class="cl-eyebrow">Eyebrow</p>
+        <p>Uppercase, champagne, and tracked at 0.18em. The legacy 0.4em tracking is retired. No ornamental rule yet.</p>
+        <hr class="cl-divisor">
+        <p>The divider is a single subtle border. Pair it with a <a class="cl-enlace" href="#buttons">button</a> when the sentence is a real link.</p>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="alerts" aria-labelledby="alerts-title">
+      <div class="container">
+        <h2 id="alerts-title">Alerts &amp; notices</h2>
+        <p>Static notices have no live role. Text explains the state; icons and color support it.</p>
+        <div class="cl-guia-demo">
+          <?php foreach ([['informacion', 'Collection details', 'Please arrive within your collection window.'], ['exito', 'Reservation confirmed', 'We look forward to welcoming you.'], ['aviso', 'Limited availability', 'Only 2 seats remaining.'], ['error', 'Wine unavailable', 'This wine is currently unavailable.']] as [$variante, $titulo, $mensaje]): ?>
+          <div class="cl-alerta cl-alerta--<?= $variante ?>"><span class="cl-alerta__icono"><?= iconoGuia($variante) ?></span><div class="cl-alerta__contenido"><p class="cl-alerta__titulo"><?= $titulo ?></p><p class="cl-alerta__mensaje"><?= $mensaje ?></p></div></div>
+          <?php endforeach; ?>
+        </div>
+        <div class="cl-guia-demo" id="alerta-textual"></div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion cl-guia-banda" id="status" aria-labelledby="status-title">
+      <div class="container">
+        <h2 id="status-title">Status labels</h2>
+        <p>Readable, static labels. Availability is never communicated through color alone.</p>
+        <div class="cl-guia-fila"><span class="cl-estado cl-estado--exito">Available</span><span class="cl-estado cl-estado--error">Sold out</span><span class="cl-estado cl-estado--aviso">Limited</span><span class="cl-estado">Members only</span><span class="cl-estado cl-estado--destacado">New</span></div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="notifications" aria-labelledby="notifications-title">
+      <div class="container">
+        <h2 id="notifications-title">Toast notifications</h2>
+        <p>Routine updates are polite. Urgent failures are assertive and remain until closed. Up to three demos at once; showing a toast does not move focus.</p>
+        <div class="cl-guia-fila"><button class="cl-boton" id="toast-rutina" type="button">Show order update</button><button class="cl-boton cl-boton--secundario" id="toast-persistente" type="button">Show important notice</button><button class="cl-boton cl-boton--secundario" id="toast-urgente" type="button">Show urgent error</button></div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion cl-guia-banda" id="modals" aria-labelledby="modals-title">
+      <div class="container">
+        <h2 id="modals-title">Modals &amp; confirmations</h2>
+        <p>Tab stays inside the open dialog. Escape or the backdrop closes it; focus returns to the opener. Confirmation begins on the safe action.</p>
+        <div class="cl-guia-fila"><button class="cl-boton" id="abrir-modal" type="button" data-bs-toggle="modal" data-bs-target="#modal-detalles">View collection details</button><button class="cl-boton cl-boton--secundario" id="abrir-confirmacion" type="button">Review removal</button></div>
+        <p class="cl-guia-resultado" id="confirmacion-resultado" role="status"></p>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="disclosure" aria-labelledby="disclosure-title">
+      <div class="container">
+        <h2 id="disclosure-title">Accordion / disclosure</h2>
+        <p>Use Tab and Shift+Tab between controls. Enter or Space toggles a panel. Panels open independently.</p>
+        <div class="cl-acordeon">
+          <div class="cl-acordeon__item"><h3 class="cl-acordeon__titulo"><button class="cl-acordeon__control" id="control-recogida" type="button" data-bs-toggle="collapse" data-bs-target="#panel-recogida" aria-expanded="false" aria-controls="panel-recogida">Collection details <?= iconoGuia('expandir') ?></button></h3><div class="collapse" id="panel-recogida" aria-labelledby="control-recogida"><div class="cl-acordeon__contenido">Your collection window will be shown with your order confirmation.</div></div></div>
+          <div class="cl-acordeon__item"><h3 class="cl-acordeon__titulo"><button class="cl-acordeon__control" id="control-alergias" type="button" data-bs-toggle="collapse" data-bs-target="#panel-alergias" aria-expanded="true" aria-controls="panel-alergias">Allergies and dietary needs <?= iconoGuia('expandir') ?></button></h3><div class="collapse show" id="panel-alergias" aria-labelledby="control-alergias"><div class="cl-acordeon__contenido">Please contact our team before ordering if you have a food allergy.</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion cl-guia-banda" id="loading" aria-labelledby="loading-title">
+      <div class="container">
+        <h2 id="loading-title">Loading</h2>
+        <p>Space stays reserved. Reduced motion leaves a static indicator and readable text.</p>
+        <button class="cl-boton cl-boton--con-carga" id="pedido-carga" type="button"><span class="cl-boton__reposo">Add to your order</span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Adding to your order…</span></button>
+        <p class="cl-guia-resultado" id="pedido-resultado" role="status"></p>
+        <div class="row cl-guia-rejilla cl-guia-demo">
+          <div class="col-12 col-md-6"><div class="cl-tarjeta" aria-busy="true"><p class="cl-guia-espera"><span class="cl-spinner" aria-hidden="true"></span>Checking availability…</p></div></div>
+          <div class="col-12 col-md-6"><div class="cl-tarjeta" aria-busy="true"><p>Loading collection options…</p><div aria-hidden="true"><span class="cl-skeleton cl-skeleton--superficie"></span><span class="cl-skeleton"></span><span class="cl-skeleton cl-skeleton--corto"></span></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion" id="system-states" aria-labelledby="system-states-title">
+      <div class="container">
+        <h2 id="system-states-title">Empty &amp; error states</h2>
+        <div class="row cl-guia-rejilla">
+          <div class="col-12 col-md-6"><div class="cl-estado-vista"><div class="cl-estado-vista__icono"><?= iconoGuia('pedido') ?></div><h3 class="cl-estado-vista__titulo">Your order is empty</h3><p class="cl-estado-vista__texto">Discover something to enjoy at home.</p><a class="cl-boton" href="#buttons">Explore the menu</a></div></div>
+          <div class="col-12 col-md-6"><div class="cl-estado-vista cl-estado-vista--error"><div class="cl-estado-vista__icono"><?= iconoGuia('error') ?></div><h3 class="cl-estado-vista__titulo">We couldn't load availability</h3><p class="cl-estado-vista__texto">Please try again in a moment.</p><button class="cl-boton cl-boton--secundario" id="reintentar-demo" type="button">Try again</button></div></div>
+        </div>
+        <p class="cl-guia-resultado" id="reintento-resultado" role="status"></p>
+      </div>
+    </section>
+
+    <section class="cl-guia-seccion cl-guia-banda cl-guia-cierre" id="accessibility" aria-labelledby="accessibility-title">
       <div class="container">
         <h2 id="accessibility-title">Accessibility states</h2>
         <p>Tab through this page. The focus ring is a 2px champagne outline, 3px outside the control, and it does not rely on the mouse focus outline.</p>
@@ -275,34 +493,11 @@
         <button class="cl-boton" type="button">Focus target</button>
       </div>
     </section>
-
-    <section class="cl-guia-seccion" id="grid" aria-labelledby="grid-title">
-      <div class="container">
-        <h2 id="grid-title">Bootstrap grid / containers</h2>
-        <p>Containers stop at 1200px. Columns are one-up until the medium breakpoint, then the row splits. Gutters are 1.5rem.</p>
-        <div class="row cl-guia-rejilla">
-          <div class="col-12 col-md-4">
-            <div class="cl-tarjeta"><p>Column one</p></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="cl-tarjeta"><p>Column two</p></div>
-          </div>
-          <div class="col-12 col-md-4">
-            <div class="cl-tarjeta"><p>Column three</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="cl-guia-seccion cl-guia-banda cl-guia-cierre" id="components" aria-labelledby="components-title">
-      <div class="container">
-        <h2 id="components-title">Component states</h2>
-        <p class="cl-eyebrow">Eyebrow</p>
-        <p>Uppercase, champagne, and tracked at 0.18em. The legacy 0.4em tracking is retired. No ornamental rule yet.</p>
-        <hr class="cl-divisor">
-        <p>The divider is a single subtle border. Pair it with a <a class="cl-enlace" href="#buttons">button</a> when the sentence is a real link.</p>
-      </div>
-    </section>
   </main>
+
+  <div class="cl-notificaciones" id="notificaciones"></div>
+  <div class="visually-hidden" id="notificacion-rutina" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="visually-hidden" id="notificacion-urgente" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
 </body>
 </html>

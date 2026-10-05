@@ -1,0 +1,20 @@
+.cl-modal {
+  --bs-modal-color: var(--color-texto);
+  --bs-modal-bg: var(--color-superficie);
+  --bs-modal-border-color: var(--color-borde-fuerte);
+  --bs-modal-border-radius: var(--radio-md);
+  --bs-modal-inner-border-radius: var(--radio-md);
+  --bs-modal-header-border-color: var(--color-borde);
+  --bs-modal-footer-border-color: var(--color-borde);
+
+  &__superficie { box-shadow: var(--sombra-elevada); }
+  &__cabecera { gap: var(--espacio-3); }
+
+  &__titulo {
+    flex: 1;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  &__acciones { gap: var(--espacio-2); }
+  &--confirmacion { --bs-modal-width: 28rem; }
+}

@@ -1,0 +1,29 @@
+.cl-alerta {
+  --cl-alerta-acento: var(--color-acento);
+
+  display: flex;
+  gap: var(--espacio-3);
+  align-items: flex-start;
+  padding: var(--espacio-4);
+  border: 1px solid var(--color-borde);
+  border-inline-start: 3px solid var(--cl-alerta-acento);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+
+  &__icono { color: var(--cl-alerta-acento); }
+
+  &__contenido {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__titulo {
+    margin: 0 0 var(--espacio-2);
+    font-weight: 600;
+  }
+  &__mensaje { margin: 0; }
+  &--exito { --cl-alerta-acento: var(--color-exito); }
+  &--aviso { --cl-alerta-acento: var(--color-aviso); }
+  &--error { --cl-alerta-acento: var(--color-error); }
+}

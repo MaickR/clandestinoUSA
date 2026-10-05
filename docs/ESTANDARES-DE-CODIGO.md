@@ -84,7 +84,7 @@ La guía viva es `style-guide/index.php` (local). El `style-guide.md` de la raí
 - DOM seguro: `textContent`; nunca `innerHTML` con datos no sanitizados.
 - Preferir `data-bs-*` cuando Bootstrap cubra el caso.
 - Dependencias nuevas solo con justificación. Prettier y Husky **no son obligatorios** por ahora.
-- **ESLint** (`eslint.config.mjs`) aplica solo al JS nuevo (`assets/js/main.js`, `assets/js/modules/**`) y a los `.mjs` de tooling. **Stylelint** (`.stylelintrc.json`, `stylelint-config-standard-scss`) aplica solo a `assets/scss/**`. Ambos con `npm run lint`.
+- **ESLint** (`eslint.config.mjs`) aplica solo al JS nuevo (`assets/js/main.js`, `assets/js/style-guide.js`, `assets/js/modules/**`) y a los `.mjs` de tooling. **Stylelint** (`.stylelintrc.json`, `stylelint-config-standard-scss`) aplica solo a `assets/scss/**`. Ambos con `npm run lint`.
 - El JS y CSS legacy no se lintean: se migra incrementalmente y entra en el lint al refactorizarse.
 
 ## Bootstrap 5

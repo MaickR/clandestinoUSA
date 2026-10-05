@@ -69,3 +69,27 @@
     }
   }
 }
+
+// Ambas etiquetas comparten celda: la más ancha reserva tamaño durante la espera.
+.cl-boton--con-carga {
+  display: inline-grid;
+}
+
+.cl-boton__reposo,
+.cl-boton__carga {
+  display: inline-flex;
+  grid-area: 1 / 1;
+  gap: var(--espacio-2);
+  align-items: center;
+  justify-content: center;
+}
+
+.cl-boton__carga { visibility: hidden; }
+
+.cl-boton.cl-boton--cargando {
+  cursor: wait;
+  opacity: 1;
+
+  .cl-boton__reposo { visibility: hidden; }
+  .cl-boton__carga { visibility: visible; }
+}

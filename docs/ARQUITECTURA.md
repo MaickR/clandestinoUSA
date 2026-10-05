@@ -18,16 +18,20 @@ Pipeline en `gulpfile.mjs`. Compila la foundation SCSS y el JS nuevo. El legacy 
 |---|---|
 | Sass producto | `assets/scss/main.scss` → `assets/css/style.new.css` |
 | Sass guía | `assets/scss/style-guide.scss` → `assets/css/style-guide.css`, solo en `npm run dev` |
-| Bootstrap | 5.3.x desde `node_modules`, solo núcleo (root, reboot, containers, grid, helpers) |
+| Bootstrap | 5.3.x desde `node_modules`: núcleo y mecánica transitions/modal/toasts; JS modular solo en la guía |
 | PostCSS | Autoprefixer siempre; cssnano solo en `build` |
 | JS | Entrada `assets/js/main.js` → `assets/js/dist/main.js` (esbuild, ESM, `es2020`) |
+| JS guía | `assets/js/style-guide.js` → `assets/js/dist/style-guide.js`, solo dev |
+| Iconos | `bootstrap-icons@1.13.1` (devDependency) → sprite local curado `assets/icons/cl-iconos.svg`, dev/build |
 | PHP local | `php -S 127.0.0.1:8000` lanzado por Gulp y cerrado al salir |
 | BrowserSync | `http://localhost:3000` con proxy a PHP `:8000` (PHP real, no estáticos) |
 | Lint | ESLint (JS nuevo y `.mjs` de tooling) y Stylelint (`assets/scss/**`) |
 
 Comandos: `npm run dev` (clean → CSS de producto y de guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → `style.new.css` y JS minificados, sin sourcemaps, sin servidores y sin CSS de la guía), `npm run lint`.
 
-Outputs (ignorados por git): `assets/css/style.new.css`, sus sourcemaps, `assets/css/style-guide.css` (+ `.map`, solo dev) y `assets/js/dist/**`. `clean` borra únicamente estos. `npm run build` no deja `style-guide.css`.
+Outputs (ignorados por git): `assets/css/style.new.css`, sus sourcemaps, `assets/css/style-guide.css` (+ `.map`, solo dev), `assets/js/dist/**` y `assets/icons/cl-iconos.svg`. `clean` borra únicamente estos. `npm run build` no deja CSS/JS de guía y genera siempre el sprite. Todo futuro paquete de release deberá incluir el sprite generado.
+
+Dev compila ambas entradas JS; build solo main.js. Main no importa Core mientras ninguna página lo utiliza. Watch incluye `style-guide/**/*.php`, entrada JS de guía, módulos Core y fuentes del sprite. `npm run icons` regenera el sprite sin servidores.
 
 Separación legacy/new: los cambios en HTML/PHP/CSS/JS legacy solo recargan BrowserSync; no se compilan, optimizan ni regeneran (imágenes, sitemap).
 
@@ -74,11 +78,15 @@ Si una migración futura necesita una excepción temporal, el PR tiene que decla
 
 Cada cutover es un commit de una página, verificado con la skill `qa-visual` en 390, 768 y 1280. Ninguna página de producción enlaza `style.new.css` todavía.
 
+### Core Component Library
+
+Core amplía los controles genéricos: iconografía, feedback, estados, toast, modal, disclosure, formularios, cantidad, loading, vacío/error y breadcrumb. Componentes reales en `style.new.css`; presentación y demos en CSS/JS de guía exclusivamente dev. No migra páginas ni introduce lógica de negocio. Documentación, contratos y registro técnico en `docs/CORE-COMPONENT-LIBRARY.md`. La aprobación visual humana es requisito previo al merge.
+
 ## Objetivo inmediato (futuro)
 
 | Capa | Objetivo |
 |---|---|
-| Estilos | Foundation vigente. Siguiente: layout (header, nav, footer) al migrar la primera página |
+| Estilos | Foundation y Core; aprobación visual Core pendiente. Layout/patterns al migrar páginas |
 | JavaScript | Módulos en `assets/js/modules/**` importados desde `main.js` |
 | PHP | Simple primero; estructura solo cuando la complejidad lo pida |
 | Datos | MySQL solo cuando una feature (checkout, Wine Club, reservas) lo requiera |
