@@ -1,39 +1,42 @@
 {
   "name": "clandestino-usa",
   "version": "1.0.0",
-  "description": "<div align=\"center\">",
-  "main": "assets/js/script.js",
+  "private": true,
+  "description": "Sitio web de The Clandestino USA",
+  "type": "module",
   "scripts": {
-    "build:css": "postcss assets/css/style.css -o assets/css/style.min.css",
-    "build:css:faq": "postcss assets/css/faq-styles.css -o assets/css/faq-styles.min.css",
-    "minify:js": "terser assets/js/script.js -o assets/js/script.min.js -c -m && terser assets/js/gallery.js -o assets/js/gallery.min.js -c -m && terser assets/js/hampers.js -o assets/js/hampers.min.js -c -m && terser assets/js/preloader.js -o assets/js/preloader.min.js -c -m && terser assets/js/reservation.js -o assets/js/reservation.min.js -c -m && terser assets/js/swc-carousel.js -o assets/js/swc-carousel.min.js -c -m && terser assets/js/tapas.js -o assets/js/tapas.min.js -c -m && terser assets/js/utils.js -o assets/js/utils.min.js -c -m && terser assets/js/wines.js -o assets/js/wines.min.js -c -m && terser sw.js -o sw.min.js -c -m",
-    "minify:all": "npm run build:css && npm run build:css:faq && npm run minify:js",
-    "purge:css": "postcss assets/css/style.css -o assets/css/style.purged.css",
-    "purge:report": "purgecss --css assets/css/style.css --content \"**/*.html\" assets/js/**/*.js --out assets/css/purge-report",
-    "lint": "echo \"Configura ESLint y Stylelint aquí\"",
-    "format": "echo \"Configura Prettier aquí\"",
-    "test": "npm run lint"
+    "dev": "gulp dev",
+    "build": "gulp build",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "eslint .",
+    "lint:css": "stylelint \"assets/scss/**/*.scss\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaickR/clandestinoUSA.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/MaickR/clandestinoUSA/issues"
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.19"
   },
-  "homepage": "https://github.com/MaickR/clandestinoUSA#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^7.0.2",
-    "autoprefixer": "^10.4.21",
-    "clean-css-cli": "^5.6.3",
-    "cssnano": "^7.1.1",
-    "postcss": "^8.5.6",
-    "postcss-cli": "^11.0.1",
-    "purgecss": "^7.0.2",
-    "terser": "^5.44.0"
+    "@eslint/js": "^10.0.1",
+    "autoprefixer": "^10.6.1",
+    "browser-sync": "^3.0.4",
+    "cssnano": "^8.0.10",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "gulp": "^5.0.1",
+    "gulp-postcss": "^10.0.0",
+    "gulp-rename": "^2.1.0",
+    "gulp-sass": "^6.0.1",
+    "postcss": "^8.5.29",
+    "sass": "^1.105.1",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard-scss": "^17.0.0"
   }
 }
