@@ -1,0 +1,71 @@
+// 2.75rem es el objetivo de 44px con la raíz por defecto del navegador.
+.cl-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--espacio-3) var(--espacio-4);
+  border: 1px solid transparent;
+  border-radius: var(--radio-md);
+  background: var(--color-accion);
+  color: var(--color-accion-texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  @include media-breakpoint-up(md) {
+    width: auto;
+  }
+
+  &:hover {
+    background: var(--color-accion-hover);
+    color: var(--color-accion-texto);
+  }
+
+  &:active {
+    border-color: var(--color-accion);
+    background: var(--color-texto-inverso);
+    color: var(--color-accion);
+  }
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    border-color: transparent;
+    background: var(--color-accion);
+    color: var(--color-accion-texto);
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &--secundario {
+    border-color: var(--color-borde-fuerte);
+    background: transparent;
+    color: var(--color-texto);
+
+    &:hover {
+      border-color: var(--color-acento);
+      background: transparent;
+      color: var(--color-acento);
+    }
+
+    &:active {
+      border-color: var(--color-acento);
+      background: var(--color-superficie-hover);
+      color: var(--color-acento);
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+      border-color: var(--color-borde-fuerte);
+      background: transparent;
+      color: var(--color-texto);
+      opacity: 0.45;
+    }
+  }
+}
