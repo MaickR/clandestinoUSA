@@ -1,0 +1,106 @@
+// Presentación del style guide. No es UI de producto.
+.cl-guia-seccion {
+  padding-block: var(--espacio-7);
+
+  @include media-breakpoint-up(lg) {
+    padding-block: var(--espacio-8);
+  }
+}
+
+.cl-guia-cierre {
+  padding-block-end: var(--espacio-9);
+}
+
+.cl-guia-banda {
+  background: var(--color-fondo-alterno);
+}
+
+.cl-guia-indice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3) var(--espacio-5);
+  margin: var(--espacio-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cl-guia-bloque + .cl-guia-bloque {
+  margin-block-start: var(--espacio-6);
+}
+
+.cl-guia-fila {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-4);
+  align-items: stretch;
+
+  @include media-breakpoint-up(md) {
+    flex-flow: row wrap;
+    align-items: center;
+  }
+}
+
+.cl-guia-rejilla {
+  row-gap: var(--espacio-5);
+}
+
+.cl-muestra__chip {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 5.5rem;
+  margin-block-end: var(--espacio-4);
+  padding: var(--espacio-4);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-sm);
+  color: var(--color-texto);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.cl-muestra__chip--tinta {
+  color: var(--color-texto-inverso);
+}
+
+.cl-muestra__chip--fondo { background: var(--color-fondo); }
+.cl-muestra__chip--fondo-alterno { background: var(--color-fondo-alterno); }
+.cl-muestra__chip--superficie { background: var(--color-superficie); }
+.cl-muestra__chip--superficie-hover { background: var(--color-superficie-hover); }
+.cl-muestra__chip--texto { background: var(--color-texto); }
+.cl-muestra__chip--texto-secundario { background: var(--color-texto-secundario); }
+.cl-muestra__chip--texto-muted { background: var(--color-texto-muted); }
+.cl-muestra__chip--texto-inverso { background: var(--color-texto-inverso); }
+.cl-muestra__chip--acento { background: var(--color-acento); }
+.cl-muestra__chip--acento-hover { background: var(--color-acento-hover); }
+.cl-muestra__chip--acento-vino { background: var(--color-acento-vino); }
+.cl-muestra__chip--borde { background: var(--color-borde); }
+.cl-muestra__chip--borde-fuerte { background: var(--color-borde-fuerte); }
+.cl-muestra__chip--accion { background: var(--color-accion); }
+.cl-muestra__chip--exito { background: var(--color-exito); }
+.cl-muestra__chip--aviso { background: var(--color-aviso); }
+.cl-muestra__chip--error { background: var(--color-error); }
+.cl-muestra__chip--foco { background: var(--color-foco); }
+
+.cl-guia-escala__fila {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: var(--espacio-3);
+  align-items: center;
+  margin-block-end: var(--espacio-3);
+}
+
+.cl-guia-escala__barra {
+  height: var(--espacio-2);
+  border-radius: var(--radio-sm);
+  background: var(--color-acento);
+}
+
+.cl-guia-escala__barra--paso-1 { width: var(--espacio-1); }
+.cl-guia-escala__barra--paso-2 { width: var(--espacio-2); }
+.cl-guia-escala__barra--paso-3 { width: var(--espacio-3); }
+.cl-guia-escala__barra--paso-4 { width: var(--espacio-4); }
+.cl-guia-escala__barra--paso-5 { width: var(--espacio-5); }
+.cl-guia-escala__barra--paso-6 { width: var(--espacio-6); }
+.cl-guia-escala__barra--paso-7 { width: var(--espacio-7); }
+.cl-guia-escala__barra--paso-8 { width: var(--espacio-8); }
+.cl-guia-escala__barra--paso-9 { width: var(--espacio-9); }

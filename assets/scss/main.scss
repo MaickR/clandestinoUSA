@@ -21,10 +21,11 @@
 @import "base/typography";
 @import "base/a11y";
 
-// Componentes cl- de la foundation.
+// Componentes cl-. _guia.scss solo presenta el style guide.
 @import "components/button";
 @import "components/link";
 @import "components/form";
 @import "components/card";
 @import "components/eyebrow";
 @import "components/divider";
+@import "components/guia";
