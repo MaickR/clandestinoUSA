@@ -51,4 +51,5 @@ Se hará únicamente desde `main` o desde un tag. Nunca desde ramas de feature.
 
 - No force push, salvo recuperación explícita y acordada.
 - No reescribir historial de `main`, `develop` ni `production-baseline`.
-- Normalización de saltos de línea (`.gitattributes`) es una tarea separada.
+- `.gitattributes` está activo: los archivos de texto se normalizan a LF; `.bat`, `.cmd` y `.ps1` usan CRLF.
+- Al comparar equivalencia funcional contra `production-baseline` o `master`, usar `--ignore-cr-at-eol`.
