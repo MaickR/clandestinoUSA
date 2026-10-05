@@ -23,6 +23,13 @@ Nunca se trabaja directamente sobre `main`, `develop`, `master` ni `production-b
 4. Commits atómicos; push de la rama con upstream.
 5. PR hacia `develop` y revisión.
 
+## Estrategia de merge de PRs
+
+- PR con commits atómicos y limpios → preferir **Rebase and merge**.
+- Rama con historial ruidoso o intermedio → **Squash and merge** cuando aporte claridad.
+- Nunca reescribir `main`, `develop` ni `production-baseline`.
+- No crear merge commits innecesarios en features normales.
+
 ## Commits
 
 - **Atómicos**: un cambio lógico por commit.

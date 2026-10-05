@@ -1,6 +1,6 @@
 ---
 description: Seguridad y estilo PHP del proyecto
-globs: **/*.php
+globs: "**/*.php"
 alwaysApply: false
 ---
 

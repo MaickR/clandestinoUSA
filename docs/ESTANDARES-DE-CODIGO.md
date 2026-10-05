@@ -60,7 +60,7 @@ Referencia completa. `AGENTS.md` resume lo global y `.cursor/rules/` aplica lo e
 - **BEM con prefijo `cl-`**; nesting SCSS máximo 3 niveles.
 - **7-1 pragmático**: se crean carpetas/partials solo cuando tienen contenido (`abstracts`, `base`, `components`, `layout`, `pages`, `vendors`). `themes/` no es obligatorio.
 - **Bootstrap 5 compilado desde Sass**, con **Reboot** como reset. No se usa normalize.css independiente.
-- **Root rem estándar** (16px); no se usa `62.5%`.
+- **No sobrescribir el `font-size` raíz**: se respeta la configuración predeterminada del navegador/usuario y se usa `rem` sobre esa base, de modo que `rem` respeta las preferencias del usuario. `62.5%` está prohibido y no se hardcodea `16px` en `html`.
 - **Dark-first**.
 - **Breakpoints de Bootstrap** como fuente de verdad (`sm` 576 · `md` 768 · `lg` 992 · `xl` 1200 · `xxl` 1400); mobile-first, sin breakpoints propios.
 - Variables CSS en `:root` con nombres semánticos.

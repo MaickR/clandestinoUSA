@@ -37,9 +37,9 @@ Inventario de lo pactado para el sitio y el orden general de trabajo (revenue-fi
 
 **Wine Shop**: catálogo con filtros (país, tipo — tinto/blanco/rosado/espumoso —, precio, cuerpo, maridaje) y packs/combos (wine+cheese, wine+jamón, wine+dessert).
 
-**Gift Cards**: selector de monto, bono (compra $100 recibe $110 en crédito, sin fecha de expiración por ley de California), checkout, entrega por email + PDF.
+**Gift Cards**: selector de monto ($50, $100, $200, $300, $400, $500) y checkout. **PENDIENTE de confirmar**: si habrá bonus/promoción, política de expiración conforme a la normativa aplicable, método de redención, proveedor de checkout y entrega digital/PDF definitiva.
 
-**Wine Club**: niveles Gold y Diamond, beneficios, checkout de suscripción (pago único o recurrente vía Stripe).
+**Wine Club**: niveles Gold y Diamond, beneficios, checkout de membresía/suscripción; proveedor de pagos pendiente de decisión comercial/técnica.
 
 **Eventos**: listado con fecha/cupo/precio, degustaciones y reserva de cupo; además experiencias personalizadas (cumpleaños, empresas, aniversarios, bodas, catas privadas, alquiler del restaurante) como formulario de solicitud.
 
