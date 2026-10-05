@@ -21,11 +21,10 @@
 @import "base/typography";
 @import "base/a11y";
 
-// Componentes cl-. _guia.scss solo presenta el style guide.
+// Componentes de producto. La guía vive en style-guide.scss.
 @import "components/button";
 @import "components/link";
 @import "components/form";
 @import "components/card";
 @import "components/eyebrow";
 @import "components/divider";
-@import "components/guia";

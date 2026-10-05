@@ -16,7 +16,8 @@ Pipeline en `gulpfile.mjs`. Compila la foundation SCSS y el JS nuevo. El legacy 
 
 | Pieza | Detalle |
 |---|---|
-| Sass | Entrada `assets/scss/main.scss` → `assets/css/style.new.css` |
+| Sass producto | `assets/scss/main.scss` → `assets/css/style.new.css` |
+| Sass guía | `assets/scss/style-guide.scss` → `assets/css/style-guide.css`, solo en `npm run dev` |
 | Bootstrap | 5.3.x desde `node_modules`, solo núcleo (root, reboot, containers, grid, helpers) |
 | PostCSS | Autoprefixer siempre; cssnano solo en `build` |
 | JS | Entrada `assets/js/main.js` → `assets/js/dist/main.js` (esbuild, ESM, `es2020`) |
@@ -24,9 +25,9 @@ Pipeline en `gulpfile.mjs`. Compila la foundation SCSS y el JS nuevo. El legacy 
 | BrowserSync | `http://localhost:3000` con proxy a PHP `:8000` (PHP real, no estáticos) |
 | Lint | ESLint (JS nuevo y `.mjs` de tooling) y Stylelint (`assets/scss/**`) |
 
-Comandos: `npm run dev` (clean → CSS+JS dev con sourcemaps → PHP → BrowserSync → watch), `npm run build` (clean → CSS+JS minificados, sin sourcemaps, sin servidores), `npm run lint`.
+Comandos: `npm run dev` (clean → CSS de producto y de guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → `style.new.css` y JS minificados, sin sourcemaps, sin servidores y sin CSS de la guía), `npm run lint`.
 
-Outputs (ignorados por git): `assets/css/style.new.css`, `assets/css/style.new.css.map` (solo dev) y `assets/js/dist/**`. `clean` borra únicamente estos.
+Outputs (ignorados por git): `assets/css/style.new.css`, sus sourcemaps, `assets/css/style-guide.css` (+ `.map`, solo dev) y `assets/js/dist/**`. `clean` borra únicamente estos. `npm run build` no deja `style-guide.css`.
 
 Separación legacy/new: los cambios en HTML/PHP/CSS/JS legacy solo recargan BrowserSync; no se compilan, optimizan ni regeneran (imágenes, sitemap).
 
@@ -36,13 +37,14 @@ Design system oscuro, todavía sin páginas de producto migradas. Entrada: `asse
 
 ```text
 assets/scss/
-├── main.scss
+├── main.scss                 # bundle de producto → style.new.css
+├── style-guide.scss          # solo dev → style-guide.css
 ├── abstracts/_tokens.scss    # primitivos y overrides de Bootstrap
 ├── base/                     # custom properties, tipo, accesibilidad
 └── components/               # cl-boton, cl-enlace, cl-campo, cl-tarjeta, cl-eyebrow, cl-divisor
 ```
 
-`components/_guia.scss` solo presenta `style-guide/index.php` (muestras, escala, índice). No es UI de producto.
+`components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) solo presenta `style-guide/index.php`. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
 
 Los primitivos viven en SCSS y no se copian todos a `:root`. Las custom properties semánticas (`--color-fondo`, `--fuente-cuerpo`, `--espacio-1`…`--espacio-9`, etc.) salen de `base/_root.scss`. Los componentes leen esas variables.
 
@@ -54,7 +56,7 @@ Paleta de partida aprobada, con un ajuste medido: el borde fuerte pasa de 28% a 
 
 ### Style guide
 
-`style-guide/index.php` enlaza solo `assets/css/style.new.css` y las familias que el sitio ya usa (Libre Bodoni y Playfair, eje recortado). No carga `style.css`, hojas legacy ni JS legacy.
+`style-guide/index.php` enlaza `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, más las familias que el sitio ya usa (Libre Bodoni y Playfair, eje recortado). No carga `style.css`, hojas legacy ni JS legacy. `style.new.css` es el bundle de producto; `style-guide.css` es output exclusivo de desarrollo y `npm run build` no lo genera.
 
 En Apache/GoDaddy, `.htaccess` responde 403 a `^style-guide(/|$)` sin tocar los assets compartidos. El servidor embebido de PHP ignora `.htaccess`, así que `http://localhost:3000/style-guide/` sigue visible en local. `robots.txt` no es el mecanismo de bloqueo.
 

@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.new.css">
+  <link rel="stylesheet" href="../assets/css/style-guide.css">
 </head>
 <body>
   <a class="visually-hidden-focusable" href="#contenido">Skip to content</a>
