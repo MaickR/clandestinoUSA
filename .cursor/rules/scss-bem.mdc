@@ -1,0 +1,20 @@
+---
+description: Convenciones SCSS/BEM del proyecto (arquitectura futura)
+globs: assets/scss/**/*.scss
+alwaysApply: false
+---
+
+# SCSS y BEM
+
+- Nomenclatura BEM con prefijo `cl-`: `cl-bloque__elemento--modificador`.
+- Estructura 7-1 pragmática: crear carpetas/partials solo cuando tengan contenido; **no partials vacíos**.
+- Bootstrap 5 se compila desde Sass: personalizar variables **antes** de importarlo; importar solo los módulos necesarios.
+- Usar Bootstrap Reboot como reset; **no** añadir normalize.css independiente.
+- No sobrescribir el `font-size` raíz: respetar el valor predeterminado del navegador/usuario y usar `rem` sobre esa base (así `rem` respeta las preferencias de accesibilidad del usuario).
+- Prohibido `html { font-size: 62.5% }` y no hardcodear `16px` (ni otro valor) en `html`.
+- Dark-first: estilos base oscuros; el tema claro, si existe, es la excepción.
+- Breakpoints de Bootstrap como fuente de verdad (mixins `media-breakpoint-*`); no definir breakpoints propios.
+- Máximo 3 niveles de nesting.
+- Sin `!important` sobre clases de Bootstrap.
+- **Nunca editar CSS compilado manualmente** (`style.new.css` y similares son output); se edita el SCSS.
+- `style.css` es legacy: no se mezcla con SCSS nuevo salvo en un cutover explícito por página (ver `docs/ARQUITECTURA.md`).

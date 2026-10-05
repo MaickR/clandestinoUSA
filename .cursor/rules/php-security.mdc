@@ -1,0 +1,18 @@
+---
+description: Seguridad y estilo PHP del proyecto
+globs: "**/*.php"
+alwaysApply: false
+---
+
+# PHP y seguridad
+
+- PSR-12 en código nuevo o refactorizado; no reformatear código legacy fuera del alcance.
+- Arquitectura proporcional: PHP simple primero; extraer capas solo cuando la complejidad lo justifique.
+- Validar todo input en el servidor (tipo, longitud, formato) y fallar rápido con respuesta clara.
+- Escapar todo output: `htmlspecialchars($valor, ENT_QUOTES, 'UTF-8')`.
+- Token CSRF en todo POST nuevo.
+- Prepared statements (PDO) para cualquier consulta; nunca concatenar input en SQL.
+- Secretos (SMTP, claves de pago, DB) solo mediante variables de entorno; nunca en el repo.
+- Nunca confiar en precios o importes del cliente: recalcular en el servidor.
+- Sin stack traces ni errores detallados en producción (`display_errors` off); registrar en log.
+- Compatible con GoDaddy shared: sin Redis ni procesos persistentes.
