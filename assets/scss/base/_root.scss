@@ -1,0 +1,42 @@
+// Solo tokens semánticos. Cambiar un primitivo en abstracts/_tokens.scss
+// recolorea aquí el único punto que publicamos.
+:root {
+  color-scheme: dark;
+
+  --color-fondo: #{$neutral-900};
+  --color-fondo-alterno: #{$neutral-950};
+  --color-superficie: #{$neutral-800};
+  --color-superficie-hover: #{$neutral-700};
+  --color-texto: #{$cream-100};
+  --color-texto-secundario: #{$cream-300};
+  --color-texto-muted: #{$cream-500};
+  --color-texto-inverso: #{$ink-900};
+  --color-acento: #{$champagne-300};
+  --color-acento-hover: #{$champagne-500};
+  --color-acento-vino: #{$wine-700};
+  --color-borde: #{$borde-sutil};
+  --color-borde-fuerte: #{$borde-fuerte};
+  --color-accion: #{$champagne-300};
+  --color-accion-hover: #{$champagne-500};
+  --color-accion-texto: #{$ink-900};
+  --color-foco: #{$champagne-300};
+  --color-exito: #{$sage-300};
+  --color-aviso: #{$amber-300};
+  --color-error: #{$rose-300};
+  --espacio-1: 0.25rem;
+  --espacio-2: 0.5rem;
+  --espacio-3: 0.75rem;
+  --espacio-4: 1rem;
+  --espacio-5: 1.5rem;
+  --espacio-6: 2rem;
+  --espacio-7: 3rem;
+  --espacio-8: 4rem;
+  --espacio-9: 6rem;
+  --radio-sm: 0.125rem;
+  --radio-md: 0.25rem;
+  --sombra-elevada: 0 1rem 2.5rem rgb(0 0 0 / 35%);
+  --fuente-display: #{$fuente-display};
+  --fuente-cuerpo: #{$fuente-cuerpo};
+  --fuente-editorial: #{$fuente-editorial};
+  --tracking-eyebrow: 0.18em;
+}

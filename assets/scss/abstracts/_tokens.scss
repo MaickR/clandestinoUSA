@@ -1,0 +1,76 @@
+// Primitivos y overrides de Bootstrap. Existen solo en el build.
+// Los componentes leen las custom properties de base/_root.scss.
+
+// Neutros cálidos
+$neutral-950: #100e0c;
+$neutral-900: #161412;
+$neutral-800: #221f1c;
+$neutral-700: #2c2824;
+
+// Texto
+$cream-100: #f3efe6;
+$cream-300: #cfc6b8;
+$cream-500: #9c9488;
+
+// Acento champagne (el del sitio, no el dorado del style guide legacy)
+$champagne-300: #dddaba;
+$champagne-500: #c9c39a;
+$ink-900: #1a1612;
+
+// Vino: decoración y selección. No es color de texto sobre el fondo.
+$wine-700: #6e2a38;
+
+// Feedback. Los tres superan 4.5:1 sobre neutral-900 y neutral-800.
+$sage-300: #b7cbb0;
+$amber-300: #e4c48a;
+$rose-300: #f0b4ae;
+
+// 12% es borde decorativo (la card se distingue también por la superficie).
+// 28% quedaba en ~2.3:1 y no identificaba un control. 40% supera 3:1
+// sobre neutral-950, 900, 800 y 700 (mínimo medido 3.33:1).
+$borde-sutil: rgb(243 239 230 / 12%);
+$borde-fuerte: rgb(243 239 230 / 40%);
+$fuente-display: "Libre Bodoni", "Palatino Linotype", palatino, serif;
+$fuente-editorial: "Playfair Display", georgia, serif;
+$fuente-cuerpo: system-ui, -apple-system, "BlinkMacSystemFont", "Segoe UI", sans-serif;
+
+// --- Bootstrap. Debe ir después de functions y antes de variables. ---
+$enable-dark-mode: false;
+$primary: $champagne-300;
+$body-bg: $neutral-900;
+$body-color: $cream-100;
+$body-secondary-color: $cream-300;
+$font-family-base: $fuente-cuerpo;
+$headings-font-family: $fuente-display;
+$headings-font-weight: 400;
+$headings-color: $cream-100;
+$headings-line-height: 1.2;
+$border-radius: 0.25rem;
+$border-radius-sm: 0.125rem;
+$border-color: $borde-fuerte;
+$link-color: $champagne-300;
+$link-hover-color: $cream-100;
+$link-decoration: underline;
+$focus-ring-color: $champagne-300;
+$focus-ring-opacity: 1;
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 0.75rem,
+  4: 1rem,
+  5: 1.5rem,
+  6: 2rem,
+  7: 3rem,
+  8: 4rem,
+  9: 6rem,
+);
+$grid-gutter-width: 1.5rem;
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1200px,
+);

@@ -1,5 +1,6 @@
 // Pipeline de frontend: Sass + Bootstrap, PostCSS, esbuild, PHP local y BrowserSync.
-// Outputs permitidos: assets/css/style.new.css (+ .map en dev) y assets/js/dist/**.
+// Producto: assets/css/style.new.css (+ .map en dev) y assets/js/dist/**.
+// Guía: assets/css/style-guide.css (+ .map) solo en dev. El build no lo genera.
 // El CSS/JS legacy no se compila ni se toca.
 import { spawn } from "node:child_process";
 import { rm } from "node:fs/promises";
@@ -25,10 +26,13 @@ const PHP_READY_INTERVAL_MS = 100;
 
 const paths = {
   scssEntry: "assets/scss/main.scss",
+  scssGuideEntry: "assets/scss/style-guide.scss",
   scssWatch: "assets/scss/**/*.scss",
   cssDir: "assets/css",
   cssOut: "assets/css/style.new.css",
   cssMap: "assets/css/style.new.css.map",
+  cssGuideOut: "assets/css/style-guide.css",
+  cssGuideMap: "assets/css/style-guide.css.map",
   jsEntry: "assets/js/main.js",
   jsWatch: ["assets/js/main.js", "assets/js/modules/**/*.js"],
   jsDist: "assets/js/dist",
@@ -38,6 +42,7 @@ const paths = {
     "*.php",
     "assets/css/*.css",
     "!assets/css/style.new.css",
+    "!assets/css/style-guide.css",
     "assets/js/*.js",
     "!assets/js/main.js",
   ],
@@ -56,7 +61,9 @@ let phpProcess = null;
 // --- Clean: solo outputs generados por este pipeline ---
 export async function clean() {
   await Promise.all(
-    [paths.cssOut, paths.cssMap, paths.jsDist].map((p) => rm(p, { recursive: true, force: true })),
+    [paths.cssOut, paths.cssMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist].map((p) =>
+      rm(p, { recursive: true, force: true }),
+    ),
   );
 }
 
@@ -66,6 +73,15 @@ function cssDev() {
     .pipe(sass(sassOptions).on("error", sass.logError))
     .pipe(postcss([autoprefixer()]))
     .pipe(rename("style.new.css"))
+    .pipe(dest(paths.cssDir, { sourcemaps: "." }))
+    .pipe(server.stream({ match: "**/*.css" }));
+}
+
+function cssGuideDev() {
+  return src(paths.scssGuideEntry, { sourcemaps: true })
+    .pipe(sass(sassOptions).on("error", sass.logError))
+    .pipe(postcss([autoprefixer()]))
+    .pipe(rename("style-guide.css"))
     .pipe(dest(paths.cssDir, { sourcemaps: "." }))
     .pipe(server.stream({ match: "**/*.css" }));
 }
@@ -176,7 +192,7 @@ function serve(done) {
 const reload = (done) => { server.reload(); done(); };
 
 function watcher() {
-  watch(paths.scssWatch, cssDev);
+  watch(paths.scssWatch, parallel(cssDev, cssGuideDev));
   watch(paths.jsWatch, series(jsDev, reload));
   watch(paths.legacyWatch, reload);
 }
@@ -187,6 +203,6 @@ for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
 }
 process.on("exit", stopPhp);
 
-export const dev = series(clean, parallel(cssDev, jsDev), php, serve, watcher);
+export const dev = series(clean, parallel(cssDev, cssGuideDev, jsDev), php, serve, watcher);
 export const build = series(clean, parallel(cssBuild, jsBuild));
 export default dev;

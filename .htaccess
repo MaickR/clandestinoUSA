@@ -151,6 +151,10 @@ FileETag MTime Size
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # Guía del design system: visible en local (PHP built-in ignora .htaccess)
+  # y denegada en Apache/GoDaddy. No bloquea assets compartidos.
+  RewriteRule ^style-guide(/|$) - [F,L]
+
   RewriteCond %{HTTP_HOST} ^www\.theclandestinousa\.com$ [NC]
   RewriteRule ^ https://theclandestinousa.com%{REQUEST_URI} [L,R=301]
 

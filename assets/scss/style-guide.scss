@@ -1,0 +1,13 @@
+// Presentación del style guide. No entra en style.new.css.
+// Solo functions, tokens y mixins: el CSS de producto ya lo carga la página.
+
+@import "bootstrap/scss/functions";
+@import "abstracts/tokens";
+
+// Variables de Bootstrap, para que los mixins responsive existan.
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+
+// Solo la presentación. Sin reboot, grid ni componentes de producto.
+@import "components/guia";

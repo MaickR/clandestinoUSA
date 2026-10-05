@@ -1,0 +1,11 @@
+// Firma editorial. Tracking menor que el 0.4em del legacy.
+.cl-eyebrow {
+  margin: 0 0 var(--espacio-2);
+  color: var(--color-acento);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: var(--tracking-eyebrow);
+  line-height: 1.4;
+  text-transform: uppercase;
+}
