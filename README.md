@@ -232,6 +232,7 @@ npm run lint    # ESLint (JS nuevo) + Stylelint (SCSS nuevo)
 ```
 
 - Sitio local: http://localhost:3000/ (proxy a PHP en http://127.0.0.1:8000).
+- Style guide (solo local): http://localhost:3000/style-guide/ — bloqueado con 403 en Apache/producción.
 - Los outputs generados están ignorados por git y el CSS/JS legacy no se modifica.
 - Detalle: `docs/ARQUITECTURA.md`.
 

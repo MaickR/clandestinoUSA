@@ -63,9 +63,16 @@ Referencia completa. `AGENTS.md` resume lo global y `.cursor/rules/` aplica lo e
 - **No sobrescribir el `font-size` raíz**: se respeta la configuración predeterminada del navegador/usuario y se usa `rem` sobre esa base, de modo que `rem` respeta las preferencias del usuario. `62.5%` está prohibido y no se hardcodea `16px` en `html`.
 - **Dark-first**.
 - **Breakpoints de Bootstrap** como fuente de verdad (`sm` 576 · `md` 768 · `lg` 992 · `xl` 1200 · `xxl` 1400); mobile-first, sin breakpoints propios.
-- Variables CSS en `:root` con nombres semánticos.
+- Variables CSS en `:root` con nombres semánticos. Los primitivos se quedan en SCSS (`abstracts/_tokens.scss`).
+- **Tipografía vigente**: display y headings en Libre Bodoni (fallback Palatino / serif); cita editorial en Playfair Display (`.cl-cita`); cuerpo y UI (párrafos, botones, labels, campos, mensajes) en `system-ui, -apple-system, "BlinkMacSystemFont", "Segoe UI", sans-serif`. Sin fuente nueva y sin usar Playfair como sans de interfaz.
+- **Escala**: display `clamp(2.5rem, 1.5rem + 3vw, 4.5rem)`; h1 `clamp(2rem, 1.3rem + 2vw, 3.25rem)`; h2 `clamp(1.75rem, 1.2rem + 1vw, 2.5rem)`; h3–h6 `1.5rem`; cuerpo `1.0625rem`; small `0.875rem`; eyebrow `0.75rem` en mayúsculas con `--tracking-eyebrow: 0.18em`.
+- **Espaciado**: `--espacio-1`…`--espacio-9` = 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4 y 6rem. `$spacers` de Bootstrap usa la misma escala. El padding de sección (3rem, 4rem desde `lg`, 6rem al cierre) vive en la guía; no hay `.cl-seccion` hasta que una página lo necesite.
+- **Radio**: `--radio-sm` 0.125rem (campos), `--radio-md` 0.25rem (botón y card). Sin pills por defecto. Sombra solo `--sombra-elevada`, reservada a overlays futuros.
+- **Accesibilidad de la foundation**: `:focus-visible` con anillo `--color-foco` de 2px y offset 3px; `:focus` de ratón sin anillo porque el anillo de teclado lo sustituye; `prefers-reduced-motion` anula transición y animación; `::selection` en vino con texto cream. Texto normal ≥ 4.5:1, borde de control ≥ 3:1. El error de formulario lleva mensaje visible. Botón y campo: alto mínimo 2.75rem (44px con la raíz por defecto).
 - PurgeCSS **diferido**: se evalúa cuando exista el CSS nuevo en producción.
 - Nunca editar CSS compilado a mano.
+
+La guía viva es `style-guide/index.php` (local). El `style-guide.md` de la raíz es la plantilla legacy y no describe estos tokens.
 
 ## JavaScript (arquitectura objetivo)
 
