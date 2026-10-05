@@ -1,0 +1,26 @@
+// El anillo sustituye al outline del ratón. No se apaga :focus sin este par.
+:focus-visible {
+  outline: 2px solid var(--color-foco);
+  outline-offset: 3px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+::selection {
+  background-color: var(--color-acento-vino);
+  color: var(--color-texto);
+}
+
+// !important: una transición en .cl-* gana a `*` y seguiría moviéndose.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
