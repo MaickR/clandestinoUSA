@@ -1,0 +1,9 @@
+{
+  "extends": "stylelint-config-standard-scss",
+  "ignoreFiles": ["node_modules/**", "assets/css/**"],
+  "rules": {
+    "max-nesting-depth": 3,
+    "selector-class-pattern": null,
+    "scss/at-extend-no-missing-placeholder": null
+  }
+}
