@@ -3,7 +3,12 @@
   "ignoreFiles": ["node_modules/**", "assets/css/**"],
   "rules": {
     "max-nesting-depth": 3,
-    "selector-class-pattern": null,
+    "selector-class-pattern": [
+      "^cl-[a-z][a-z0-9]*(-[a-z0-9]+)*(__[a-z][a-z0-9]*(-[a-z0-9]+)*)?(--[a-z][a-z0-9]*(-[a-z0-9]+)*)?$",
+      {
+        "message": "Las clases propias usan BEM con prefijo cl-: cl-bloque__elemento--modificador"
+      }
+    ],
     "scss/at-extend-no-missing-placeholder": null
   }
 }

@@ -20,6 +20,8 @@ const sass = gulpSass(dartSass);
 const PHP_HOST = "127.0.0.1";
 const PHP_PORT = 8000;
 const SYNC_PORT = 3000;
+const PHP_READY_TIMEOUT_MS = 10000;
+const PHP_READY_INTERVAL_MS = 100;
 
 const paths = {
   scssEntry: "assets/scss/main.scss",
@@ -109,25 +111,54 @@ async function php() {
   if (await portInUse(PHP_PORT, PHP_HOST)) {
     throw new Error(`El puerto ${PHP_PORT} ya está en uso; cierra el proceso que lo ocupa.`);
   }
+  const child = spawn("php", ["-S", `${PHP_HOST}:${PHP_PORT}`, "-t", "."], { stdio: "ignore" });
+  phpProcess = child;
+
   await new Promise((resolve, reject) => {
-    const child = spawn("php", ["-S", `${PHP_HOST}:${PHP_PORT}`, "-t", "."], { stdio: "ignore" });
-    phpProcess = child;
+    let settled = false;
+    let poll;
+    let timer;
+    const finish = (err, { kill = false } = {}) => {
+      if (settled) return;
+      settled = true;
+      clearInterval(poll);
+      clearTimeout(timer);
+      if (err) {
+        phpProcess = null;
+        if (kill && child.exitCode === null) child.kill();
+        reject(err);
+        return;
+      }
+      resolve();
+    };
+
     child.once("error", (err) => {
-      phpProcess = null;
-      reject(new Error(
+      finish(new Error(
         err.code === "ENOENT"
           ? "PHP CLI no está disponible en el PATH. Instálalo para usar `npm run dev`."
           : `No se pudo iniciar PHP: ${err.message}`,
       ));
     });
     child.once("exit", (code) => {
+      if (!settled) {
+        finish(new Error(`PHP terminó antes de estar disponible (código ${code ?? "desconocido"}).`));
+        return;
+      }
       if (phpProcess === child) {
         phpProcess = null;
         if (code) console.error(`PHP terminó con código ${code}`);
       }
     });
-    // Si no falla al arrancar, se considera iniciado.
-    setTimeout(resolve, 500);
+
+    poll = setInterval(() => {
+      portInUse(PHP_PORT, PHP_HOST).then((open) => { if (open) finish(); });
+    }, PHP_READY_INTERVAL_MS);
+    timer = setTimeout(() => {
+      finish(
+        new Error(`PHP no aceptó conexiones en ${PHP_HOST}:${PHP_PORT} tras ${PHP_READY_TIMEOUT_MS} ms.`),
+        { kill: true },
+      );
+    }, PHP_READY_TIMEOUT_MS);
   });
 }
 
