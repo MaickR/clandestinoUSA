@@ -1,0 +1,18 @@
+---
+description: Convenciones de JavaScript del proyecto
+globs: assets/js/**/*.js
+alwaysApply: false
+---
+
+# JavaScript
+
+- `assets/js/dist/**` es **output generado** (esbuild): no editarlo manualmente; se edita el fuente.
+- ES Modules; un archivo = una responsabilidad. Bundling con esbuild.
+- Named exports cuando aporten claridad; **no** se exigen barrels (`index.js`).
+- `try/catch` solo donde el error se maneje o se enriquezca; nunca `catch` vacío.
+- Fail Fast: validar entradas y elementos del DOM al inicio; salir con mensaje claro.
+- DOM seguro: `textContent` por defecto; nunca `innerHTML` con datos no sanitizados.
+- Event delegation en listas o contenido dinámico; `throttle` en scroll/resize y `debounce` en búsqueda.
+- Si Bootstrap cubre el caso (modal, collapse, dropdown, carousel), usar atributos `data-bs-*` en vez de JS propio.
+- Sin dependencias nuevas sin justificarlas (peso, mantenimiento, alternativa nativa).
+- Comentarios en español explicando el porqué; textos visibles al usuario en inglés.
