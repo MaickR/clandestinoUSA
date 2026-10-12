@@ -1,8 +1,5 @@
 .cl-banda-cta {
   padding-block: var(--espacio-7);
-  border-block: 1px solid var(--color-borde);
-  background: var(--color-superficie);
-  text-align: center;
 
   h3 {
     margin-block-end: var(--espacio-5);
@@ -15,15 +12,11 @@
 }
 
 .cl-banda-cta__fila {
-  row-gap: var(--espacio-5);
-  align-items: center;
   justify-content: center;
 }
 
 .cl-banda-cta__acciones {
   margin-block-start: 0;
-  margin-inline: auto;
-  justify-content: center;
 }
 
 // La foto acompaña una invitación concreta; la altura la determina el contenido.

@@ -133,41 +133,7 @@
 <section id="patrones-cta" aria-labelledby="patrones-cta-titulo">
   <div class="cl-guia-seccion container">
     <h2 id="patrones-cta-titulo">CTA band</h2>
-    <p>Simple invitations and featured stories. Inquiries start a conversation; they do not confirm a booking.</p>
+    <p>Featured invitations with photography. Inquiries start a conversation; they do not confirm a booking.</p>
   </div>
-  <section class="cl-banda-cta" aria-labelledby="banda-tapas-titulo">
-    <div class="container">
-      <div class="row cl-banda-cta__fila">
-        <div class="col-12 col-lg-8">
-          <p class="cl-eyebrow">An invitation to share</p>
-          <h3 id="banda-tapas-titulo">Something good to share</h3>
-          <p class="cl-seccion__descripcion">Take a look at our tapas before you join us at the table.</p>
-        </div>
-        <div class="col-12 col-lg-8">
-          <div class="cl-seccion__acciones cl-banda-cta__acciones">
-            <a class="cl-boton" href="../tapas.html">Explore the tapas</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div class="cl-guia-seccion container"><p class="cl-texto-pequeno">Two actions · For a gathering or a visit.</p></div>
-  <section class="cl-banda-cta" aria-labelledby="banda-encuentros-titulo">
-    <div class="container">
-      <div class="row cl-banda-cta__fila">
-        <div class="col-12 col-lg-8">
-          <p class="cl-eyebrow">Gather at The Clandestino</p>
-          <h3 id="banda-encuentros-titulo">Bring your people to the table</h3>
-          <p class="cl-seccion__descripcion">Tell us about your gathering or ask about a table for your visit.</p>
-        </div>
-        <div class="col-12 col-lg-8">
-          <div class="cl-seccion__acciones cl-banda-cta__acciones">
-            <a class="cl-boton" href="../contact.html#contact-form">Ask about private events</a>
-            <a class="cl-boton cl-boton--secundario" href="../contact.html#contact-form">Ask about a table</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
   <?php require __DIR__ . '/bandas-cta-destacadas.php'; ?>
 </section>

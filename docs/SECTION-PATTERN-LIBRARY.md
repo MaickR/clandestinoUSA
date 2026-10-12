@@ -1,6 +1,6 @@
 # Biblioteca de patrones de sección — Wave 1
 
-Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Pendiente de aprobación visual humana**: QA técnico no aprueba el diseño, ni autoriza PR, merge, deploy o Wave 2. Base comprobada: `develop` / `origin/develop` en `0053822`; rama `feature/ui-section-patterns-wave-1`.
+Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Aprobada visualmente por el usuario en UI-PATTERNS-05, sujeta a la validación final de retirada de las bandas antiguas**. El QA técnico verifica este cierre; no autoriza crear PR, merge, deploy ni iniciar Wave 2. Base comprobada: `develop` / `origin/develop` en `0053822`; rama `feature/ui-section-patterns-wave-1`.
 
 ## Composición y contratos compartidos
 
@@ -69,9 +69,7 @@ Fotos sin personas: tapas (`bg/clandestino-tapas.jpg`) y vinos (`bg/the-clandest
 
 **Propósito:** invitación compacta a explorar o consultar, sin prometer operaciones completadas.
 
-Estructura: `section.cl-banda-cta[aria-labelledby] > .container > .row.cl-banda-cta__fila`, columna de heading/descripción opcional y columna de `.cl-seccion__acciones.cl-banda-cta__acciones` con enlaces Core. Título obligatorio; uno o dos CTAs como en las demos, con nombres claros.
-
-La versión simple conserva la composición **centrada y vertical**: texto/acciones en columnas 12/12 y 8/12 desde lg. Eyebrow Core, heading local `clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem)`, padding 3rem/4rem desde lg y superficie/bordes semánticos. Es adecuada para una invitación breve, cierre de sección o consulta sin necesidad de fotografía.
+El patrón vigente es exclusivamente fotográfico: `cl-banda-cta cl-banda-cta--destacada`, con orientación normal o `cl-banda-cta--invertida`. Las dos bandas centradas sin fotografía se retiraron de la guía y del contrato de uso. Se conservan padding, tipografía contextual y reglas compartidas necesarias; se eliminan solo declaraciones antiguas sobrescritas por la destacada.
 
 **`cl-banda-cta--destacada`** sirve para una historia comercial que merece contexto fotográfico: Wine Club, encuentros privados o comida para llevar. Mantiene título, descripción y uno/dos enlaces; añade `.cl-banda-cta__media`, `.cl-banda-cta__imagen`, `.cl-banda-cta__contenido` y `.cl-banda-cta__nota` opcional. Estructura: `.container > .row.g-0.cl-banda-cta__fila > .col-md-5.cl-banda-cta__media + .col-md-7.cl-banda-cta__contenido`. El contenido agrupa eyebrow, heading elegido por la página, descripción, nota contextual y acciones compartidas. No es una tarjeta Core duplicada: su responsabilidad es componer media y llamada a la acción; usa la misma superficie/radio y botones/eyebrow existentes.
 
@@ -79,7 +77,7 @@ Teléfono: foto 4:3 arriba, texto a la izquierda con padding 2rem/1.5rem, botone
 
 **`cl-banda-cta--invertida`**, combinada con destacada, mueve únicamente media a la derecha desde md y ajusta sus esquinas. En móvil siempre foto primero. DOM imagen informativa → narrativa → enlaces; la fotografía no es interactiva. Una única implementación; no hay variante compacta ni estilos por página.
 
-Guía: se conservan ambas bandas simples y se incluyen tres destacadas estáticas mediante `partials/bandas-cta-destacadas.php`, requerido dentro del bloque CTA de `patrones-wave-1.php`. Wine Club con dos enlaces, Private Events invertida con uno, Take Away con dos. Destinos existentes: `swc.html`, `wines.html`, `contact.html#contact-form`, `menu.html#tapas-title`. No formulario, suscripción inmediata, disponibilidad garantizada ni checkout. La nota pide contexto o invita a consultar detalles.
+Guía: se muestran únicamente tres destacadas estáticas mediante `partials/bandas-cta-destacadas.php`, requerido dentro del bloque CTA de `patrones-wave-1.php`. Wine Club con dos enlaces, Private Events invertida con uno, Take Away con dos. Destinos existentes: `swc.html`, `wines.html`, `contact.html#contact-form`, `menu.html#tapas-title`. No formulario, suscripción inmediata, disponibilidad garantizada ni checkout. La nota pide contexto o invita a consultar detalles.
 
 Fotos verificadas, sin personas, con fuentes AVIF/WebP reales, dimensiones explícitas y lazy/async por estar bajo el primer viewport:
 
@@ -89,7 +87,7 @@ Fotos verificadas, sin personas, con fuentes AVIF/WebP reales, dimensiones expl�
 | gallery/tapas/the-clandestino-tapas-table.jpeg | 1998×628 | 251080 | 140428 | 124724 |
 | gallery/tapas/the-clandestino-bocadillo.jpeg | 1200×1600 | 180195 | 73856 | 44655 |
 
-Fuentes alternativas bajo `webp/gallery/…` y `avif/gallery/…`, mismo nombre/dimensiones y extensión correspondiente. Foco central: copas/botella, tabla compartida y bocadillo. La tabla panorámica se recorta deliberadamente al plato central en el split; no usar esta composición cuando sea imprescindible mostrar todos los productos. No se alteran originales. Revisar cada nueva foto y texto antes de reutilizar. Texto sobre superficie sólida, alt informativo, h3 subordinado en guía y foco Core; targets ≥44px. Sin JS. **Evolución UI-PATTERNS-04 pendiente de aprobación visual humana.**
+Fuentes alternativas bajo `webp/gallery/…` y `avif/gallery/…`, mismo nombre/dimensiones y extensión correspondiente. Foco central: copas/botella, tabla compartida y bocadillo. La tabla panorámica se recorta deliberadamente al plato central en el split; no usar esta composición cuando sea imprescindible mostrar todos los productos. No se alteran originales. Revisar cada nueva foto y texto antes de reutilizar. Texto sobre superficie sólida, alt informativo, h3 subordinado en guía y foco Core; targets ≥44px. Sin JS. **Diseño aprobado visualmente por el usuario; cierre UI-PATTERNS-05 sujeto a su última validación técnica.**
 
 ## Decisión futura — carrusel editorial de Home
 
@@ -233,3 +231,16 @@ Comparación con build minificado base, usando **PHP gzencode nivel 6 en ambos l
 Patterns incorpora tres instancias/URLs nuevas de imágenes: pasa de cuatro pictures/tres fotos únicas a siete/seis. Nuevas fuentes: total AVIF 269410, WebP 353162, JPEG 764391 bytes; alternativas, no suma de descargas. Las fotos lazy solo se solicitan al acercarse a su sección; ningún JS, icono, fuente o stylesheet adicional. El partial PHP no añade requests. Los originales quedan intactos. No se deducen Web Vitals de producción del laboratorio.
 
 Revisión local: `/style-guide/patterns.php#patrones-cta` para la familia completa y `/style-guide/patterns.php#banda-club` para la variante principal. La guía Core sigue en `/style-guide/`. Próximo paso: confirmar visualmente las nuevas bandas en el navegador del usuario.
+
+### Cierre definitivo — UI-PATTERNS-05
+
+El usuario aprobó visualmente Wave 1 y solicitó retirar únicamente las dos bandas CTA antiguas sin fotografía. La última validación de este cierre queda **completada**; Wave 1 está lista para preparar una PR cuando se solicite. No se crea PR, merge, deploy ni otra wave en esta tarea.
+
+- Preflight limpio y sincronizado en `270e42a`, misma feature.
+- Retiradas las demos «Something good to share» y «Bring your people to the table», junto con su etiqueta de dos acciones. Se conservan sin cambios el partial de Wine Club, Private Events invertida y Take Away, fotografías, contenido y enlaces.
+- Eliminadas siete declaraciones SCSS de la banda simple que la destacada ya sobrescribía: borde/superficie/alineación base, gap/alineación de fila y centrado/margen automático de acciones. Se conservan todos los selectores compartidos y modificadores vigentes, con casos reales en las tres demos; sin selectores huérfanos ni cambios visuales del patrón aprobado.
+- Lint/build/PHP del partial modificado: PASS. Dev local disponible. En Chromium integrado, 390/768/1280px: tres bandas, sin overflow ni truncamiento, fotos cargadas, dimensiones de media/contenido y acciones iguales a la evidencia de UI-PATTERNS-04. Se comparó después de estabilizar la navegación; posiciones verticales cambian por retirar las demos anteriores.
+- Foco visible y Tab: PASS; las acciones conservan targets de 44px. Colores y superficies idénticos al diseño anterior; no cambia su contraste. Consola sin errores relevantes; guía, CSS y nueve fuentes de imagen HTTP 200.
+- Hero, Section System y Media + Content conservan código y markup previo al bloque CTA. Diff limitado a SCSS CTA, partial Wave 1 y este documento; intactos Foundation/Core, JS/CSS legacy, PHP/HTML productivo, imágenes y tooling.
+
+Evidencias de cierre: `C:/Users/Mike/.codex/visualizations/2026/10/12/01a12ee8-6679-7ae3-a5eb-c895d147987a/cierre-wave-1-*`. La aprobación humana expresa sustituye los estados pendientes históricos registrados arriba; las comprobaciones anteriores se mantienen como historial, no como estado vigente. Este cierre no afirma nuevas pruebas de Firefox/Safari, lector de pantalla o zoom 200%.
