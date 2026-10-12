@@ -12,7 +12,7 @@ export default [
     ],
   },
   {
-    files: ["assets/js/main.js", "assets/js/modules/**/*.js"],
+    files: ["assets/js/main.js", "assets/js/style-guide.js", "assets/js/modules/**/*.js"],
     ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2020,

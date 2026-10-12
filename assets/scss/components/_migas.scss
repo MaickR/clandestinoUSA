@@ -1,0 +1,17 @@
+.cl-migas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+
+  &__item {
+    display: inline-flex;
+    gap: var(--espacio-2);
+    align-items: center;
+  }
+  &__separador { color: var(--color-texto-muted); }
+}

@@ -5,6 +5,7 @@
   "description": "Sitio web de The Clandestino USA",
   "type": "module",
   "scripts": {
+    "icons": "node scripts/generar-iconos.mjs",
     "dev": "gulp dev",
     "build": "gulp build",
     "lint": "npm run lint:js && npm run lint:css",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "autoprefixer": "^10.6.1",
+    "bootstrap-icons": "1.13.1",
     "browser-sync": "^3.0.4",
     "cssnano": "^8.0.10",
     "esbuild": "^0.28.2",

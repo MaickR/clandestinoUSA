@@ -1,6 +1,7 @@
 // Pipeline de frontend: Sass + Bootstrap, PostCSS, esbuild, PHP local y BrowserSync.
 // Producto: assets/css/style.new.css (+ .map en dev) y assets/js/dist/**.
-// Guía: assets/css/style-guide.css (+ .map) solo en dev. El build no lo genera.
+// Guía: CSS/JS de demostración (+ .map) solo en dev. Build no los genera.
+// Sprite local curado: se genera siempre en dev/build.
 // El CSS/JS legacy no se compila ni se toca.
 import { spawn } from "node:child_process";
 import { rm } from "node:fs/promises";
@@ -14,6 +15,7 @@ import cssnano from "cssnano";
 import rename from "gulp-rename";
 import browserSync from "browser-sync";
 import { build as esbuild } from "esbuild";
+import { generarIconos } from "./scripts/generar-iconos.mjs";
 
 const { src, dest, series, parallel, watch } = gulp;
 const sass = gulpSass(dartSass);
@@ -34,7 +36,12 @@ const paths = {
   cssGuideOut: "assets/css/style-guide.css",
   cssGuideMap: "assets/css/style-guide.css.map",
   jsEntry: "assets/js/main.js",
-  jsWatch: ["assets/js/main.js", "assets/js/modules/**/*.js"],
+  jsGuideEntry: "assets/js/style-guide.js",
+  jsGuideOut: "assets/js/dist/style-guide.js",
+  jsWatch: ["assets/js/main.js", "assets/js/style-guide.js", "assets/js/modules/**/*.js"],
+  guideWatch: "style-guide/**/*.php",
+  iconWatch: ["scripts/iconos.json", "scripts/generar-iconos.mjs"],
+  iconOut: "assets/icons/cl-iconos.svg",
   jsDist: "assets/js/dist",
   jsOut: "assets/js/dist/main.js",
   legacyWatch: [
@@ -45,6 +52,7 @@ const paths = {
     "!assets/css/style-guide.css",
     "assets/js/*.js",
     "!assets/js/main.js",
+    "!assets/js/style-guide.js",
   ],
 };
 
@@ -61,7 +69,7 @@ let phpProcess = null;
 // --- Clean: solo outputs generados por este pipeline ---
 export async function clean() {
   await Promise.all(
-    [paths.cssOut, paths.cssMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist].map((p) =>
+    [paths.cssOut, paths.cssMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist, paths.iconOut].map((p) =>
       rm(p, { recursive: true, force: true }),
     ),
   );
@@ -106,6 +114,16 @@ const jsOptions = {
 
 const jsDev = () => esbuild({ ...jsOptions, sourcemap: true, minify: false });
 const jsBuild = () => esbuild({ ...jsOptions, sourcemap: false, minify: true });
+const jsGuideDev = () => esbuild({
+  ...jsOptions, entryPoints: [paths.jsGuideEntry], outfile: paths.jsGuideOut,
+  sourcemap: true, minify: false,
+});
+
+// Import dinámico evita que watch reutilice una versión anterior del generador.
+async function iconos() {
+  const generador = await import(`./scripts/generar-iconos.mjs?revision=${Date.now()}`);
+  await generador.generarIconos();
+}
 
 // --- PHP local ---
 function portInUse(port, host) {
@@ -193,7 +211,9 @@ const reload = (done) => { server.reload(); done(); };
 
 function watcher() {
   watch(paths.scssWatch, parallel(cssDev, cssGuideDev));
-  watch(paths.jsWatch, series(jsDev, reload));
+  watch(paths.jsWatch, series(parallel(jsDev, jsGuideDev), reload));
+  watch(paths.guideWatch, reload);
+  watch(paths.iconWatch, series(iconos, reload));
   watch(paths.legacyWatch, reload);
 }
 
@@ -203,6 +223,6 @@ for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
 }
 process.on("exit", stopPhp);
 
-export const dev = series(clean, parallel(cssDev, cssGuideDev, jsDev), php, serve, watcher);
-export const build = series(clean, parallel(cssBuild, jsBuild));
+export const dev = series(clean, generarIconos, parallel(cssDev, cssGuideDev, jsDev, jsGuideDev), php, serve, watcher);
+export const build = series(clean, generarIconos, parallel(cssBuild, jsBuild));
 export default dev;

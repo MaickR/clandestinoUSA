@@ -1,0 +1,33 @@
+.cl-boton-icono {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  min-height: 2.75rem;
+  padding: var(--espacio-2);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+  background: transparent;
+  color: var(--color-texto);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--color-acento);
+    background: var(--color-superficie-hover);
+    color: var(--color-acento);
+  }
+
+  &:active {
+    background: var(--color-texto-inverso);
+  }
+
+  &:disabled {
+    border-color: var(--color-borde-fuerte);
+    background: transparent;
+    color: var(--color-texto);
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+}

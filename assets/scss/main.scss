@@ -16,6 +16,11 @@
 @import "bootstrap/scss/grid";
 @import "bootstrap/scss/helpers";
 
+// Mecánica de Collapse, Modal y Toast; apariencia propia en cl-*.
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/toasts";
+
 // Base propia: tokens semánticos, tipo y accesibilidad.
 @import "base/root";
 @import "base/typography";
@@ -28,3 +33,15 @@
 @import "components/card";
 @import "components/eyebrow";
 @import "components/divider";
+@import "components/icon";
+@import "components/boton-icono";
+@import "components/alerta";
+@import "components/estado";
+@import "components/notificacion";
+@import "components/modal";
+@import "components/acordeon";
+@import "components/cantidad";
+@import "components/spinner";
+@import "components/skeleton";
+@import "components/estado-vista";
+@import "components/migas";

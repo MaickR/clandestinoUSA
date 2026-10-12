@@ -1,0 +1,13 @@
+.cl-cantidad {
+  display: inline-flex;
+  gap: var(--espacio-2);
+  align-items: center;
+  max-width: 100%;
+
+  &__campo {
+    width: 5rem;
+    min-width: 0;
+    padding-inline: var(--espacio-2);
+    text-align: center;
+  }
+}

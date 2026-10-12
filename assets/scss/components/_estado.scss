@@ -1,0 +1,14 @@
+.cl-estado {
+  display: inline-block;
+  padding: var(--espacio-1) var(--espacio-2);
+  border: 1px solid currentcolor;
+  border-radius: var(--radio-sm);
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+  line-height: 1.5;
+
+  &--exito { color: var(--color-exito); }
+  &--aviso { color: var(--color-aviso); }
+  &--error { color: var(--color-error); }
+  &--destacado { color: var(--color-acento); }
+}

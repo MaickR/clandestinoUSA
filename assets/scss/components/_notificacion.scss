@@ -1,0 +1,43 @@
+.cl-notificaciones {
+  position: fixed;
+  z-index: $zindex-toast;
+  inset-block-end: var(--espacio-4);
+  inset-inline-end: var(--espacio-4);
+  width: min(22rem, calc(100% - 2 * var(--espacio-4)));
+  max-height: calc(100dvh - 2 * var(--espacio-4));
+  overflow-y: auto;
+  pointer-events: none;
+}
+
+.cl-notificacion {
+  --bs-toast-max-width: 100%;
+  --bs-toast-font-size: 0.875rem;
+  --bs-toast-color: var(--color-texto);
+  --bs-toast-bg: var(--color-superficie);
+  --bs-toast-border-color: var(--color-borde-fuerte);
+  --bs-toast-border-radius: var(--radio-md);
+  --bs-toast-box-shadow: var(--sombra-elevada);
+
+  margin-block-start: var(--espacio-3);
+
+  &__fila {
+    display: flex;
+    gap: var(--espacio-3);
+    align-items: flex-start;
+    padding: var(--espacio-3);
+  }
+
+  &__contenido {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__titulo {
+    margin: 0 0 var(--espacio-1);
+    font-weight: 600;
+  }
+  &__mensaje { margin: 0; }
+  &--exito { border-inline-start: 3px solid var(--color-exito); }
+  &--aviso { border-inline-start: 3px solid var(--color-aviso); }
+  &--error { border-inline-start: 3px solid var(--color-error); }
+}
