@@ -5,12 +5,25 @@ function escaparProducto(string $texto): string
     return htmlspecialchars($texto, ENT_QUOTES, 'UTF-8');
 }
 
-function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $clase = 'cl-producto-gastronomico__imagen', bool $formatos = true): void
+function iconoProducto(string $nombre): string
 {
+    return '<svg class="cl-icon" aria-hidden="true" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-'
+        . escaparProducto($nombre) . '"></use></svg>';
+}
+
+function fotoProducto(
+    string $ruta,
+    string $alt,
+    int $ancho,
+    int $alto,
+    string $clase = 'cl-producto-gastronomico__imagen',
+    bool $formatos = true,
+    string $claseMarco = 'cl-producto-gastronomico__visual'
+): void {
     $raiz = '../assets/images/';
     $base = preg_replace('/\.(jpe?g|webp)$/i', '', $ruta);
     ?>
-    <picture>
+    <picture class="<?= escaparProducto($claseMarco) ?>">
       <?php if ($formatos): ?>
       <source srcset="<?= escaparProducto($raiz . 'avif/' . $base . '.avif') ?>" type="image/avif">
       <source srcset="<?= escaparProducto($raiz . 'webp/' . $base . '.webp') ?>" type="image/webp">
@@ -50,9 +63,12 @@ function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $
           <div class="cl-producto-gastronomico__contenido">
             <p class="cl-eyebrow">For the table</p>
             <h3 class="cl-producto-gastronomico__titulo" id="tabla-titulo">Cheese &amp; charcuterie board</h3>
-            <p class="cl-producto-gastronomico__descripcion">A little of this, a little of that. A board of cheeses and cured meats, made for conversation.</p>
-            <p class="cl-producto-gastronomico__precio">$36.00 <span class="cl-producto-gastronomico__unidad">Example price / sharing board · serves 2 (demo portion)</span></p>
-            <div class="cl-producto-gastronomico__acciones"><a class="cl-enlace" href="#productos-destacado">Discover the sharing board</a></div>
+            <p class="cl-producto-gastronomico__descripcion">Cheeses, cured meats, and a board made for conversation.</p>
+            <p class="cl-producto-gastronomico__dato"><?= iconoProducto('personas') ?> For sharing · serves 2 (demo)</p>
+            <div class="cl-producto-gastronomico__pie">
+              <p class="cl-producto-gastronomico__precio">$36.00<span class="cl-producto-gastronomico__unidad">Example price / board</span></p>
+              <div class="cl-producto-gastronomico__acciones"><a class="cl-boton-icono" href="#productos-destacado" aria-label="Explore the sharing board"><?= iconoProducto('siguiente') ?></a></div>
+            </div>
           </div>
         </article>
       </div>
@@ -62,9 +78,12 @@ function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $
           <div class="cl-producto-gastronomico__contenido">
             <p class="cl-eyebrow">Spanish cheese</p>
             <h3 class="cl-producto-gastronomico__titulo" id="manchego-titulo">Manchego</h3>
-            <p class="cl-producto-gastronomico__descripcion">A Spanish cheese to enjoy on its own or alongside the rest of the table.</p>
-            <p class="cl-producto-gastronomico__precio">Price to be confirmed <span class="cl-producto-gastronomico__unidad">Wedge · weight and availability to be confirmed</span></p>
-            <div class="cl-producto-gastronomico__acciones"><a class="cl-enlace" href="#productos-menu">See the menu presentation</a></div>
+            <p class="cl-producto-gastronomico__descripcion">Spanish cheese to enjoy on its own or alongside the rest of the table.</p>
+            <p class="cl-producto-gastronomico__dato"><?= iconoProducto('informacion') ?> Availability to be confirmed</p>
+            <div class="cl-producto-gastronomico__pie">
+              <p class="cl-producto-gastronomico__precio cl-producto-gastronomico__precio--pendiente">Price to be confirmed<span class="cl-producto-gastronomico__unidad">Per wedge · weight unconfirmed</span></p>
+              <div class="cl-producto-gastronomico__acciones"><a class="cl-boton-icono" href="#productos-menu" aria-label="Explore the cheese menu"><?= iconoProducto('siguiente') ?></a></div>
+            </div>
           </div>
         </article>
       </div>
@@ -75,8 +94,11 @@ function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $
             <p class="cl-eyebrow">Cured specialties</p>
             <h3 class="cl-producto-gastronomico__titulo" id="chorizo-titulo">Chorizo</h3>
             <p class="cl-producto-gastronomico__descripcion">Spanish cured sausage from our product photography collection.</p>
-            <p class="cl-producto-gastronomico__precio">$12.00 <span class="cl-producto-gastronomico__unidad">Example price / plate · demo portion</span></p>
-            <p><span class="cl-estado cl-estado--aviso">Limited availability · demo</span></p>
+            <p><span class="cl-estado cl-estado--aviso"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('aviso') ?> Limited availability · demo</span></span></p>
+            <div class="cl-producto-gastronomico__pie">
+              <p class="cl-producto-gastronomico__precio">$12.00<span class="cl-producto-gastronomico__unidad">Example price / plate</span></p>
+              <div class="cl-producto-gastronomico__acciones"><a class="cl-boton-icono" href="#productos-pedido" aria-label="Explore the Take Away demo"><?= iconoProducto('pedido') ?></a></div>
+            </div>
           </div>
         </article>
       </div>
@@ -88,9 +110,28 @@ function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $
   <div class="container">
     <div class="cl-seccion__encabezado"><p class="cl-eyebrow">At a glance</p><h2 id="productos-menu-titulo">The menu, simply presented</h2><p class="cl-seccion__descripcion">Readable rows for a menu with or without photography. All amounts are examples.</p></div>
     <ul class="cl-catalogo__lista">
-      <li class="cl-item-menu"><div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Cheese &amp; charcuterie board</h3><p class="cl-item-menu__descripcion">Cheeses, cured meats, and something to share.</p><span class="cl-texto-pequeno">Sharing board · serves 2 (demo portion)</span></div><p class="cl-item-menu__precio">$36.00<span class="cl-producto-gastronomico__unidad">Example / board</span></p></li>
-      <li class="cl-item-menu"><div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Manchego cheese</h3><p class="cl-item-menu__descripcion">Spanish cheese. Ask about the current selection and serving size.</p><span class="cl-texto-pequeno">Wedge · weight pending confirmation</span></div><p class="cl-item-menu__precio">Price unavailable<span class="cl-producto-gastronomico__unidad">Pending commercial confirmation</span></p></li>
-      <li class="cl-item-menu"><div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Chorizo</h3><p class="cl-item-menu__descripcion">A Spanish cured specialty for the table.</p><span class="cl-texto-pequeno">Plate · demo portion</span></div><p class="cl-item-menu__precio">$12.00<span class="cl-producto-gastronomico__unidad">Example / plate</span></p></li>
+      <li class="cl-item-menu">
+        <div class="cl-item-menu__cabecera">
+          <?php fotoProducto('gallery/tapas/the-clandestino-tapas-6.jpeg', 'Cheese and charcuterie sharing board', 2048, 1536, 'cl-item-menu__imagen', true, 'cl-item-menu__media'); ?>
+          <div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Cheese &amp; charcuterie board</h3><p class="cl-item-menu__descripcion">Cheeses, cured meats, and something to share.</p><p class="cl-texto-pequeno">Board · serves 2 (demo portion)</p><span class="cl-estado cl-estado--exito"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('exito') ?> Available · demo</span></span></div>
+        </div>
+        <div class="cl-item-menu__comercial"><p class="cl-item-menu__precio cl-producto-gastronomico__precio">$36.00<span class="cl-producto-gastronomico__unidad">Example / board</span></p><a class="cl-boton-icono" href="#productos-destacado" aria-label="View sharing board details"><?= iconoProducto('siguiente') ?></a></div>
+      </li>
+      <li class="cl-item-menu">
+        <div class="cl-item-menu__cabecera"><div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Manchego cheese</h3><p class="cl-item-menu__descripcion">Spanish cheese. Ask about the current selection and serving size.</p><p class="cl-texto-pequeno">Wedge · weight pending confirmation</p><span class="cl-producto-gastronomico__dato"><?= iconoProducto('informacion') ?> Availability unconfirmed</span></div></div>
+        <div class="cl-item-menu__comercial"><p class="cl-item-menu__precio cl-producto-gastronomico__precio--pendiente">Price unavailable<span class="cl-producto-gastronomico__unidad">Pending confirmation</span></p><a class="cl-boton-icono" href="#manchego-titulo" aria-label="View Manchego presentation"><?= iconoProducto('informacion') ?></a></div>
+      </li>
+      <li class="cl-item-menu">
+        <div class="cl-item-menu__cabecera">
+          <?php fotoProducto('gallery/tapas/the-clandestino-chorizo.jpeg', 'Spanish chorizo from the existing product collection', 1536, 2048, 'cl-item-menu__imagen', true, 'cl-item-menu__media'); ?>
+          <div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Chorizo</h3><p class="cl-item-menu__descripcion">A Spanish cured specialty for the table.</p><p class="cl-texto-pequeno">Plate · demo portion</p><span class="cl-estado cl-estado--aviso"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('aviso') ?> Limited availability · demo</span></span></div>
+        </div>
+        <div class="cl-item-menu__comercial"><p class="cl-item-menu__precio cl-producto-gastronomico__precio">$12.00<span class="cl-producto-gastronomico__unidad">Example / plate</span></p><a class="cl-boton-icono" href="#productos-pedido" aria-label="Explore the local order demonstration"><?= iconoProducto('pedido') ?></a></div>
+      </li>
+      <li class="cl-item-menu">
+        <div class="cl-item-menu__cabecera"><div class="cl-item-menu__contenido"><h3 class="cl-item-menu__titulo">Chorizo plate · unavailable example</h3><p class="cl-item-menu__descripcion">A sold-out presentation with no order action available.</p><span class="cl-estado cl-estado--error"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('error') ?> Sold out · demo</span></span></div></div>
+        <div class="cl-item-menu__comercial"><p class="cl-item-menu__precio cl-producto-gastronomico__precio">$12.00<span class="cl-producto-gastronomico__unidad">Example / plate</span></p><button class="cl-boton-icono" type="button" disabled aria-label="Chorizo plate unavailable in this demo"><?= iconoProducto('restringido') ?></button></div>
+      </li>
     </ul>
   </div>
 </section>
@@ -100,7 +141,11 @@ function fotoProducto(string $ruta, string $alt, int $ancho, int $alto, string $
     <div class="cl-seccion__encabezado"><h2 id="productos-destacado-titulo">A product with a story</h2></div>
     <article class="row cl-media-contenido" aria-labelledby="tabla-destacada-titulo">
       <div class="col-md-6 cl-media-contenido__media"><?php fotoProducto('gallery/tapas/the-clandestino-tapas-6.jpeg', 'Cheeses and charcuterie arranged on a sharing board', 2048, 1536, 'cl-media-contenido__imagen'); ?></div>
-      <div class="col-md-6 cl-media-contenido__contenido"><p class="cl-eyebrow">Made for sharing</p><h3 id="tabla-destacada-titulo">Start with the board. Let the evening unfold.</h3><p>Cheeses, cured meats, and a table of friends. The photograph shows one of our existing sharing boards; the current selection and portions need confirmation.</p><p class="cl-producto-gastronomico__precio">$36.00<span class="cl-producto-gastronomico__unidad">Example price / sharing board · serves 2 (demo)</span></p><div class="cl-seccion__acciones"><a class="cl-boton" href="#productos-pedido">Explore the order demo</a></div></div>
+      <div class="col-md-6 cl-media-contenido__contenido">
+        <p class="cl-eyebrow">Made for sharing</p><h3 class="cl-titulo-1" id="tabla-destacada-titulo">Cheese &amp; charcuterie board</h3><p>Start with the board. Let the evening unfold. The photograph shows a board from our existing collection.</p>
+        <dl class="cl-producto-gastronomico__ficha"><dt>For the table</dt><dd>Serves 2 · example portion</dd><dt>Selection</dt><dd>Current contents to be confirmed</dd></dl>
+        <div class="cl-producto-gastronomico__pie"><p class="cl-producto-gastronomico__precio">$36.00<span class="cl-producto-gastronomico__unidad">Example price / board</span></p><div class="cl-producto-gastronomico__acciones"><a class="cl-boton" href="#productos-pedido"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('pedido') ?> Try the order demo</span></a></div></div>
+      </div>
     </article>
   </div>
 </section>

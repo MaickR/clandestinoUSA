@@ -1,6 +1,6 @@
 // Se conserva toda la fotografía existente, aunque incluya varias botellas.
 .cl-vino__imagen {
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 3;
   padding: var(--espacio-4);
   object-fit: contain;
 }
@@ -17,12 +17,32 @@
   dd { margin: 0; }
 
   @include media-breakpoint-up(sm) {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
     column-gap: var(--espacio-4);
   }
 }
 
 // El destacado mantiene el grid y la narrativa aprobados de Wave 1.
 .cl-vino__imagen--destacada {
+  aspect-ratio: 1;
   background: var(--color-superficie);
+}
+
+// Altura natural por ficha: una tarjeta breve no hereda el vacío de su vecina.
+.cl-producto-gastronomico--vino {
+  height: auto;
+
+  @include media-breakpoint-up(lg) {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: stretch;
+
+    .cl-producto-gastronomico__visual { height: 100%; }
+
+    .cl-vino__imagen {
+      aspect-ratio: 2 / 3;
+      height: 100%;
+      border-radius: var(--radio-md) 0 0 var(--radio-md);
+    }
+  }
 }

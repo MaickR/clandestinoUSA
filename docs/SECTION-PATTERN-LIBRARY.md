@@ -250,6 +250,8 @@ Evidencias de cierre: `C:/Users/Mike/.codex/visualizations/2026/10/12/01a12ee8-6
 
 ## Wave 2 — Gastronomía y productos
 
+**Estado actual:** dirección visual general aprobada por el usuario; refinamiento integral solicitado. El contrato y QA vigentes del refinamiento están al final de este documento. Los registros anteriores describen la base publicada de Wave 2 y se conservan como historial.
+
 Base: `develop` en `a8328cf`, Wave 1 integrada; rama `feature/ui-section-patterns-wave-2`. Sin migración de páginas ni operaciones comerciales. Aprobación visual humana pendiente.
 
 ### Matriz previa a SCSS
@@ -362,3 +364,91 @@ Wave 2 añade diez instancias fotográficas / siete URLs únicas. Descarga prefe
 Nuevos (8): los cuatro SCSS listados, `assets/js/modules/guia/productos.js`, `style-guide/partials/productos-wave-2.php`, `vinos-cestas-wave-2.php` y `pedido-estados-wave-2.php`. Modificados (7): `assets/scss/main.scss`, `assets/scss/components/_guia.scss`, `assets/js/style-guide.js`, `style-guide/patterns.php`, la nota de `partials/patrones-wave-1.php`, `docs/ARQUITECTURA.md` y este documento. Outputs ignorados, sin eliminaciones.
 
 Revisión humana integral: `http://localhost:3000/style-guide/patterns.php#wave-2`, navegación interna a tapas/menu/destacados/vinos/cestas/Take Away/estados. Core: `http://localhost:3000/style-guide/`. Probar móvil/tablet/desktop; en Take Away, editar cantidad y elegir Success/Failure antes de Add to Order. Validación técnica completa; **aprobación visual humana pendiente**. Publicación normal solo a la feature, sin PR, merge, force push ni deploy. Precios, disponibilidad y demás pendientes comerciales no convierten estas demostraciones en ofertas reales.
+
+### Refinamiento integral UX/UI — 2026-10-12
+
+Se conserva `feature/ui-section-patterns-wave-2`; preflight limpio y sincronizado tras fetch en `c282798`, con los dos commits originales publicados. Base histórica de la feature: `develop@a8328cf`. No se actualiza develop ni se crea otra rama. La dirección visual general cuenta con aprobación del usuario; **el refinamiento permanece pendiente de aprobación visual humana**.
+
+Se adaptaron las tres composiciones descritas por el usuario: tarjeta vertical con pie comercial, presentación lateral editorial y filas horizontales. No se copiaron paletas claras, promociones, reseñas ni controles ficticios. Foundation, Core, Wave 1, fuentes y tokens permanecen intactos.
+
+#### Composición y jerarquía comercial vigentes
+
+| Familia / estructura | Refinamiento |
+|---|---|
+| Tarjeta compartida | Foto, categoría compacta, título, descripción breve y dato/estado. `cl-producto-gastronomico__pie` agrupa precio/unidad y acción con separador sutil; wrap móvil, precio protagonista y texto de precio pendiente de menor jerarquía. Sin truncamiento ni altura fija del contenido |
+| Acciones de producto | Core `cl-boton-icono` para enlaces reales a detalles/composiciones existentes; 44px y nombre accesible. El icono de pedido enlaza al laboratorio local, no ejecuta una compra |
+| Menú | `cl-item-menu__cabecera` agrupa foto opcional y copy; `__comercial`, precio y acción. Foto 72px móvil/96px desde md, sin encogimiento del picture ni cuadro vacío al omitirla. Precio/acción debajo en móvil y columna derecha desde md |
+| Estados de filas | Disponible, limitado y agotado con `cl-estado`, texto e icono; no-confirmado con información textual. Disabled nativo para acción agotada. Se conserva la variante sin precio y sin foto |
+| Vinos | `cl-producto-gastronomico--vino` reutiliza la tarjeta, con altura natural independiente por ficha. Vertical hasta md; fotografía lateral desde lg. Media contain, centrada en toda su celda, sin recortar botellas. Adaro no hereda la altura de PURE SOUL ni añade relleno informativo |
+| Destacados | Mantienen `cl-media-contenido` y la orientación aprobada. Nombre del producto como titular, copy breve, ficha `dl`, precio/dato comercial y acción agrupados. No se crean un nuevo destacado ni formularios comerciales |
+| Cestas | Mismo patrón, fotografía existente, contexto de regalo y pie con consulta/exploración. Sin inventar contenido, personalización confirmada ni importe |
+| Take Away | Tarjeta editorial con Bootstrap/Wave 1: fotografía lateral desde md y datos/selección a la derecha. Precio unitario, cantidad Core, subtotal ilustrativo y acción principal; feedback visible al lado del control |
+| Catálogo | Estados previos conservados: imagen/precio ausentes, skeleton/spinner de carga, vacío y error recuperable demo. No hay filtros dinámicos ni copias masivas de tarjetas |
+
+La altura igual de tarjetas gastronómicas/cestas conserva pies alineados; la variante de vino usa altura natural porque su información es desigual. No se compensa con texto inventado, min-height excesivo o overflow:hidden. Los valores contextuales de fotografía/controles reutilizan spacing/radius actuales; no se crean tokens globales.
+
+#### Iconografía Core
+
+32 usos de SVG sobre el sprite existente, con 13 símbolos: `personas`, `siguiente`, `informacion`, `aviso`, `pedido`, `exito`, `error`, `restringido`, `regalo`, `restar`, `sumar`, `cerrar`, `reintentar`. Todos verificados como IDs existentes. `iconoProducto()` es un helper exclusivo de estos partials: SVG decorativo con `aria-hidden`/`focusable=false`, currentColor y nombre escapado. El nombre accesible pertenece al enlace/botón; estados y datos conservan texto visible. Sin favoritos, ratings ni nuevos iconos/dependencias.
+
+#### Take Away y subtotal ilustrativo
+
+`Simulated outcome` se mueve a un fieldset **Demo controls**, fuera de la presentación del producto. Es una herramienta del laboratorio para elegir Success/Failure, nunca un control comercial. Permanece conectado por su ID y se bloquea durante la acción local.
+
+`data-cl-precio-ejemplo="3600"` proporciona únicamente el importe estático de demostración en centavos. El JS de guía valida que sea un entero seguro no negativo y usa `Intl.NumberFormat` para mostrar **Example subtotal** según 1–6 unidades válidas. El subtotal excluye impuestos y no representa un cobro ni importe final. Cantidad inválida muestra `—`; al restaurar Core el último valor válido, el subtotal vuelve a ese ejemplo. Se conserva el guard que impide enviar el primer valor inválido restaurado.
+
+Éxito actualiza la última selección mediante un `dl`: producto, cantidad, precio de ejemplo por unidad y subtotal de ejemplo. Error conserva cantidad/subtotal del resultado exitoso anterior aunque la vista previa haya cambiado. Clear oculta el `dl` y devuelve foco al botón; no borra la cantidad de trabajo. Reload devuelve cantidad inicial y selección vacía. No hay acumulación de carrito, pagos, impuestos calculados, almacenamiento ni requests de negocio.
+
+Los mensajes se acortan y el feedback inicial contiene una indicación útil. Su reserva baja de 13rem móvil/9rem md a 8rem/6.5rem; carga, éxito y error mantienen el espacio. El aviso de cantidad se coloca después de la acción para que no desplace cantidad/subtotal/CTA al aparecer. Se retira la reserva de tres líneas entre cantidad y acción. El mensaje más largo se expande cuando lo necesita, sin recortar texto. La tarjeta crece según contenido; su foto cover acompaña la altura desde md y los vinos siguen contain.
+
+#### Contrato para integración futura
+
+La estructura visual distingue media, categoría/título/descripcion, ficha opcional, estado, precio/unidad y acciones. No hay selectores ligados al nombre del producto ni al importe. PHP futuro podrá omitir foto/ficha/acción, renderizar precio confirmado o ausente, y proporcionar disponibilidad textual junto a la variante Core. Los strings se deberán escapar al renderizar; estos helpers no son un sistema de plantillas universal.
+
+El atributo de precio y el cálculo local pertenecen exclusivamente al laboratorio. Una futura operación deberá recibir importes/disponibilidad autoritativos del servidor, validar unidades y gestionar idempotencia/concurrencia allí. No se implementan endpoints, BD, autenticación, inventario ni seguridad transaccional en esta pasada.
+
+#### QA técnico del refinamiento
+
+Skill `.agents/skills/qa-visual/SKILL.md`, Chromium integrado. Evidencia local en `C:/Users/Mike/.codex/visualizations/2026/10/12/01a131d5-3c57-7d23-abc8-fbc9a3f422fc/`, con prefijos `refine-`, `refinement-` y registros JSON de responsive/contraste/teclado/stress. Se usó una pestaña de QA independiente para evitar capturas atrasadas del tab inicial; las capturas preliminares `refined-*` no son evidencia final.
+
+| Comprobación | Resultado |
+|---|---|
+| npm run lint | PASS: ejecución final ESLint/Stylelint, sin cambiar reglas |
+| npm run build | PASS: producto/sprite; sin CSS/JS guía, sourcemaps ni selectores cl-guia/cl-muestra en producto |
+| PHP lint | PASS: los tres partials modificados |
+| npm run dev / watch | PASS: PHP, BrowserSync y recompilación/reload; localhost:3000 disponible para revisión |
+| 320 / 360 / 390 / 425 / 768 / 820 / 992 / 1024 / 1280 / 1440px | PASS: geometría de todos los patrones, 60 vistas de familias y revisión visual de composiciones representativas; sin overflow ni textos cortados |
+| Miniaturas de menú | PASS final: primer render de 320px reveló encogimiento del picture y solape con título; se añadió su elemento BEM sin flex-shrink. Separación final medida 16px en 320/768/1280 |
+| Vinos | PASS: los tres usos de botella contain en los diez anchos; altura independiente de PURE SOUL/Adaro, sin etiquetas recortadas |
+| Estrés | PASS: título y descripción extensos en la tarjeta sin foto/precio, a 320/768/1280; sin overflow de documento ni contenido. Fixture temporal restaurado; no se publica contenido de prueba comercial |
+| Subtotal | PASS: 2→$72, 3→$108, 6→$216; máximo deshabilita sumar; inválido→`—` y restauración al último valor válido; envío inválido bloqueado |
+| Acción/feedback | PASS: Enter/Space, bloqueo de duplicados, espera, éxito, fallo conservando selección anterior, limpieza y retorno de foco. Botón 44px; feedback móvil 128px estable en carga/fallo |
+| Teclado/foco/hover | PASS: controles nativos y enlaces operables; Tab/Shift+Tab, foco champagne 2px/offset 3px sin recorte; hover de cantidad observado sobre superficie-hover. Active conserva la regla Core intacta; no se midió una pulsación sostenida |
+| Targets | PASS: mínimo 44px en acciones de tarjetas/filas y controles de pedido, en los diez anchos |
+| Contraste | PASS: 158 textos/combinaciones sobre fondos resueltos, mínimo 9.51:1; disabled excluido del requisito de texto WCAG; ningún texto sobre fotografía |
+| Semántica | PASS: un h1, sin saltos de heading, IDs únicos, labels asociados, output de subtotal nombrado, SVG decorativos, fotos con alt/dimensiones y estados textuales |
+| HTTP / SVG / consola | PASS: 42 URLs locales HTTP 200, 13 símbolos usados existentes y cero imágenes/SVG faltantes; sin errores/warnings de página observados |
+| Protección | PASS: diff limitado a los diez archivos de alcance; Foundation/Core/Wave 1, producción, originales, deps, tooling y JS productivo intactos |
+
+Zoom 200% no se pudo ejecutar mediante el control del navegador integrado: el intento de atajo falló antes de confirmar un cambio de escala. No se sustituye por reducir el viewport ni se declara probado. Firefox/Safari, dispositivos táctiles físicos, lector de pantalla auditivo y Apache/GoDaddy no se ejecutaron. Reduced motion conserva Foundation/Core sin emulación nueva. BrowserSync mantiene el aviso Node DEP0060 preexistente, sin fallo operativo. La aprobación visual humana final continúa pendiente.
+
+#### Performance del refinamiento
+
+CSS minificado con el mismo build y PHP gzencode nivel 6. JS guía comparado en memoria con esbuild/Node gzip nivel 6, reemplazando solo el módulo de demo por su versión `c282798` para la medida anterior; sin escribir bundles de guía productivos.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 57640 | 60558 | 11062 | 11413 | +351 (+3.17%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 64679 | 65653 | 14893 | 15120 | +227 (+1.52%) |
+| JS guía minificado, solo medición | 32858 | 33411 | 10504 | 10688 | +184 (+1.75%) |
+
+CSS crece por pie comercial, filas con media/acciones, variante reutilizable de vino y selección/resumen; los estilos del fieldset demo/feedback siguen en la hoja exclusiva de guía. JS crece solo por subtotal y resumen local. Hash del JS productivo vacío permanece `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. Sin dependencias, PurgeCSS ni librerías de iconos.
+
+Imágenes: 17→19 instancias en Patterns por reutilizar dos fotos en filas; las siete fotos Wave 2 / trece fotos totales y las 35 URLs de formatos alternativos siguen iguales. Pesos de fotos sin cambios; descarga preferida de Wave 2 conserva 577444 bytes. El sprite compartido añade un recurso local cacheable: inventario de guías/recursos locales 41→42 URLs únicas; 32 usos de SVG no son 32 archivos. Estos conteos de markup/HTTP distinguen formatos alternativos de peticiones efectivas, sin afirmar un HAR de red ni Web Vitals de producción.
+
+#### Archivos y entrega del refinamiento
+
+Modificados: `assets/scss/patterns/_producto-gastronomico.scss`, `_item-menu.scss`, `_vino.scss`, `_catalogo.scss`; `assets/scss/components/_guia.scss`; los tres partials PHP Wave 2; `assets/js/modules/guia/productos.js`; este documento. Sin archivos fuente nuevos ni eliminados. Se mantiene la entrada de JS y todos los imports/tooling existentes.
+
+Revisión integral: `/style-guide/patterns.php#wave-2`, filas en `#productos-menu`, vinos en `#productos-vinos`, cestas en `#productos-cestas`, selección en `#productos-pedido`. Foundation/Core conserva `/style-guide/`. Probar cantidad y subtotal; en Demo controls, elegir Failure y luego ejecutar Add to Order para ver recuperación. Precios/porciones/stock/añadas/cestas siguen pendientes de confirmación comercial; nada constituye una compra real. Publicación normal únicamente a la feature; sin PR, merge, force ni deploy.
