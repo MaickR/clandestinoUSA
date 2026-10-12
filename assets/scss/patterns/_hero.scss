@@ -1,25 +1,20 @@
-// Sin oscurecer otra vez la fotografía: el panel sólido garantiza contraste.
+// La misma celda desde móvil: el contenido en flujo reserva la altura del banner.
 .cl-hero {
   display: grid;
+  overflow: clip;
   background: var(--color-fondo-alterno);
-
+  isolation: isolate;
 }
 
 .cl-hero__estructura {
-  @include media-breakpoint-up(lg) {
-    grid-area: 1 / 1;
-  }
+  z-index: 1;
+  grid-area: 1 / 1;
 }
 
 .cl-hero__media {
   position: relative;
   display: block;
-  aspect-ratio: 16 / 9;
-
-  @include media-breakpoint-up(lg) {
-    grid-area: 1 / 1;
-    aspect-ratio: auto;
-  }
+  grid-area: 1 / 1;
 }
 
 .cl-hero__imagen {
@@ -32,18 +27,79 @@
 
 .cl-hero__contenido {
   position: relative;
-  padding: var(--espacio-6) var(--espacio-5);
-  background: var(--color-fondo-alterno);
+  padding: var(--espacio-8) var(--espacio-4);
+  margin-inline: auto;
+  text-align: center;
+  isolation: isolate;
+
+  // Protección elíptica local, con bordes difusos; nunca un panel o filtro global.
+  &::before {
+    position: absolute;
+    z-index: -1;
+    inset: calc(-1 * var(--espacio-8));
+    background: radial-gradient(ellipse farthest-side at var(--hero-proteccion-posicion, center), rgba($neutral-950, 0.55), rgba($neutral-950, 0.45) 75%, rgba($neutral-950, 0) 100%);
+    content: "";
+    pointer-events: none;
+  }
+
+  .cl-display {
+    max-inline-size: 14ch;
+    margin-inline: auto;
+    margin-block-end: var(--espacio-5);
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 4rem);
+    line-height: 1.12;
+  }
+
+  .cl-seccion__descripcion {
+    max-inline-size: 42ch;
+    margin-inline: auto;
+    color: var(--color-texto);
+  }
+
+  .cl-seccion__acciones {
+    justify-content: center;
+    margin-inline: auto;
+  }
+
+  .cl-boton--secundario {
+    border-color: var(--color-acento);
+    background: var(--color-fondo);
+  }
+
+  @include media-breakpoint-up(md) {
+    padding-block: var(--espacio-9);
+  }
 
   @include media-breakpoint-up(lg) {
-    margin-block: var(--espacio-8);
-    padding: var(--espacio-7);
+    --hero-proteccion-posicion: 35% 50%;
+
+    padding-inline: var(--espacio-5);
+    margin-inline: 0;
+    text-align: left;
+
+    .cl-display,
+    .cl-seccion__descripcion,
+    .cl-seccion__acciones { margin-inline: 0; }
+
+    .cl-seccion__acciones { justify-content: flex-start; }
   }
 }
 
 .cl-hero--interior .cl-hero__contenido {
+  padding-block: var(--espacio-7);
+
+  .cl-titulo-1 {
+    max-inline-size: 20ch;
+    margin-inline: auto;
+    margin-block-end: var(--espacio-5);
+    font-size: clamp(1.875rem, 1.4rem + 1.6vw, 3rem);
+  }
+
+  @include media-breakpoint-up(md) {
+    padding-block: var(--espacio-8);
+  }
+
   @include media-breakpoint-up(lg) {
-    margin-block: var(--espacio-6);
-    padding: var(--espacio-6);
+    .cl-titulo-1 { margin-inline: 0; }
   }
 }

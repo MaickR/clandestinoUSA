@@ -1,4 +1,24 @@
 // Presentación del style guide. No es UI de producto.
+.cl-guia-navegacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-4) var(--espacio-6);
+  margin-block: var(--espacio-5);
+
+  [aria-current="page"] {
+    color: var(--color-texto);
+    text-decoration-thickness: 2px;
+  }
+}
+
+.cl-guia-patrones {
+  .cl-guia-seccion,
+  #patrones-media .cl-seccion__encabezado { text-align: center; }
+
+  .cl-guia-indice,
+  .cl-guia-navegacion { justify-content: center; }
+}
+
 .cl-guia-seccion {
   padding-block: var(--espacio-7);
 

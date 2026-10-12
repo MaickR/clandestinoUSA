@@ -1,6 +1,7 @@
 <?php
 // Guía local del design system. No procesa formularios ni enlaza el CSS legacy.
 $iconos = json_decode(file_get_contents(__DIR__ . '/../scripts/iconos.json'), true, 512, JSON_THROW_ON_ERROR);
+$paginaGuia = 'fundamentos';
 
 /** SVG decorativo; nombres limitados al manifiesto local. */
 function iconoGuia(string $nombre): string
@@ -21,7 +22,7 @@ function iconoGuia(string $nombre): string
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Local design system reference for The Clandestino USA. Not a public page.">
   <meta name="theme-color" content="#161412">
-  <title>Design system — The Clandestino USA</title>
+  <title>Foundations &amp; Core — The Clandestino USA</title>
   <link rel="icon" href="../assets/favicon/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,8 +52,9 @@ function iconoGuia(string $nombre): string
   <header class="cl-guia-seccion">
     <div class="container">
       <p class="cl-eyebrow">The Clandestino USA</p>
-      <h1>Design system</h1>
+      <h1>Foundations &amp; Core</h1>
       <p class="cl-texto-secundario">Dark, editorial, and built for the table. This page is a local reference. Apache denies it in production.</p>
+      <?php require __DIR__ . '/partials/navegacion-guia.php'; ?>
       <nav aria-label="On this page">
         <ul class="cl-guia-indice">
           <li><a class="cl-enlace" href="#foundations">Foundations</a></li>
@@ -76,10 +78,6 @@ function iconoGuia(string $nombre): string
           <li><a class="cl-enlace" href="#loading">Loading</a></li>
           <li><a class="cl-enlace" href="#system-states">Empty &amp; error states</a></li>
           <li><a class="cl-enlace" href="#accessibility">Accessibility states</a></li>
-          <li><a class="cl-enlace" href="#patrones-seccion">Section system</a></li>
-          <li><a class="cl-enlace" href="#patrones-hero">Hero</a></li>
-          <li><a class="cl-enlace" href="#patrones-media">Media + content</a></li>
-          <li><a class="cl-enlace" href="#patrones-cta">CTA band</a></li>
         </ul>
       </nav>
     </div>
@@ -497,7 +495,6 @@ function iconoGuia(string $nombre): string
         <button class="cl-boton" type="button">Focus target</button>
       </div>
     </section>
-    <?php require __DIR__ . '/partials/patrones-wave-1.php'; ?>
   </main>
 
   <div class="cl-notificaciones" id="notificaciones"></div>

@@ -61,7 +61,7 @@ Paleta de partida aprobada, con un ajuste medido: el borde fuerte pasa de 28% a 
 
 ### Style guide
 
-`style-guide/index.php` enlaza `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, más las familias que el sitio ya usa (Libre Bodoni y Playfair, eje recortado). No carga `style.css`, hojas legacy ni JS legacy. `style.new.css` es el bundle de producto; `style-guide.css` es output exclusivo de desarrollo y `npm run build` no lo genera.
+`style-guide/index.php` presenta Foundations/Core y `style-guide/patterns.php`, Section Patterns. Ambas enlazan `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, con las fuentes existentes (Libre Bodoni/Playfair). Comparten un pequeño partial de navegación con enlaces HTML y `aria-current`. Patterns incluye demos estáticas y no carga JS de guía. Ninguna carga CSS/JS legacy. `style-guide.css` es exclusivo de desarrollo; build no lo genera.
 
 En Apache/GoDaddy, `.htaccess` responde 403 a `^style-guide(/|$)` sin tocar los assets compartidos. El servidor embebido de PHP ignora `.htaccess`, así que `http://localhost:3000/style-guide/` sigue visible en local. `robots.txt` no es el mecanismo de bloqueo.
 
@@ -85,7 +85,7 @@ Core amplía los controles genéricos: iconografía, feedback, estados, toast, m
 
 ### Pattern Library — Wave 1
 
-Los cuatro patrones estructurales se importan después de Core en `main.scss`, sin JavaScript nuevo. La guía incluye demostraciones estáticas mediante `require __DIR__ . '/partials/patrones-wave-1.php'`; el bloqueo Apache `^style-guide(/|$)` cubre también ese subdirectorio. No hay motor de plantillas ni migración productiva. Contratos, imágenes verificadas y QA: `docs/SECTION-PATTERN-LIBRARY.md`. Implementación técnica con aprobación visual humana pendiente.
+Los cuatro patrones se importan después de Core en `main.scss`, sin JavaScript nuevo. Solo `style-guide/patterns.php` incluye `partials/patrones-wave-1.php` con `require`/`__DIR__`; el bloqueo Apache existente cubre ambas páginas y sus partials. Hero superpuesto desde móvil, Media + Content desde md y CTA centrado; contratos, imágenes, QA y carrusel futuro de Home: `docs/SECTION-PATTERN-LIBRARY.md`. Sin motor de plantillas ni migración productiva; aprobación visual humana pendiente.
 
 ## Objetivo inmediato (futuro)
 

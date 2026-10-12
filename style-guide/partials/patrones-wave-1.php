@@ -36,7 +36,7 @@
 <section id="patrones-hero" aria-labelledby="patrones-hero-titulo">
   <div class="cl-guia-seccion container">
     <h2 id="patrones-hero-titulo">Hero</h2>
-    <p>Editorial and interior compositions. Photography stays visible; text sits on a solid surface.</p>
+    <p>Editorial and interior compositions. Photography and content share one banner at every size.</p>
   </div>
   <section class="cl-hero" aria-labelledby="hero-editorial-titulo">
     <picture class="cl-hero__media">
@@ -46,9 +46,9 @@
     </picture>
     <div class="container cl-hero__estructura">
       <div class="row">
-        <div class="cl-hero__contenido col-lg-6">
+        <div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
           <p class="cl-eyebrow">The Clandestino · Mount Shasta</p>
-          <h3 class="cl-display" id="hero-editorial-titulo">A little Spain.<br>A table to share.</h3>
+          <h3 class="cl-display" id="hero-editorial-titulo">A little Spain. A&nbsp;table to share.</h3>
           <p class="cl-seccion__descripcion">Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.</p>
           <div class="cl-seccion__acciones">
             <a class="cl-boton" href="../tapas.html">Explore the tapas</a>
@@ -67,7 +67,7 @@
     </picture>
     <div class="container cl-hero__estructura">
       <div class="row">
-        <div class="cl-hero__contenido col-lg-6">
+        <div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
           <p class="cl-eyebrow">Spanish wines</p>
           <h3 class="cl-titulo-1" id="hero-interior-titulo">Discover a different side of Spain</h3>
           <p class="cl-seccion__descripcion">Explore the wines that accompany our table, from familiar regions to new discoveries.</p>
@@ -87,14 +87,14 @@
       <p class="cl-seccion__descripcion">One structure, two orientations. Both return to image then narrative on small screens.</p>
     </div>
     <section class="row cl-media-contenido" aria-labelledby="media-tapas-titulo">
-      <div class="col-lg-6 cl-media-contenido__media">
+      <div class="col-md-6 cl-media-contenido__media">
         <picture>
           <source srcset="../assets/images/avif/bg/clandestino-tapas.avif" type="image/avif">
           <source srcset="../assets/images/webp/bg/clandestino-tapas.webp" type="image/webp">
           <img class="cl-media-contenido__imagen" src="../assets/images/bg/clandestino-tapas.jpg" width="1920" height="1080" alt="A sharing platter with cured meats, cheeses, olives, walnuts, and colorful crisps" loading="lazy" decoding="async">
         </picture>
       </div>
-      <div class="col-lg-6 cl-media-contenido__contenido">
+      <div class="col-md-6 cl-media-contenido__contenido">
         <p class="cl-eyebrow">Made for sharing</p>
         <h3 id="media-tapas-titulo">Let the table tell the story</h3>
         <p>Tapas invite you to slow down and share. Explore the flavors of Spain, one small plate at a time.</p>
@@ -113,14 +113,14 @@
 <section class="cl-seccion cl-seccion--alterna" aria-labelledby="media-vinos-titulo">
   <div class="container">
     <div class="row cl-media-contenido cl-media-contenido--invertido">
-      <div class="col-lg-6 cl-media-contenido__media">
+      <div class="col-md-6 cl-media-contenido__media">
         <picture>
           <source srcset="../assets/images/avif/bg/the-clandestino-usa.avif" type="image/avif">
           <source srcset="../assets/images/webp/bg/the-clandestino-usa.webp" type="image/webp">
           <img class="cl-media-contenido__imagen" src="../assets/images/bg/the-clandestino-usa.jpg" width="1920" height="1080" alt="A selection of Spanish wine bottles on a table in the restaurant" loading="lazy" decoding="async">
         </picture>
       </div>
-      <div class="col-lg-6 cl-media-contenido__contenido">
+      <div class="col-md-6 cl-media-contenido__contenido">
         <p class="cl-eyebrow">From Spain to your glass</p>
         <h3 id="media-vinos-titulo">Every bottle begins a conversation</h3>
         <p>Our Spanish wine selection is part of the experience. Browse the wine menu and find something to explore on your next visit.</p>
@@ -138,11 +138,12 @@
   <section class="cl-banda-cta" aria-labelledby="banda-tapas-titulo">
     <div class="container">
       <div class="row cl-banda-cta__fila">
-        <div class="col-lg-8">
+        <div class="col-12 col-lg-8">
+          <p class="cl-eyebrow">An invitation to share</p>
           <h3 id="banda-tapas-titulo">Something good to share</h3>
           <p class="cl-seccion__descripcion">Take a look at our tapas before you join us at the table.</p>
         </div>
-        <div class="col-lg-4">
+        <div class="col-12 col-lg-8">
           <div class="cl-seccion__acciones cl-banda-cta__acciones">
             <a class="cl-boton" href="../tapas.html">Explore the tapas</a>
           </div>
@@ -154,11 +155,12 @@
   <section class="cl-banda-cta" aria-labelledby="banda-encuentros-titulo">
     <div class="container">
       <div class="row cl-banda-cta__fila">
-        <div class="col-lg-7">
+        <div class="col-12 col-lg-8">
+          <p class="cl-eyebrow">Gather at The Clandestino</p>
           <h3 id="banda-encuentros-titulo">Bring your people to the table</h3>
           <p class="cl-seccion__descripcion">Tell us about your gathering or ask about a table for your visit.</p>
         </div>
-        <div class="col-lg-5">
+        <div class="col-12 col-lg-8">
           <div class="cl-seccion__acciones cl-banda-cta__acciones">
             <a class="cl-boton" href="../contact.html#contact-form">Ask about private events</a>
             <a class="cl-boton cl-boton--secundario" href="../contact.html#contact-form">Ask about a table</a>

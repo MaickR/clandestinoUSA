@@ -72,7 +72,7 @@ Referencia completa. `AGENTS.md` resume lo global y `.cursor/rules/` aplica lo e
 - PurgeCSS **diferido**: se evalúa cuando exista el CSS nuevo en producción.
 - Nunca editar CSS compilado a mano.
 
-La guía viva es `style-guide/index.php` (local). El `style-guide.md` de la raíz es la plantilla legacy y no describe estos tokens.
+La guía viva local se divide en `style-guide/index.php` (Foundations/Core) y `style-guide/patterns.php` (Section Patterns). El `style-guide.md` de la raíz es la plantilla legacy y no describe estos tokens.
 
 ## JavaScript (arquitectura objetivo)
 

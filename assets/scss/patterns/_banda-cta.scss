@@ -1,22 +1,27 @@
 .cl-banda-cta {
-  padding-block: var(--espacio-6);
+  padding-block: var(--espacio-7);
   border-block: 1px solid var(--color-borde);
   background: var(--color-superficie);
+  text-align: center;
+
+  h3 {
+    margin-block-end: var(--espacio-5);
+    font-size: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
+  }
 
   @include media-breakpoint-up(lg) {
-    padding-block: var(--espacio-7);
+    padding-block: var(--espacio-8);
   }
 }
 
 .cl-banda-cta__fila {
   row-gap: var(--espacio-5);
   align-items: center;
+  justify-content: center;
 }
 
 .cl-banda-cta__acciones {
   margin-block-start: 0;
-
-  @include media-breakpoint-up(lg) {
-    justify-content: flex-end;
-  }
+  margin-inline: auto;
+  justify-content: center;
 }

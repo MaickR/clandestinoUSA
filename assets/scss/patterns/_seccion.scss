@@ -12,7 +12,11 @@
     text-align: center;
 
     .cl-seccion__encabezado { margin-inline: auto; }
-    .cl-seccion__acciones { justify-content: center; }
+
+    .cl-seccion__acciones {
+      justify-content: center;
+      margin-inline: auto;
+    }
   }
 }
 
@@ -26,7 +30,18 @@
 // Grupo compartido por los cuatro patrones, sin duplicar botones Core.
 .cl-seccion__acciones {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--espacio-3);
+  max-inline-size: 32rem;
   margin-block-start: var(--espacio-5);
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
+
+    > .cl-boton {
+      flex: 1 1 0;
+      min-inline-size: 0;
+      max-inline-size: 16rem;
+    }
+  }
 }
