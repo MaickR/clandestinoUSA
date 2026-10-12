@@ -314,3 +314,51 @@ Todos los precios y disponibilidad requieren confirmación: tabla, Chorizo, Manc
 - Sin `fetch`, endpoints de negocio, POST, `innerHTML`, localStorage, sessionStorage, cookies de carrito, pagos, cuentas ni inventario. Los únicos datos son estáticos controlados y la cantidad local. PHP solo compone partials con `require`/`__DIR__` y escapa strings de helpers con `htmlspecialchars`.
 
 `cl-guia-resultado--cantidad` reserva tres líneas; `--producto` reserva 13rem móvil y 9rem desde md. A 320px el feedback mantiene 208px durante carga y fallo; el botón conserva 44px. Imágenes tienen dimensiones, proporción y lazy loading. No se declara una medición de CLS/Core Web Vitals de producción.
+
+### Registro técnico y responsive — 2026-10-12
+
+Skill utilizada: `.agents/skills/qa-visual/SKILL.md`, ampliada a los nueve anchos pedidos. Navegador Chromium integrado, viewport CSS (no dispositivos físicos).
+
+| Verificación | Resultado |
+|---|---|
+| Preflight | PASS: limpio, fetch, develop actualizado por ff-only a `a8328cf`; Wave 1 confirmada como ancestro, feature desde esa base |
+| `npm run lint` | PASS final: ESLint y Stylelint, sin relajar reglas |
+| `npm run build` | PASS final: CSS/JS producto y sprite; sin CSS/JS guía ni sourcemaps |
+| `php -l` | PASS: patterns.php, patrones-wave-1.php y los tres partials nuevos de Wave 2 |
+| `npm run dev` / watch | PASS: PHP y BrowserSync localhost:3000; recompilación/reload observados |
+| 320 / 390 / 425 / 768 / 820 / 992 / 1024 / 1280 / 1440 px | PASS: geometría de todos los patrones, capturas por productos/familias y revisión de vistas representativas; sin overflow horizontal ni truncamiento |
+| Fotografías / botellas | PASS: proporciones reservadas, fotos existentes cargadas; los tres usos de vino resuelven object-fit: contain en los nueve anchos |
+| Take Away | PASS: cantidad, máximos, entrada inválida real con teclado/restauración, envío inválido bloqueado, Enter/Space, espera, éxito, fallo, limpieza y retry demo |
+| Loading | PASS: botón 44px estable, foco retenido, aria-busy, campos bloqueados y activaciones repetidas ignoradas |
+| Teclado/foco | PASS: Tab/Shift+Tab, botones/campo/select nativos, anillo champagne 2px y offset 3px; sin trampas. Targets de acciones de producto y controles ≥44px |
+| Semántica | PASS: un h1, sin saltos de nivel, IDs únicos, labels asociados, alt y dimensiones; disponibilidad descrita con texto |
+| Contraste Wave 2 | PASS: 138 textos/combinaciones sobre superficies resueltas, mínimo 9.51:1; controles disabled excluidos del requisito de texto WCAG; ningún texto superpuesto a fotografías |
+| Consola / HTTP | PASS: sin errores/warnings observados en las dos guías; 41 URLs locales únicas (guías, CSS/JS, sprite, favicon y fuentes de imágenes) HTTP 200 |
+| Core | PASS: nueve anchos sin overflow; modal por Enter, foco inicial, Escape y retorno; toast por Space; cantidad por ArrowUp; sin cambio de API/fuentes Core |
+| Wave 1 / Foundation | PASS: geometría sin overflow junto a Wave 2; SCSS de las cuatro familias y tokens/base intactos; revisión de vistas existentes, solo se actualiza la nota obsoleta de aprobación en su demo |
+| Protección productiva | PASS: sin cambios en HTML/PHP productivo, CSS/JS legacy, imágenes originales, sitemap, robots, .htaccess, dependencias ni tooling |
+
+No se ejecutaron Firefox, Safari, lector de pantalla auditivo, Apache/GoDaddy ni zoom 200%. Reduced motion conserva la regla Foundation/Core existente; no se emuló la preferencia del sistema. Hover/active de acciones reutilizan las reglas Core intactas; la prueba funcional con teclado no sustituye una revisión táctil física. BrowserSync emite el aviso Node DEP0060 `util._extend` preexistente; no afecta al build ni a la consola de la página.
+
+La primera captura full-page sobrepasó el límite del navegador y un lote largo agotó el tiempo de la herramienta. Se completó QA por vistas de productos/familias y geometría. Algunas capturas iniciales reflejan el scroll suave en tránsito; no se usan como prueba de composición final. Evidencias finales locales fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/12/01a131d5-3c57-7d23-abc8-fbc9a3f422fc/`, con `review-*`, `confirmed-*`, `final-invalid-320.png`, `final-loading-320.png`, `final-error-320.png`, `wave2-responsive-final.json`, `wave2-contrast.json` y recorrido de teclado. El primer build sandbox falló por lectura ascendente de esbuild; el build final pasó con los permisos necesarios, sin cambiar herramientas.
+
+### Performance antes / después
+
+CSS producto minificado del mismo pipeline, gzip PHP `gzencode` nivel 6. JS guía medido con esbuild en memoria y Node gzip nivel 6, sin crear outputs de producción.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Incremento gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 54838 | 57640 | 10624 | 11062 | +438 (+4.12%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 61583 | 64679 | 14118 | 14893 | +775 (+5.49%) |
+| JS guía minificado, solo medición | 31008 | 32858 | 9934 | 10504 | +570 (+5.74%) |
+
+CSS aumenta por cuatro patrones de presentación, media contain, ficha, acciones y catálogo; ninguna clase exclusiva de guía en producto. JS productivo conserva SHA-256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` (20 bytes gzip representan el flujo vacío). Solo la guía añade la interacción necesaria, sin librerías nuevas.
+
+Wave 2 añade diez instancias fotográficas / siete URLs únicas. Descarga preferida de esas siete fuentes: 577444 bytes (cinco AVIF y dos WebP); alternativa WebP: 717504; originales/fallbacks: 1305601. Son alternativas, no suma de requests; la misma tabla/PURE SOUL se reutiliza con la misma URL y caché. No se crean ni sobrescriben fotos. Las fuentes de hasta 2048px son las existentes y se cargan lazy; pueden evaluarse derivados menores en una futura migración productiva, fuera de este encargo. No se instala optimizador ni se recorre todo el directorio de assets.
+
+### Archivos y revisión integral
+
+Nuevos (8): los cuatro SCSS listados, `assets/js/modules/guia/productos.js`, `style-guide/partials/productos-wave-2.php`, `vinos-cestas-wave-2.php` y `pedido-estados-wave-2.php`. Modificados (7): `assets/scss/main.scss`, `assets/scss/components/_guia.scss`, `assets/js/style-guide.js`, `style-guide/patterns.php`, la nota de `partials/patrones-wave-1.php`, `docs/ARQUITECTURA.md` y este documento. Outputs ignorados, sin eliminaciones.
+
+Revisión humana integral: `http://localhost:3000/style-guide/patterns.php#wave-2`, navegación interna a tapas/menu/destacados/vinos/cestas/Take Away/estados. Core: `http://localhost:3000/style-guide/`. Probar móvil/tablet/desktop; en Take Away, editar cantidad y elegir Success/Failure antes de Add to Order. Validación técnica completa; **aprobación visual humana pendiente**. Publicación normal solo a la feature, sin PR, merge, force push ni deploy. Precios, disponibilidad y demás pendientes comerciales no convierten estas demostraciones en ofertas reales.
