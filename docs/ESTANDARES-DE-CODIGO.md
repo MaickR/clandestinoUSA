@@ -74,6 +74,8 @@ Referencia completa. `AGENTS.md` resume lo global y `.cursor/rules/` aplica lo e
 
 La guía viva local se divide en `style-guide/index.php` (Foundations/Core) y `style-guide/patterns.php` (Section Patterns). El `style-guide.md` de la raíz es la plantilla legacy y no describe estos tokens.
 
+Criterios prácticos de experiencia, mobile first, interacciones, formularios, rendimiento e identidad: [Guía UX/UI](UX-UI-GUIDELINES.md). Complementa los contratos técnicos sin duplicar tokens ni imponer prohibiciones dogmáticas.
+
 ## JavaScript (arquitectura objetivo)
 
 - ES Modules, bundling con esbuild; `assets/js/dist/**` es output generado.
