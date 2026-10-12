@@ -9,8 +9,8 @@
             <p class="cl-eyebrow">NTC &amp; Sons</p><h3 class="cl-producto-gastronomico__titulo" id="pure-card-titulo">PURE SOUL</h3>
             <p class="cl-producto-gastronomico__descripcion">The blend and ageing shown on our photographed label.</p>
             <dl class="cl-vino__ficha"><dt>Grapes (photo)</dt><dd>Grenache 85% · Vidadillo 15%</dd><dt>Ageing (photo)</dt><dd>Barrel aged</dd></dl>
-            <p class="cl-producto-gastronomico__unidad">Current release and availability to be confirmed.</p>
-            <div class="cl-producto-gastronomico__pie"><p class="cl-producto-gastronomico__precio">$12.00 <span class="cl-producto-gastronomico__unidad">Example / glass</span>$45.00 <span class="cl-producto-gastronomico__unidad">Example / bottle · volumes unconfirmed</span></p><div class="cl-producto-gastronomico__acciones"><a class="cl-boton-icono" href="#vino-destacado" aria-label="Explore PURE SOUL details"><?= iconoProducto('siguiente') ?></a></div></div>
+            <p class="cl-producto-gastronomico__unidad">Current release, volumes and availability to be confirmed.</p>
+            <div class="cl-producto-gastronomico__pie"><div class="cl-producto-gastronomico__precios"><p class="cl-producto-gastronomico__precio">$12.00<span class="cl-producto-gastronomico__unidad">Example / glass</span></p><p class="cl-producto-gastronomico__precio">$45.00<span class="cl-producto-gastronomico__unidad">Example / bottle</span></p></div><div class="cl-producto-gastronomico__acciones"><a class="cl-boton-icono" href="#vino-destacado" aria-label="Explore PURE SOUL details"><?= iconoProducto('siguiente') ?></a></div></div>
           </div>
         </article>
       </div>

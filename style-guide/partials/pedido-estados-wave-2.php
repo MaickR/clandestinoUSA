@@ -24,11 +24,11 @@
                         <button class="cl-boton-icono" type="button" data-cl-cantidad="sumar" aria-label="Increase boards"><?= iconoProducto('sumar') ?></button>
                       </div>
                     </div>
-                    <div class="cl-campo-grupo"><span class="cl-etiqueta" id="subtotal-etiqueta">Example subtotal</span><output class="cl-producto-gastronomico__subtotal" id="pedido-subtotal" for="pedido-unidades" aria-labelledby="subtotal-etiqueta">$36.00</output></div>
                   </div>
                   <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="pedido-ayuda">1–6 boards · demo limit. Subtotal excludes taxes and is not a final charge.</p>
-                  <div class="cl-producto-gastronomico__acciones">
-                    <button class="cl-boton cl-boton--con-carga" id="pedido-agregar" type="submit"><span class="cl-boton__reposo"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('pedido') ?> Add to Order · demo</span></span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Adding · demo…</span></button>
+                  <div class="cl-producto-gastronomico__pie cl-producto-gastronomico__pie--pedido">
+                    <div class="cl-producto-gastronomico__precios"><div><span class="cl-etiqueta" id="subtotal-etiqueta">Example subtotal</span><output class="cl-producto-gastronomico__subtotal" id="pedido-subtotal" for="pedido-unidades" aria-labelledby="subtotal-etiqueta">$36.00</output></div></div>
+                    <div class="cl-producto-gastronomico__acciones"><button class="cl-boton cl-boton--con-carga" id="pedido-agregar" type="submit"><span class="cl-boton__reposo"><span class="cl-producto-gastronomico__dato"><?= iconoProducto('pedido') ?> Add to Order · demo</span></span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Adding · demo…</span></button></div>
                   </div>
                   <p class="cl-mensaje-campo cl-cantidad__mensaje cl-guia-resultado" id="pedido-error" role="status"></p>
                 </div>

@@ -452,3 +452,28 @@ Imágenes: 17→19 instancias en Patterns por reutilizar dos fotos en filas; las
 Modificados: `assets/scss/patterns/_producto-gastronomico.scss`, `_item-menu.scss`, `_vino.scss`, `_catalogo.scss`; `assets/scss/components/_guia.scss`; los tres partials PHP Wave 2; `assets/js/modules/guia/productos.js`; este documento. Sin archivos fuente nuevos ni eliminados. Se mantiene la entrada de JS y todos los imports/tooling existentes.
 
 Revisión integral: `/style-guide/patterns.php#wave-2`, filas en `#productos-menu`, vinos en `#productos-vinos`, cestas en `#productos-cestas`, selección en `#productos-pedido`. Foundation/Core conserva `/style-guide/`. Probar cantidad y subtotal; en Demo controls, elegir Failure y luego ejecutar Add to Order para ver recuperación. Precios/porciones/stock/añadas/cestas siguen pendientes de confirmación comercial; nada constituye una compra real. Publicación normal únicamente a la feature; sin PR, merge, force ni deploy.
+
+### Contraste con las tres referencias adjuntas — 2026-10-12
+
+Preflight limpio y sincronizado tras fetch en `060c564`, misma feature. Se revisaron las imágenes reales A (tarjeta vertical), B (presentación comercial lateral) y C (filas). A y C ya están cubiertas por el refinamiento anterior: fotografía, pie precio/acción y filas con media opcional/estados. Se conserva ese trabajo. No se copian HOT, favoritos, descuentos, estrellas, garantía ni colores de las referencias.
+
+La referencia B concreta una mejora: el subtotal y la acción se agrupan en una franja inferior con separador, mediante el mismo `cl-producto-gastronomico__pie` y el modificador contextual `--pedido`. El CTA ocupa todo el ancho móvil y se alinea a la derecha cuando hay espacio. Cantidad/ayuda permanecen encima; feedback debajo y Demo controls fuera del producto. IDs, labels, output, APIs Core y comportamiento JS no cambian.
+
+`cl-producto-gastronomico__precios` permite agrupar más de un precio/unidad y se reutiliza tanto en ese pie como en PURE SOUL. Copa y botella se muestran en paralelo cuando caben, con wrap natural; los volúmenes pendientes se comunican junto a la disponibilidad. A 768px la tarjeta PURE SOUL pasa de 844.61 a 756.22px y a 1440px de 570.31 a 505.72px, sin recortar contenido ni añadir información comercial. Adaro conserva altura natural y datos pendientes; cestas, menú y destacados se mantienen.
+
+| Verificación actual | Resultado |
+|---|---|
+| Lint / build / PHP | PASS: lint/build finales y ambos partials modificados; build excluye assets de guía |
+| Dev | PASS: PHP/BrowserSync/watch; localhost:3000 activo |
+| Diez anchos requeridos | PASS: 320/360/390/425/768/820/992/1024/1280/1440, sin overflow; controls ≥44px y los tres usos de vino contain; 20 capturas de las composiciones ajustadas |
+| Mobile CTA | PASS: a 390px, botón y pie miden 301px; subtotal/acción apilados sin compresión |
+| Estados / interacción | PASS: cantidad 2→$72, carga por Enter, fallo por Space conserva $72, inválido→`—`/envío bloqueado, limpieza y retorno de foco. Matriz restante y casos de estrés del refinamiento anterior preservados |
+| Accesibilidad | PASS: 159 textos/combinaciones, mínimo 9.51:1; un h1, IDs únicos, labels completos, Tab/Shift+Tab y foco 2px; sin texto recortado ni foto/ícono faltante |
+| HTTP / consola | PASS: mismas 42 URLs locales HTTP 200; consola sin errores/warnings de página observados |
+| Protección | PASS: solo SCSS compartido de producto, PHP Take Away/vinos-cestas y este registro; Foundation/Core/Wave 1, menú, fotografía, JS, tooling y producción intactos |
+
+Las limitaciones anteriores siguen explícitas: zoom 200%, Firefox/Safari, lector auditivo, dispositivos físicos y Apache/GoDaddy no se declaran probados; active conserva Core sin medición de pulsación sostenida. Se mantiene el aviso dev Node DEP0060 preexistente. Evidencias nuevas: `references-*` en el directorio local de QA ya documentado. Las capturas de la acción muestran loading intencionadamente; no son pedidos reales.
+
+Performance medida con el mismo pipeline/gzip: CSS producto 60558→61050 bytes, gzip 11413→11464 (**+51 bytes, +0.45%**). JS producto idéntico y vacío (gzip 20); JS guía conserva 65653 bytes/15120 gzip en dev y 33411/10688 minificado en memoria. No cambia ningún fuente JS. Imágenes/peticiones conservan 19 instancias, trece fotografías únicas, 35 alternativas y 42 recursos locales; cero fotos, iconos o dependencias nuevas. El incremento CSS corresponde exclusivamente a agrupación de precios y ajuste responsive del pie.
+
+Se integra como un ajuste coherente sobre el refinamiento publicado, sin reconstruir Wave 2 ni crear otra rama. El contrato de backend futuro y todos los pendientes comerciales se mantienen. **Pendiente de aprobación visual humana.**
