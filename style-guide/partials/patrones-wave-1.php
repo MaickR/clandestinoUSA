@@ -133,7 +133,7 @@
 <section id="patrones-cta" aria-labelledby="patrones-cta-titulo">
   <div class="cl-guia-seccion container">
     <h2 id="patrones-cta-titulo">CTA band</h2>
-    <p>One action or two. Inquiries start a conversation; they do not confirm a booking.</p>
+    <p>Simple invitations and featured stories. Inquiries start a conversation; they do not confirm a booking.</p>
   </div>
   <section class="cl-banda-cta" aria-labelledby="banda-tapas-titulo">
     <div class="container">
@@ -169,4 +169,5 @@
       </div>
     </div>
   </section>
+  <?php require __DIR__ . '/bandas-cta-destacadas.php'; ?>
 </section>

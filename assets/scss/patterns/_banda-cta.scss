@@ -25,3 +25,88 @@
   margin-inline: auto;
   justify-content: center;
 }
+
+// La foto acompaña una invitación concreta; la altura la determina el contenido.
+.cl-banda-cta--destacada {
+  border: 0;
+  background: var(--color-fondo);
+  text-align: start;
+
+  .cl-banda-cta__fila {
+    row-gap: 0;
+    align-items: stretch;
+    border-radius: var(--radio-md);
+    background: var(--color-superficie);
+  }
+
+  .cl-banda-cta__acciones {
+    inline-size: 100%;
+    margin-inline: 0;
+    justify-content: start;
+
+    @include media-breakpoint-only(md) {
+      flex-direction: column;
+    }
+  }
+
+  .cl-seccion__descripcion {
+    max-inline-size: 42ch;
+  }
+}
+
+.cl-banda-cta__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+
+  @include media-breakpoint-up(md) {
+    aspect-ratio: auto;
+  }
+}
+
+.cl-banda-cta__imagen {
+  position: absolute;
+  inline-size: 100%;
+  block-size: 100%;
+  border-start-start-radius: var(--radio-md);
+  border-start-end-radius: var(--radio-md);
+  object-fit: cover;
+  object-position: center;
+
+  @include media-breakpoint-up(md) {
+    border-start-end-radius: 0;
+    border-end-start-radius: var(--radio-md);
+  }
+}
+
+.cl-banda-cta__contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  padding: var(--espacio-6) var(--espacio-5);
+
+  @include media-breakpoint-up(lg) {
+    padding: var(--espacio-7);
+  }
+}
+
+.cl-banda-cta__nota {
+  inline-size: 100%;
+  margin-block: var(--espacio-5);
+  padding-block-start: var(--espacio-4);
+  border-block-start: 1px solid var(--color-borde);
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.cl-banda-cta--invertida {
+  @include media-breakpoint-up(md) {
+    .cl-banda-cta__media {
+      order: 2;
+    }
+
+    .cl-banda-cta__imagen {
+      border-radius: 0 var(--radio-md) var(--radio-md) 0;
+    }
+  }
+}

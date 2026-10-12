@@ -38,3 +38,5 @@ Guía práctica para decidir, diseñar y revisar. Complementa `ESTANDARES-DE-COD
 La dirección es editorial premium, cálida y gastronómica: fotografía auténtica, tipografía con personalidad, ritmo generoso, texto cercano y CTAs claros. Buscar una mesa acogedora, no una interfaz fría, corporativa, genérica o monótona. La sofisticación nace de composición, proporciones y contraste, no de una apariencia artificialmente lujosa.
 
 Reutilizar la paleta y los componentes existentes. Añadir un recurso visual solo cuando resuelva una necesidad de contenido/legibilidad. Evaluar el conjunto en navegador y admitir ajustes de contexto sin multiplicar variantes por página. El QA técnico y la aprobación visual humana son decisiones distintas; registrar ambas con honestidad.
+
+Una promo destacada usa media cuando ayuda a entender la invitación comercial. Elegir una fotografía relacionada, una acción principal y una nota que aclare el siguiente paso; conservar la banda simple para mensajes breves. El detalle debe aportar contexto, no beneficios, urgencia o descuentos inventados.

@@ -10,7 +10,7 @@ Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Pend
 - Tokens existentes para superficies, bordes, espaciado y texto. Sin modificar tokens/base, raíz, familias tipográficas ni escala; `cl-display` y `cl-titulo-1` son Foundation.
 - Clases propias BEM en español; máximo tres niveles de anidación. Sin nuevas utilidades globales, dependencias, JS ni render dinámico.
 - Cada sección lleva un título y `aria-labelledby` único. La página decide el nivel; la guía usa h2 para familias y h3 para ejemplos bajo su único h1.
-- Navegación mediante enlaces reales: `tapas.html`, `wines.html`, `menu.html`, `contact.html#contact-form`. Consultar una mesa o evento no confirma disponibilidad ni una reserva. No hay transacciones ni promociones.
+- Navegación mediante enlaces reales: `tapas.html`, `wines.html`, `menu.html`, `contact.html#contact-form`. Consultar una mesa o evento no confirma disponibilidad ni una reserva. No hay transacciones ni descuentos ficticios; las invitaciones destacadas enlazan a información o consultas reales.
 
 ## `cl-seccion`
 
@@ -71,7 +71,25 @@ Fotos sin personas: tapas (`bg/clandestino-tapas.jpg`) y vinos (`bg/the-clandest
 
 Estructura: `section.cl-banda-cta[aria-labelledby] > .container > .row.cl-banda-cta__fila`, columna de heading/descripción opcional y columna de `.cl-seccion__acciones.cl-banda-cta__acciones` con enlaces Core. Título obligatorio; uno o dos CTAs como en las demos, con nombres claros.
 
-Las dos demostraciones usan la misma composición **centrada y vertical**: texto y acciones en columnas 12/12 y 8/12 desde lg. Eyebrow Core aporta identidad; heading local `clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem)`, descripción y acciones centradas. Padding 3rem/4rem desde lg, superficie y bordes semánticos para separar secciones. Uno o dos CTAs con el grupo compartido; no hay modificadores artificiales por cantidad, paleta nueva, gradientes decorativos, imágenes ni JS. No trunca nombres ni fija altura; foco Core.
+La versión simple conserva la composición **centrada y vertical**: texto/acciones en columnas 12/12 y 8/12 desde lg. Eyebrow Core, heading local `clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem)`, padding 3rem/4rem desde lg y superficie/bordes semánticos. Es adecuada para una invitación breve, cierre de sección o consulta sin necesidad de fotografía.
+
+**`cl-banda-cta--destacada`** sirve para una historia comercial que merece contexto fotográfico: Wine Club, encuentros privados o comida para llevar. Mantiene título, descripción y uno/dos enlaces; añade `.cl-banda-cta__media`, `.cl-banda-cta__imagen`, `.cl-banda-cta__contenido` y `.cl-banda-cta__nota` opcional. Estructura: `.container > .row.g-0.cl-banda-cta__fila > .col-md-5.cl-banda-cta__media + .col-md-7.cl-banda-cta__contenido`. El contenido agrupa eyebrow, heading elegido por la página, descripción, nota contextual y acciones compartidas. No es una tarjeta Core duplicada: su responsabilidad es componer media y llamada a la acción; usa la misma superficie/radio y botones/eyebrow existentes.
+
+Teléfono: foto 4:3 arriba, texto a la izquierda con padding 2rem/1.5rem, botones apilados. Desde md: split 5/12–7/12; altura determinada por el contenido en flujo, imagen absoluta cover sin deformación. En tablet md, acciones siguen verticales para conservar etiquetas cómodas; desde lg vuelven al grupo horizontal equilibrado y el padding pasa a 3rem. Se usa la tipografía de la banda existente. Sin altura rígida, overlays, sombras ni iconos añadidos: la riqueza viene de fotografía auténtica, ritmo y una nota útil separada por borde sutil. El radio md se aplica a superficie y esquinas externas de la foto sin recortar el foco.
+
+**`cl-banda-cta--invertida`**, combinada con destacada, mueve únicamente media a la derecha desde md y ajusta sus esquinas. En móvil siempre foto primero. DOM imagen informativa → narrativa → enlaces; la fotografía no es interactiva. Una única implementación; no hay variante compacta ni estilos por página.
+
+Guía: se conservan ambas bandas simples y se incluyen tres destacadas estáticas mediante `partials/bandas-cta-destacadas.php`, requerido dentro del bloque CTA de `patrones-wave-1.php`. Wine Club con dos enlaces, Private Events invertida con uno, Take Away con dos. Destinos existentes: `swc.html`, `wines.html`, `contact.html#contact-form`, `menu.html#tapas-title`. No formulario, suscripción inmediata, disponibilidad garantizada ni checkout. La nota pide contexto o invita a consultar detalles.
+
+Fotos verificadas, sin personas, con fuentes AVIF/WebP reales, dimensiones explícitas y lazy/async por estar bajo el primer viewport:
+
+| Foto (ruta bajo assets/images) | Dimensiones | JPEG bytes | WebP bytes | AVIF bytes |
+|---|---:|---:|---:|---:|
+| gallery/wines/the-clandestino-wines-table.jpeg | 1536×2048 | 333116 | 138878 | 100031 |
+| gallery/tapas/the-clandestino-tapas-table.jpeg | 1998×628 | 251080 | 140428 | 124724 |
+| gallery/tapas/the-clandestino-bocadillo.jpeg | 1200×1600 | 180195 | 73856 | 44655 |
+
+Fuentes alternativas bajo `webp/gallery/…` y `avif/gallery/…`, mismo nombre/dimensiones y extensión correspondiente. Foco central: copas/botella, tabla compartida y bocadillo. La tabla panorámica se recorta deliberadamente al plato central en el split; no usar esta composición cuando sea imprescindible mostrar todos los productos. No se alteran originales. Revisar cada nueva foto y texto antes de reutilizar. Texto sobre superficie sólida, alt informativo, h3 subordinado en guía y foco Core; targets ≥44px. Sin JS. **Evolución UI-PATTERNS-04 pendiente de aprobación visual humana.**
 
 ## Decisión futura — carrusel editorial de Home
 
@@ -190,3 +208,28 @@ Fotografías y pesos sin cambios: cuatro instancias, tres URLs únicas; AVIF 197
 Nuevos archivos locales de guía: `patterns.php` y `partials/navegacion-guia.php`; se reutiliza el partial de demos. Cambios de presentación exclusivos en `_guia.scss`, de producto en los cuatro patrones; contratos/arquitectura/estándares actualizados. Guía UX/UI general en `docs/UX-UI-GUIDELINES.md`. Sin dependencias, JS nuevo, carrusel, migración productiva ni cambios en develop/main.
 
 Próximo paso: abrir ambas rutas locales, probar zoom 200% en el navegador del usuario y confirmar la composición visual. No hay PR, merge, force push o deploy automático.
+
+
+### CTA premium — UI-PATTERNS-04
+
+Preflight del 2026-10-12: rama esperada limpia y sincronizada con origin en `cde0425`. Se conservan Hero, Section System, Media + Content y la banda simple. Solo se amplía CTA con destacada/invertida, demos y documentación. **Pendiente de aprobación visual humana**, sin Wave 2, PR, merge ni deploy.
+
+| QA final (Chromium integrado) | Resultado |
+|---|---|
+| 320 / 390 / 425 / 768 / 820 / 992 / 1024 / 1280px | PASS: cinco bandas, sin overflow horizontal ni texto truncado; revisión de capturas y geometría |
+| Responsive | PASS: foto 4:3 y acciones completas en teléfono; split desde md, inversión solo desde md; alturas según contenido |
+| Acciones | PASS: targets 44px, pares de ancho igual; grupo ocupa el ancho permitido y mantiene máximo 32rem |
+| Teclado y foco | PASS: Tab/Shift+Tab por los enlaces destacados, orden lógico y outline 2px/offset 3px sin recorte |
+| Contraste | PASS: 26 elementos sobre superficie sólida, mínimo 9.70:1; ningún texto sobre fotografía |
+| Semántica | PASS: h3 subordinados al h2 CTA/un único h1, imágenes informativas con alt y dimensiones, enlaces reales |
+| Consola / recursos | Sin errores/warnings relevantes de navegador; HTTP 200 en ambas páginas, CSS, destinos y nueve fuentes de foto |
+| Lint / build / PHP | PASS: lint/build finales; index, patterns, patrones-wave-1 y bandas-cta-destacadas sin errores PHP |
+| Protección | Diff limitado a cinco archivos permitidos; Foundation/Core, tooling, JS, otras familias, producción y originales intactos |
+
+Evidencias fuera del repositorio: `C:/Users/Mike/.codex/visualizations/2026/10/12/01a12ee8-6679-7ae3-a5eb-c895d147987a/cta-premium-*`, geometría, contraste, teclado y capturas completas finales de los ocho anchos. Se revisaron recortes derivados de esas capturas; las capturas iniciales de viewport pueden mostrar scroll de ancla en tránsito. No se ejecutaron Firefox/Safari ni lector de pantalla. Zoom 200% continúa pendiente de la revisión anterior; no es prueba declarada de este refinamiento. Dev conserva el aviso Node DEP0060 preexistente, sin fallo operativo.
+
+Comparación con build minificado base, usando **PHP gzencode nivel 6 en ambos lados** (su tamaño puede diferir del gzipSync histórico): CSS 53423 → 55019 bytes, gzip 10440 → 10640 (**+200 bytes, +1.92%**). El incremento corresponde a layout split, media/radios, nota y orientación; cero selectores exclusivos de guía en producto. JS producto 0 → 0 bytes, gzip 20 → 20, SHA-256 idéntico `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. Build no emite assets de guía; dev genera las dos hojas habituales.
+
+Patterns incorpora tres instancias/URLs nuevas de imágenes: pasa de cuatro pictures/tres fotos únicas a siete/seis. Nuevas fuentes: total AVIF 269410, WebP 353162, JPEG 764391 bytes; alternativas, no suma de descargas. Las fotos lazy solo se solicitan al acercarse a su sección; ningún JS, icono, fuente o stylesheet adicional. El partial PHP no añade requests. Los originales quedan intactos. No se deducen Web Vitals de producción del laboratorio.
+
+Revisión local: `/style-guide/patterns.php#patrones-cta` para la familia completa y `/style-guide/patterns.php#banda-club` para la variante principal. La guía Core sigue en `/style-guide/`. Próximo paso: confirmar visualmente las nuevas bandas en el navegador del usuario.
