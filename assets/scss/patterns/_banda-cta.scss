@@ -1,0 +1,22 @@
+.cl-banda-cta {
+  padding-block: var(--espacio-6);
+  border-block: 1px solid var(--color-borde);
+  background: var(--color-superficie);
+
+  @include media-breakpoint-up(lg) {
+    padding-block: var(--espacio-7);
+  }
+}
+
+.cl-banda-cta__fila {
+  row-gap: var(--espacio-5);
+  align-items: center;
+}
+
+.cl-banda-cta__acciones {
+  margin-block-start: 0;
+
+  @include media-breakpoint-up(lg) {
+    justify-content: flex-end;
+  }
+}

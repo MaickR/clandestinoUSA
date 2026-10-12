@@ -1,0 +1,49 @@
+// Sin oscurecer otra vez la fotografía: el panel sólido garantiza contraste.
+.cl-hero {
+  display: grid;
+  background: var(--color-fondo-alterno);
+
+}
+
+.cl-hero__estructura {
+  @include media-breakpoint-up(lg) {
+    grid-area: 1 / 1;
+  }
+}
+
+.cl-hero__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+
+  @include media-breakpoint-up(lg) {
+    grid-area: 1 / 1;
+    aspect-ratio: auto;
+  }
+}
+
+.cl-hero__imagen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-foco, center);
+}
+
+.cl-hero__contenido {
+  position: relative;
+  padding: var(--espacio-6) var(--espacio-5);
+  background: var(--color-fondo-alterno);
+
+  @include media-breakpoint-up(lg) {
+    margin-block: var(--espacio-8);
+    padding: var(--espacio-7);
+  }
+}
+
+.cl-hero--interior .cl-hero__contenido {
+  @include media-breakpoint-up(lg) {
+    margin-block: var(--espacio-6);
+    padding: var(--espacio-6);
+  }
+}

@@ -45,7 +45,8 @@ assets/scss/
 ├── style-guide.scss          # solo dev → style-guide.css
 ├── abstracts/_tokens.scss    # primitivos y overrides de Bootstrap
 ├── base/                     # custom properties, tipo, accesibilidad
-└── components/               # cl-boton, cl-enlace, cl-campo, cl-tarjeta, cl-eyebrow, cl-divisor
+├── components/               # Foundation y Core
+└── patterns/                 # cl-seccion, cl-hero, cl-media-contenido, cl-banda-cta
 ```
 
 `components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) solo presenta `style-guide/index.php`. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
@@ -82,11 +83,15 @@ Cada cutover es un commit de una página, verificado con la skill `qa-visual` en
 
 Core amplía los controles genéricos: iconografía, feedback, estados, toast, modal, disclosure, formularios, cantidad, loading, vacío/error y breadcrumb. Componentes reales en `style.new.css`; presentación y demos en CSS/JS de guía exclusivamente dev. No migra páginas ni introduce lógica de negocio. Documentación, contratos y registro técnico en `docs/CORE-COMPONENT-LIBRARY.md`. La aprobación visual humana es requisito previo al merge.
 
+### Pattern Library — Wave 1
+
+Los cuatro patrones estructurales se importan después de Core en `main.scss`, sin JavaScript nuevo. La guía incluye demostraciones estáticas mediante `require __DIR__ . '/partials/patrones-wave-1.php'`; el bloqueo Apache `^style-guide(/|$)` cubre también ese subdirectorio. No hay motor de plantillas ni migración productiva. Contratos, imágenes verificadas y QA: `docs/SECTION-PATTERN-LIBRARY.md`. Implementación técnica con aprobación visual humana pendiente.
+
 ## Objetivo inmediato (futuro)
 
 | Capa | Objetivo |
 |---|---|
-| Estilos | Foundation y Core; aprobación visual Core pendiente. Layout/patterns al migrar páginas |
+| Estilos | Foundation, Core y Wave 1 estructural; aprobar visualmente los patrones antes de migrar páginas |
 | JavaScript | Módulos en `assets/js/modules/**` importados desde `main.js` |
 | PHP | Simple primero; estructura solo cuando la complejidad lo pida |
 | Datos | MySQL solo cuando una feature (checkout, Wine Club, reservas) lo requiera |

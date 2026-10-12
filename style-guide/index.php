@@ -76,6 +76,10 @@ function iconoGuia(string $nombre): string
           <li><a class="cl-enlace" href="#loading">Loading</a></li>
           <li><a class="cl-enlace" href="#system-states">Empty &amp; error states</a></li>
           <li><a class="cl-enlace" href="#accessibility">Accessibility states</a></li>
+          <li><a class="cl-enlace" href="#patrones-seccion">Section system</a></li>
+          <li><a class="cl-enlace" href="#patrones-hero">Hero</a></li>
+          <li><a class="cl-enlace" href="#patrones-media">Media + content</a></li>
+          <li><a class="cl-enlace" href="#patrones-cta">CTA band</a></li>
         </ul>
       </nav>
     </div>
@@ -493,6 +497,7 @@ function iconoGuia(string $nombre): string
         <button class="cl-boton" type="button">Focus target</button>
       </div>
     </section>
+    <?php require __DIR__ . '/partials/patrones-wave-1.php'; ?>
   </main>
 
   <div class="cl-notificaciones" id="notificaciones"></div>

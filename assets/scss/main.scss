@@ -45,3 +45,9 @@
 @import "components/skeleton";
 @import "components/estado-vista";
 @import "components/migas";
+
+// Patrones estructurales reutilizables, después de Foundation y Core.
+@import "patterns/seccion";
+@import "patterns/hero";
+@import "patterns/media-contenido";
+@import "patterns/banda-cta";

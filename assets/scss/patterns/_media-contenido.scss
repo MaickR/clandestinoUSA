@@ -1,0 +1,20 @@
+.cl-media-contenido { row-gap: var(--espacio-6); }
+
+.cl-media-contenido__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: var(--media-foco, center);
+}
+
+.cl-media-contenido__contenido { align-self: center; }
+
+// Una sola estructura: la orientación cambia únicamente desde lg.
+.cl-media-contenido--invertido {
+  @include media-breakpoint-up(lg) {
+    .cl-media-contenido__media { order: 2; }
+    .cl-media-contenido__contenido { order: 1; }
+  }
+}
