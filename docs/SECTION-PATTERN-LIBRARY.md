@@ -1,4 +1,6 @@
-# Biblioteca de patrones de sección — Wave 1
+# Biblioteca de patrones de sección
+
+## Wave 1 — Patrones estructurales
 
 Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Aprobada visualmente por el usuario en UI-PATTERNS-05, sujeta a la validación final de retirada de las bandas antiguas**. El QA técnico verifica este cierre; no autoriza crear PR, merge, deploy ni iniciar Wave 2. Base comprobada: `develop` / `origin/develop` en `0053822`; rama `feature/ui-section-patterns-wave-1`.
 
@@ -244,3 +246,71 @@ El usuario aprobó visualmente Wave 1 y solicitó retirar únicamente las dos ba
 - Hero, Section System y Media + Content conservan código y markup previo al bloque CTA. Diff limitado a SCSS CTA, partial Wave 1 y este documento; intactos Foundation/Core, JS/CSS legacy, PHP/HTML productivo, imágenes y tooling.
 
 Evidencias de cierre: `C:/Users/Mike/.codex/visualizations/2026/10/12/01a12ee8-6679-7ae3-a5eb-c895d147987a/cierre-wave-1-*`. La aprobación humana expresa sustituye los estados pendientes históricos registrados arriba; las comprobaciones anteriores se mantienen como historial, no como estado vigente. Este cierre no afirma nuevas pruebas de Firefox/Safari, lector de pantalla o zoom 200%.
+
+
+## Wave 2 — Gastronomía y productos
+
+Base: `develop` en `a8328cf`, Wave 1 integrada; rama `feature/ui-section-patterns-wave-2`. Sin migración de páginas ni operaciones comerciales. Aprobación visual humana pendiente.
+
+### Matriz previa a SCSS
+
+| Familia | Estados aplicables | Representación |
+|---|---|---|
+| Tarjeta gastronómica / quesos / especiales | Default, imagen ausente, precio ausente; disponible, agotado y limitado solo si se confirma | Fotografía y texto; `cl-estado` textual; placeholder sin request roto |
+| Fila de menú | Default, precio/porción ausentes | Lista semántica, metadatos textuales; sin hover artificial |
+| Destacado gastronómico | Default; precio ausente | Reutiliza `cl-media-contenido`; sin estado interactivo de la fotografía |
+| Vino | Default, precio por copa/botella o ausente, imagen ausente | Tarjeta compartida con media contain; ficha `dl`; variedades solo con evidencia |
+| Cesta gourmet | Default, precio ausente, personalización pendiente | Tarjeta compartida; CTA contextual; no promesa de contenido/disponibilidad |
+| Take Away demo | Default, hover/focus/active en controles, disabled nativo, disponible, agotado, limitado, cantidad inválida, acción en curso/completada/fallida | `cl-cantidad`, botón de carga, `cl-spinner`, `cl-alerta`, `cl-estado`; selección en memoria, sin totales/pagos |
+| Catálogo | Default, loading, empty, error | Bootstrap Grid; `cl-skeleton` y `cl-estado-vista`; navegación por categorías sin filtro dinámico |
+
+Loading/error no se imponen a fotografías ni tarjetas estáticas. `cl-modal`/`cl-notificacion` siguen disponibles en Core: no se necesitan para esta selección local con feedback persistente al lado del control. Los estados comerciales de la guía siempre son simulados y llevan texto explícito. No hay precios reales actuales verificados; los importes numéricos son ejemplos, nunca una oferta.
+
+### Decisiones y límites
+
+Una estructura `cl-producto-gastronomico` reutiliza la superficie Foundation `cl-tarjeta` para tapas, quesos, especiales y cestas. Vino aporta únicamente media contain y ficha semántica; no duplica una tarjeta. Destacados reutilizan el split Wave 1. Fila de menú y composición de catálogo resuelven necesidades distintas. No se crean partials de cesta/destacado cuando solo cambia contenido.
+
+Implementación y QA completados el 2026-10-12. Aprobación visual humana de Wave 2 pendiente.
+
+### Inventario, composición y reutilización
+
+| Patrón | Variantes / ejemplo | Contrato |
+|---|---|---|
+| `cl-producto-gastronomico` + `cl-tarjeta` | Tabla compartida, Manchego, Chorizo, cesta clásica y personalizada; imagen/precio ausentes | Media 4:3, contenido flexible, precio y unidad explícitos, acción opcional; solo acciones tienen hover/focus/active Core |
+| `cl-item-menu` | Tres productos, porción de ejemplo y precio pendiente; agotado Take Away | `ul/li` para menú, texto sin truncamiento; precio separado desde md |
+| `cl-media-contenido` | Tabla destacada y vino destacado invertido | Split Wave 1 desde md, imagen antes del contenido en teléfono; no se crea otro patrón de destacado |
+| `cl-vino__imagen`, `cl-vino__ficha` | PURE SOUL y Adaro; foto cuadrada contain; ficha `dl/dt/dd` | Fotografía completa, sin convertir botellas en fondos; destacado conserva media cuadrada contain |
+| `cl-catalogo` | Grid gastronómico, categorías navegables, lista de menú, resumen demo | Bootstrap Grid: 1 columna móvil, 2 desde md, 3 desde lg para gastronomía/estados; vinos/cestas 2 desde md |
+| Core sin duplicación | Etiquetas, cantidad, botón con carga, spinner/skeleton, alerta y vacío/error | Ningún alert/modal/toast/spinner alternativo; no se necesita modal/toast para confirmar una demo local |
+
+SCSS nuevo: `_producto-gastronomico.scss`, `_item-menu.scss`, `_vino.scss`, `_catalogo.scss`; imports después de Wave 1. No existen partials vacíos de cesta o destacado. `_guia.scss` solo reserva el espacio de mensajes demo, no añade estilos de documentación al producto. Sin tokens nuevos, dependencias, filtros JS ni lógica legacy importada.
+
+### Assets comprobados y datos comerciales
+
+Rutas relativas a `assets/images/`. Dimensiones/formato verificados con `getimagesize`; contenido fotográfico revisado localmente y en navegador. Las cinco fotos JPEG tienen derivados AVIF/WebP existentes con las mismas dimensiones. Las dos cestas solo utilizan su WebP existente.
+
+| Fuente original | Dimensiones | Bytes original | Bytes AVIF / WebP |
+|---|---:|---:|---:|
+| `gallery/tapas/the-clandestino-tapas-6.jpeg` | 2048 × 1536 | 242225 | 64977 / 97166 |
+| `gallery/tapas/the-clandestino-chorizo.jpeg` | 1536 × 2048 | 286112 | 69712 / 111680 |
+| `gallery/quesos/manchego.jpg` | 1024 × 683 | 124583 | 56715 / 69582 |
+| `wines/PURE-SOUL.jpg` | 916 × 2048 | 182591 | 101549 / 125896 |
+| `wines/ADARO.jpeg` | 1536 × 2048 | 243994 | 58395 / 87084 |
+| `hampers/basket-01.webp` | 1536 × 2048 | 69928 | — / 69928 (original) |
+| `hampers/basket-13.webp` | 1536 × 2048 | 156168 | — / 156168 (original) |
+
+Evidencia de nombres/productos: `assets/js/tapas.js`, `assets/js/wines.js`, `assets/js/hampers.js`, `menu.html` y metadatos/secciones de tapas/wines/hampers. Se inspeccionaron selectivamente; no se cargan sus scripts en la guía. La foto de PURE SOUL muestra NTC & Sons, Grenache 85%, Vidadillo 15% y Barrel Aged: la ficha los identifica como información **de la etiqueta fotografiada**. No se extrapolan a una añada actual. Región, denominación, añada, alcohol y variedades de Adaro se omiten porque el catálogo histórico no confirma la oferta vigente.
+
+Todos los precios y disponibilidad requieren confirmación: tabla, Chorizo, Manchego, PURE SOUL, Adaro, Classic Basket y Custom Hamper. Porciones/pesos/volúmenes, composición de cestas, personalización y ventanas de recogida también están pendientes. $36 / board, $12 / plate y $12 glass / $45 bottle se muestran exclusivamente como **Example price**, con unidad; no se declara precio real vigente. No se muestran descuentos, reseñas, promociones ni urgencia histórica. `Limited availability`, `Available` y `Sold out` incluyen `demo` visible.
+
+### Interacciones y seguridad de la demo
+
+`assets/js/modules/guia/productos.js` entra únicamente por `style-guide.js`. La entrada conecta ejemplos de Core solo cuando existe su contenedor y productos solo cuando existe `pedido-demo`; los módulos Core no cambian.
+
+- Cantidad Core: enteros 1–6, botones en los límites, `aria-invalid`, mensaje asociado y restauración del último valor válido al confirmar. Un flag local conserva el aviso en el primer submit después de una entrada inválida restaurada, evitando que ese submit actualice la selección.
+- Add to Order: submit local prevenido, espera de 1.6s, Core carga con `aria-busy` y bloqueo de activaciones repetidas; cantidad/desenlace/limpieza deshabilitados durante la espera. Conserva foco en el botón.
+- Resultado Success/Failure elegido con `select` nativo. Éxito reemplaza la última selección; error conserva la selección anterior. Feedback Core persistente en una región `role=status` con texto inequívoco de demo. No hay suma de unidades ni cálculo de precios.
+- Clear demo selection devuelve a vacío y foco al botón de pedido; disabled real cuando no hay selección. Reload borra la selección. Retry de catálogo solo muestra texto; el ejemplo estático de error permanece.
+- Sin `fetch`, endpoints de negocio, POST, `innerHTML`, localStorage, sessionStorage, cookies de carrito, pagos, cuentas ni inventario. Los únicos datos son estáticos controlados y la cantidad local. PHP solo compone partials con `require`/`__DIR__` y escapa strings de helpers con `htmlspecialchars`.
+
+`cl-guia-resultado--cantidad` reserva tres líneas; `--producto` reserva 13rem móvil y 9rem desde md. A 320px el feedback mantiene 208px durante carga y fallo; el botón conserva 44px. Imágenes tienen dimensiones, proporción y lazy loading. No se declara una medición de CLS/Core Web Vitals de producción.

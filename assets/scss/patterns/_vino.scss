@@ -1,0 +1,28 @@
+// Se conserva toda la fotografía existente, aunque incluya varias botellas.
+.cl-vino__imagen {
+  aspect-ratio: 1;
+  padding: var(--espacio-4);
+  object-fit: contain;
+}
+
+.cl-vino__ficha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espacio-2);
+  margin-block: var(--espacio-4);
+  overflow-wrap: anywhere;
+
+  dt { color: var(--color-texto-secundario); }
+
+  dd { margin: 0; }
+
+  @include media-breakpoint-up(sm) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: var(--espacio-4);
+  }
+}
+
+// El destacado mantiene el grid y la narrativa aprobados de Wave 1.
+.cl-vino__imagen--destacada {
+  background: var(--color-superficie);
+}

@@ -1,0 +1,72 @@
+// Comparte la superficie Foundation; el contenido determina la altura.
+.cl-producto-gastronomico {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow-wrap: anywhere;
+
+  &__media {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radio-md) var(--radio-md) 0 0;
+    background: var(--color-superficie);
+  }
+
+  &__imagen {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radio-md) var(--radio-md) 0 0;
+    object-fit: cover;
+  }
+
+  &__contenido {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--espacio-3);
+    padding: var(--espacio-5);
+
+    > * { margin-block: 0; }
+  }
+
+  &__titulo { font-size: 1.75rem; }
+
+  &__descripcion { color: var(--color-texto-secundario); }
+
+  &__precio {
+    color: var(--color-acento);
+    font-size: 1.125rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__unidad {
+    display: block;
+    color: var(--color-texto-secundario);
+    font-size: 0.875rem;
+  }
+
+  &__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-3);
+    align-items: end;
+    margin-block-start: auto;
+    padding-block-start: var(--espacio-3);
+
+    .cl-enlace {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+    }
+  }
+
+  &__nota {
+    padding: var(--espacio-5);
+    color: var(--color-texto-secundario);
+    text-align: center;
+  }
+}

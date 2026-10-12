@@ -95,6 +95,15 @@
   margin-block-start: var(--espacio-3);
 }
 
+// Reserva el mensaje más largo de la demo de productos sin afectar a Core.
+.cl-guia-resultado--producto {
+  min-height: 13rem;
+
+  @include media-breakpoint-up(md) { min-height: 9rem; }
+}
+
+.cl-guia-resultado--cantidad { min-height: 5.1em; }
+
 .cl-muestra__chip {
   display: flex;
   flex-direction: column;

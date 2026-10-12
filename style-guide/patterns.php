@@ -1,5 +1,5 @@
 <?php
-// Referencia local estática: sin operaciones ni JavaScript de demostración.
+// Referencia local: las interacciones de Wave 2 no realizan operaciones comerciales.
 $paginaGuia = 'patrones';
 ?>
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ $paginaGuia = 'patrones';
     <div class="container">
       <p class="cl-eyebrow">The Clandestino USA</p>
       <h1>Section Patterns</h1>
-      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Wave 1 is awaiting human visual approval.</p>
+      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Wave 1 is approved; Wave 2 awaits human visual review.</p>
       <?php require __DIR__ . '/partials/navegacion-guia.php'; ?>
       <nav aria-label="On this page">
         <ul class="cl-guia-indice">
@@ -32,12 +32,23 @@ $paginaGuia = 'patrones';
           <li><a class="cl-enlace" href="#patrones-hero">Hero</a></li>
           <li><a class="cl-enlace" href="#patrones-media">Media + content</a></li>
           <li><a class="cl-enlace" href="#patrones-cta">CTA band</a></li>
+          <li><a class="cl-enlace" href="#wave-2">Wave 2 overview</a></li>
+          <li><a class="cl-enlace" href="#productos-tapas">Tapas &amp; cheese</a></li>
+          <li><a class="cl-enlace" href="#productos-menu">Menu rows</a></li>
+          <li><a class="cl-enlace" href="#productos-destacado">Featured food</a></li>
+          <li><a class="cl-enlace" href="#productos-vinos">Wines</a></li>
+          <li><a class="cl-enlace" href="#vino-destacado">Featured wine</a></li>
+          <li><a class="cl-enlace" href="#productos-cestas">Gourmet baskets</a></li>
+          <li><a class="cl-enlace" href="#productos-pedido">Take Away demo</a></li>
+          <li><a class="cl-enlace" href="#productos-estados">Catalog states</a></li>
         </ul>
       </nav>
     </div>
   </header>
   <main id="contenido">
     <?php require __DIR__ . '/partials/patrones-wave-1.php'; ?>
+    <?php require __DIR__ . '/partials/productos-wave-2.php'; ?>
   </main>
+  <script type="module" src="../assets/js/dist/style-guide.js"></script>
 </body>
 </html>
