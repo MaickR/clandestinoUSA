@@ -119,6 +119,7 @@ Verificado el 2026-10-12 en Chromium integrado. Wave 1 técnicamente implementad
 | Build | PASS: cuatro patrones, sin `cl-guia`/`cl-muestra`, sin CSS/JS de demostración ni sourcemaps |
 | PHP | PASS: index y partial sin errores de sintaxis |
 | Servidor/watch | PASS: `npm run dev`, PHP y BrowserSync en localhost:3000 |
+| Advertencia dev | Node emite `DEP0060`: `util._extend` obsoleto en el proceso del servidor. No bloquea compilación, guía ni watch; sin cambiar dependencias/tooling |
 | 390 / 768 / 1280px | PASS: capturas de familias, sin overflow horizontal, texto cortado ni CTAs superpuestos; recortes razonables |
 | Zoom 200% | PENDIENTE: el navegador integrado no expone control de zoom; `ctrl+plus` no cambió escala ni ancho CSS; no se registra como probado |
 | Teclado/foco | PASS: diez CTAs con Tab, retorno Shift+Tab, sin trampas; outline champagne 2px/offset 3px, también comprobado en móvil |
@@ -136,6 +137,6 @@ Evidencias locales fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/
 
 ### Archivos y entrega
 
-Nuevos: los cuatro SCSS en `assets/scss/patterns/`, `style-guide/partials/patrones-wave-1.php` y este documento. Modificados: `assets/scss/main.scss`, `style-guide/index.php`, y referencias vigentes en `docs/ARQUITECTURA.md` / `docs/ESTANDARES-DE-CODIGO.md`. Los outputs permanecen ignorados. Un único commit lógico contiene patrones, demos y documentación; publicación normal exclusivamente de la feature. Sin PR, merge, force push ni deploy.
+Nuevos: los cuatro SCSS en `assets/scss/patterns/`, `style-guide/partials/patrones-wave-1.php` y este documento. Modificados: `assets/scss/main.scss`, `style-guide/index.php`, y referencias vigentes en `docs/ARQUITECTURA.md` / `docs/ESTANDARES-DE-CODIGO.md`. Los outputs permanecen ignorados. El commit de implementación contiene patrones, demos y documentación; un segundo commit documental registra la advertencia dev observada después. Publicación normal exclusivamente de la feature. Sin PR, merge, force push ni deploy.
 
 La guía debe permanecer disponible cuando sea práctico. Próximo paso: el usuario abre la guía local, verifica zoom 200% en su navegador y confirma el diseño. No iniciar Wave 2 automáticamente.
