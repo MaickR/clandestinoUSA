@@ -1,0 +1,47 @@
+// Ritmo estructural; la tipografía y el contenedor pertenecen a Foundation.
+.cl-seccion {
+  padding-block: var(--espacio-7);
+
+  @include media-breakpoint-up(lg) {
+    padding-block: var(--espacio-8);
+  }
+
+  &--alterna { background: var(--color-fondo-alterno); }
+
+  &--centrada {
+    text-align: center;
+
+    .cl-seccion__encabezado { margin-inline: auto; }
+
+    .cl-seccion__acciones {
+      justify-content: center;
+      margin-inline: auto;
+    }
+  }
+}
+
+.cl-seccion__encabezado { margin-block-end: var(--espacio-6); }
+
+.cl-seccion__descripcion {
+  margin-block-end: 0;
+  color: var(--color-texto-secundario);
+}
+
+// Grupo compartido por los cuatro patrones, sin duplicar botones Core.
+.cl-seccion__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-3);
+  max-inline-size: 32rem;
+  margin-block-start: var(--espacio-5);
+
+  @include media-breakpoint-up(md) {
+    flex-direction: row;
+
+    > .cl-boton {
+      flex: 1 1 0;
+      min-inline-size: 0;
+      max-inline-size: 16rem;
+    }
+  }
+}

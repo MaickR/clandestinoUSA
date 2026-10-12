@@ -45,7 +45,8 @@ assets/scss/
 ├── style-guide.scss          # solo dev → style-guide.css
 ├── abstracts/_tokens.scss    # primitivos y overrides de Bootstrap
 ├── base/                     # custom properties, tipo, accesibilidad
-└── components/               # cl-boton, cl-enlace, cl-campo, cl-tarjeta, cl-eyebrow, cl-divisor
+├── components/               # Foundation y Core
+└── patterns/                 # cl-seccion, cl-hero, cl-media-contenido, cl-banda-cta
 ```
 
 `components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) solo presenta `style-guide/index.php`. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
@@ -60,7 +61,7 @@ Paleta de partida aprobada, con un ajuste medido: el borde fuerte pasa de 28% a 
 
 ### Style guide
 
-`style-guide/index.php` enlaza `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, más las familias que el sitio ya usa (Libre Bodoni y Playfair, eje recortado). No carga `style.css`, hojas legacy ni JS legacy. `style.new.css` es el bundle de producto; `style-guide.css` es output exclusivo de desarrollo y `npm run build` no lo genera.
+`style-guide/index.php` presenta Foundations/Core y `style-guide/patterns.php`, Section Patterns. Ambas enlazan `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, con las fuentes existentes (Libre Bodoni/Playfair). Comparten un pequeño partial de navegación con enlaces HTML y `aria-current`. Patterns incluye demos estáticas y no carga JS de guía. Ninguna carga CSS/JS legacy. `style-guide.css` es exclusivo de desarrollo; build no lo genera.
 
 En Apache/GoDaddy, `.htaccess` responde 403 a `^style-guide(/|$)` sin tocar los assets compartidos. El servidor embebido de PHP ignora `.htaccess`, así que `http://localhost:3000/style-guide/` sigue visible en local. `robots.txt` no es el mecanismo de bloqueo.
 
@@ -82,11 +83,15 @@ Cada cutover es un commit de una página, verificado con la skill `qa-visual` en
 
 Core amplía los controles genéricos: iconografía, feedback, estados, toast, modal, disclosure, formularios, cantidad, loading, vacío/error y breadcrumb. Componentes reales en `style.new.css`; presentación y demos en CSS/JS de guía exclusivamente dev. No migra páginas ni introduce lógica de negocio. Documentación, contratos y registro técnico en `docs/CORE-COMPONENT-LIBRARY.md`. La aprobación visual humana es requisito previo al merge.
 
+### Pattern Library — Wave 1
+
+Los cuatro patrones se importan después de Core en `main.scss`, sin JavaScript nuevo. Solo `style-guide/patterns.php` incluye `partials/patrones-wave-1.php` con `require`/`__DIR__`; el bloqueo Apache existente cubre ambas páginas y sus partials. Hero superpuesto desde móvil, Media + Content desde md y CTA centrado; contratos, imágenes, QA y carrusel futuro de Home: `docs/SECTION-PATTERN-LIBRARY.md`. Sin motor de plantillas ni migración productiva; aprobación visual humana pendiente.
+
 ## Objetivo inmediato (futuro)
 
 | Capa | Objetivo |
 |---|---|
-| Estilos | Foundation y Core; aprobación visual Core pendiente. Layout/patterns al migrar páginas |
+| Estilos | Foundation, Core y Wave 1 estructural; aprobar visualmente los patrones antes de migrar páginas |
 | JavaScript | Módulos en `assets/js/modules/**` importados desde `main.js` |
 | PHP | Simple primero; estructura solo cuando la complejidad lo pida |
 | Datos | MySQL solo cuando una feature (checkout, Wine Club, reservas) lo requiera |

@@ -1,0 +1,46 @@
+.cl-media-contenido {
+  row-gap: var(--espacio-6);
+
+  @include media-breakpoint-up(md) {
+    --bs-gutter-x: var(--espacio-6);
+  }
+}
+
+.cl-media-contenido__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radio-md);
+  object-fit: cover;
+  object-position: var(--media-foco, center);
+
+  @include media-breakpoint-up(md) {
+    aspect-ratio: 1;
+  }
+
+  @include media-breakpoint-up(lg) {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.cl-media-contenido__contenido {
+  align-self: center;
+
+  @include media-breakpoint-up(md) {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 1.0625rem;
+  }
+}
+
+// Una sola estructura: orientación y columnas cambian juntas desde md.
+.cl-media-contenido--invertido {
+  @include media-breakpoint-up(md) {
+    .cl-media-contenido__media { order: 2; }
+    .cl-media-contenido__contenido { order: 1; }
+  }
+}
