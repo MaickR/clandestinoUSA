@@ -1,46 +1,106 @@
-// La comparativa es una selección nativa; cada nivel conserva su relato.
+// Dos invitaciones editoriales; la jerarquía no implica beneficios confirmados.
 .cl-membresia {
   min-width: 0;
-  height: 100%;
   padding: var(--espacio-5);
   border: 1px solid var(--color-borde-fuerte);
   border-radius: var(--radio-md);
-  background: var(--color-superficie);
+  background: var(--color-fondo);
   overflow-wrap: anywhere;
 
-  &--destacada { border-top: var(--espacio-1) solid var(--color-acento); }
+  @include media-breakpoint-up(lg) { padding: var(--espacio-6); }
 
   &:has(input:checked) {
     outline: 2px solid var(--color-acento);
     outline-offset: 3px;
   }
 
-  &__nombre {
-    color: var(--color-acento);
-    font-size: 2rem;
+  &__introduccion { margin-block-end: var(--espacio-7); }
+
+  &__imagen {
+    @include media-breakpoint-up(md) { aspect-ratio: 3 / 4; }
   }
 
+  &__nombre {
+    margin-block: var(--espacio-3) var(--espacio-4);
+    color: var(--color-acento);
+    font-size: 2.25rem;
+  }
+
+  &__enfoque { max-inline-size: 34ch; }
+
   &__precio {
-    margin-block: var(--espacio-5) var(--espacio-2);
+    margin-block: var(--espacio-5);
     font-family: var(--fuente-display);
-    font-size: 2rem;
+    font-size: 2.75rem;
+    line-height: 1.15;
+  }
+
+  &__moneda {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
   }
 
   &__nota {
     display: block;
+    margin-block-start: var(--espacio-2);
     color: var(--color-texto-secundario);
     font-family: var(--fuente-cuerpo);
     font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &__grupo {
+    padding-block: var(--espacio-4);
+    border-block-start: 1px solid var(--color-borde);
+  }
+
+  &__subtitulo {
+    margin-block-end: var(--espacio-3);
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+    font-weight: 600;
   }
 
   &__beneficios {
     display: grid;
     gap: var(--espacio-3);
+    margin: 0;
     padding-inline-start: var(--espacio-5);
   }
 
   &__eleccion {
-    padding-block-start: var(--espacio-4);
-    border-top: 1px solid var(--color-borde);
+    gap: var(--espacio-3);
+    justify-content: space-between;
+    margin-block-start: var(--espacio-4);
+    padding: var(--espacio-4);
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-md);
+    font-size: 1rem;
+    transition: background-color 150ms ease, border-color 150ms ease;
+
+    &:hover { border-color: var(--color-acento); }
+  }
+
+  &__indicador { visibility: hidden; }
+  &:has(input:checked) &__indicador { visibility: visible; }
+
+  &__eleccion .cl-opcion__texto {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &--destacada {
+    border-color: var(--color-acento);
+    border-block-start-width: var(--espacio-1);
+    background: var(--color-superficie);
+
+    .cl-membresia__nombre { font-size: clamp(2.75rem, 2.25rem + 1vw, 3.25rem); }
+    .cl-membresia__precio { font-size: 3.25rem; }
+
+    .cl-membresia__eleccion {
+      border-color: var(--color-acento);
+      background: var(--color-acento);
+      color: var(--color-texto-inverso);
+    }
   }
 }

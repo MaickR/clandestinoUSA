@@ -1,5 +1,90 @@
 # Biblioteca de patrones de sección
 
+## Refinamiento comercial Wave 4 — 2026-10-16 — revisión bloqueada
+
+Base publicada verificada tras fetch: `232d670be61347dc7d4da0104c3aae0192d37a74`, coincidente con origin, árbol inicialmente limpio y rama `feature/ui-section-patterns-wave-4`. Este apartado sustituye las descripciones de Wine Club/Gift Cards y el estado de QA de la implementación inicial que sigue como historial. **WAVE 4 NOT READY: el refinamiento aún no tiene QA renderizado ni aprobación visual humana.** Los resultados visuales anteriores no validan estos cambios.
+
+### Auditoría y decisiones de refinamiento
+
+| Familia / necesidad | Decisión y cobertura implementada | Cierre |
+|---|---|---|
+| Wine Club: valor y comparación | Extender `cl-membresia`, conservar `cl-media-contenido`, radios y Accordion Core | Implementado; revisión visual/funcional pendiente |
+| Gold/Diamond | Gold cálido con foco regional; Diamond ocupa 7/12 desde md frente a 5/12, superficie cálida, borde champagne, nombre/precio mayores y selector acentuado | Jerarquía propuesta, pendiente de aprobación |
+| Gift Cards: recorrido y arte | Extender `cl-regalo`; seis radios Core, datos opcionales, arte oficial sustituible, resumen y continuación demo | Implementado; revisión visual/funcional pendiente |
+| Events | Ajustes quirúrgicos de copy/CTA, sin reconstruir destacado, tarjetas, agenda ni detalle | Implementado; regresión interactiva pendiente |
+| Private Experiences | Conservar composición y campos Core; aclarar consulta/conversación/confirmación y corregir selector | HTML generado comprobado; teclado/validación en navegador pendientes |
+| Laboratorio | Reubicar Demo controls en disclosures nativos cerrados, después del recorrido; conservar cuatro ciclos y 29 estados futuros | Sin duplicar sistemas; recorrido interactivo pendiente |
+| Precios, ventajas, entrega y políticas | Referencias históricas etiquetadas y espacios pendientes | Pendiente comercial |
+| Reservas, cobros, emisión y cuenta | No implementar | Reservado para backend; cuenta Wave 7 |
+
+Wine Club sigue introducción → comparación/selección → resumen → FAQ → laboratorio. El nuevo relato invita a conocer el origen, carácter y contexto gastronómico del vino, diferenciando una relación de membresía de una compra individual. Gold y Diamond presentan perfiles **de archivo**, sin checks de ventajas vigentes ni distintivos de popularidad. Los $99/$199 USD son referencias históricas explícitas, no precios actuales; los $149 se mencionan como antecedente promocional sin oferta activa. La periodicidad de cobro permanece pendiente. Los grupos separan selección de vino, acompañamiento y privilegios adicionales históricos de Diamond. No se promete más cantidad: ambos antecedentes hablan de cuatro botellas por selección. Ningún dato histórico se convierte en política vigente.
+
+La selección conserva radios nativos, contorno champagne y un icono Core de confirmación únicamente cuando el radio está marcado. El resumen lee nombre, precio histórico y periodicidad de los slots del bloque seleccionado, sin segunda tabla en JS. Diamond se diferencia mediante composición y tokens existentes; no añade colores, fuentes, efectos ni componentes globales.
+
+Gift Cards organiza un solo formulario en cuatro pasos: **01 importe → 02 destinatario/dedicatoria → 03 vista previa → 04 revisión y acción demo**. Datos y arte comparten columnas desde md; el resumen ocupa el ancho inferior. Los importes siguen exclusivamente $50/$100/$200/$300/$400/$500. Destinatario opcional de 60 caracteres y mensaje opcional de 300; sin dirección ni correo de entrega. La dedicatoria aparece al lado del arte y nunca se dibuja encima del diseño oficial. El aviso de políticas permanece visible fuera del laboratorio. Las presentaciones físicas/digitales solo aparecen como conceptos futuros en Demo controls.
+
+Al cambiar importe se solicita su reverso oficial; los botones Front/Amount side permiten inspeccionar ambas caras. Editar el texto conserva la cara elegida; limpiar vuelve al frente. El importe anterior se oculta durante la carga para no mostrar un reverso contradictorio. Skeleton/error/retry reutilizan Core; el fallback conserva importe y dedicatoria como texto. La imagen tiene proporción y dimensiones reservadas, `object-fit: contain`, sin recorte. Se propone una aparición de opacidad de 180ms y respuesta de selector de 150ms; Foundation conserva su regla global de reduced motion (0.01ms/una iteración). No se ha emulado esa preferencia en este refinamiento.
+
+### Recursos gráficos oficiales
+
+Se utilizaron las siete imágenes adjuntas del propietario, disponibles en `C:/Users/Mike/Pictures/gift-card/Gift-Card-the-clandestino-USA/`: `gift-card.png` y los seis `gift-card-reves-{importe}.png`. Se preservaron originales, logotipo, proporciones y diseño. Los nuevos WebP en `assets/images/gift-cards/` mantienen **3137×2030**, transparencia y resolución, mediante conversión Pillow calidad 90; sin recorte, redimensionado ni generación de una marca alternativa. Se inspeccionaron directamente el frente convertido y el reverso de $50; los siete derivados se comprobaron por dimensiones/peso. No faltan imágenes oficiales; queda pendiente la revisión visual de las siete en navegador.
+
+El texto impreso de redención pertenece al arte aportado. No confirma condiciones comerciales actuales: la interfaz lo advierte y mantiene pendientes redención, expiración, reembolso, presentación y entrega. No existe código canjeable, QR, saldo, activación, PDF ni wallet.
+
+### Estados, interacciones y contratos
+
+Se conservan las cuatro demos locales: inicial, selección/edición, inválido, espera de 1.6s, error con entradas conservadas, recuperación, confirmación explícitamente demo y reset. Las 29 opciones de ciclo de vida mantienen su estructura anterior. En Gift Cards se añaden carga/error/reintento del arte y selección de cara; Amount side está disabled sin importe. Son estados implementados en código, **no comprobados funcionalmente en navegador en esta pasada**. No se afirman transacciones ni envíos. Las alertas siguen Core; las actualizaciones textuales usan `textContent`, sin HTML dinámico ni persistencia.
+
+Events distingue **Explore event details** de **Explore a seat inquiry · demo**. La acción final previsualiza interés; no retiene una plaza. Se conservan los eventos hipotéticos de 2028, zona horaria, agenda, disponibilidad y detalle. Private Experiences dice **Review my inquiry** y explica consulta inicial → conversación → confirmación separada solo tras disponibilidad y acuerdo. La confirmación local indica expresamente que nada se envió ni reservó.
+
+El selector `private-occasion` reemplaza el cierre mal formado `</option value="birthday">` por opciones renderizadas desde un mapa explícito y escapado. Valores/etiquetas: vacío/Choose an occasion, birthday/Birthday, anniversary/Anniversary, celebration/Celebration, corporate/Corporate gathering, private/Private get-together y dining/Personalized dining. Se preservan required, label y mensaje asociado; no se alteran los demás controles Core.
+
+Los contratos conceptuales previos permanecen: ID/nombre de plan, precio/moneda nullable, periodicidad, beneficios, estado y promoción verificada; producto/importe/presentación/arte/políticas del regalo; evento/fecha-zona/disponibilidad; consulta/ocasión/fecha/invitados/contacto. `data-cl-plan`, `data-cl-plan-precio`, `data-cl-plan-periodicidad` y `data-cl-regalo-arte` separan presentación y datos; no son esquema MySQL ni autoridad comercial. Una referencia futura de reserva/consulta será un dato del servidor y no se inventa ahora. El backend validará precios, promociones, permisos, capacidad, emisión y transacciones.
+
+### Reserva centralizada: referencia futura, sin integración
+
+`MaickR/Booking-app-php` se registra únicamente como referencia propuesta para una evaluación backend posterior: no se inspecciona, modifica, copia ni integra en esta wave. Se podría estudiar una aplicación centralizada con CTAs contextuales desde Restaurante, Events, Wine Tastings y Private Experiences. Son flujos distintos: mesa requiere comensales/fecha-hora/mesas/disponibilidad; evento requiere evento/cupos/fecha/participantes; privado comienza por consulta/propuesta y confirma después. No se crea un motor único que suponga procesos idénticos.
+
+Los destinos son conceptuales: futura reserva de mesa, detalle/inscripción de evento y consulta privada. Ahora solo se usan anclas existentes de Style Guide; sin endpoints inventados ni redirección a GitHub. Cuando proceda una banda de navegación se reutilizará `cl-banda-cta--destacada` con Core; no se crea otra. Antes de reutilizar la app antigua será necesaria una auditoría de seguridad, integridad de datos, autorización, concurrencia y adaptación al dominio gastronómico. Esa auditoría no se realiza aquí.
+
+### Verificación actual y limitaciones
+
+| Comprobación | Resultado de este refinamiento |
+|---|---|
+| npm run lint | PASS: ESLint y Stylelint, sin modificar reglas |
+| npm run build | PASS: producto/sprite; JS productivo vacío, sin nueva dependencia |
+| PHP lint | PASS: patterns.php y seis partials Wave 4 |
+| HTML generado | PASS estructural: PHP renderizado, Python HTMLParser y lxml; cero cierres mal formados/errores de pila, IDs únicos, siete opciones correctas, labels, anclas locales y siete rutas de arte existentes; figcaption en posición válida. No es certificación Nu/W3C |
+| npm run dev | PASS: PHP/BrowserSync/watch inicia en localhost:3000 |
+| Navegador integrado | BLOQUEADO: la política de permisos rechaza el origen localhost:3000 incluso después de autorización en chat y aviso del usuario de permiso actualizado. No se elude por otro origen/herramienta |
+| 320/360/390/425/768/820/992/1024/1280/1440 | PENDIENTE de QA renderizado de los nuevos layouts; SCSS mobile first con breakpoints existentes, no resultado visual declarado |
+| Teclado, foco, targets, contraste, zoom 200%, viewport corto | PENDIENTE de prueba actual; no se extrapola el QA de la implementación inicial |
+| Cuatro demos, seis reversos, validación/recuperación y ausencia de imagen | PENDIENTE de ejercicio en navegador; código revisado y lint aprobado |
+| Consola y Network | PENDIENTE; no se declara cero errores/404 ni requests reales medidos |
+| Regresiones | Fuentes Foundation/Core/Waves 1–3, Quantity, modal/galería y Accordion intactos; ejecución interactiva pendiente. `_guia.scss` solo cambia reserva de feedback acotada a Wave 4 |
+
+Evidencia local: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a14453-b06d-7011-8bb2-85fcf74ed185/refinement-html-validation.json`, `refinement-assets.json` y HTML before/after. Las capturas `verified-*` pertenecen a la implementación inicial y no acreditan el refinamiento. No hay capturas nuevas: la herramienta rechazó la apertura. Tampoco se declara QA en Safari/Firefox, lector de pantalla, dispositivos físicos ni hosting real.
+
+### Performance del refinamiento
+
+Mismo pipeline de build y Node gzip nivel 6; bundle guía en memoria con esbuild, sin minificar ni sourcemap, como la base medida antes de editar.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 75393 | 77387 | 13282 | 13611 | +329 (+2.48%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 82328 | 85499 | 19189 | 19886 | +697 (+3.63%) |
+
+El crecimiento CSS corresponde a las extensiones de membresía/regalo; JS solo a la guía y control del arte/resúmenes. Markup conserva 41 instancias img: la vista previa sustituye la fotografía anterior por el frente oficial. Se añaden siete recursos WebP, pero solo una cara se solicita inicialmente y las demás por interacción; no se precargan los seis importes. Frente: 308594 bytes. Reversos: 193576–201862 bytes por imagen. Total de siete derivados: **1497458 bytes**, frente a **19339190 bytes** de PNG fuente. Son inventarios/pesos, no un HAR ni mediciones de solicitudes reales. No se alteran fotografías originales ni se añaden requests comerciales.
+
+### Archivos, revisión y pendientes
+
+Modificados: `_membresia.scss`, `_regalo.scss`, `_guia.scss` (regla Wave 4), `comercial.js`, cuatro partials de familia y esta biblioteca. Nuevos: siete WebP oficiales derivados en `assets/images/gift-cards/`. `_evento.scss`, `_consulta-privada.scss`, el catálogo compacto de estados y las entradas/tooling se conservan. Sin cambios a VISUAL-DIRECTION ni nuevas decisiones comerciales confirmadas.
+
+URLs locales preparadas: `http://localhost:3000/style-guide/patterns.php#wine-club`, `#gift-cards`, `#events`, `#private-experiences`, `#wave-4-states`; Foundation/Core en `/style-guide/`. Abrir Demo controls para elegir Failure/Success. Antes de cerrar la wave se requiere revisar estas rutas en los diez anchos, ejecutar los cuatro flujos y sus errores, comprobar selección por teclado del selector corregido, arte ausente/retry, consola, recursos y regresiones.
+
+Pendiente de Nicolás: beneficios actuales y diferencias de nivel, precios/periodicidad/promociones, elegibilidad/entrega/renovación/cancelación; presentación y políticas de Gift Card; eventos reales/cupos/precios; posibilidades y capacidad privadas. Backend conserva autoridad y responsabilidad por reservas/cobros/emisión/comunicaciones/persistencia. **Bloqueo de entrega: QA visual y funcional actual sin ejecutar por permisos del navegador. Aprobación visual humana pendiente.**
+
 ## Wave 4 — Wine Club, Gift Cards, Events y Private Experiences — 2026-10-16
 
 Rama `feature/ui-section-patterns-wave-4`, base `develop@cd009fd0bae46d1accffd16f74760a2b32b7674a`. Preflight limpio, fetch ejecutado, develop actualizado por fast-forward y Wave 3 verificada como ancestro (`4e6d4b0`, merge #9). No se modifica el comportamiento de páginas productivas. Dirección existente conservada; **aprobación visual humana de Wave 4 pendiente**.

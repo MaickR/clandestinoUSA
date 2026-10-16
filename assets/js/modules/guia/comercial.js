@@ -63,7 +63,7 @@ function conectarDemo(id, { validar, actualizar, confirmar }) {
     formulario.setAttribute("aria-busy", "true");
     for (const control of controles) control.disabled = true;
     desenlace.disabled = true;
-    informar("Working on the local demonstration… Nothing is being sent.");
+    informar("Updating the local preview… Nothing is being sent.");
     window.setTimeout(() => {
       enCurso = false;
       carga.establecerCarga(false);
@@ -71,11 +71,11 @@ function conectarDemo(id, { validar, actualizar, confirmar }) {
       for (const control of controles) control.disabled = false;
       desenlace.disabled = false;
       if (falla) {
-        informar("Demo action failed. Your entries are kept. Choose Success in Demo controls and try again.", "error");
+        informar("Demo action failed. Your entries are kept. Open Demo controls, choose Success and try again.", "error");
       } else {
         confirmacion.textContent = resumen;
         confirmacion.hidden = false;
-        informar("Demonstration completed. No payment, membership, gift, booking or inquiry was created.", "exito");
+        informar("Demonstration completed. Nothing has been sent or purchased.", "exito");
       }
     }, 1600);
   });
@@ -107,8 +107,11 @@ function iniciarMembresia() {
     validar: () => validarSeleccion(formulario, "club-plan-demo", "club-plan-error", "Select Gold or Diamond for this demo."),
     actualizar: () => {
       porId("club-summary").textContent = seleccion()
-        ? `${nombre()} selected · example. ${nivel().querySelector(".cl-membresia__precio").innerText.replace(/\s+/g, " ").trim()}. Benefits unconfirmed.`
-        : "No membership selected.";
+        ? `${nombre()} selected for exploration · demonstration only. Current benefits and terms are unconfirmed.`
+        : "No level selected. Choose the profile you would like to explore.";
+      porId("club-summary-details").hidden = !seleccion();
+      porId("club-summary-price").textContent = seleccion() ? nivel().querySelector("[data-cl-plan-precio]").textContent : "—";
+      porId("club-summary-cadence").textContent = seleccion() ? nivel().querySelector("[data-cl-plan-periodicidad]").textContent : "—";
     },
     confirmar: () => `${nombre()} selection completed · demonstration only. No enrollment, payment or renewal is scheduled.`,
   });
@@ -119,6 +122,69 @@ function iniciarRegalo() {
   const importe = () => formulario.querySelector("input[type=radio]:checked")?.value;
   const nombre = porId("gift-recipient");
   const mensaje = porId("gift-message");
+  const imagen = porId("gift-preview-art");
+  const frente = imagen.getAttribute("src");
+  const marco = porId("gift-art-frame");
+  const espera = porId("gift-art-loading");
+  const falloArte = porId("gift-art-error");
+  const vistaFrente = porId("gift-view-front");
+  const vistaImporte = porId("gift-view-amount");
+  const pieArte = porId("gift-art-caption");
+  let cara = "front";
+  let importeAnterior = importe();
+
+  function describirArte() {
+    pieArte.textContent = cara === "amount"
+      ? `Official artwork · $${importe()} USD amount side · Non-redeemable preview`
+      : "Official artwork · Front · Non-redeemable preview";
+  }
+
+  function terminarArte() {
+    if (!imagen.complete || !imagen.naturalWidth) return;
+    espera.hidden = true;
+    falloArte.hidden = true;
+    imagen.hidden = false;
+    marco.removeAttribute("aria-busy");
+    describirArte();
+  }
+
+  function mostrarArte(vista, forzar = false) {
+    const elegido = formulario.querySelector("input[type=radio]:checked");
+    cara = vista === "amount" && elegido ? "amount" : "front";
+    const fuente = cara === "amount" ? elegido.dataset.clRegaloArte : frente;
+    vistaFrente.setAttribute("aria-pressed", String(cara === "front"));
+    vistaImporte.setAttribute("aria-pressed", String(cara === "amount"));
+    vistaImporte.disabled = !elegido;
+    if (!forzar && fuente === imagen.getAttribute("src") && imagen.complete && imagen.naturalWidth) {
+      describirArte();
+      return;
+    }
+    // Retirar el importe anterior mientras carga el nuevo evita un preview contradictorio.
+    imagen.hidden = true;
+    falloArte.hidden = true;
+    espera.hidden = false;
+    marco.setAttribute("aria-busy", "true");
+    pieArte.textContent = "Loading the selected card artwork…";
+    imagen.alt = cara === "amount" ? `Official The Clandestino USA Gift Card artwork for $${importe()} USD · non-redeemable preview` : "Official The Clandestino USA Gift Card front design";
+    imagen.loading = "eager";
+    imagen.src = fuente;
+  }
+  imagen.addEventListener("load", terminarArte);
+  function fallarArte() {
+    imagen.hidden = true;
+    espera.hidden = true;
+    falloArte.hidden = false;
+    marco.removeAttribute("aria-busy");
+    pieArte.textContent = "Artwork unavailable. Your current gift selection remains below.";
+  }
+  imagen.addEventListener("error", fallarArte);
+  if (imagen.complete) {
+    if (imagen.naturalWidth) terminarArte();
+    else fallarArte();
+  }
+  vistaFrente.addEventListener("click", () => mostrarArte("front"));
+  vistaImporte.addEventListener("click", () => mostrarArte("amount"));
+  porId("gift-art-retry").addEventListener("click", () => mostrarArte(cara, true));
   conectarDemo("gift", {
     validar: () => {
       const primero = validarSeleccion(formulario, "gift-amount-demo", "gift-amount-error", "Choose one of the six gift amounts.");
@@ -126,11 +192,14 @@ function iniciarRegalo() {
       return primero || [nombre, mensaje].find((campo) => !campo.validity.valid) || null;
     },
     actualizar: () => {
-      porId("gift-preview-amount").textContent = importe() ? `$${importe()} USD` : "Choose an amount";
-      porId("gift-preview-amount").classList.toggle("cl-regalo__importe--pendiente", !importe());
+      porId("gift-preview-amount").textContent = importe() ? `$${importe()} USD selected · one Gift Card preview` : "Choose an amount to see its card design";
       porId("gift-preview-name").textContent = nombre.value.trim() || "someone special";
       porId("gift-preview-message").textContent = mensaje.value.trim() || "A little Spain. A moment to share.";
-      porId("gift-summary").textContent = importe() ? `One gift · $${importe()} USD · example selection. Delivery and policies pending.` : "No amount selected.";
+      porId("gift-summary").textContent = importe() ? `One gift · $${importe()} USD · ${nombre.value.trim() ? `for ${nombre.value.trim()}` : "recipient optional"}. Preview only; nothing purchased.` : "No amount selected.";
+      if (importe() !== importeAnterior) {
+        importeAnterior = importe();
+        mostrarArte(importe() ? "amount" : "front");
+      }
     },
     confirmar: () => `Gift request preview completed · $${importe()} USD example. No card was issued, purchased or delivered.`,
   });
@@ -147,7 +216,7 @@ function iniciarEvento() {
     actualizar: () => {
       porId("event-summary").textContent = porId("event-choice").checked ? "A journey through Spanish wine · May 18, 2028 · 6:00 PM PDT · example selected. No seat held." : "No event selected.";
     },
-    confirmar: () => "Event selection completed · hypothetical event, May 18, 2028. This is not a reservation or a ticket.",
+    confirmar: () => "Event interest preview completed · hypothetical event, May 18, 2028. A real flow would check event places before confirmation. No seat is held or ticket issued.",
   });
 }
 
@@ -185,7 +254,7 @@ function iniciarConsulta() {
         ? `${ocasion.selectedOptions[0].textContent} · ${porId("private-guests").value ? `${porId("private-guests").value} guests` : "Guest count pending"} · ${fecha.value || "Date pending"}. Inquiry preview only.`
         : "Your inquiry preview is empty.";
     },
-    confirmar: () => "Inquiry received · demonstration only. Awaiting a response is a future visual state; no message was sent and no reservation is confirmed.",
+    confirmar: () => "Inquiry preview ready · demonstration only. A real inquiry would start a conversation with the team; confirmation would follow only after availability and details are agreed. Nothing was sent or reserved.",
   });
 }
 
