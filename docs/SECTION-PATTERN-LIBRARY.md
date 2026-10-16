@@ -66,6 +66,73 @@ Revisión integral: `http://localhost:3000/style-guide/patterns.php#wave-3`; nav
 
 Pendientes de contenido reales: material audiovisual apto y derechos/captions/poster; consentimiento para futuros invitados identificables; fechas, formatos y disponibilidad de experiencias; historia ampliada con evidencia. Estos pendientes no se sustituyen por datos ficticios. La biblioteca editorial permanece reutilizable entre páginas futuras; no migra páginas productivas ni crea negocio.
 
+### Registro técnico — 2026-10-15
+
+Skill `qa-visual`, Chromium integrado; las pruebas de viewport se hicieron en una pestaña dedicada y se comprobó el ancho efectivo, incluyendo el scrollbar nativo. Se descartaron capturas preliminares con scroll suave en tránsito. Un fixture PHP temporal conservó el mismo HTML/CSS y desactivó únicamente el scroll suave para capturas estables; instrumentó Resource Timing/Layout Instability y permitió cargar todas las fotos. Los fixtures se retiraron del repositorio antes de la entrega. No se añadió código de medición al producto ni a la guía definitiva.
+
+| Comprobación | Resultado |
+|---|---|
+| Preflight | PASS: fetch, develop ff-only, Wave 2 como ancestro y base `cb1edde`; feature desde árbol limpio |
+| `npm run lint` | PASS final, ESLint/Stylelint sin cambios de reglas |
+| `npm run build` | PASS final: producto/sprite; sin CSS/JS guía, sourcemaps ni selectores cl-guia/cl-muestra en CSS productivo |
+| PHP | PASS: patterns.php y los cinco partials nuevos |
+| Dev/watch | PASS: PHP + BrowserSync en localhost:3000, recompilación y reload observados |
+| 320 / 360 / 390 / 425 / 768 / 820 / 992 / 1024 / 1280 / 1440px | PASS: 60 capturas por familia, inspección de seis hojas de contacto y vistas detalladas; sin overflow horizontal ni elementos fuera del viewport |
+| Media | PASS: dimensiones de originales y 16 derivados Wave 3 verificadas; imágenes cargadas, sin distorsión; galería natural sin crop; slot vertical contain verificado en los diez anchos |
+| Estados abiertos | PASS: pendientes/no disponible simulado, imagen ausente, colección vacía, video pendiente/error/captions pendientes; geometría en los diez anchos y capturas detalladas 320/768/1280 |
+| Teclado | PASS: Tab por doce enlaces/disclosures de Wave 3, Shift+Tab de retorno, navegación local por Enter; disclosures nativos por Enter/Space, sin traps |
+| Foco / targets | PASS: anillo champagne 2px/offset 3px, visible con aire dentro del viewport; mínimo observado 44.89px en acciones nuevas; summaries ≥52.89px |
+| Contraste | PASS: 108 textos/combinaciones medidos, mínimo 9.25:1, sin fallos; texto sobre superficies sólidas, incluido feedback Core |
+| Semántica | PASS: un h1, IDs únicos, sin saltos de headings, alt/dimensiones completos, listas/figuras nativas y secciones nombradas |
+| Contenido largo | PASS: título extendido y palabra sin espacios, descripción/caption largos y valor extenso a 320/768/1280; sin overflow ni truncamiento. Fixture retirado; contenido insuficiente representado por fallback y datos pendientes |
+| HTTP / consola | PASS: 69 URLs locales de atributos/destinos comprobadas con HTTP 200; todas las fotos de la guía cargadas; cero errores/warnings de página observados |
+| Reduced motion | Foundation intacta, sin animación/transición nueva; cascada existente conservada. No se emuló otra preferencia del sistema |
+| Zoom 200% | PENDIENTE: Ctrl+Equal no modificó viewport/escala del navegador integrado; no se declara probado ni se sustituye por reducir ancho |
+| Video play/pause | NO APLICA a la entrega estática: cero videos activos. Se inspeccionaron dos archivos de archivo, sin certificar su publicación; probar el contrato nativo al conectar material apto |
+| Protección | PASS: solo patrones nuevos, imports, presentación exclusiva de guía, PHP de guía y este documento. Ninguna página/PHP/CSS/JS legacy, imagen/video original, sitemap, robots, .htaccess, dependencias ni tooling modificados |
+
+Limitaciones: no se ejecutaron Safari/Firefox, lector de pantalla auditivo, dispositivos físicos ni Apache/GoDaddy. El servidor dev conserva el aviso preexistente Node `DEP0060` (`util._extend`); build/lint no fallan. Los intentos sandbox de build/dev fallaron por lectura ascendente de esbuild; las ejecuciones finales con acceso necesario pasaron sin modificar el pipeline. QA técnico no constituye aprobación visual humana.
+
+### Performance medida
+
+Mismo `npm run build`, Node `gzipSync` nivel 6, sin mezclar CSS dev con CSS minificado. JS de guía medido en dev con el mismo pipeline; sus fuentes son idénticas a la base y no incorpora Wave 3.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Diferencia gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 61050 | 65074 | 11476 | 12017 | +541 (+4.71%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 65693 | 65693 | 15145 | 15145 | 0 |
+
+El flujo gzip vacío mide 20 bytes; no contiene JavaScript productivo. SHA-256 de `dist/main.js` antes/después: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. El crecimiento CSS corresponde a las cinco composiciones; las reglas de los disclosures quedan exclusivamente en `_guia.scss`. Cero paquetes, JS nuevo, fuentes nuevas, iconos nuevos o imágenes generadas.
+
+| Media Wave 3 | Original bytes | AVIF bytes | WebP bytes |
+|---|---:|---:|---:|
+| Tapas 6 | 242225 | 64977 | 97166 |
+| Table 1 | 554353 | 244824 | 296066 |
+| Table panorámica | 251080 | 124724 | 140428 |
+| Wines table | 333116 | 100031 | 138878 |
+| Tapas wines | 213748 | 47301 | 81462 |
+| Interior | 138907 | 41770 | 56918 |
+| Bocadillo | 180195 | 44655 | 73856 |
+| Paella de archivo | 406969 | 140784 | 193066 |
+| **8 fotos únicas Wave 3** | **2320593** | **809066** | **1077840** |
+
+Estos son payloads alternativos, no acumulados; el navegador selecciona una fuente por picture. Wave 3 usa quince instancias de esas ocho fotos; cinco fotos ya estaban en Waves 1/2. Patterns completo pasa de 19 a 34 imágenes y de 13 a 16 fotografías únicas. Las tres incorporaciones a la guía (Table 1, Tapas wines, Paella) suman **432909 bytes AVIF**; no son archivos nuevos del repositorio. Todas son lazy por estar bajo el primer viewport.
+
+Resource Timing en viewport 1280×1000, guía base y final con todas las fotos solicitadas mediante el mismo fixture, caché compartida sin throttling: **19→22 recursos** excluyendo BrowserSync/favicon y sin contar el documento. Son 13→16 requests de imagen y los mismos seis recursos de estilos/JS/fuente/sprite; el tooling de BrowserSync produce polling variable y se registra aparte en los JSON. Peso de fotografías preferidas de la página completa: **1044501→1477410 bytes**, +432909. No es una prueba de descarga fría ni un presupuesto de primera pantalla. Las 69 URLs comprobadas por HTTP incluyen formatos alternativos, destinos y fragmentos de sprite; no equivalen a 69 requests de render.
+
+Video: **0→0 requests y bytes** en la guía, incluso tras cargar todas las imágenes y abrir estados. El template inerte no contiene source/poster ficticios. Los MP4 inspeccionados solo se abrieron en una pestaña independiente de auditoría que se cerró.
+
+Estabilidad local: observador Layout Instability (ventanas estándar, excluye interacción reciente) registró **0→0** en el fixture de carga, con dimensiones/proporciones reservadas y sin saltos visibles durante la inspección. No son valores LCP/INP/CLS productivos ni una auditoría de usuarios reales. No se midieron LCP/INP de producción.
+
+### Archivos, entrega y revisión humana
+
+Nuevos: cinco SCSS `patterns/` citados arriba; `style-guide/partials/editorial-wave-3.php`, `experiencias-wave-3.php`, `historias-wave-3.php`, `galeria-media-wave-3.php`, `comunidad-valores-wave-3.php`. Modificados: `assets/scss/main.scss`, `assets/scss/components/_guia.scss`, `style-guide/patterns.php`, este documento. No se elimina ningún fuente. Los fixtures temporales no se publican. No existe una decisión arquitectónica nueva que requiera duplicar esta información en ARQUITECTURA.
+
+Evidencia local fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a142de-ae6e-7192-8ba5-4b09bcdaf63a/`; `wave3-*`, `sheet-*`, `states-*`, `final-states-*`, `stress-*`, `responsive.json`, `states-final.json`, `portrait.json`, `keyboard.json`, `accessibility.json`, `http.json`, `performance-before.json`, `performance-after.json`, `bundles.json`. El registro usa la fecha local del usuario (2026-10-15).
+
+Publicación autorizada: dos commits coherentes, normal push solo a `feature/ui-section-patterns-wave-3`; sin PR, merge, force ni deploy. Abrir `http://localhost:3000/style-guide/patterns.php#wave-3`, recorrer las seis familias y desplegar sus estados. **Wave 3 técnicamente lista; aprobación visual integral del usuario pendiente.**
+
 ## Wave 1 — Patrones estructurales
 
 Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Aprobada visualmente por el usuario en UI-PATTERNS-05, sujeta a la validación final de retirada de las bandas antiguas**. El QA técnico verifica este cierre; no autoriza crear PR, merge, deploy ni iniciar Wave 2. Base comprobada: `develop` / `origin/develop` en `0053822`; rama `feature/ui-section-patterns-wave-1`.
