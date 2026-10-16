@@ -1,0 +1,32 @@
+.cl-testimonio {
+  row-gap: var(--espacio-6);
+  align-items: center;
+  overflow-wrap: anywhere;
+
+  &__imagen {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radio-md);
+    object-fit: cover;
+
+    @include media-breakpoint-up(lg) { aspect-ratio: 1; }
+  }
+
+  &__cita {
+    margin-block: var(--espacio-5);
+    padding-inline-start: var(--espacio-5);
+    border-inline-start: 2px solid var(--color-acento);
+    color: var(--color-acento);
+    font-family: var(--fuente-display);
+    font-size: clamp(1.5rem, 1.1rem + 1vw, 2.25rem);
+    line-height: 1.4;
+  }
+
+  &__firma {
+    margin-block-end: var(--espacio-5);
+    color: var(--color-texto-secundario);
+    font-size: 0.875rem;
+  }
+}

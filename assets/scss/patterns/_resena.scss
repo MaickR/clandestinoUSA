@@ -1,0 +1,78 @@
+// La reseña comparte estructura; la variante compacta reduce énfasis, no contenido.
+.cl-resena {
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+  overflow-wrap: anywhere;
+
+  &--compacta {
+    padding-inline: 0;
+    border-inline: 0;
+    background: transparent;
+  }
+
+  &__cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-3);
+    align-items: center;
+    margin-block-end: var(--espacio-4);
+  }
+
+  &__avatar {
+    display: grid;
+    flex: 0 0 2.75rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-md);
+    color: var(--color-acento);
+  }
+
+  &__autor {
+    margin: 0;
+    font-family: var(--fuente-cuerpo);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__meta {
+    margin-block: var(--espacio-2) var(--espacio-4);
+    color: var(--color-texto-secundario);
+    font-size: 0.875rem;
+  }
+
+  &__texto { margin: 0; }
+
+  &__respuesta {
+    margin-block-start: var(--espacio-5);
+    padding-inline-start: var(--espacio-4);
+    border-inline-start: 2px solid var(--color-acento);
+    font-size: 0.9375rem;
+  }
+
+  &__respuesta p:last-child { margin: 0; }
+}
+
+// El valor siempre tiene una alternativa textual; las estrellas no son controles.
+.cl-valoracion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-2);
+  align-items: center;
+  color: var(--color-acento);
+  font-size: 0.875rem;
+
+  &__estrellas { letter-spacing: 0.1em; }
+}
+
+.cl-resenas-lista {
+  row-gap: var(--espacio-5);
+  margin-block: var(--espacio-5);
+  padding-inline-start: 0;
+  list-style: none;
+
+  > [hidden] { display: none; }
+}
