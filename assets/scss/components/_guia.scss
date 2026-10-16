@@ -84,6 +84,13 @@
 .cl-guia-demo { margin-block-start: var(--espacio-5); }
 .cl-guia-demo > * + * { margin-block-start: var(--espacio-3); }
 
+details.cl-guia-demo > summary {
+  min-height: 2.75rem;
+  padding-block: var(--espacio-3);
+  color: var(--color-acento);
+  cursor: pointer;
+}
+
 .cl-guia-espera {
   display: flex;
   gap: var(--espacio-3);

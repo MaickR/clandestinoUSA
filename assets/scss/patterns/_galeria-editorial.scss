@@ -1,0 +1,114 @@
+// Colección consistente: el recorte pertenece a la miniatura, nunca al visor.
+.cl-galeria-editorial {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espacio-5) var(--espacio-4);
+
+  @include media-breakpoint-up(md) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  @include media-breakpoint-up(lg) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.cl-galeria-editorial__figura {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cl-galeria-editorial__figura--principal {
+  grid-column: 1 / -1;
+
+  @include media-breakpoint-up(md) { grid-column: auto; }
+
+  @include media-breakpoint-up(lg) {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+.cl-galeria-editorial__figura--panorama {
+  grid-column: 1 / -1;
+
+  @include media-breakpoint-up(md) { grid-column: auto; }
+
+  @include media-breakpoint-up(lg) { grid-column: 1 / -1; }
+}
+
+.cl-galeria-editorial__abrir {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+
+  &:hover { border-color: var(--color-acento); }
+  &:active { border-color: var(--color-acento-hover); }
+}
+
+.cl-galeria-editorial__figura--principal .cl-galeria-editorial__abrir {
+  aspect-ratio: 4 / 3;
+
+  @include media-breakpoint-up(md) { aspect-ratio: 1; }
+
+  @include media-breakpoint-up(lg) { aspect-ratio: auto; }
+}
+
+.cl-galeria-editorial__figura--panorama .cl-galeria-editorial__abrir {
+  aspect-ratio: 1998 / 628;
+
+  @include media-breakpoint-up(md) { aspect-ratio: 1; }
+
+  @include media-breakpoint-up(lg) { aspect-ratio: 1998 / 628; }
+}
+
+.cl-galeria-editorial__imagen {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radio-md);
+  object-fit: cover;
+  object-position: var(--galeria-foco, center);
+}
+
+.cl-galeria-editorial__indicacion {
+  position: absolute;
+  inset-inline-end: var(--espacio-3);
+  inset-block-end: var(--espacio-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-texto);
+
+  .cl-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: drop-shadow(0 1px 1px var(--color-fondo));
+  }
+}
+
+.cl-galeria-editorial__pie {
+  margin-block-start: var(--espacio-3);
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.cl-galeria-editorial__ausente {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+}
