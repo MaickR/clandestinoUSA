@@ -2,7 +2,7 @@
 <section id="patrones-seccion" aria-labelledby="patrones-seccion-titulo">
   <div class="cl-guia-seccion container">
     <h2 id="patrones-seccion-titulo">Section system</h2>
-    <p>Wave 1 · Structural patterns. Visual approval pending. These links open existing restaurant pages.</p>
+    <p>Wave 1 · Approved structural patterns. These links open existing restaurant pages.</p>
   </div>
   <section class="cl-seccion" aria-labelledby="seccion-editorial-titulo">
     <div class="container">

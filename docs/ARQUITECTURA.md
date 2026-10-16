@@ -46,10 +46,10 @@ assets/scss/
 ├── abstracts/_tokens.scss    # primitivos y overrides de Bootstrap
 ├── base/                     # custom properties, tipo, accesibilidad
 ├── components/               # Foundation y Core
-└── patterns/                 # cl-seccion, cl-hero, cl-media-contenido, cl-banda-cta
+└── patterns/                 # Wave 1 estructural y Wave 2 gastronómica
 ```
 
-`components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) solo presenta `style-guide/index.php`. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
+`components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) presenta las dos páginas de guía. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
 
 Los primitivos viven en SCSS y no se copian todos a `:root`. Las custom properties semánticas (`--color-fondo`, `--fuente-cuerpo`, `--espacio-1`…`--espacio-9`, etc.) salen de `base/_root.scss`. Los componentes leen esas variables.
 
@@ -61,7 +61,7 @@ Paleta de partida aprobada, con un ajuste medido: el borde fuerte pasa de 28% a 
 
 ### Style guide
 
-`style-guide/index.php` presenta Foundations/Core y `style-guide/patterns.php`, Section Patterns. Ambas enlazan `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, con las fuentes existentes (Libre Bodoni/Playfair). Comparten un pequeño partial de navegación con enlaces HTML y `aria-current`. Patterns incluye demos estáticas y no carga JS de guía. Ninguna carga CSS/JS legacy. `style-guide.css` es exclusivo de desarrollo; build no lo genera.
+`style-guide/index.php` presenta Foundations/Core y `style-guide/patterns.php`, Section Patterns. Ambas enlazan `assets/css/style.new.css` y, después, `assets/css/style-guide.css`, con las fuentes existentes (Libre Bodoni/Playfair). Comparten un pequeño partial de navegación con enlaces HTML y `aria-current`. Patterns incluye composiciones estáticas y demos locales de productos mediante la misma entrada JS de guía. Ninguna carga CSS/JS legacy. `style-guide.css` es exclusivo de desarrollo; build no lo genera.
 
 En Apache/GoDaddy, `.htaccess` responde 403 a `^style-guide(/|$)` sin tocar los assets compartidos. El servidor embebido de PHP ignora `.htaccess`, así que `http://localhost:3000/style-guide/` sigue visible en local. `robots.txt` no es el mecanismo de bloqueo.
 
@@ -86,6 +86,10 @@ Core amplía los controles genéricos: iconografía, feedback, estados, toast, m
 ### Pattern Library — Wave 1
 
 Los cuatro patrones se importan después de Core en `main.scss`, sin JavaScript nuevo. Solo `style-guide/patterns.php` incluye `partials/patrones-wave-1.php` con `require`/`__DIR__`; el bloqueo Apache existente cubre ambas páginas y sus partials. Hero superpuesto desde móvil, Media + Content desde md y CTA centrado; contratos, imágenes, QA y carrusel futuro de Home: `docs/SECTION-PATTERN-LIBRARY.md`. Sin motor de plantillas ni migración productiva; aprobación visual humana pendiente.
+
+### Pattern Library — Wave 2 (vigente, pendiente de aprobación visual)
+
+Cuatro partials de producto amplían `main.scss`: tarjeta gastronómica compartida, fila de menú, media/ficha de vino y composición de catálogo. No cambia Foundation/Core ni los layouts Wave 1. La tarjeta Foundation y `cl-media-contenido` se reutilizan también para quesos, cestas y destacados. Demos en tres partials locales de `patterns.php`; `modules/guia/productos.js` entra exclusivamente por `style-guide.js`. La misma entrada conecta Core o productos según los elementos presentes. `main.js` continúa sin imports; build excluye las demos. No hay backend, requests de negocio ni persistencia. Inventario, matriz, assets y validación: `SECTION-PATTERN-LIBRARY.md`.
 
 ## Objetivo inmediato (futuro)
 
