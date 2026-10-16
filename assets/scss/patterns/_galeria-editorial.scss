@@ -83,14 +83,17 @@
   inset-inline-end: var(--espacio-3);
   inset-block-end: var(--espacio-3);
   display: flex;
-  gap: var(--espacio-2);
   align-items: center;
-  padding: var(--espacio-2) var(--espacio-3);
-  border: 1px solid var(--color-borde-fuerte);
-  border-radius: var(--radio-md);
-  background: var(--color-fondo);
-  color: var(--color-acento);
-  font-size: 0.875rem;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-texto);
+
+  .cl-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: drop-shadow(0 1px 1px var(--color-fondo));
+  }
 }
 
 .cl-galeria-editorial__pie {

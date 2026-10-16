@@ -3,6 +3,7 @@
   { "nombre": "cerrar", "archivo": "x-lg" },
   { "nombre": "volver", "archivo": "arrow-left" },
   { "nombre": "expandir", "archivo": "chevron-down" },
+  { "nombre": "ver", "archivo": "eye" },
   { "nombre": "siguiente", "archivo": "chevron-right" },
   { "nombre": "correo", "archivo": "envelope" },
   { "nombre": "telefono", "archivo": "telephone" },

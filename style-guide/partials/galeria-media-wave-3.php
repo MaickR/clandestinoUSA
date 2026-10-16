@@ -7,7 +7,7 @@ $figuraGaleria = static function (string $nombre, string $titulo, string $descri
     <figure class="cl-galeria-editorial__figura <?= $escaparEditorial($clase) ?>">
       <a class="cl-galeria-editorial__abrir" href="../assets/images/avif/<?= $escaparEditorial($ruta) ?>.avif" data-cl-galeria-abrir data-cl-galeria-titulo="<?= $escaparEditorial($titulo) ?>" data-cl-galeria-descripcion="<?= $escaparEditorial($descripcion) ?>" data-cl-galeria-alt="<?= $escaparEditorial($alt) ?>" aria-label="<?= $escaparEditorial('Enlarge photograph: ' . $titulo) ?>">
         <?php $fotoEditorial($nombre, 'cl-galeria-editorial__imagen'); ?>
-        <span class="cl-galeria-editorial__indicacion" aria-hidden="true">View <svg class="cl-icon" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-sumar"></use></svg></span>
+        <span class="cl-galeria-editorial__indicacion" title="View image" aria-hidden="true"><svg class="cl-icon" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-ver"></use></svg></span>
       </a>
       <figcaption class="cl-galeria-editorial__pie"><?= $escaparEditorial($titulo) ?></figcaption>
     </figure>
