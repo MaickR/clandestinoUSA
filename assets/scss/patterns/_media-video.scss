@@ -1,0 +1,26 @@
+.cl-media-video { overflow-wrap: anywhere; }
+
+.cl-media-video__figura { margin: 0; }
+
+.cl-media-video__pantalla {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: var(--color-fondo-alterno);
+  object-fit: contain;
+}
+
+.cl-media-video__pantalla--vertical {
+  max-width: 24rem;
+  margin-inline: auto;
+  aspect-ratio: 478 / 850;
+}
+
+.cl-media-video__contexto {
+  margin-block-start: var(--espacio-5);
+  color: var(--color-texto-secundario);
+}
+

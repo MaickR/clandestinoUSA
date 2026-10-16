@@ -1,5 +1,71 @@
 # Biblioteca de patrones de sección
 
+## Wave 3 — Experiencias y storytelling editorial
+
+Base verificada el 2026-10-15: `develop` / `origin/develop` en `cb1edde`, merge de Wave 2 (#8); árbol limpio tras fetch y fast-forward. Rama `feature/ui-section-patterns-wave-3`. El encargo actual confirma Foundation/Core/Waves 1 y 2 como sistema aprobado; los registros anteriores se conservan como historial. Wave 3 espera una sola aprobación visual humana integral.
+
+### Matriz de estados y decisiones previas
+
+Matriz definida antes de construir las composiciones. Los enlaces reutilizan hover/active de `cl-enlace`, foco Foundation y targets de 44px; las fotos no son controles. N/A significa que no hay una operación que justifique ese estado.
+
+| Familia | Default y variantes | Hover / focus / active | Disabled / disponibilidad | Media ausente | Loading / empty / error | Contenido largo / insuficiente | Vertical / horizontal |
+|---|---|---|---|---|---|---|---|
+| Experiences | Vertical, destacada horizontal y sin foto; grid mixto con Bootstrap | Solo enlaces Core | Sin CTA si falta confirmar; no disponible explícito solo como ejemplo simulado, sin inventar cupos | Se retira media y usa `--sin-imagen`, mensaje contextual | Loading N/A; colección vacía/error futuro usa Core, no nueva demo dinámica | Altura natural, wrap; omitir eyebrow/CTA opcionales, no inventar descripción | Vertical 3:4 y destacada 4:3; revisar foco por foto |
+| Storytelling | Foto dominante y bajada, manifiesto no atribuido; split existente Wave 1 | Solo enlaces Core | N/A | Retirar figura, conservar narrativa; reutilizar fallback de galería si la foto necesita explicación | N/A: narrativa estática | Sin truncado; no publicar historia sin hechos comprobados | Foto natural; split existente verifica recorte |
+| Gallery | Mosaico, principal mayor, panorama completo, captions opcionales | N/A, sin lightbox | N/A | Slot estable, texto y caption; sin URL rota | Loading N/A; vacío Core demostrado; error de foto usa slot ausente | Caption fluye; una sola foto puede ser principal, no rellenar con duplicados | Dimensiones reales; imágenes completas, sin crop ni deformación |
+| Video | Poster/estado pendiente; contrato nativo inerte preparado | Controles nativos cuando exista clip apto; enlaces Core de recuperación | No mostrar play falso si falta material | Imagen estática o Core sin poster; sin video apto demostrado | Sin loading inventado; error de reproducción estático Core; sin subtítulos requerido = publicación pendiente | Título/contexto fuera del reproductor; no inventar transcripción | 16:9 y `--vertical` con relación 478:850; contain |
+| Community | Dos fotos y contexto editorial, reutiliza galería/historia | Solo enlace Core | N/A, no reseñas ni estados de moderación | Retirar figura o usar mismo slot de galería | N/A: archivo estático | Alturas naturales; omitir nombres/citas no verificados | Proporción original, sin personas identificables |
+| Values | Introducción dominante + lista editorial con separadores | Solo enlace Core | N/A | No necesita foto | N/A | Lista variable, sin cajas de altura fija; no fabricar atributos para completar cuatro | N/A |
+
+Reproducción/pausa son estados nativos del contrato, no simulados con fotos. Al no disponer de un clip revisado y autorizable, no se presenta un reproductor activo: el alcance permite explícitamente un estado representativo honesto. No hay pruebas de reproducción/pausa sobre la entrega final; serán necesarias al conectar un clip apto. No se añade loading a contenido editorial estático ni disabled a enlaces. Core sigue resolviendo alertas y vacío/error.
+
+### Composición, variantes y reutilización
+
+- `cl-experiencia`: fotografía protagonista separada del contenido con línea editorial, sin precio/pie de catálogo. `--destacada` 3:2 desde md, apilada antes; `--sin-imagen` elimina la media y conserva una invitación tipográfica. Grid Bootstrap 1 columna, 2 desde md, 3 desde lg; el caso sin imagen ocupa el ancho de tablet. No hay otra tarjeta para cada página.
+- `cl-historia`: foto panorámica sin recorte, bajada de título y prosa, manifiesto con Libre Bodoni y sin `blockquote`/atribución inventada. La historia de varias imágenes continúa con **el mismo** `cl-media-contenido` de Wave 1. Identidad española, tapas/vino y Mount Shasta están respaldados por `about.html`, `menu.html`, `index.html` y `swc.html`. No se afirman fechas de fundación, premios, origen personal ni nombres/citas de clientes.
+- `cl-galeria-editorial`: CSS Grid mobile-first, 1/2/3 columnas en base/md/lg; principal ocupa 2 desde md, panorama ocupa todas. DOM y orden visual coinciden; sin dense, masonry, carrusel, JS ni lightbox. Comunidad usa `--encuentro`, dos proporciones 3:2 desde md y fotos completas con captions; no es un componente de testimonios.
+- `cl-media-video`: pantalla contain, contexto y fallback Core. Caption/título fuera de la imagen para conservar contraste. Contrato `<template>` inerte con `<video controls playsinline preload="none">`; no inicia descargas ni produce controles inutilizables. No se clona por JS. Añadir source/poster reales, dimensiones, `track` revisado cuando corresponda y alternativa textual antes de usarlo. Reutiliza el mismo patrón para horizontal/vertical, sin player propio.
+- `cl-valores`: introducción de mayor peso + lista semántica de atributos respaldados por el contenido existente. Sin iconos de relleno, estadísticas ni premios. Sus gutters también componen bajadas editoriales; no cambia tipografía/superficies Foundation.
+
+Cinco SCSS bajo `patterns/`, importados después de Wave 2: `_experiencia.scss`, `_historia.scss`, `_galeria-editorial.scss`, `_media-video.scss`, `_valores.scss`. Sin cambios en Foundation/Core/Waves 1/2 ni arquitectura nueva. La guía incluye `editorial-wave-3.php` como entrada, más cuatro partials por composición: experiencias, historias, galería/media, comunidad/valores. El helper local de fotos evita repetir `<picture>`; inventario cerrado y strings escapados, no motor de plantillas ni backend.
+
+### Contratos de media, permisos y contenido
+
+Fotografía local auténtica: `assets/images/`, originales intactos. Derivados AVIF/WebP existentes; no se generan alternativas ni se añaden fotos externas. Cada imagen declara dimensiones reales, `loading="lazy"` y `decoding="async"` porque la wave está bajo el primer viewport. Un futuro Hero LCP debe usar carga oportuna evaluada en su página, sin lazy automático.
+
+| Foto bajo assets/images | Dimensiones | Composición |
+|---|---:|---|
+| `gallery/tapas/the-clandestino-tapas-6.jpeg` | 2048×1536 | Experiencia destacada, comunidad |
+| `gallery/tapas/the-clandestino-tapas-table-1.jpeg` | 2048×1536 | Foto principal de galería |
+| `gallery/tapas/the-clandestino-tapas-table.jpeg` | 1998×628 | Historia dominante y panorama sin crop |
+| `gallery/wines/the-clandestino-wines-table.jpeg` | 1536×2048 | Wine Club y galería |
+| `gallery/tapas/the-clandestino-tapas-wines.jpeg` | 1536×2048 | Tapas & wine y galería |
+| `bg/clandestino-usa.jpg` | 1880×920 | Historia, comunidad y still audiovisual |
+| `gallery/tapas/the-clandestino-bocadillo.jpeg` | 1200×1600 | Galería |
+| `gallery/tapas/the-clandestino-paella.jpeg` | 2048×1536 | Archivo gastronómico, sin oferta actual implícita |
+
+Fotos revisadas visualmente: alimentos, vino y ambiente sin personas identificables. `gallery/clandestino-swc.jpg` se descartó por mostrar invitados sin consentimiento documentado. El uso contextual de los assets propios existentes respalda las demos; no acredita permisos de personas ni licencia audiovisual. Copy creativo se identifica como editorial; no se presenta como cita factual. No se promete carta actual, formatos de evento, disponibilidad/cupos ni degustación programada.
+
+Para reutilizar: aportar título y nivel apropiado, copy verificable, URL existente/CTA opcional, foto con dimensiones/alt/foco y permiso aplicable. Si no hay foto, renderizar fallback **en servidor** sin `src` roto; si falla durante la transferencia, las dimensiones mantienen espacio y el alt sigue disponible. El slot 4:3 de demo es un ejemplo: reservar la proporción de la foto sustituida en la integración real. No forzar todas las fotografías a una orientación. Captions no necesitan repetir el alt.
+
+### Auditoría audiovisual y tratamiento
+
+Inventario: 20 MP4 locales en `assets/images/gallery/videos/`, sin archivos VTT/SRT encontrados bajo assets. Legacy `index.html` contiene videos de clientes con `preload="metadata"`; `about.html` contiene promos con `preload="none"` y posters a menudo genéricos. No se importan esos scripts ni se asume que esos posters correspondan al clip.
+
+Se inspeccionaron en navegador `clandestino-experience.mp4` (1,316,107 bytes; 478×850; 6.059s): personas identificables, descartado; y `clandestino-wine-promo.mp4` (7,554,540 bytes; 478×850; 35.4s): montaje de botellas con efectos, sin texto de subtítulos asociado. No se certificó todo su audio, permisos ni adecuación del montaje/poster. Los otros clips no se consideran autorizados por el solo hecho de estar en el repo. Testimonios se reservan a Wave 5.
+
+Por ello la entrega usa una **foto estática explícitamente rotulada**, estado Video pending, ejemplo de error y alerta Captions pending. Cero URLs MP4/source activas, descargas iniciales de video = 0 por contrato de markup. Sin botón play decorativo ni afirmación de que existen subtítulos. La alternativa textual describe la foto y declara que no describe un film sin revisar.
+
+Antes de conectar video: revisar todas las escenas/audio, autorización de personas/música, poster correspondiente, captions si hay habla/sonido informativo, descripción o alternativa de información visual, y comprobar teclado/play/pausa/error real. Conservar enlace de recuperación fuera de `<video>`: su fallback interno no se muestra necesariamente ante un error de red/codec. `preload="none"`, sin autoplay, sin bibliotecas; metadata solo si una necesidad medida justifica esa descarga.
+
+### Accesibilidad, responsive y verificación
+
+Semántica: h2 por familia, h3 para ejemplos, un solo h1 de página, figuras/captions, listas nativas y secciones nombradas. Texto sobre superficies sólidas, nunca sobre foto nueva. Sans del sistema y Libre Bodoni existentes; sin segunda tipografía. Foco/reduced motion de Foundation intactos; no hay nueva animación. Texto sin ellipsis/line clamp, columnas `minmax(0, …)` y wrap para contenido largo. Tab/Shift+Tab y Enter/Space en enlaces/disclosures nativos, sin trampas ni scripts nuevos.
+
+Revisión integral: `http://localhost:3000/style-guide/patterns.php#wave-3`; navegación Experiences / Storytelling / Gallery / Video / Community / Values. Abrir los disclosures de estados en experiencias, galería y video. Foundation/Core permanece en `/style-guide/`. Validar 320/360/390/425/768/820/992/1024/1280/1440px, zoom 200% si la herramienta lo permite, consola, fotos, teclado y foco. Comandos: `npm run lint`, `npm run build`, `php -l` en los seis PHP nuevos/modificados, `npm run dev`. El registro final de mediciones/QA se añade tras ejecutar.
+
+Pendientes de contenido reales: material audiovisual apto y derechos/captions/poster; consentimiento para futuros invitados identificables; fechas, formatos y disponibilidad de experiencias; historia ampliada con evidencia. Estos pendientes no se sustituyen por datos ficticios. La biblioteca editorial permanece reutilizable entre páginas futuras; no migra páginas productivas ni crea negocio.
+
 ## Wave 1 — Patrones estructurales
 
 Wave 1 implementa cuatro familias de presentación sobre Foundation/Core. **Aprobada visualmente por el usuario en UI-PATTERNS-05, sujeta a la validación final de retirada de las bandas antiguas**. El QA técnico verifica este cierre; no autoriza crear PR, merge, deploy ni iniciar Wave 2. Base comprobada: `develop` / `origin/develop` en `0053822`; rama `feature/ui-section-patterns-wave-1`.

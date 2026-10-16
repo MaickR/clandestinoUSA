@@ -1,0 +1,39 @@
+// Secuencia narrativa de fotografía dominante, bajada y manifiesto sin atribución.
+.cl-historia { overflow-wrap: anywhere; }
+
+.cl-historia__figura { margin: 0 0 var(--espacio-6); }
+
+.cl-historia__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio-md);
+}
+
+.cl-historia__pie {
+  margin-block-start: var(--espacio-3);
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.cl-historia__texto {
+  max-width: 48ch;
+  color: var(--color-texto-secundario);
+}
+
+.cl-historia__manifiesto {
+  margin-block: var(--espacio-7);
+  padding-block: var(--espacio-6);
+  border-block: 1px solid var(--color-borde);
+
+  @include media-breakpoint-up(md) { margin-block: var(--espacio-8); }
+}
+
+.cl-historia__declaracion {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--color-acento);
+  font-family: var(--fuente-display);
+  font-size: clamp(2rem, 1.5rem + 2vw, 3.25rem);
+  line-height: 1.2;
+}

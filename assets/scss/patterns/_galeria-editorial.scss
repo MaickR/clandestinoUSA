@@ -1,0 +1,62 @@
+// Grid en orden de lectura; sin masonry, lightbox ni controles decorativos.
+.cl-galeria-editorial {
+  display: grid;
+  gap: var(--espacio-5);
+  grid-template-columns: minmax(0, 1fr);
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--espacio-6);
+  }
+}
+
+.cl-galeria-editorial__figura {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.cl-galeria-editorial__figura--principal {
+  @include media-breakpoint-up(md) { grid-column: span 2; }
+}
+
+.cl-galeria-editorial__figura--panorama {
+  @include media-breakpoint-up(md) { grid-column: 1 / -1; }
+}
+
+.cl-galeria-editorial__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio-md);
+}
+
+.cl-galeria-editorial__pie {
+  margin-block-start: var(--espacio-3);
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.cl-galeria-editorial__ausente {
+  display: grid;
+  align-content: center;
+  min-width: 0;
+  aspect-ratio: 4 / 3;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+}
+
+// Comunidad reutiliza las figuras y captions; cambia solo el ritmo del conjunto.
+.cl-galeria-editorial--encuentro {
+  @include media-breakpoint-up(md) {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: center;
+  }
+}

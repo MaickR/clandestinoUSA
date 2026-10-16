@@ -1,0 +1,70 @@
+// La fotografía invita a una vivencia; no hay precio ni pie de catálogo.
+.cl-experiencia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-5);
+  min-width: 0;
+  height: 100%;
+  overflow-wrap: anywhere;
+}
+
+.cl-experiencia__media {
+  display: block;
+  margin: 0;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+}
+
+.cl-experiencia__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: inherit;
+  object-fit: cover;
+  object-position: var(--experiencia-foco, center);
+}
+
+.cl-experiencia__contenido {
+  min-width: 0;
+  padding-block-end: var(--espacio-5);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.cl-experiencia__descripcion { color: var(--color-texto-secundario); }
+
+.cl-experiencia__accion {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding-block: var(--espacio-2);
+}
+
+.cl-experiencia--destacada {
+  @include media-breakpoint-up(md) {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--espacio-6);
+    align-items: center;
+  }
+
+  .cl-experiencia__imagen { aspect-ratio: 4 / 3; }
+
+  .cl-experiencia__contenido {
+    padding-block: var(--espacio-5);
+    border-top: 1px solid var(--color-borde);
+  }
+}
+
+// Sin foto: se retira la media completa, conservando una composición editorial.
+.cl-experiencia--sin-imagen {
+  justify-content: center;
+  padding: var(--espacio-6);
+  border-top: 1px solid var(--color-acento);
+  background: var(--color-superficie);
+}
+
+.cl-experiencias {
+  row-gap: var(--espacio-7);
+  margin-block-end: var(--espacio-7);
+}
