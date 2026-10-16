@@ -1,5 +1,74 @@
 # Biblioteca de patrones de sección
 
+## Refinamiento integral Wave 3 — 2026-10-16
+
+Base publicada `7d672fa` / `ae8c0ea`; misma rama `feature/ui-section-patterns-wave-3`, limpia y sincronizada tras fetch. Este apartado actualiza los contratos vigentes; los registros de Wave 3 inicial que siguen quedan como historial. Criterio estético consolidado: [VISUAL-DIRECTION.md](VISUAL-DIRECTION.md). Pendiente de aprobación visual humana integral.
+
+### Dirección y composiciones
+
+Experiencias usa una invitación gastronómica dominante y dos piezas de apoyo: Wine Club lateral y gourmet sin foto compacto. En md, la principal se distribuye en foto/copy laterales; en lg ocupa una columna frente al grupo secundario compacto, centrado verticalmente. Móvil conserva el descubrimiento secundario lateral. Se mantiene el HTML y la geometría de `cl-experiencia--destacada`, los disclosures `cl-guia-demo` y los estados iniciales. Solo se normaliza el radio de sus fotos a `--radio-md`, corrigiendo la herencia interrumpida por picture; no se rediseña la destacada.
+
+Storytelling conserva fotografía, relato, manifiesto y split Wave 1. La bajada cambia 5/6 + offset a 5/7, con gutter intencional, alineación vertical y título contextual balanceado; se retira el br rígido del titular. El manifiesto mantiene sus tres ideas y saltos editoriales deliberados. No cambia Foundation.
+
+Comunidad se separa de la galería mediante `cl-comunidad`: una invitación clara al encuentro, interior protagonista y detalle panorámico de mesa en dos figuras relacionadas; CTA Core para conversar sobre un grupo. DOM texto→media; desde md la media no interactiva queda a la izquierda y la acción conserva su orden. No son testimonios ni evidencia de clientes. Valores mantiene introducción/lista, con titular champagne, primer atributo de mayor jerarquía, dos atributos intermedios y cierre de ancho completo desde lg; sin cuatro tarjetas ni estadísticas. Video permanece intacto.
+
+### Galería visual e interacción
+
+`cl-galeria-editorial`: dos columnas móvil con principal/panorama completos, tres miniaturas por fila en md, cuatro en lg con principal 2×2 y panorama al cierre. Los seis controles y captions mantienen el orden DOM. Slots consistentes, recortes cover revisados y radios `--radio-md`; el visor usa exclusivamente contain. Las seis fotos y sus derivados ya existían. Sin generación de miniaturas, dependencias, autoplay ni precarga vecina.
+
+Cada figura tiene un enlace `a[data-cl-galeria-abrir]` a su archivo real, un picture lazy, caption breve e indicación View. Sin JavaScript el enlace sigue abriendo la imagen; con JS el visor presenta foto completa, título, descripción, contador derivado de las entradas y controles. No se incluye un control para fotografía conocida como ausente.
+
+**API:** `inicializarGaleria(contenedor)` en `assets/js/modules/patterns/galeria.js`, con HTMLElement explícito. Cada raíz `[data-cl-galeria]` contiene sus enlaces y un `[data-cl-galeria-visor]` con la estructura mostrada en `partials/visor-galeria.php`. El módulo no conoce IDs de guía ni datos de productos. WeakMap garantiza inicialización idempotente. Devuelve `{ abrir(indice = 0, origen), cerrar() }`; abrir fuera del rango lanza RangeError. Una colección sin entradas devuelve abrir=false, sin modal ni listeners.
+
+Markup de cada enlace: `href` local real, `data-cl-galeria-titulo`, descripción/alt opcionales en `data-cl-galeria-descripcion` / `data-cl-galeria-alt`. La miniatura aporta width/height reales; sin miniatura, usar `data-cl-galeria-ancho` y `data-cl-galeria-alto` para reservar su proporción antes de cargar (fallback 4:3). Se aceptan únicamente http(s) del mismo origen y se omiten enlaces con aria-disabled="true" o pertenecientes a una raíz anidada. Datos estáticos controlados y escapados en PHP; JS usa textContent y atributos de imagen, sin HTML arbitrario. El inventario es una instantánea estática al inicializar. Páginas con sustitución dinámica del DOM deberán definir primero su ciclo de vida; no se añade destroy/dispose sin necesidad en estas páginas PHP estáticas.
+
+**Core:** `inicializarModal` sin modificaciones. Bootstrap mantiene backdrop, Escape, scroll lock y trap; el adaptador conserva foco inicial en cierre y retorno al enlace activador. El módulo solo controla fotografías. Anterior/siguiente circulares con ≥2 entradas; ambas acciones disabled nativas con una foto. Flechas izquierda/derecha solo dentro del visor abierto, sin modificadores y fuera de campos editables. Contador `01 / 06`, captions y región polite se actualizan sin mover foco.
+
+**Carga/error:** nuevo Image insertado en el mismo slot; fuente seleccionada currentSrc del picture o href. Solo se solicita la foto elegida, que puede venir de caché si su miniatura ya cargó el mismo AVIF. Sin segunda descarga por preloader y sin precargar el resto. Spinner Core tras 150ms para no destellar en caché; aria-busy limitado a la media. Una revisión invalida callbacks antiguos al navegar/cerrar. Error Core persistente conserva cierre, contador y navegación; Next permite recuperar cuando está disponible. Al ocultarse se retira src. Slot de ancho completo y proporción reservada antes de cargar, con altura máxima 54dvh/38rem; foto centrada contain. Cuerpo de modal scrollable y controles fuera de él.
+
+**Estados demostrados:** colección real de seis fotos; fotografía ausente sin control; una foto (01/01, navegación disabled); error real de decodificación seguido de una foto válida; vacío sin visor. El error demo carga un archivo de texto local existente que responde 200: no inventa una URL 404 ni afecta al catálogo principal. Sus dos fuentes son un caso de fallo/recuperación, no dos fotos comerciales. Varias raíces independientes comparten la estructura del visor, con IDs únicos aportados por el consumidor. No modales anidados.
+
+**Integración:** `style-guide.js` inicializa las raíces explícitamente. `main.js` no importa la galería. Nuevo CSS de producto en `_visor-galeria.scss` y `_comunidad.scss`, además de los patrones refinados; sin CSS específico de laboratorio en producto. Los helpers PHP evitan repetir visor/figuras en la guía; no son una aplicación ni backend nuevos. Foundation/Core/Waves 1/2 y archivos de video no se rediseñan. QA y mediciones finales se registran después de su ejecución.
+
+### Matriz vigente del refinamiento
+
+| Familia | Variantes y estados conservados/comprobados | Interacción y límites |
+|---|---|---|
+| Experiences | Invitación dominante, descubrimiento lateral, textual sin fotografía; destacada aprobada; pendiente, no disponible, contenido largo | Acciones Core, hover/active/focus existentes; sin reserva ficticia ni loading artificial |
+| Storytelling | Bajada 5/7, fotografía dominante, manifiesto y split Wave 1; texto largo | Estático; sin estados dinámicos inventados |
+| Gallery | Colección real, ausente sin control, una foto, vacío; carga diferida, error y recuperación | Hover/active de miniatura, foco, apertura/cierre, anterior/siguiente, contador/caption; disabled nativo con una foto; variantes de orientación |
+| Video | Contrato y estados pendientes/ausencia/error previos, intactos | Sin archivo apto ni player falso; subtítulos pendientes, sin autoplay ni descarga de MP4 |
+| Community | Interior y mesa de archivo, invitación contextual, texto largo | Consulta real, sin opiniones, nombres o permisos supuestos |
+| Values | Introducción y lista con primer atributo dominante, dos intermedios y cierre; texto largo | Enlace Core; estático, sin métricas ni loading |
+
+### QA final y autoevaluación — 2026-10-16
+
+- `npm run lint`, `npm run build` y `php -l` en los cinco partials nuevos/modificados: correctos. Dev arranca en localhost:3000; aviso conocido Node DEP0060 de BrowserSync, sin error de aplicación.
+- Inspección real de las seis familias en 320, 360, 390, 425, 768, 820, 992, 1024, 1280 y 1440px: 60 vistas, sin overflow ni fotos fallidas. Radios renderizados 4px. Se corrigieron gutters que desbordaban 4px en 992px y un vacío excesivo entre invitaciones secundarias.
+- Visor revisado en esos diez anchos y 390×568: dentro del viewport, contain, controles 44×44 y caption fuera de la foto. Se corrigieron márgenes laterales de tablet, espacio vertical excesivo en móvil y centrado de la foto al alcanzar la altura máxima. Texto deliberadamente largo y palabra sin espacios: sin overflow en 320/768/1280.
+- Pruebas reales: primera/intermedia/última (01/06, 04/06, 06/06), anterior/siguiente circular, flechas, Enter/Space, cierre por botón/Escape/backdrop, retorno al activador, Tab/Shift+Tab con trap Bootstrap, una foto con navegación disabled y vacío sin controles. Cuatro raíces independientes; tres reaperturas sin duplicación. Inicialización repetida devuelve la misma instancia; flechas no interceptan un campo editable ni el documento con visor cerrado.
+- Fallo real de decodificación HTTP 200 conserva cierre y navegación; siguiente recupera la fotografía. Fixture temporal con demora de 2,2s verifica spinner/aria-busy, navegación durante carga sin sobrescritura tardía y cierre durante carga con limpieza de src. Fixtures retirados del repositorio tras guardar evidencia externa; no añade endpoints productivos.
+- Regresión Core: modal informativo, trap, Escape/retorno de foco, confirmación con foco inicial en Keep item, cancelación, accordion y quantity funcionan. Adaptador y estilos Core sin cambios. Consola del navegador sin errores/warnings de aplicación. Los 50 recursos locales referenciados (incluidos derivados y sprite) responden HTTP 200.
+- Semántica: un h1, ningún ID duplicado ni fotografía activa sin alt. 113 muestras de texto editorial sobre superficies sólidas: contraste mínimo 9,25:1. Foco de teclado 2px champagne/offset 3px. Reduced motion auditado en la regla Foundation existente; no se emuló la preferencia del sistema. El comando de zoom nativo no alteró el viewport: 200% queda sin verificar, sin presentarlo como prueba ejecutada. No se realizó auditoría con lector de pantalla.
+- Autoevaluación creativa: experiencias diferencia invitación principal y descubrimientos compactos; historia recupera relación título/prosa; colección fotográfica conserva ritmo y alineación; comunidad explica encuentro/contexto/acción; valores distribuye pesos sin cajas repetidas. Video conserva su honestidad editorial. Aprobación estética exclusivamente pendiente del usuario.
+
+### Performance del refinamiento
+
+Medición gzip nivel 6, base publicada 7d672fa frente al refinamiento. Compilación de entrada de guía antes/después en las mismas condiciones, sin sourcemap; producto medido tras build, antes de restaurar dev.
+
+| Recurso | Antes | Después |
+|---|---:|---:|
+| CSS de producto, bytes / gzip | 65.074 / 12.017 | 71.414 / 12.767 |
+| JS de producto, bytes / gzip | 0 / 20 | 0 / 20 |
+| JS de guía sin minificar, bytes / gzip | 65.663 / 15.122 | 71.911 / 16.649 |
+| Fotos únicas / peso AVIF preferido de toda la guía | 16 / 1.477.410 B | 16 / 1.477.410 B |
+| Elementos img con fuente / solicitudes de media | 34 / 16 | 34 / 16 |
+| Recursos de guía tras cargar todas las fotos, sin documento/BrowserSync/favicon | 22 | 22 |
+
+La galería principal contiene seis fotografías existentes: mesa, maridaje, arroz, bocadillo, vino y panorama; comunidad reutiliza interior/panorama. No se modifica ningún original ni se genera media. Las nuevas referencias reutilizan recursos en caché. Error demo solicita texto únicamente al abrirlo; sin 404 deliberado. Sin recursos de video activos. Build excluye CSS/JS de guía; main.js sigue intacto. La nueva galería vive solo en la entrada dev. Incrementos gzip: CSS +750 B, guía +1.527 B, producto JS +0 B. Estas son mediciones locales de recursos, no LCP/INP/CLS productivos. La altura reservada durante la carga lenta se comprobó estable; al cambiar de orientación puede reajustarse intencionalmente el slot.
+
+Pendientes reales: aprobación visual integral, zoom 200% verificable, prueba de lector de pantalla; video autorizado/poster/subtítulos y permisos de fotografía identificable antes de publicar ese contenido. Inventario técnico y evidencia detallada conservados fuera del árbol productivo. Ninguna página productiva, archivo legacy, dependencia, original multimedia ni configuración de hosting cambia.
+
 ## Wave 3 — Experiencias y storytelling editorial
 
 Base verificada el 2026-10-15: `develop` / `origin/develop` en `cb1edde`, merge de Wave 2 (#8); árbol limpio tras fetch y fast-forward. Rama `feature/ui-section-patterns-wave-3`. El encargo actual confirma Foundation/Core/Waves 1 y 2 como sistema aprobado; los registros anteriores se conservan como historial. Wave 3 espera una sola aprobación visual humana integral.

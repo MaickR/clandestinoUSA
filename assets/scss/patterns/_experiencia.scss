@@ -20,7 +20,7 @@
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 4;
-  border-radius: inherit;
+  border-radius: var(--radio-md);
   object-fit: cover;
   object-position: var(--experiencia-foco, center);
 }
@@ -65,6 +65,92 @@
 }
 
 .cl-experiencias {
-  row-gap: var(--espacio-7);
+  display: grid;
+  gap: var(--espacio-5);
   margin-block-end: var(--espacio-7);
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+.cl-experiencias__principal {
+  @include media-breakpoint-up(md) { grid-column: 1 / -1; }
+
+  @include media-breakpoint-up(lg) {
+    grid-column: 1;
+  }
+}
+
+.cl-experiencias__secundarias {
+  display: grid;
+  gap: var(--espacio-5);
+
+  @include media-breakpoint-up(md) {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-column: auto;
+    grid-template-columns: minmax(0, 1fr);
+    align-self: center;
+  }
+}
+
+// Las nuevas invitaciones no alteran la composición destacada aprobada.
+.cl-experiencia--invitacion {
+  gap: 0;
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+
+  .cl-experiencia__imagen { aspect-ratio: 4 / 3; }
+
+  .cl-experiencia__contenido {
+    padding: var(--espacio-5);
+    border: 0;
+  }
+
+  @include media-breakpoint-only(md) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+  }
+}
+
+.cl-experiencia__titulo {
+  max-width: 20ch;
+  font-size: clamp(1.75rem, 1.4rem + 1vw, 2.5rem);
+}
+
+.cl-experiencia--descubrimiento {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--espacio-4);
+  align-items: start;
+  height: auto;
+  padding: var(--espacio-5);
+  border-block: 1px solid var(--color-borde);
+
+  .cl-experiencia__contenido {
+    padding: 0;
+    border: 0;
+  }
+
+  .cl-experiencia__descripcion { font-size: 1rem; }
+}
+
+.cl-experiencia--invitacion-textual {
+  height: auto;
+  padding: var(--espacio-5);
+
+  .cl-experiencia__contenido {
+    padding: 0;
+    border: 0;
+  }
+}
+
+.cl-experiencia__accion {
+  gap: var(--espacio-3);
 }

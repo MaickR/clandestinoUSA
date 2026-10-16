@@ -1,49 +1,69 @@
+<?php
+require __DIR__ . '/visor-galeria.php';
+$figuraGaleria = static function (string $nombre, string $titulo, string $descripcion, string $clase = '') use ($fotosEditoriales, $fotoEditorial, $escaparEditorial): void {
+    $ruta = $fotosEditoriales[$nombre][0];
+    $alt = $fotosEditoriales[$nombre][4];
+    ?>
+    <figure class="cl-galeria-editorial__figura <?= $escaparEditorial($clase) ?>">
+      <a class="cl-galeria-editorial__abrir" href="../assets/images/avif/<?= $escaparEditorial($ruta) ?>.avif" data-cl-galeria-abrir data-cl-galeria-titulo="<?= $escaparEditorial($titulo) ?>" data-cl-galeria-descripcion="<?= $escaparEditorial($descripcion) ?>" data-cl-galeria-alt="<?= $escaparEditorial($alt) ?>" aria-label="<?= $escaparEditorial('Enlarge photograph: ' . $titulo) ?>">
+        <?php $fotoEditorial($nombre, 'cl-galeria-editorial__imagen'); ?>
+        <span class="cl-galeria-editorial__indicacion" aria-hidden="true">View <svg class="cl-icon" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-sumar"></use></svg></span>
+      </a>
+      <figcaption class="cl-galeria-editorial__pie"><?= $escaparEditorial($titulo) ?></figcaption>
+    </figure>
+    <?php
+};
+?>
 <section class="cl-seccion" id="galeria-editorial" aria-labelledby="galeria-editorial-titulo">
   <div class="container">
     <div class="cl-seccion__encabezado">
-      <p class="cl-eyebrow">Editorial gallery</p>
+      <p class="cl-eyebrow">Editorial gallery · The photo journal</p>
       <h2 id="galeria-editorial-titulo">A closer look at the table</h2>
-      <p class="cl-seccion__descripcion">Textures, colors and the small details that make you want to stay. Photographs from our collection; current dishes may differ.</p>
+      <p class="cl-seccion__descripcion">Textures, colors and details worth lingering over. Open a photograph to explore the whole frame, then follow the collection at your own pace.</p>
+      <p class="cl-texto-pequeno">From the restaurant archive · Current dishes may differ.</p>
     </div>
-    <div class="cl-galeria-editorial">
-      <figure class="cl-galeria-editorial__figura cl-galeria-editorial__figura--principal">
-        <?php $fotoEditorial('mesa', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">For the center of the table · A board full of textures and flavors.</figcaption>
-      </figure>
-      <figure class="cl-galeria-editorial__figura">
-        <?php $fotoEditorial('maridaje', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">Tapas meet wine · An invitation to explore them together.</figcaption>
-      </figure>
-      <figure class="cl-galeria-editorial__figura">
-        <?php $fotoEditorial('arroz', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">From the archive · Rice, prawns and mussels.</figcaption>
-      </figure>
-      <figure class="cl-galeria-editorial__figura">
-        <?php $fotoEditorial('bocadillo', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">A closer look · Toasted bread and a generous filling.</figcaption>
-      </figure>
-      <figure class="cl-galeria-editorial__figura">
-        <?php $fotoEditorial('vino', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">At the barrel table · A bottle and glasses ready for conversation.</figcaption>
-      </figure>
-      <figure class="cl-galeria-editorial__figura cl-galeria-editorial__figura--panorama">
-        <?php $fotoEditorial('panorama', 'cl-galeria-editorial__imagen'); ?>
-        <figcaption class="cl-galeria-editorial__pie">Room to share · The whole board, without a crop.</figcaption>
-      </figure>
+    <div data-cl-galeria>
+      <?php $visorGaleria('visor-editorial'); ?>
+      <div class="cl-galeria-editorial">
+        <?php $figuraGaleria('mesa', 'A table full of flavor', 'Cheeses, cured meats, olives and small bites. A board from our restaurant archive.', 'cl-galeria-editorial__figura--principal'); ?>
+        <?php $figuraGaleria('maridaje', 'Where tapas meet wine', 'A sharing board, a bottle and glasses. Flavors to explore together.'); ?>
+        <?php $figuraGaleria('arroz', 'From the kitchen archive', 'Rice, prawns and mussels, photographed for the restaurant collection. Not a current menu announcement.'); ?>
+        <?php $figuraGaleria('bocadillo', 'A closer look', 'Toasted bread and a generous filling, served on a wooden board.'); ?>
+        <?php $figuraGaleria('vino', 'At the barrel table', 'A wine bottle, carafe and glasses on one of the restaurant tables.'); ?>
+        <?php $figuraGaleria('panorama', 'Room to share', 'The whole sharing board, with cheeses, cured meats, almonds and bocadillos.', 'cl-galeria-editorial__figura--panorama'); ?>
+      </div>
     </div>
     <details class="cl-guia-demo">
-      <summary>Gallery fallback · Local example</summary>
+      <summary>Gallery states · Missing, single, error &amp; empty</summary>
       <div class="row cl-guia-rejilla">
         <div class="col-md-6">
           <figure class="cl-galeria-editorial__figura">
             <div class="cl-galeria-editorial__ausente"><p>Photograph unavailable · example</p></div>
-            <figcaption class="cl-galeria-editorial__pie">The caption remains available when the photograph cannot be shown. No broken image is requested.</figcaption>
+            <figcaption class="cl-galeria-editorial__pie">The caption remains readable. An absent photograph has no enlargement control and is not counted.</figcaption>
           </figure>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" data-cl-galeria>
+          <?php $visorGaleria('visor-foto-unica'); ?>
+          <div class="cl-estado-vista">
+            <h3 class="cl-estado-vista__titulo">One photograph, the whole story</h3>
+            <p class="cl-estado-vista__texto">Single-photo example. Previous and Next are disabled; close remains available.</p>
+            <a class="cl-boton cl-boton--secundario" href="../assets/images/avif/gallery/wines/the-clandestino-wines-table.avif" data-cl-galeria-abrir data-cl-galeria-titulo="At the barrel table" data-cl-galeria-descripcion="One photograph from the restaurant archive." data-cl-galeria-alt="A wine bottle, carafe and glasses on a wooden barrel table" data-cl-galeria-ancho="1536" data-cl-galeria-alto="2048">Open single-photo viewer</a>
+          </div>
+        </div>
+        <div class="col-md-6" data-cl-galeria>
+          <?php $visorGaleria('visor-error-foto'); ?>
+          <div class="cl-estado-vista cl-estado-vista--error">
+            <h3 class="cl-estado-vista__titulo">A photograph fails to load</h3>
+            <p class="cl-estado-vista__texto">Local decoding-error example. Open the viewer, then use Next to recover with a valid photograph.</p>
+            <!-- Un recurso de texto local responde 200 pero no decodifica como imagen. -->
+            <a class="cl-boton cl-boton--secundario" href="../assets/icons/LICENCIA-bootstrap-icons.txt" data-cl-galeria-abrir data-cl-galeria-titulo="Photograph unavailable · example" data-cl-galeria-descripcion="This deliberately tests image decoding failure, without a missing URL.">Open image error example</a>
+            <a class="cl-enlace cl-experiencia__accion" href="../assets/images/avif/gallery/tapas/the-clandestino-tapas-6.avif" data-cl-galeria-abrir data-cl-galeria-titulo="Back at the table" data-cl-galeria-descripcion="A valid photograph for recovering from the preceding example." data-cl-galeria-alt="Cheeses and cured meats on a sharing board" data-cl-galeria-ancho="2048" data-cl-galeria-alto="1536">Open recovery photograph</a>
+          </div>
+        </div>
+        <div class="col-md-6" data-cl-galeria>
           <div class="cl-estado-vista">
             <h3 class="cl-estado-vista__titulo">More photographs to come</h3>
-            <p class="cl-estado-vista__texto">Empty collection example. Publish a gallery once suitable photographs are available.</p>
+            <p class="cl-estado-vista__texto">Empty collection example. There is no viewer to open until photographs are available.</p>
           </div>
         </div>
       </div>

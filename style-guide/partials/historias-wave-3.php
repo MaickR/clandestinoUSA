@@ -8,11 +8,11 @@
       <?php $fotoEditorial('panorama', 'cl-historia__imagen'); ?>
       <figcaption class="cl-historia__pie">From our table · Cheeses, cured meats and small bites from the restaurant archive.</figcaption>
     </figure>
-    <div class="row cl-valores">
+    <div class="row cl-historia__bajada">
       <div class="col-md-5">
-        <h3 class="cl-titulo-1">Spanish at heart.<br>At home in Mount Shasta.</h3>
+        <h3 class="cl-historia__titulo">Spanish at heart. At home in Mount Shasta.</h3>
       </div>
-      <div class="col-md-6 offset-md-1">
+      <div class="col-md-7">
         <p class="cl-historia__texto">The Clandestino brings Spanish tapas and wine to Mount Shasta, California. The table is where those flavors come together: cheeses, cured meats, a glass of wine and something new to try.</p>
         <p class="cl-historia__texto">Take a little time. Pass a plate. Make room for one more conversation.</p>
         <a class="cl-enlace cl-experiencia__accion" href="../about.html">Get to know The Clandestino</a>
@@ -23,7 +23,7 @@
         <div class="col-md-7">
           <p class="cl-historia__declaracion">More sharing.<br>More conversation.<br>A little more time.</p>
         </div>
-        <div class="col-md-4 offset-md-1 cl-valores__introduccion">
+        <div class="col-md-5 cl-valores__introduccion">
           <p class="cl-eyebrow">Around our table</p>
           <p class="cl-historia__texto">A simple invitation to enjoy Spanish flavors in good company.</p>
           <p class="cl-texto-pequeno">Brand editorial copy · No personal quotation or historical attribution.</p>

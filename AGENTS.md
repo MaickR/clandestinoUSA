@@ -59,6 +59,7 @@ Una tarea está terminada solo si:
 ## Referencias
 
 - `docs/ESTANDARES-DE-CODIGO.md` — estándares de código.
+- `docs/VISUAL-DIRECTION.md` — criterio estético y referencias aprobadas; consultar antes de diseñar o refinar UI.
 - `docs/ARQUITECTURA.md` — arquitectura vigente y objetivo inmediato.
 - `docs/MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md` — producto y prioridades.
 - `docs/GIT-WORKFLOW.md` — ramas, commits y releases.

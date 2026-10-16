@@ -1,0 +1,40 @@
+// La estancia y la mesa acompañan una invitación; no representan testimonios.
+.cl-comunidad {
+  row-gap: var(--espacio-6);
+  align-items: center;
+  overflow-wrap: anywhere;
+
+  @include media-breakpoint-up(md) { --bs-gutter-x: var(--espacio-6); }
+
+}
+
+.cl-comunidad__contenido {
+  @include media-breakpoint-up(md) { order: 2; }
+}
+
+.cl-comunidad__titulo {
+  max-width: 18ch;
+  font-size: clamp(2rem, 1.4rem + 1.5vw, 2.75rem);
+  text-wrap: balance;
+}
+
+.cl-comunidad__figura {
+  margin: 0;
+  border-radius: var(--radio-md);
+
+  & + & { margin-block-start: var(--espacio-4); }
+}
+
+.cl-comunidad__imagen {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radio-md);
+}
+
+.cl-comunidad__nota {
+  margin-block: var(--espacio-5);
+  padding-inline-start: var(--espacio-4);
+  border-inline-start: 1px solid var(--color-acento);
+  color: var(--color-texto-secundario);
+}

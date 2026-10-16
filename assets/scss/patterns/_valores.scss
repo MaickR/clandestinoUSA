@@ -24,3 +24,35 @@
   margin-block-end: 0;
   color: var(--color-texto-secundario);
 }
+
+.cl-valores__introduccion--editorial {
+  align-self: start;
+
+  @include media-breakpoint-up(md) { padding-block-start: var(--espacio-5); }
+}
+
+.cl-valores__titulo {
+  max-width: 15ch;
+  margin-block-end: var(--espacio-5);
+  color: var(--color-acento);
+  font-size: clamp(2rem, 1.4rem + 1.6vw, 3rem);
+  text-wrap: balance;
+}
+
+.cl-valores__lista--editorial {
+  display: grid;
+  column-gap: var(--espacio-6);
+
+  @include media-breakpoint-up(lg) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.cl-valores__item--principal,
+.cl-valores__item--cierre {
+  @include media-breakpoint-up(lg) { grid-column: 1 / -1; }
+}
+
+.cl-valores__item--principal {
+  border-color: var(--color-acento);
+
+  h3 { font-size: 2rem; }
+}
