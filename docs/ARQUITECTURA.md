@@ -91,6 +91,10 @@ Los cuatro patrones se importan después de Core en `main.scss`, sin JavaScript 
 
 Cuatro partials de producto amplían `main.scss`: tarjeta gastronómica compartida, fila de menú, media/ficha de vino y composición de catálogo. No cambia Foundation/Core ni los layouts Wave 1. La tarjeta Foundation y `cl-media-contenido` se reutilizan también para quesos, cestas y destacados. Demos en tres partials locales de `patterns.php`; `modules/guia/productos.js` entra exclusivamente por `style-guide.js`. La misma entrada conecta Core o productos según los elementos presentes. `main.js` continúa sin imports; build excluye las demos. No hay backend, requests de negocio ni persistencia. Inventario, matriz, assets y validación: `SECTION-PATTERN-LIBRARY.md`.
 
+### Pattern Library — Wave 4
+
+Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y consulta privada. `style-guide/patterns.php` incluye una entrada PHP Wave 4, cuatro familias y laboratorio de estados; reutiliza Core, Waves anteriores y fotografía existente. `modules/guia/comercial.js` conecta demostraciones locales exclusivamente desde `style-guide.js`, sin requests ni persistencia. CSS de laboratorio permanece en `_guia.scss`. No cambia el bundle JS productivo, el tooling ni las páginas legacy. Cobertura, contratos conceptuales de UI, QA, performance y pendientes comerciales: `SECTION-PATTERN-LIBRARY.md`. Aprobación visual humana pendiente.
+
 ## Objetivo inmediato (futuro)
 
 | Capa | Objetivo |

@@ -1,5 +1,5 @@
 <?php
-// Referencia local: las interacciones de Wave 2 no realizan operaciones comerciales.
+// Referencia local: las interacciones de la guía no realizan operaciones comerciales.
 $paginaGuia = 'patrones';
 ?>
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ $paginaGuia = 'patrones';
     <div class="container">
       <p class="cl-eyebrow">The Clandestino USA</p>
       <h1>Section Patterns</h1>
-      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Waves 1 &amp; 2 form the approved system; Wave 3 awaits human visual review.</p>
+      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Explore Waves 1–4; new Wave 4 patterns await human visual review.</p>
       <?php require __DIR__ . '/partials/navegacion-guia.php'; ?>
       <nav aria-label="On this page">
         <ul class="cl-guia-indice">
@@ -48,6 +48,12 @@ $paginaGuia = 'patrones';
           <li><a class="cl-enlace" href="#video-editorial">Video</a></li>
           <li><a class="cl-enlace" href="#comunidad">Community</a></li>
           <li><a class="cl-enlace" href="#valores">Values</a></li>
+          <li><a class="cl-enlace" href="#wave-4">Wave 4 overview</a></li>
+          <li><a class="cl-enlace" href="#wine-club">Wine Club</a></li>
+          <li><a class="cl-enlace" href="#gift-cards">Gift Cards</a></li>
+          <li><a class="cl-enlace" href="#events">Events</a></li>
+          <li><a class="cl-enlace" href="#private-experiences">Private Experiences</a></li>
+          <li><a class="cl-enlace" href="#wave-4-states">Wave 4 states</a></li>
         </ul>
       </nav>
     </div>
@@ -56,6 +62,7 @@ $paginaGuia = 'patrones';
     <?php require __DIR__ . '/partials/patrones-wave-1.php'; ?>
     <?php require __DIR__ . '/partials/productos-wave-2.php'; ?>
     <?php require __DIR__ . '/partials/editorial-wave-3.php'; ?>
+    <?php require __DIR__ . '/partials/comercial-wave-4.php'; ?>
   </main>
   <script type="module" src="../assets/js/dist/style-guide.js"></script>
 </body>
