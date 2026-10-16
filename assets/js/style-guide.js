@@ -6,6 +6,7 @@ import { inicializarModal } from "./modules/core/modal.js";
 import { inicializarNotificaciones } from "./modules/core/notificacion.js";
 import { inicializarProductosGuia } from "./modules/guia/productos.js";
 import { inicializarGaleria } from "./modules/patterns/galeria.js";
+import { inicializarComercialGuia } from "./modules/guia/comercial.js";
 
 // Los IDs son propios de esta guía; los módulos Core reciben elementos existentes.
 const porId = (id) => document.getElementById(id);
@@ -69,3 +70,4 @@ function inicializarCoreGuia() {
 if (porId("cantidad-demo")) inicializarCoreGuia();
 inicializarProductosGuia();
 for (const galeria of document.querySelectorAll("[data-cl-galeria]")) inicializarGaleria(galeria);
+inicializarComercialGuia();

@@ -64,6 +64,13 @@
   row-gap: var(--espacio-5);
 }
 
+// Ritmo y reserva de feedback exclusivos del laboratorio Wave 4.
+.cl-guia-comercial {
+  .cl-guia-controles-demo { margin-block: var(--espacio-5); }
+  .cl-guia-resultado { min-height: 8rem; }
+  .cl-acordeon { margin-block: var(--espacio-6); }
+}
+
 .cl-guia-iconos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));

@@ -1,0 +1,46 @@
+// La comparativa es una selección nativa; cada nivel conserva su relato.
+.cl-membresia {
+  min-width: 0;
+  height: 100%;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+  background: var(--color-superficie);
+  overflow-wrap: anywhere;
+
+  &--destacada { border-top: var(--espacio-1) solid var(--color-acento); }
+
+  &:has(input:checked) {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 3px;
+  }
+
+  &__nombre {
+    color: var(--color-acento);
+    font-size: 2rem;
+  }
+
+  &__precio {
+    margin-block: var(--espacio-5) var(--espacio-2);
+    font-family: var(--fuente-display);
+    font-size: 2rem;
+  }
+
+  &__nota {
+    display: block;
+    color: var(--color-texto-secundario);
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+  }
+
+  &__beneficios {
+    display: grid;
+    gap: var(--espacio-3);
+    padding-inline-start: var(--espacio-5);
+  }
+
+  &__eleccion {
+    padding-block-start: var(--espacio-4);
+    border-top: 1px solid var(--color-borde);
+  }
+}
