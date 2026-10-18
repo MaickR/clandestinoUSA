@@ -36,7 +36,7 @@ function inicializarListado(raiz) {
     raiz.querySelector("[data-cl-resenas-error]").hidden = disponibilidad.value !== "error";
     raiz.querySelector("[data-cl-resenas-carga]").hidden = disponibilidad.value !== "loading";
     mas.hidden = !listo || seleccion.length <= limite;
-    contador.textContent = listo ? `${seleccion.length} fictional ${seleccion.length === 1 ? "review" : "reviews"} · ${Math.min(limite, seleccion.length)} shown of 6 total. No real guest data.` : "Example collection unavailable. Filters retained.";
+    contador.textContent = listo ? `${seleccion.length} fictional ${seleccion.length === 1 ? "review" : "reviews"} · ${Math.min(limite, seleccion.length)} shown of ${entradas.length} total. No real guest data.` : "Example collection unavailable. Filters retained.";
   }
 
   for (const control of [filtro, orden]) control.addEventListener("change", () => { limite = 3; representar(); });
@@ -69,9 +69,23 @@ function inicializarFormulario(formulario) {
   const resultado = formulario.querySelector("[data-cl-resena-resultado]");
   const feedback = formulario.querySelector("[data-cl-resena-feedback]");
   const contador = formulario.querySelector("[data-cl-resena-contador]");
+  const puntuacionActual = formulario.querySelector("[data-cl-resena-puntuacion-actual]");
   const carga = inicializarBotonCarga(enviar);
   let esperando = false;
   let validarAlEditar = false;
+  let simulacionTerminada = false;
+
+  function actualizarPuntuacion() {
+    const elegido = radios.find((radio) => radio.checked);
+    puntuacionActual.textContent = elegido ? `${elegido.value} out of 5 stars selected.` : "No rating selected.";
+  }
+
+  function editarBorrador() {
+    if (!simulacionTerminada || esperando) return;
+    // Un solo anuncio al volver a editar; no repetirlo en cada pulsación.
+    simulacionTerminada = false;
+    mensaje("Draft updated. Run the simulation again; no review has been sent, saved or published.");
+  }
 
   function longitud() { return [...texto.value.trim()].length; }
   function mostrarError(controles, id, invalido) {
@@ -98,7 +112,11 @@ function inicializarFormulario(formulario) {
     feedback.replaceChildren(crearAlerta({ mensaje: mensajeTexto, variante }));
   }
   for (const control of [enviar, limpiar, resultado]) control.disabled = false;
-  texto.addEventListener("input", actualizarContador);
+  puntuacionActual.hidden = false;
+  actualizarPuntuacion();
+  texto.addEventListener("input", () => { actualizarContador(); editarBorrador(); });
+  for (const radio of radios) radio.addEventListener("change", () => { actualizarPuntuacion(); editarBorrador(); });
+  aviso.addEventListener("change", editarBorrador);
   formulario.addEventListener("change", () => { if (validarAlEditar) validar(); });
   formulario.addEventListener("submit", (evento) => {
     evento.preventDefault();
@@ -111,6 +129,7 @@ function inicializarFormulario(formulario) {
       return;
     }
     esperando = true;
+    simulacionTerminada = false;
     carga.establecerCarga(true);
     formulario.setAttribute("aria-busy", "true");
     for (const control of [...radios, texto, aviso, limpiar, resultado]) control.disabled = true;
@@ -120,16 +139,19 @@ function inicializarFormulario(formulario) {
       carga.establecerCarga(false);
       formulario.removeAttribute("aria-busy");
       for (const control of [...radios, texto, aviso, limpiar, resultado]) control.disabled = false;
+      simulacionTerminada = true;
       mensaje(resultado.value === "error" ? "Simulation failed. Your rating and text are retained. Try again; no real review was sent or published." : "Submission simulated · Pending moderation. No real review was sent, saved or published. Your example remains here for editing.", resultado.value === "error" ? "error" : "exito");
     }, 1200);
   });
   formulario.addEventListener("reset", (evento) => {
     if (esperando) { evento.preventDefault(); return; }
     validarAlEditar = false;
+    simulacionTerminada = false;
     for (const control of [...radios, texto, aviso]) { control.removeAttribute("aria-invalid"); control.classList.remove("cl-campo--error"); }
     for (const id of ["resena-puntuacion-error", "resena-texto-error", "resena-aviso-error"]) formulario.querySelector(`#${id}`).hidden = true;
     // El evento reset precede al restablecimiento nativo de los campos.
     contador.textContent = "0 / 1,000 characters";
+    puntuacionActual.textContent = "No rating selected.";
     mensaje("Example cleared. No review was sent, saved or published.");
     radios[0].focus();
   });

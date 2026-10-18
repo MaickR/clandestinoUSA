@@ -12,7 +12,7 @@ $promedioDemo = number_format(array_sum(array_column($resenasDemo, 'puntuacion')
       <div class="col-md-5"><p class="cl-eyebrow">Internal · fictional demo</p><p class="cl-reputacion__promedio"><?= $promedioDemo ?><span class="cl-texto-pequeno"> / 5</span></p><p>6 fictional reviews · not restaurant ratings</p><p class="cl-texto-pequeno cl-texto-secundario">Example snapshot: <time datetime="2026-10-16">October 16, 2026</time><br>No platform scores are combined.</p><a class="cl-enlace" href="#review-listing">Inspect the six example entries</a></div>
       <div class="col-md-7"><ul class="cl-reputacion__distribucion" aria-label="Fictional rating distribution">
         <?php for ($estrellas = 5; $estrellas >= 1; $estrellas--) : ?>
-        <li class="cl-reputacion__fila"><span><?= $estrellas ?> <?= $estrellas === 1 ? 'star' : 'stars' ?></span><progress class="cl-reputacion__barra" value="<?= $distribucionDemo[$estrellas] ?>" max="6" aria-label="<?= $estrellas ?> stars: <?= $distribucionDemo[$estrellas] ?> of 6 fictional reviews"><?= $distribucionDemo[$estrellas] ?> / 6</progress><span aria-hidden="true"><?= $distribucionDemo[$estrellas] ?></span></li>
+        <li class="cl-reputacion__fila"><span><?= $estrellas ?> <?= $estrellas === 1 ? 'star' : 'stars' ?></span><progress class="cl-reputacion__barra" value="<?= $distribucionDemo[$estrellas] ?>" max="6" aria-label="<?= $estrellas ?> <?= $estrellas === 1 ? 'star' : 'stars' ?>: <?= $distribucionDemo[$estrellas] ?> of 6 fictional reviews"><?= $distribucionDemo[$estrellas] ?> / 6</progress><span aria-hidden="true"><?= $distribucionDemo[$estrellas] ?></span></li>
         <?php endfor; ?>
       </ul></div>
     </div>
@@ -26,11 +26,7 @@ $promedioDemo = number_format(array_sum(array_column($resenasDemo, 'puntuacion')
         <div data-cl-resenas-skeleton hidden aria-hidden="true"><span class="cl-skeleton"></span><span class="cl-skeleton cl-skeleton--corto"></span></div>
         <button class="cl-boton cl-boton--secundario" type="button" data-cl-resenas-reintentar hidden>Retry example</button>
       </div>
-      <div class="row cl-guia-rejilla">
-        <?php foreach (['Internal' => 'Restaurant review records, subject to authorship checks and moderation.', 'Google' => 'No Google rating or review is reproduced. A verified review URL, date and permitted use are pending.', 'Facebook' => 'No Facebook rating or recommendation is reproduced. Its native rating model must be preserved.'] as $fuente => $nota) : ?>
-        <div class="col-lg-4"><article class="cl-catalogo__resumen"><p class="cl-eyebrow">Source boundary</p><h3><?= $escaparResena($fuente) ?></h3><p><?= $escaparResena($nota) ?></p><span class="cl-estado">Source data pending</span></article></div>
-        <?php endforeach; ?>
-      </div>
+      <p class="cl-media-video__contexto">Source identity belongs to every review and summary. <a class="cl-enlace" href="#review-sources">Inspect Internal, Google and Facebook source formats</a>. No platform ratings are combined.</p>
     </details>
   </div>
 </section>

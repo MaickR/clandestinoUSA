@@ -8,9 +8,10 @@
             <legend class="cl-etiqueta">Your rating · required</legend>
             <div class="cl-resena-formulario__opciones">
               <?php for ($i = 1; $i <= 5; $i++) : ?>
-              <label class="cl-resena-formulario__opcion" for="resena-estrella-<?= $i ?>"><input class="visually-hidden" type="radio" name="puntuacion" id="resena-estrella-<?= $i ?>" value="<?= $i ?>" required aria-describedby="resena-puntuacion-ayuda resena-puntuacion-error"><span><span aria-hidden="true" class="cl-resena-formulario__estrella">★ </span><?= $i ?><span class="visually-hidden"> <?= $i === 1 ? 'star' : 'stars' ?></span></span></label>
+              <label class="cl-resena-formulario__opcion" for="resena-estrella-<?= $i ?>"><input class="visually-hidden" type="radio" name="puntuacion" id="resena-estrella-<?= $i ?>" value="<?= $i ?>" required aria-describedby="resena-puntuacion-ayuda resena-puntuacion-error"><span class="cl-resena-formulario__estrella" aria-hidden="true">☆<span class="cl-resena-formulario__relleno">★</span></span><span class="visually-hidden"><?= $i ?> <?= $i === 1 ? 'star' : 'stars' ?></span></label>
               <?php endfor; ?>
             </div>
+            <p class="cl-resena-formulario__valor" data-cl-resena-puntuacion-actual hidden>No rating selected.</p>
             <p class="cl-mensaje-campo cl-mensaje-campo--ayuda" id="resena-puntuacion-ayuda">1 = poor · 5 = excellent. Use arrow keys within the rating group.</p>
             <p class="cl-mensaje-campo" id="resena-puntuacion-error" hidden>Choose a rating from 1 to 5.</p>
           </fieldset>

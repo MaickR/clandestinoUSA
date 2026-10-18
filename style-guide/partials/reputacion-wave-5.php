@@ -22,8 +22,14 @@ $tarjetaResena = static function (array $resena, bool $compacta = false) use ($e
         <h3 class="cl-resena__autor"><?= $escaparResena('Demo entry ' . substr($resena['id'], -2)) ?></h3>
       </header>
       <?php $valoracionResena($resena['puntuacion']); ?>
-      <p class="cl-resena__meta">Internal · fictional demo<?php if ($resena['fecha']) : ?> · <time datetime="<?= $escaparResena($resena['fecha']) ?>"><?= $escaparResena($resena['fecha']) ?></time><?php endif; ?> · Not verified</p>
       <p class="cl-resena__texto"><?= $escaparResena($resena['texto']) ?></p>
+      <ul class="cl-resena__meta" aria-label="Review context">
+        <li><span class="cl-resena__fuente">Source: Internal</span> · fictional demo</li>
+        <?php if ($resena['fecha']) : ?>
+        <li><time datetime="<?= $escaparResena($resena['fecha']) ?>"><?= $escaparResena((new DateTimeImmutable($resena['fecha']))->format('M j, Y')) ?></time></li>
+        <?php endif; ?>
+        <li>Not verified</li>
+      </ul>
       <?php if (!empty($resena['respuesta'])) : ?>
       <aside class="cl-resena__respuesta" aria-label="Example business response"><p><strong>Business response · fictional example</strong></p><p>A response to this comment would appear here. No real conversation is represented.</p></aside>
       <?php endif; ?>

@@ -17,7 +17,7 @@
     flex-wrap: wrap;
     gap: var(--espacio-3);
     align-items: center;
-    margin-block-end: var(--espacio-4);
+    margin-block-end: var(--espacio-2);
   }
 
   &__avatar {
@@ -39,12 +39,25 @@
   }
 
   &__meta {
-    margin-block: var(--espacio-2) var(--espacio-4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2) var(--espacio-4);
+    margin-block: var(--espacio-4) 0;
+    padding: 0;
     color: var(--color-texto-secundario);
     font-size: 0.875rem;
+    line-height: 1.5;
+    list-style: none;
+
+    > li { min-width: 0; }
   }
 
-  &__texto { margin: 0; }
+  &__fuente {
+    color: var(--color-texto);
+    font-weight: 500;
+  }
+
+  &__texto { margin-block: var(--espacio-4) 0; }
 
   &__respuesta {
     margin-block-start: var(--espacio-5);

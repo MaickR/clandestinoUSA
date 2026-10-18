@@ -1,5 +1,76 @@
 # Biblioteca de patrones de sección
 
+## Refinamiento Wave 5 — 2026-10-18 — QA renderizado pendiente
+
+Rama `feature/ui-section-patterns-wave-5`, base de esta pasada `1ed29dbc7e4a99537bef3df24775e8fbcc845602`. Preflight: rama correcta, árbol limpio, fetch ejecutado y divergencia 0/0 con origin; Wave 5 y su base intactas. Sin nueva rama ni cambios a develop/main. Este apartado describe el refinamiento vigente; las verificaciones del 16 de octubre que siguen son históricas y no certifican estos cambios. **WAVE 5 NOT READY: falta QA visual/funcional actual en navegador.**
+
+### Auditoría previa y decisiones
+
+Se revisaron AGENTS, VISUAL-DIRECTION, UX/UI, Core, estándares, arquitectura, esta biblioteca, los cuatro SCSS, el módulo JS, los cinco PHP y los contratos reales Foundation/Waves 1–4. Las capturas locales del 16 de octubre se consultaron como referencia de la misma base sin cambios, no como render actual del refinamiento.
+
+| Observación | Clasificación y evidencia | Decisión |
+|---|---|---|
+| Selector con estrella rellena y número iguales en cinco opciones | Mejora UX/UI justificada: markup/CSS y captura de la base; la selección no se expresa de forma progresiva | Conservar radios y sustituir presentación por cinco estrellas vacías/rellenas progresivamente, valor numérico textual y foco de teclado |
+| Metadatos de reseña en una sola línea de texto | Mejora UX/UI justificada: fuente/fecha/verificación concatenadas, sin elementos independientes | Separar una lista semántica con wrap; autor y puntuación conservados, texto antes del contexto, fecha legible y respuesta independiente |
+| Destacado con firma genérica | Mejora UX/UI justificada: figcaption original no tenía espacios individuales para autor/fuente/fecha/valoración | Mantener foto/cita/CTA y columnas; autor y contexto como placeholders explícitos, fecha/valoración opcionales sin fabricar cifras |
+| Procedencias Google/Facebook | Pendiente de contenido real; mejora de su muestra frontend justificada | Reubicar las tres muestras existentes junto a Reviews, usando los mismos metadatos. Sin copiar reseñas, estrellas, logos o enlaces falsos |
+| Éxito anterior permanece tras editar | Defecto confirmado en flujo de código: input actualizaba contador/validación y change solo validación; ninguno invalidaba el resultado anterior | Un aviso Draft updated al volver a editar puntuación/texto/aviso después de éxito o fallo; no repetirlo por pulsación |
+| Orden, fechas ausentes, Show more y foco | Comportamiento ya correcto por inspección; comparadores ejecutados como funciones aisladas | No reescribir. Mantener foco en filtro/orden, y título de primera entrada revelada al desaparecer Show more. El contador deriva el total de entradas, sin literal 6 |
+| Vacío/loading/error/retry, reputación, video y lifecycle | Responsabilidad ya correctamente representada en el código; prueba interactiva actual pendiente | Conservar estados. Solo corregir singular accesible «1 star». Sin cambiar promedio, distribución, media o reglas de moderación |
+| Paginación, verificación externa, autoría y publicación | Funcionalidad futura | Conservar contratos conceptuales; sin API, almacenamiento ni panel administrativo |
+
+No se declara reproducción en navegador de estas observaciones: el acceso fue rechazado antes de observar la página. Los cambios de presentación se basan en código y capturas históricas de la base; la autoevaluación del render nuevo sigue pendiente. No se modifican tokens ni VISUAL-DIRECTION, ni se atribuye una aprobación estética nueva.
+
+### Resultado y contratos conservados
+
+- `cl-resena` y `--compacta` conservan superficie, radio md, avatar opcional, autor, puntuación textual, cuerpo completo y respuesta. `cl-resena__meta` ahora es una lista de fuente, fecha opcional y verificación que envuelve cada dato por separado; `__fuente` aporta énfasis textual sin badge. La fecha usa `time` ISO y etiqueta legible. Sin fecha no aparece un valor sustituto.
+- Los tres formatos de procedencia están en `#review-sources`, dentro del disclosure de contexto. Internal, Google y Facebook llevan nombres legibles, estado de fecha/URL pendientes y contexto de permisos; no contienen citas ni ratings. Solo se añadirá un enlace original al validar una URL auténtica y su uso permitido.
+- `cl-testimonio` mantiene la composición editorial y fotografía ambiental existente. La firma presenta nombre autorizado pendiente, fuente pendiente, fecha opcional y valoración no proporcionada, todos explícitamente placeholders. No hay estrellas sin datos. Una integración real omitirá los datos opcionales ausentes y conservará autoría/permisos comprobados.
+- El formulario mantiene cinco radios nativos, un nombre/grupo, required, flechas/Space del navegador y labels accesibles 1–5. CSS `:has(:checked)` rellena la estrella elegida y anteriores; hover solo destaca el target, sin cambiar la puntuación. `:has(:focus-visible)` dibuja foco de teclado. Mínimos CSS de 2.75rem, gap existente y wrap; pendientes medidas renderizadas. La cifra visible «N out of 5 stars selected» complementa forma/color; es texto normal, sin otra región live que duplique el anuncio del radio. Sin JS se oculta ese texto dinámico para evitar un valor obsoleto; radios/selección CSS y nombres nativos permanecen.
+- Tras terminar una simulación, la primera edición vuelve al borrador con Core Alert informativa. Las siguientes pulsaciones no recrean el aviso; un nuevo resultado de simulación permite otro aviso al volver a editar. Espera, bloqueo, validación, conservación tras fallo, éxito inequívoco sin publicación y reset permanecen. Reset limpia el valor textual además del contador/errores. No hay requests ni persistencia.
+- El listado conserva filtros, cuatro órdenes, contador `role=status` atómico, Show more, vacío, loading/error y recuperación. Los controles de filtro/orden no reciben un traslado automático de foco. El título revelado por Show more recibe `tabindex=-1`, sin añadir una parada permanente de Tab. Sin JS, seis entradas completas y controles demo deshabilitados en el HTML. Estos son contratos/código inspeccionados, no pruebas actuales de teclado/lector de pantalla.
+- PHP futuro podrá proporcionar registros paginados, total autoritativo, página/cursor y filtro/orden efectivos. La demo opera sobre una colección local completa; su contador de DOM no es el total global de una colección paginada. El adaptador futuro deberá resolver filtro/orden de toda la colección en servidor cuando corresponda. Sin diseñar ahora un protocolo o paginador.
+- Reputación conserva 3.2/5 y distribución 1/2/1/1/1 sobre seis datos ficticios internos; nunca mezcla plataformas ni muestra ausencia como cero. Video conserva contrato nativo inerte, horizontal/vertical, error y alternativa externa: sin film nuevo, autoplay, poster falso ni permisos supuestos. Lifecycle conserva moderación interna, publicación, cuerpo público/retirado y revisión pendiente separados; ningún texto rechazado/retirado entra en la colección.
+
+### QA actual y límites
+
+Skill aplicada: `.agents/skills/qa-visual/SKILL.md`. El navegador integrado rechazó la adquisición de acceso a la URL local por su política interna, antes de observar contenido, pese al protocolo HTTP solicitado. La autorización del usuario para trabajar en local está confirmada. No se cambió de origen, navegador, motor de renderizado ni canal para eludir el rechazo. Las comprobaciones de código/HTML/HTTP siguientes no son sustitutos de navegador.
+
+| Comprobación ejecutada | Resultado |
+|---|---|
+| npm run lint / npm run build | PASS: ESLint/Stylelint y build completos; sin cambiar reglas, dependencias o tooling |
+| php -l / git diff --check | PASS: los 25 PHP de guía y diff; se repiten los PHP tocados tras el último ajuste de copy |
+| HTML generado localmente | PASS estructural HTMLParser/lxml: cierres equilibrados, un h1, 238 IDs únicos, ARIA/anclas resueltas; no certificación Nu/W3C |
+| Radios y alternativa sin JS | PASS estructural: valores 1/2/3/4/5, un nombre/fieldset, cinco labels y required, seis entradas sin hidden; acciones/selects deshabilitados en HTML inicial. No se declara recorrido real de teclado ni navegador sin JS |
+| Funciones de puntuación/borrador | PASS aislado Node: seis etiquetas (vacío y 1–5), cambio a borrador una sola vez, sin aviso durante espera o edición inicial; bindings revisados. Sin DOM ni simulador de navegador |
+| Cuatro comparadores reales | PASS aislado sobre los seis datos PHP: newest/oldest dejan fecha ausente al final; highest/lowest correctos. No demuestra UI de filtros, Show more o recuperación |
+| Procedencia, featured y video | PASS estructural: tres muestras sin cita/rating/enlace, metadatos explícitos del destacado y cero videos activos |
+| Recursos | PASS HTTP: 51 recursos locales responden 200 y usos SVG resueltos. No es Network/HAR de navegador ni decodificación visual |
+| Contraste / reduced motion | PASS matemático de 12 pares de tokens compilados, mínimo 8.65:1; selectores progresivos/foco y regla reduce presentes. No se declara contraste renderizado, hover o emulación del SO |
+| npm run dev | PASS: PHP/BrowserSync/watch en localhost:3000, con aviso Node DEP0060 preexistente |
+| Diez anchos: 320/360/390/425/768/820/992/1024/1280/1440 | PENDIENTE: nuevas capturas, medidas de overflow, metadatos/texto sin espacios, targets y proporción tablet/desktop |
+| Teclado/foco/lector, selección 1–5, formulario y estados | PENDIENTE en navegador: no se extrapolan pruebas del 16 de octubre. Zoom real 200%, viewport corto y anuncios también pendientes |
+| Regresiones Core/Waves 1–4 y consola | Fuentes intactas y build correcto; PENDIENTE ejecución actual de modal/galería, Quantity, Accordion y demos comerciales, consola y Network |
+
+Evidencia local fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a146a9-6634-73b2-b882-7a42ccd1f604/refinement-2026-10-18/`, con `before.json`, `after.json`, `logic-checks.json`, `html-checks.json`, `token-contrast.json` y HTML. No hay capturas nuevas ni se presentan las históricas como evidencia del refinamiento.
+
+### Performance, cobertura y entrega
+
+Mismo pipeline y Node gzip nivel 6; guía medida en memoria con esbuild, sin sourcemaps. El build no deja CSS/JS de guía; main.js fuente y output productivo permanecen idénticos.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 81515 | 82271 | 14161 | 14268 | +107 (+0.76%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 94499 | 95514 | 21843 | 22057 | +214 (+0.98%) |
+| JS guía minificado, medición | 50905 | 51377 | 16191 | 16318 | +127 (+0.78%) |
+
+Nueve archivos modificados: tres SCSS (`_resena`, `_testimonio`, `_resena-formulario`), `modules/guia/resenas.js`, cuatro PHP (`reputacion-wave-5`, `resenas-testimonios-wave-5`, `escribir-resena-wave-5`, `resumen-listado-wave-5`) y esta biblioteca. Sin nuevos archivos del repo, componentes, fotos, videos, iconos, fuentes o dependencias. `_reputacion.scss`, lifecycle, Foundation/Core/Waves 1–4, entradas, producción, legacy, backend/BD, Booking-app-php y hosting intactos.
+
+La matriz original conserva sus siete familias y contratos futuros: reseñas internas, procedencias externas verificadas, destacado autorizado, video autorizado, reputación por fuente, listado, formulario y estados de moderación tienen estructura frontend. El refinamiento resuelve las carencias de presentación/borrador detectadas sin ampliar backend ni variantes redundantes. **Cobertura de código cerrada; aceptación visual/funcional actual abierta.**
+
+Revisión local: `http://localhost:3000/style-guide/patterns.php#wave-5`, `#reviews`, `#review-sources`, `#featured-testimonials`, `#write-review`, `#review-listing`, `#reputation`; Core en `/style-guide/`. Abrir el disclosure de procedencia; recorrer puntuación 1→5 con flechas/Space, enviar, editar puntuación/texto y comprobar Draft updated, forzar fallo y recuperar, resetear. Probar cuatro órdenes, filtro sin resultados, Show more, retry y fechas ausentes; repetir diez anchos, texto largo/metadatos extensos, poca altura, zoom real 200% y regresiones. Sin PR, merge, force push ni deploy. Contenido auténtico, permisos, verificación y backend siguen pendientes independientes del QA bloqueado.
+
 ## Wave 5 — Reviews, Testimonials & Reputation — 2026-10-16
 
 Rama `feature/ui-section-patterns-wave-5`, base `develop@9e6d0b475f6f663ea65fc05f6af4bdac44a5851f`. Preflight limpio: fetch, switch develop y fast-forward ejecutados; Wave 4 verificada como ancestro e integrada por merge #10. Sin PR, merge ni deploy de esta feature. Dirección visual existente conservada, sin decisiones nuevas atribuidas al usuario. **Aprobación visual humana pendiente.**
