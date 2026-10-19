@@ -46,7 +46,7 @@ El sprite es output ignorado por Git. Tanto dev como build lo generan siempre an
 
 ## CSS y JavaScript
 
-`main.scss` importa la mecánica Sass `transitions`, `modal`, `toasts` y los componentes BEM propios. No importa componentes visuales Bootstrap adicionales. `style-guide.scss` conserva la presentación de demos como única hoja separada; `main.scss` no importa `_guia.scss`.
+`main.scss` importa la mecánica Sass `transitions`, `modal`, `toasts` y los componentes BEM propios. Wave 6 añade la mecánica `offcanvas` para navegación, con presentación `cl-` propia; no sustituye componentes Core. `style-guide.scss` conserva la presentación de demos como única hoja separada; `main.scss` no importa `_guia.scss`.
 
 `assets/js/main.js` permanece sin imports Core. Su output productivo no aumenta. `assets/js/style-guide.js` importa demos y los seis módulos reutilizables de `modules/core/`:
 

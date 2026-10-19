@@ -1,6 +1,9 @@
 <?php
 // Laboratorio aislado. No es una página productiva ni un motor de reservas.
 $pieCompleto = ($_GET['footer'] ?? '') !== 'minimal';
+$logoNavegacion = ($_GET['logo'] ?? '') === 'original' ? '/assets/images/clandestino-logo.svg' : '/assets/images/clandestino-logo-ui.svg';
+$paginaInterior = ($_GET['layout'] ?? '') === 'interior';
+$destinoActivo = ($_GET['active'] ?? '') === 'club' ? 'Wine Club' : 'Home';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,11 +18,14 @@ $pieCompleto = ($_GET['footer'] ?? '') !== 'minimal';
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.new.css">
+  <link rel="stylesheet" href="/assets/css/style-guide.css">
 </head>
 <body class="cl-estructura" data-cl-navegacion>
   <a class="cl-saltar" href="#contenido-global">Skip to main content</a>
+  <?php require __DIR__ . '/partials/acceso-wave-6.php'; ?>
   <?php require __DIR__ . '/partials/cabecera-wave-6.php'; ?>
   <main id="contenido-global" tabindex="-1">
+    <?php if (!$paginaInterior) : ?>
     <section class="cl-hero" id="inicio-global" tabindex="-1" aria-labelledby="inicio-global-titulo">
       <picture class="cl-hero__media">
         <source srcset="/assets/images/avif/bg/clandestino-usa.avif" type="image/avif">
@@ -33,11 +39,15 @@ $pieCompleto = ($_GET['footer'] ?? '') !== 'minimal';
         <div class="cl-seccion__acciones"><a class="cl-boton" href="<?= $escaparNavegacion($rutaReserva) ?>">Reserve a Table</a><a class="cl-boton cl-boton--secundario" href="/style-guide/patterns.php#productos-vinos" target="_top">Explore Wines</a></div>
       </div></div></div>
     </section>
+    <?php else : ?>
+    <section class="cl-seccion" id="inicio-global" tabindex="-1" aria-labelledby="interior-titulo"><div class="container"><p class="cl-eyebrow">Interior composition · design laboratory</p><h1 id="interior-titulo">An unhurried evening of Spanish hospitality, from the first welcome to the last glass</h1><p>A long title without a photographic hero. The same header, breadcrumbs, form controls and footer remain in place.</p></div></section>
+    <section class="cl-seccion cl-guia-estructura-clara" aria-labelledby="interior-form-titulo"><div class="container"><h2 id="interior-form-titulo">A lighter content surface</h2><p>Contrast and anchor test only; this is not a product theme or a live enquiry form.</p><label class="cl-etiqueta" for="interior-sample">Example enquiry</label><input class="cl-campo" id="interior-sample" value="A table for an evening together · sample only" readonly></div></section>
+    <?php endif; ?>
     <section class="cl-seccion" aria-labelledby="estructura-titulo">
       <div class="container">
         <p class="cl-eyebrow">Wave 6 · Navigation laboratory</p>
         <h2 id="estructura-titulo">An invitation, from every page.</h2>
-        <p>This is an isolated design system preview. Navigation opens existing examples in the guide. My Account is a future destination; reservations are not available here.</p>
+        <p>This is an isolated design system preview. Navigation opens existing examples in the guide. Sign in opens a sample interface; accounts and reservations are not available here.</p>
         <p><a class="cl-enlace" href="/style-guide/patterns.php#wave-6" target="_top">Back to Section Patterns</a></p>
         <nav class="cl-ruta" aria-label="Breadcrumb">
           <ol class="cl-migas"><li class="cl-migas__item"><a class="cl-enlace" href="#inicio-global">Home</a></li><li class="cl-migas__item"><span class="cl-migas__separador" aria-hidden="true">/</span><span aria-current="page">Navigation laboratory</span></li></ol>
@@ -53,6 +63,7 @@ $pieCompleto = ($_GET['footer'] ?? '') !== 'minimal';
           <address class="cl-contacto"><p>211 N Mt Shasta Blvd, Mt Shasta, CA 96067</p><p><a class="cl-enlace" href="mailto:ntcusa@nicolastena.com">ntcusa@nicolastena.com</a></p></address>
           <p class="cl-texto-pequeno">Optional data example: phone, social profiles and opening hours omitted. Hours awaiting confirmation. Legal policy slot awaiting a published document — no link.</p>
           <p><a class="cl-enlace" href="navigation.php?footer=minimal#pie-global" target="_top">Preview the same footer with optional data absent and a longer description</a></p>
+          <p><a class="cl-enlace" href="navigation.php?layout=interior&amp;active=club" target="_top">Preview an interior page, form controls and Discover active</a></p>
         </details>
         <nav class="cl-contexto" aria-label="Related destinations">
           <a class="cl-enlace" href="/style-guide/patterns.php#experiencias" target="_top"><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-volver"></use></svg>Back to Experiences</a>

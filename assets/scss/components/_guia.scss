@@ -1,4 +1,13 @@
 // Presentación del style guide. No es UI de producto.
+.cl-guia-estructura-clara {
+  background: $cream-100;
+  color: $ink-900;
+
+  h2,
+  .cl-etiqueta { color: $ink-900; }
+  .cl-campo { max-inline-size: 36rem; }
+}
+
 .cl-guia-navegacion-marco {
   display: block;
   inline-size: 100%;

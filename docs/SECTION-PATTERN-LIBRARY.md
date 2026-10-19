@@ -1,6 +1,99 @@
 # Biblioteca de patrones de sección
 
+## Wave 6 — Refinamiento final — 2026-10-19
+
+Esta sección describe el estado vigente y sustituye las decisiones de interacción/composición del registro inicial de Wave 6 conservado más abajo. Misma rama `feature/ui-section-patterns-wave-6`, base `develop` en `a88845e`, inicio del refinamiento `c5b1be5`. Preflight: árbol limpio, fetch y sincronización 0/0 con origin, diff contra develop revisado; sin cambios ajenos. Arquitectura general, Discover, reservas, breadcrumbs y navegación contextual aprobados en primera revisión humana. Este refinamiento requiere nueva aprobación visual.
+
+### Cobertura y criterio visual
+
+Se inspeccionaron las tres referencias adjuntas de AKLE (desktop, móvil y tablet: archivos `codex-clipboard-66e28fbd…`, `1ee97f78…` y `b6370626…`). Se adoptan organización editorial, separadores, círculos sociales y franja inferior; no identidad, contenidos, pagos ni garantías. Foundation, Core y Waves 1–5 se reutilizan: no hay biblioteca paralela, fuentes, iconos ni dependencias nuevas. VISUAL-DIRECTION permanece intacto.
+
+| Necesidad | Resolución vigente |
+|---|---|
+| Header / tipografía | Extender `cl-cabecera`; fuente explícita `var(--fuente-cuerpo)`, peso 500, 0.9375rem, interlineado 1.5 y tracking 0.015em; sin cambiar escala global |
+| Sticky / Hero / skip / breadcrumbs / contexto | Reutilizar; superficie sólida, altura estable, observers y offsets locales; Hero Wave 1 intacto |
+| Móvil/tablet | Sustituir únicamente Collapse del panel principal por Offcanvas oficial; Discover conserva Collapse |
+| Cuenta | Crear composición de acceso con icono Core y Core Modal/campos/carga/alertas; exclusivamente sintética |
+| Footer | Rediseñar composición `cl-pie` y reutilizar `cl-contacto`, grid, enlaces y sprite Core |
+| Backend, cuentas, reservas, pagos | Diferir a fase funcional; no se implementan endpoints, tablas, sesiones ni permisos |
+| TikTok / YouTube | Diferir: sin URL canónica verificable en repositorio; no generar enlaces |
+| Back to Top | Omitir: no se justifica otro control flotante/sistema global en este laboratorio; reconsiderar al construir páginas largas reales |
+
+### Header, Discover y drawer
+
+Desktop desde xl/1200px: logo → Home / Experiences / Restaurant / Wine Shop → Discover → Reserve a Table → icono Sign in. Se preservan aire, targets de al menos 44px y subrayado activo. Discover contiene únicamente Gift Cards, Wine Club y Events; si una hija es actual, el padre tiene indicador visual y descripción accesible, y la hija `aria-current="page"`. No es un megamenú ni depende de hover.
+
+Por debajo de xl se usa una sola estructura DOM de navegación en `offcanvas-xl offcanvas-end`, ancho `min(25rem, calc(100vw - var(--espacio-5)))`: 296px a 320px y máximo 400px. Panel derecho oscuro, grupos claros, CTA y contacto compacto, scroll interno; transición transform de 260ms, sin blur. El mismo botón hamburguesa se traslada al encabezado del drawer y se convierte en X: no se duplica un cierre. Sus nombres son Open/Close main navigation; estado y aria-expanded siguen el ciclo oficial. Se bloquean dobles activaciones durante transición y se atiende cierre pendiente al finalizar la apertura.
+
+`inicializarNavegacion(contenedor, { raizScroll = null })` mantiene API explícita, WeakMap e inicialización idempotente. Imports individuales Offcanvas y Collapse; Bootstrap aporta backdrop, Escape, focus trap, bloqueo/restauración de body y cierre responsive al pasar a desktop. No hay segundo trap ni listener de resize propio. Escape cierra Discover antes que el drawer; selección cierra y enfoca anclas locales al terminar. Cierre normal retorna al activador; resize a desktop retorna a Discover. `destruir()` devuelve una Promise cacheada, espera transiciones, aborta listeners, desconecta observers, dispone instancias y restaura markup. Limpieza revisada en código; montaje/desmontaje dinámico no probado en navegador.
+
+Sticky conserva alto aproximado de 84px; solo cambian superficie/borde. IntersectionObserver y ResizeObserver mantienen estado y `--navegacion-offset`; scroll-margin local evita anclas/foco ocultos. No se altera historial ni scroll global. Sin JS, las listas permanecen visibles y los controles de mejora ocultos; alternativa revisada en markup. Foundation/reduced-motion y reglas Bootstrap reducen transiciones; se inspeccionó CSS compilado, sin emular preferencia del sistema.
+
+### Acceso demostrativo y contrato futuro
+
+El único icono de persona, después de reservas en desktop y disponible junto al logo en móvil, abre `acceso-wave-6.php`. `inicializarAcceso(contenedor, activador)` reutiliza Core Modal y sus mecanismos de foco, Escape, backdrop, scroll y retorno. Título Welcome back, labels visibles, email/password, Show/Hide con aria-pressed, foco inicial en email, carga/errores/feedback y cierre. Recuperación y creación de cuenta son slots textuales sin rutas falsas.
+
+Los campos son **readonly**, sin atributos name, con fixtures `guest@example.invalid` / `sample-only`; password oculto inicialmente y al cerrar. Autocomplete username/current-password prepara el contrato. El submit se cancela siempre: validación sintética y temporizador de interfaz de 900ms, seguido de aviso explícito de servicio no conectado. Selector de laboratorio separado ofrece ready, invalid, loading, error y complete; complete declara que no hubo autenticación ni sesión. No hay fetch, endpoints, cookies, persistencia, registro de credenciales ni falso acceso exitoso. El HTML sin JS mantiene submit deshabilitado.
+
+Integración posterior PHP/MySQL (Wave 7/backend): un único acceso para clientes y administradores; servidor determina rol, autorización y destino permitido en cada petición. No mostrar Admin como categoría comercial. Reemplazar fixtures/readonly y conectar servicio solo al existir funcionalidad real: validación servidor, CSRF, consultas preparadas, password_hash/password_verify, errores genéricos y limitación de intentos; sesiones con cookies Secure/HttpOnly/SameSite y redirects permitidos. No se crean esquema, rutas ni infraestructura en esta wave. La autorización nunca dependerá del control visual ni de un rol enviado por cliente.
+
+### Footer editorial y datos
+
+Desktop: cuatro áreas Brand / Explore / Discover more / Visit & contact, separadas con gutters y líneas discretas. Tablet: marca superior y tres columnas legibles. Móvil: logo/descripción/redes centrados, grupos verticales con separadores; sin acordeones innecesarios. Franja inferior independiente con copyright PHP dinámico y legales reales. Altura observada con datos completos: aproximadamente 1282px a 390, 744px a 768 y 543px a 1280; sin overflow ni huecos artificiales.
+
+Explore contiene Restaurant, Wine Shop y Experiences; Discover more agrupa Spanish Wine Club, Gift Cards, Events y Private Experiences (ancla existente de guía configurable mediante `$rutaExperienciaPrivada`). Logo Home usa la configuración de navegación. Datos contrastados con index/contact legacy: 211 N Mt Shasta Blvd, Mt Shasta, CA 96067; `tel:+14086090027`; `mailto:ntcusa@nicolastena.com`; Maps hacia esa dirección. Horario archivado Tue–Sun 4–8 PM Pacific / Monday Closed aparece con aviso de reconfirmación, no como promesa de vigencia comercial. Confirmar teléfono, email y horario antes de publicación real.
+
+Instagram `https://www.instagram.com/theclandestinousa/` y Facebook `https://www.facebook.com/profile.php?id=61559740614798`: iconos del sprite, círculos 44px, nombres accesibles y rel de seguridad al abrir fuera. No se habilitan TikTok/YouTube sin URL verificada. Legales `/policies.html` y `/terms.html` existen; sin políticas inventadas, logos de pago ni afirmaciones de seguridad comercial. Fixture `?footer=minimal` prueba datos opcionales ausentes y descripción larga con el mismo partial, sin enlaces vacíos.
+
+### Configuración de rutas y composición
+
+Se conservan `$rutasNavegacion`, `$rutasDescubrir`, `$destinoActivo`, `$rutaReserva`; se añaden `$logoNavegacion` (derivado UI por defecto) y `$rutaExperienciaPrivada`. Valores desde configuración interna confiable, escapados; no construir URLs desde labels ni petición. Nueve destinos de producto representados: Experiences es ancla de Home; Reserve conserva destino demostrativo válido/aviso; My Account se expresa mediante Sign in sintético, futura ruta autorizada por servidor. Booking-app-php permanece sin cambios ni integración.
+
+El sitemap legacy no es contrato futuro: menu/tapas corresponden a contenido Restaurant; wines a Wine Shop; swc a Wine Club; hampers a catálogo contextual; about al relato Restaurant; contact a contacto/footer; terms/policies a legales. links es utilidad legacy, no nueva categoría primaria. No se modifica sitemap ni se publican rutas nuevas.
+
+`navigation.php?layout=interior&active=club` demuestra página sin Hero, título largo, sección clara/campo Core, breadcrumbs y estado de hija activa. La composición por defecto conserva Hero fotográfico, contenido oscuro y anclas. Query fixtures con valores allowlisted, sin interpolación de entrada. Iframe de Patterns conserva aislamiento y navegación propia; no hay segunda versión productiva del Header ni import de demostraciones en main.js.
+
+### Logo y performance
+
+El SVG original (435399 bytes) contiene dos PNG embebidos. Se creó `assets/images/clandestino-logo-ui.svg` (285557 bytes): PNG → WebP lossless exact, igualdad RGBA decodificada comprobada en ambos recursos, eliminación solo de metadata/namedview no renderizable; geometría, máscaras, proporciones y original intactos. Render revisado en navegador. `?logo=original` permite comparar. No se afirma igualdad píxel a píxel de capturas ni compatibilidad entre navegadores no probados.
+
+Mediciones comparables Node gzip por defecto, CSS de build y esbuild ES2020 en memoria para guía:
+
+| Recurso | Antes bytes / gzip | Después bytes / gzip |
+|---|---:|---:|
+| CSS productivo | 90329 / 15797 | 105258 / 17319 |
+| JS guía sin minificar, sin sourcemap | 108592 / 24998 | 119537 / 27650 |
+| JS guía minificado (solo medición) | 58622 / 18506 | 64565 / 20093 |
+| JS productivo | 0 / 20 | 0 / 20 |
+| Sprite Core | 11536 / 3920 | 11536 / 3920 |
+| Logo original → derivado UI | 435399 / 304595 | 285557 / 201119 |
+
+Incremento CSS gzip 1522 bytes y guía minificada gzip 1587 bytes incluye mecánica Offcanvas y acceso. Ahorro logo gzip 103476 bytes (34.0%). Build excluye style-guide.js; producción sigue sin activación JS. Sin bundle Bootstrap completo, Popper, dependencias ni imágenes nuevas. Fuente original intacta; derivado no sustituye assets legacy.
+
+### QA ejecutado y límites
+
+- `npm run lint`, `npm run build`, php -l en los 32 PHP de guía y `git diff --check`: correctos. Validación HTML renderizado de lab completo/mínimo/interior, Patterns y Core: cierres, IDs únicos, referencias ARIA/anclas, alt y sprite; 66 URLs locales únicas respondieron 200. No equivale a certificación W3C.
+- Navegador IAB real en 320, 360, 390, 425, 768, 820, 992, 1024, 1280 y 1440: cerrado, drawer/Discover y modal abiertos, sin overflow horizontal. Texto largo a 320/768/1280, viewport corto 390×360 y cambio de orientación/resize probados.
+- Drawer: click, Enter/Space, X, Escape, backdrop, selección/ancla, Tab/Shift+Tab circular, tres ciclos, scroll interno y resize abierto a desktop. Sin backdrop residual ni body bloqueado; foco restaurado. Modal: foco inicial, Tab/Shift+Tab, Escape/backdrop/cierre, Show/Hide y reset, estados sintéticos/validación/carga, sin autenticación.
+- Footer completo/mínimo, tablet/móvil/desktop; interiores claros/oscuros, Hero y sin Hero; activos/breadcrumbs/offsets y separación de la guía revisados. Contraste calculado de 37 textos sólidos Header/Footer/modal: mínimo 5.47:1, ninguno inferior a 4.5:1. Consola sin errores/warnings en las muestras revisadas.
+- Regresiones representativas ejecutadas: Core Modal, Accordion, Collapse, formulario/select y Quantity; Waves 1–5: Hero, cantidad/subtotal, Gallery (abrir/cerrar/foco), elección de plan, filtro/rating, Reviews Carousel y Video Carousel (recorrido hasta final). Iframe conserva overlays/foco propios. No se probó reproducción de vídeo ni se modificaron módulos anteriores.
+- Pendiente manual: zoom real 200%, touch físico, lector de pantalla, forced colors, reduced motion a nivel sistema, Safari/Firefox. Sin emulación fiable disponible para esas condiciones, no se declara PASS. Revisar teclado completo, orientación, ambas preferencias de movimiento y logo en esos navegadores antes de publicación.
+
+| Comprobación qa-visual ejecutada | Resultado |
+|---|---|
+| 390 / 768 / 1280 y otros siete anchos | PASS: composición y capturas revisadas |
+| Teclado y foco | PASS: controles, overlays, retorno y secuencia probados |
+| Contraste de textos sólidos | PASS: mínimo 5.47:1 |
+| Semántica, labels, alt, IDs y ARIA | PASS: HTML renderizado inspeccionado |
+| Consola y recursos locales revisados | PASS: sin errores/warnings, enlaces locales 200 |
+| Overflow y texto largo | PASS: sin desbordamiento horizontal |
+| Safari/Firefox, zoom 200%, touch físico, lector y movimiento del sistema | PENDIENTE manual, no PASS |
+
+Evidencia local fuera del repositorio: carpeta `C:/Users/Mike/.codex/visualizations/2026/10/19/01a1547e-0df7-7222-8161-191d7900264d/wave-6-refinement/` con JSON antes/después/responsive/estrés/contraste y capturas finales 390/768/1280, drawer, modal e interiores. `npm run dev` sirve `http://localhost:3000/style-guide/navigation.php`, variantes anteriores y `/style-guide/patterns.php` / `/style-guide/` (Core) para revisión. Tras el build final se reinició dev correctamente; la reapertura final del navegador fue rechazada por su política de seguridad de URL, sin intentar evasión. Los resultados anteriores corresponden a pruebas reales ya ejecutadas; no se afirma una nueva sesión de navegador después de ese bloqueo. Aprobación visual humana pendiente; sin PR, merge ni deploy.
+
 ## Wave 6 — Navegación global y estructura — 2026-10-19
+
+**Registro histórico inicial:** las decisiones sustituidas por el refinamiento vigente de arriba (Collapse móvil, cuenta estática, composición Footer y logo sin derivado) se conservan como trazabilidad, no como contrato actual.
 
 Rama `feature/ui-section-patterns-wave-6`, desde `develop` en `a88845e` (merge de Wave 5, PR #11). Preflight: árbol limpio en la feature Wave 5, divergencia 0/0, fetch ejecutado y HEAD de Wave 5 comprobado como ancestro de origin/develop. Develop se actualizó por fast-forward antes de crear esta feature. Sin PR, merge ni deploy de Wave 6. La aprobación visual humana permanece pendiente.
 
