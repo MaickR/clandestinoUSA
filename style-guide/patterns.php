@@ -24,7 +24,7 @@ $paginaGuia = 'patrones';
     <div class="container">
       <p class="cl-eyebrow">The Clandestino USA</p>
       <h1>Section Patterns</h1>
-      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Explore Waves 1–4; new Wave 4 patterns await human visual review.</p>
+      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Explore Waves 1–5; Wave 5 reviews and reputation await human visual review.</p>
       <?php require __DIR__ . '/partials/navegacion-guia.php'; ?>
       <nav aria-label="On this page">
         <ul class="cl-guia-indice">
@@ -54,6 +54,7 @@ $paginaGuia = 'patrones';
           <li><a class="cl-enlace" href="#events">Events</a></li>
           <li><a class="cl-enlace" href="#private-experiences">Private Experiences</a></li>
           <li><a class="cl-enlace" href="#wave-4-states">Wave 4 states</a></li>
+          <li><a class="cl-enlace" href="#wave-5">Wave 5 · Reviews &amp; reputation</a></li>
         </ul>
       </nav>
     </div>
@@ -63,6 +64,7 @@ $paginaGuia = 'patrones';
     <?php require __DIR__ . '/partials/productos-wave-2.php'; ?>
     <?php require __DIR__ . '/partials/editorial-wave-3.php'; ?>
     <?php require __DIR__ . '/partials/comercial-wave-4.php'; ?>
+    <?php require __DIR__ . '/partials/reputacion-wave-5.php'; ?>
   </main>
   <script type="module" src="../assets/js/dist/style-guide.js"></script>
 </body>

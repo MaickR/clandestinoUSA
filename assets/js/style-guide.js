@@ -7,6 +7,9 @@ import { inicializarNotificaciones } from "./modules/core/notificacion.js";
 import { inicializarProductosGuia } from "./modules/guia/productos.js";
 import { inicializarGaleria } from "./modules/patterns/galeria.js";
 import { inicializarComercialGuia } from "./modules/guia/comercial.js";
+import { inicializarResenasGuia } from "./modules/guia/resenas.js";
+import { inicializarCarrusel } from "./modules/patterns/carrusel.js";
+import { inicializarMediaCarrusel } from "./modules/patterns/carrusel-media.js";
 
 // Los IDs son propios de esta guía; los módulos Core reciben elementos existentes.
 const porId = (id) => document.getElementById(id);
@@ -71,3 +74,8 @@ if (porId("cantidad-demo")) inicializarCoreGuia();
 inicializarProductosGuia();
 for (const galeria of document.querySelectorAll("[data-cl-galeria]")) inicializarGaleria(galeria);
 inicializarComercialGuia();
+inicializarResenasGuia();
+for (const contenedor of document.querySelectorAll("[data-cl-carrusel]")) {
+  inicializarCarrusel(contenedor);
+  if (contenedor.hasAttribute("data-cl-carrusel-media")) inicializarMediaCarrusel(contenedor);
+}

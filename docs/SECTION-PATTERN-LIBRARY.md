@@ -1,5 +1,260 @@
 # Biblioteca de patrones de sección
 
+## Refinamiento final Wave 5 — 2026-10-19
+
+Base `255815f0f7f976ed0c2049ebbf2229eb7ce0be95`, rama `feature/ui-section-patterns-wave-5`. Preflight: árbol limpio, fetch y sincronización 0/0 con origin. Esta pasada sustituye el bloqueo de QA del 18 de octubre: el navegador integrado ya permite probar el origen local. La aprobación visual humana de los nuevos cambios sigue pendiente; no hay PR, merge ni deploy.
+
+### Auditoría y decisiones de alcance
+
+| Necesidad | Decisión / resultado |
+|---|---|
+| Reviews completas frente a compactas | EXTENDER la base existente: superficie transparente, separación editorial superior/inferior y mismo contenido completo. Se conserva `--compacta`, autor, valoración textual, fuente legible, fecha/avatar opcionales y respuesta independiente; sin tercer componente |
+| Selección editorial de reseñas | CREAR `cl-carrusel`, separado del listado filtrable y del Featured Testimonial. Cuatro registros ficticios existentes; controles antes de la pista para no obligar a recorrer una reseña larga para navegar |
+| Colección audiovisual | REUTILIZAR la misma navegación y las proporciones/estados de Wave 3. Tres ejemplos: horizontal pendiente, vertical pendiente y no disponible. Se elimina la fotografía ambiental de la antigua muestra de video para que no parezca un poster de cliente |
+| Featured, estrellas, formulario, reputación y lifecycle | PRESERVAR los diseños expresamente aprobados por el usuario. Sus fuentes específicas y lógica permanecen intactas; la superficie compartida de reseña sí se refleja en el listado |
+| Flecha de select demasiado próxima al borde | EXTENDER exclusivamente `select.cl-campo` simple: SVG champagne integrado, separación derecha 16px y reserva de texto 48px mediante tokens. Estados nativos conservados; sin simular apertura con focus ni rotación |
+| Media auténtica, verificación externa y moderación | CONTENIDO / BACKEND FUTURO. Sin integración, publicación, almacenamiento, permisos ficticios ni acciones de administración |
+
+Se consultaron dirección visual, UX/UI, Core, estándares, reglas y contratos existentes; también el comportamiento del carrusel audiovisual legacy de Home como referencia. No se copia su implementación. Sin cambios a VISUAL-DIRECTION ni nuevas decisiones visuales atribuidas al usuario.
+
+### Contrato de los carruseles
+
+- `inicializarCarrusel(contenedor)` recibe un HTMLElement explícito, valida pista/controles y es idempotente mediante WeakMap. Markup: raíz `data-cl-carrusel`, lista `data-cl-carrusel-pista` con ID único y elementos directos, controles con `anterior`, `siguiente` y `posicion` bajo el prefijo `data-cl-carrusel-*`. Los botones nativos tienen nombres accesibles y `aria-controls`. No hay framework ni dependencias nuevas.
+- CSS Grid + Scroll Snap conserva scroll nativo, texto íntegro, wrap de palabras y alturas naturales. Una columna parcial móvil invita a explorar; dos columnas en tablet; tres de texto/dos audiovisuales en desktop. Las alturas pueden variar según contenido; no se recortan reseñas para igualarlas. No autoplay ni transforms para mover tarjetas.
+- Anterior/siguiente y Left/Right/Home/End calculan posiciones desde geometría real y limitan el desplazamiento. Las teclas solo se capturan con foco en la pista; no interfieren con radios, selects o reproductores. Los extremos se deshabilitan y la posición cuenta elementos realmente visibles, incluidos parciales. No es una región live: evita anuncios en cada frame de scroll.
+- Si se deshabilita el botón enfocado en un extremo, el foco pasa a la pista; el resto de movimientos lo conserva. Un control dentro de una tarjeta fuera de vista la desplaza a una posición accesible al recibir foco. No hay contenido ocultado a lectores mediante aria-hidden ni paradas artificiales en cada tarjeta.
+- Una entrada no tiene controles y no añade una parada en la pista; cero entradas muestra Core Empty sin valoración o navegación. Sin JS, listas y scroll permanecen; controles ocultos desde PHP. La alternativa sin JS se comprobó estructuralmente en el HTML inicial, no mediante un navegador con scripting desactivado.
+- La API devuelve `destruir()`: aborta listeners, desconecta ResizeObserver y emite `cl:carrusel-destruir`; invocarla antes de retirar el componente. Eventos locales `cl:carrusel-cambio` (rango visible) y `cl:carrusel-navegar` permiten pausar media sin mezclar reproducción con navegación. La colección se proporciona al inicializar: para sustituir sus registros, destruir y reinicializar. No se implementan mutaciones/paginación remota.
+- Solo `style-guide.js` inicializa los dos módulos durante esta wave. `main.js` productivo no incorpora carruseles; las páginas reales decidirán su inicialización cuando los utilicen.
+
+### Media, fuentes y moderación
+
+`inicializarMediaCarrusel(contenedor)` es un adaptador idempotente de video nativo. Escucha play para pausar los demás videos de esa colección; pausa al navegar/cambiar el rango, al salir del viewport, al ocultarse el documento y al destruirse. La integración debe llamar `destruir()` antes de desmontar. No carga fuentes, reproduce automáticamente ni sustituye controles nativos.
+
+Activación futura: video autorizado con `controls playsinline preload="none"`, dimensiones/orientación originales, poster que corresponda al film, autor/fuente/fecha verificables cuando existan, subtítulos WebVTT revisados (`track kind="captions"`, idioma y etiqueta) y transcripción/alternativa visual fuera del reproductor. La URL, permisos de persona/media/reproducción externa y vigencia deben validarse antes de servir source/poster/track. No hay archivos de video activos, posters genéricos, Play vacío ni nuevas descargas de media. **Play/pausa, exclusividad, subtítulos y fallos reales de decodificación no están probados: falta un film aprobado y funcional.** El contrato inerte y estados de disponibilidad no se presentan como reproducción probada.
+
+Flujo futuro: cliente envía → pendiente → administración aprueba/rechaza → servidor entrega solo contenido publicable. Listado y carrusel deben recibir exclusivamente la revisión aprobada/publicada y media permitida. No enviar texto privado/rechazado/retirado al DOM para ocultarlo con CSS o JS; una edición pendiente no reemplaza automáticamente una versión aprobada. El cliente nunca autoriza publicación. Lifecycle conserva su separación entre moderación interna, publicación y visibilidad.
+
+Se conservan los contratos de ID/autor/fuente/referencia externa/puntuación/texto/fecha/estados/respuesta/permisos/URL/media de la matriz original. PHP futuro podrá proporcionar selección editorial o registros paginados con total, cursor/página, filtro y orden efectivos. Google/Facebook siguen como formatos de procedencia sin autores, ratings, logos o URLs originales inventadas; solo se reproducirá material permitido y comprobado, sin promedios combinados.
+
+### QA ejecutado y límites
+
+| Verificación actual | Resultado |
+|---|---|
+| `npm run lint`, `npm run build` | PASS completos; sin dependencias/tooling nuevos. El build excluye JS/CSS exclusivos de guía |
+| `php -l`, `git diff --check` | PASS en los siete partials Wave 5 y diff |
+| HTML renderizado / recursos | PASS estructural HTMLParser/lxml: cierres equilibrados, 251 IDs únicos, un h1, ARIA/anclas resueltas, grupos de rating y cuatro colecciones correctos. 51 recursos locales HTTP 200; símbolos SVG resueltos. No certificación Nu/W3C ni HAR completo |
+| Responsive | PASS de geometría en 320, 360, 390, 425, 768, 820, 992, 1024, 1280 y 1440px: sin overflow de página ni texto de tarjeta. Capturas revisadas en 390/768/1280. Scroll horizontal intencional confinado a pistas; texto largo sin truncamiento, con/sin avatar/fecha y respuesta |
+| Estrés / poca altura | PASS: procedencia temporal extensa con palabra sin espacios en 320/390/768/1280/1440, restaurada después; sin overflow. Viewport 390×360: controles accesibles, navegación efectiva; targets de 44×44 |
+| Carruseles | PASS en navegador: botones, Home/End y flechas locales, scroll real, snap calculado, extremos, contador, foco tras deshabilitar botón, entrada única/vacía, acceso al disclosure de tarjeta audiovisual inicialmente fuera de vista. Sin animación automática |
+| Selects | PASS renderizado Core y Waves 2–5: inset 16px/reserva 48px. Activo, hover/foco visible, error, disabled, opción larga y cambio nativo por teclado; disabled omitido al tabular. Sin microinteracción de apertura: el navegador no ofrece un estado interoperable fiable. Forced colors conserva flecha nativa por CSS; pendiente prueba en ese modo |
+| Formulario aprobado | PASS: valores 1–5 con 1–5 rellenos visibles, flechas nativas, texto de valor, reset, campos incompletos, texto de 1.001 caracteres, loading, éxito simulado, edición a Draft updated, error con entradas retenidas. Ninguna publicación/persistencia |
+| Listing / reputación | PASS: cuatro órdenes con fecha ausente al final en órdenes de fecha, filtro sin resultados, Show more y foco al título revelado, reset, carga, error/retry y contador coherente. Resumen conserva promedio 3.2/5 y seis datos ficticios de una sola fuente |
+| Regresiones | PASS: Quantity incrementa; Core modal abre/cierra; accordion abre por teclado; visor Wave 3 abre, Escape cierra y devuelve foco al activador una vez completada su transición. Validación de las cuatro demos comerciales y cambio de estado de membresía ejecutados. No se declara una nueva prueba exhaustiva de todos sus flujos |
+| Contraste / consola | PASS calculado sobre 81 textos renderizados de Reviews/carruseles: mínimo 9.7:1. Consola sin errores/warnings en la sesión y fotografías activas cargadas; imágenes inertes de visores sin src no son fallos |
+| Pendiente de dispositivo/modo | Swipe táctil físico, zoom real 200%, lector de pantalla, forced colors y Safari/Firefox no ejecutados. Reduced motion inspeccionado en la rama matchMedia que elimina scroll suave; no emulado. Capturas del navegador presentan suavizado, por lo que no certifican nitidez tipográfica final |
+
+Evidencia local fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a146a9-6634-73b2-b882-7a42ccd1f604/final-2026-10-19/` (capturas, responsive, estrés de metadatos, rating, contraste, HTML/HTTP y mediciones). Skill utilizada: `.agents/skills/qa-visual/SKILL.md`. Los límites anteriores se distinguen de los checks ejecutados, sin extrapolar build a aprobación visual.
+
+### Performance y revisión
+
+Mismo pipeline de producto y esbuild en memoria para guía, gzip Node nivel 6, sin sourcemaps:
+
+| Artefacto | Bytes antes → después | Gzip antes → después | Delta gzip |
+|---|---:|---:|---:|
+| CSS producto | 82271 → 84671 | 14268 → 14899 | +631 (+4.42%) |
+| JS producto | 0 → 0 | 20 → 20 | 0 (cabecera gzip vacía) |
+| JS guía DEV | 95514 → 102269 | 22057 → 23668 | +1611 (+7.30%) |
+| JS guía minificado, medición | 51377 → 55087 | 16318 → 17554 | +1236 (+7.57%) |
+
+Sin nuevos recursos fotográficos, videos, fuentes, iconos o dependencias. SVG de select inline sin request; 51 URLs locales de assets antes/después. Doce archivos del repo: entrada JS de guía, dos módulos nuevos, cuatro SCSS (incluido el único ajuste Core autorizado), cuatro PHP (dos nuevos) y esta biblioteca. Producción, legacy, backend, assets originales y fuentes de Waves 1–4 intactos.
+
+Watcher `npm run dev` activo. Revisar `/style-guide/patterns.php#reviews`, `#reviews-carousel`, `#video-testimonials`, `#select-states`, `#review-listing`, `#write-review` y Core en `/style-guide/` desde `http://localhost:3000`. Los estados único/vacío y select están en disclosures compactos. Cobertura frontend cerrada sin variantes redundantes; pendientes contenido/URL/permisos auténticos, validación audiovisual real, modos/dispositivos indicados y aprobación visual de estos nuevos cambios.
+
+## Refinamiento Wave 5 — 2026-10-18 — QA renderizado pendiente
+
+Rama `feature/ui-section-patterns-wave-5`, base de esta pasada `1ed29dbc7e4a99537bef3df24775e8fbcc845602`. Preflight: rama correcta, árbol limpio, fetch ejecutado y divergencia 0/0 con origin; Wave 5 y su base intactas. Sin nueva rama ni cambios a develop/main. Este apartado describe el refinamiento vigente; las verificaciones del 16 de octubre que siguen son históricas y no certifican estos cambios. **WAVE 5 NOT READY: falta QA visual/funcional actual en navegador.**
+
+### Auditoría previa y decisiones
+
+Se revisaron AGENTS, VISUAL-DIRECTION, UX/UI, Core, estándares, arquitectura, esta biblioteca, los cuatro SCSS, el módulo JS, los cinco PHP y los contratos reales Foundation/Waves 1–4. Las capturas locales del 16 de octubre se consultaron como referencia de la misma base sin cambios, no como render actual del refinamiento.
+
+| Observación | Clasificación y evidencia | Decisión |
+|---|---|---|
+| Selector con estrella rellena y número iguales en cinco opciones | Mejora UX/UI justificada: markup/CSS y captura de la base; la selección no se expresa de forma progresiva | Conservar radios y sustituir presentación por cinco estrellas vacías/rellenas progresivamente, valor numérico textual y foco de teclado |
+| Metadatos de reseña en una sola línea de texto | Mejora UX/UI justificada: fuente/fecha/verificación concatenadas, sin elementos independientes | Separar una lista semántica con wrap; autor y puntuación conservados, texto antes del contexto, fecha legible y respuesta independiente |
+| Destacado con firma genérica | Mejora UX/UI justificada: figcaption original no tenía espacios individuales para autor/fuente/fecha/valoración | Mantener foto/cita/CTA y columnas; autor y contexto como placeholders explícitos, fecha/valoración opcionales sin fabricar cifras |
+| Procedencias Google/Facebook | Pendiente de contenido real; mejora de su muestra frontend justificada | Reubicar las tres muestras existentes junto a Reviews, usando los mismos metadatos. Sin copiar reseñas, estrellas, logos o enlaces falsos |
+| Éxito anterior permanece tras editar | Defecto confirmado en flujo de código: input actualizaba contador/validación y change solo validación; ninguno invalidaba el resultado anterior | Un aviso Draft updated al volver a editar puntuación/texto/aviso después de éxito o fallo; no repetirlo por pulsación |
+| Orden, fechas ausentes, Show more y foco | Comportamiento ya correcto por inspección; comparadores ejecutados como funciones aisladas | No reescribir. Mantener foco en filtro/orden, y título de primera entrada revelada al desaparecer Show more. El contador deriva el total de entradas, sin literal 6 |
+| Vacío/loading/error/retry, reputación, video y lifecycle | Responsabilidad ya correctamente representada en el código; prueba interactiva actual pendiente | Conservar estados. Solo corregir singular accesible «1 star». Sin cambiar promedio, distribución, media o reglas de moderación |
+| Paginación, verificación externa, autoría y publicación | Funcionalidad futura | Conservar contratos conceptuales; sin API, almacenamiento ni panel administrativo |
+
+No se declara reproducción en navegador de estas observaciones: el acceso fue rechazado antes de observar la página. Los cambios de presentación se basan en código y capturas históricas de la base; la autoevaluación del render nuevo sigue pendiente. No se modifican tokens ni VISUAL-DIRECTION, ni se atribuye una aprobación estética nueva.
+
+### Resultado y contratos conservados
+
+- `cl-resena` y `--compacta` conservan superficie, radio md, avatar opcional, autor, puntuación textual, cuerpo completo y respuesta. `cl-resena__meta` ahora es una lista de fuente, fecha opcional y verificación que envuelve cada dato por separado; `__fuente` aporta énfasis textual sin badge. La fecha usa `time` ISO y etiqueta legible. Sin fecha no aparece un valor sustituto.
+- Los tres formatos de procedencia están en `#review-sources`, dentro del disclosure de contexto. Internal, Google y Facebook llevan nombres legibles, estado de fecha/URL pendientes y contexto de permisos; no contienen citas ni ratings. Solo se añadirá un enlace original al validar una URL auténtica y su uso permitido.
+- `cl-testimonio` mantiene la composición editorial y fotografía ambiental existente. La firma presenta nombre autorizado pendiente, fuente pendiente, fecha opcional y valoración no proporcionada, todos explícitamente placeholders. No hay estrellas sin datos. Una integración real omitirá los datos opcionales ausentes y conservará autoría/permisos comprobados.
+- El formulario mantiene cinco radios nativos, un nombre/grupo, required, flechas/Space del navegador y labels accesibles 1–5. CSS `:has(:checked)` rellena la estrella elegida y anteriores; hover solo destaca el target, sin cambiar la puntuación. `:has(:focus-visible)` dibuja foco de teclado. Mínimos CSS de 2.75rem, gap existente y wrap; pendientes medidas renderizadas. La cifra visible «N out of 5 stars selected» complementa forma/color; es texto normal, sin otra región live que duplique el anuncio del radio. Sin JS se oculta ese texto dinámico para evitar un valor obsoleto; radios/selección CSS y nombres nativos permanecen.
+- Tras terminar una simulación, la primera edición vuelve al borrador con Core Alert informativa. Las siguientes pulsaciones no recrean el aviso; un nuevo resultado de simulación permite otro aviso al volver a editar. Espera, bloqueo, validación, conservación tras fallo, éxito inequívoco sin publicación y reset permanecen. Reset limpia el valor textual además del contador/errores. No hay requests ni persistencia.
+- El listado conserva filtros, cuatro órdenes, contador `role=status` atómico, Show more, vacío, loading/error y recuperación. Los controles de filtro/orden no reciben un traslado automático de foco. El título revelado por Show more recibe `tabindex=-1`, sin añadir una parada permanente de Tab. Sin JS, seis entradas completas y controles demo deshabilitados en el HTML. Estos son contratos/código inspeccionados, no pruebas actuales de teclado/lector de pantalla.
+- PHP futuro podrá proporcionar registros paginados, total autoritativo, página/cursor y filtro/orden efectivos. La demo opera sobre una colección local completa; su contador de DOM no es el total global de una colección paginada. El adaptador futuro deberá resolver filtro/orden de toda la colección en servidor cuando corresponda. Sin diseñar ahora un protocolo o paginador.
+- Reputación conserva 3.2/5 y distribución 1/2/1/1/1 sobre seis datos ficticios internos; nunca mezcla plataformas ni muestra ausencia como cero. Video conserva contrato nativo inerte, horizontal/vertical, error y alternativa externa: sin film nuevo, autoplay, poster falso ni permisos supuestos. Lifecycle conserva moderación interna, publicación, cuerpo público/retirado y revisión pendiente separados; ningún texto rechazado/retirado entra en la colección.
+
+### QA actual y límites
+
+Skill aplicada: `.agents/skills/qa-visual/SKILL.md`. El navegador integrado rechazó la adquisición de acceso a la URL local por su política interna, antes de observar contenido, pese al protocolo HTTP solicitado. La autorización del usuario para trabajar en local está confirmada. No se cambió de origen, navegador, motor de renderizado ni canal para eludir el rechazo. Las comprobaciones de código/HTML/HTTP siguientes no son sustitutos de navegador.
+
+| Comprobación ejecutada | Resultado |
+|---|---|
+| npm run lint / npm run build | PASS: ESLint/Stylelint y build completos; sin cambiar reglas, dependencias o tooling |
+| php -l / git diff --check | PASS: los 25 PHP de guía y diff; se repiten los PHP tocados tras el último ajuste de copy |
+| HTML generado localmente | PASS estructural HTMLParser/lxml: cierres equilibrados, un h1, 238 IDs únicos, ARIA/anclas resueltas; no certificación Nu/W3C |
+| Radios y alternativa sin JS | PASS estructural: valores 1/2/3/4/5, un nombre/fieldset, cinco labels y required, seis entradas sin hidden; acciones/selects deshabilitados en HTML inicial. No se declara recorrido real de teclado ni navegador sin JS |
+| Funciones de puntuación/borrador | PASS aislado Node: seis etiquetas (vacío y 1–5), cambio a borrador una sola vez, sin aviso durante espera o edición inicial; bindings revisados. Sin DOM ni simulador de navegador |
+| Cuatro comparadores reales | PASS aislado sobre los seis datos PHP: newest/oldest dejan fecha ausente al final; highest/lowest correctos. No demuestra UI de filtros, Show more o recuperación |
+| Procedencia, featured y video | PASS estructural: tres muestras sin cita/rating/enlace, metadatos explícitos del destacado y cero videos activos |
+| Recursos | PASS HTTP: 51 recursos locales responden 200 y usos SVG resueltos. No es Network/HAR de navegador ni decodificación visual |
+| Contraste / reduced motion | PASS matemático de 12 pares de tokens compilados, mínimo 8.65:1; selectores progresivos/foco y regla reduce presentes. No se declara contraste renderizado, hover o emulación del SO |
+| npm run dev | PASS: PHP/BrowserSync/watch en localhost:3000, con aviso Node DEP0060 preexistente |
+| Diez anchos: 320/360/390/425/768/820/992/1024/1280/1440 | PENDIENTE: nuevas capturas, medidas de overflow, metadatos/texto sin espacios, targets y proporción tablet/desktop |
+| Teclado/foco/lector, selección 1–5, formulario y estados | PENDIENTE en navegador: no se extrapolan pruebas del 16 de octubre. Zoom real 200%, viewport corto y anuncios también pendientes |
+| Regresiones Core/Waves 1–4 y consola | Fuentes intactas y build correcto; PENDIENTE ejecución actual de modal/galería, Quantity, Accordion y demos comerciales, consola y Network |
+
+Evidencia local fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a146a9-6634-73b2-b882-7a42ccd1f604/refinement-2026-10-18/`, con `before.json`, `after.json`, `logic-checks.json`, `html-checks.json`, `token-contrast.json` y HTML. No hay capturas nuevas ni se presentan las históricas como evidencia del refinamiento.
+
+### Performance, cobertura y entrega
+
+Mismo pipeline y Node gzip nivel 6; guía medida en memoria con esbuild, sin sourcemaps. El build no deja CSS/JS de guía; main.js fuente y output productivo permanecen idénticos.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 81515 | 82271 | 14161 | 14268 | +107 (+0.76%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV | 94499 | 95514 | 21843 | 22057 | +214 (+0.98%) |
+| JS guía minificado, medición | 50905 | 51377 | 16191 | 16318 | +127 (+0.78%) |
+
+Nueve archivos modificados: tres SCSS (`_resena`, `_testimonio`, `_resena-formulario`), `modules/guia/resenas.js`, cuatro PHP (`reputacion-wave-5`, `resenas-testimonios-wave-5`, `escribir-resena-wave-5`, `resumen-listado-wave-5`) y esta biblioteca. Sin nuevos archivos del repo, componentes, fotos, videos, iconos, fuentes o dependencias. `_reputacion.scss`, lifecycle, Foundation/Core/Waves 1–4, entradas, producción, legacy, backend/BD, Booking-app-php y hosting intactos.
+
+La matriz original conserva sus siete familias y contratos futuros: reseñas internas, procedencias externas verificadas, destacado autorizado, video autorizado, reputación por fuente, listado, formulario y estados de moderación tienen estructura frontend. El refinamiento resuelve las carencias de presentación/borrador detectadas sin ampliar backend ni variantes redundantes. **Cobertura de código cerrada; aceptación visual/funcional actual abierta.**
+
+Revisión local: `http://localhost:3000/style-guide/patterns.php#wave-5`, `#reviews`, `#review-sources`, `#featured-testimonials`, `#write-review`, `#review-listing`, `#reputation`; Core en `/style-guide/`. Abrir el disclosure de procedencia; recorrer puntuación 1→5 con flechas/Space, enviar, editar puntuación/texto y comprobar Draft updated, forzar fallo y recuperar, resetear. Probar cuatro órdenes, filtro sin resultados, Show more, retry y fechas ausentes; repetir diez anchos, texto largo/metadatos extensos, poca altura, zoom real 200% y regresiones. Sin PR, merge, force push ni deploy. Contenido auténtico, permisos, verificación y backend siguen pendientes independientes del QA bloqueado.
+
+## Wave 5 — Reviews, Testimonials & Reputation — 2026-10-16
+
+Rama `feature/ui-section-patterns-wave-5`, base `develop@9e6d0b475f6f663ea65fc05f6af4bdac44a5851f`. Preflight limpio: fetch, switch develop y fast-forward ejecutados; Wave 4 verificada como ancestro e integrada por merge #10. Sin PR, merge ni deploy de esta feature. Dirección visual existente conservada, sin decisiones nuevas atribuidas al usuario. **Aprobación visual humana pendiente.**
+
+### Auditoría inicial y final de cobertura
+
+Se consultaron AGENTS, dirección visual, UX/UI, Core, esta biblioteca, arquitectura, estándares, mapa de producto, Git workflow y reglas SCSS/JS/PHP. Se inspeccionaron módulos Core, galería/media Wave 3, formularios/estados Wave 4 y testimonios de `index.html`. El legacy usa un carrusel de videos de clientes; su presencia no demuestra permisos, subtítulos ni derecho a reproducir opiniones. Las URLs legacy de Google Maps y Facebook identifican ubicación/perfil, no una reseña original validada. No se copian cifras, citas, identidades ni ese carrusel.
+
+| Necesidad inicial | Clasificación | Cierre frontend |
+|---|---|---|
+| Grid, secciones, acciones, campos, alerts, estados, skeleton y carga | REUTILIZAR Foundation/Core y Waves 1–4 | Sin cambios a sus fuentes; misma entrada de guía |
+| Reseña, puntuación y respuesta opcional | CREAR `cl-resena` / `cl-valoracion` | Normal, compacta, composición editorial, corta/larga, avatar abstracto opcional, sin fecha, información parcial y no disponible |
+| Testimonio destacado | CREAR `cl-testimonio`, REUTILIZAR fotografía/helper Wave 3 | Composición editorial asimétrica; placeholder rotulado, sin puntuación ni autor inventado |
+| Video horizontal/vertical, error, alternativa | REUTILIZAR `cl-media-video` / Core | Estados honestos de contenido pendiente; contrato nativo inerte, sin play ficticio |
+| Resumen de reputación y distribución | CREAR `cl-reputacion`, REUTILIZAR estados Core | Una única fuente ficticia; promedio/distribución consistentes con el listado |
+| Listado, filtro, orden y revelado incremental | EXTENDER composición `cl-catalogo` con `cl-resenas-lista` | Seis registros locales; filtro real, orden real, tres entradas iniciales y tres adicionales |
+| Escribir reseña | EXTENDER controles nativos/Core con `cl-resena-formulario` | Radios, contador, validación, espera, fallo/recuperación, éxito simulado y reset |
+| Moderación y visibilidad | REUTILIZAR `cl-estado` | Seis referencias estáticas; sin acciones de moderador ni contenido privado |
+| Autoría, permisos, origen verificado, publicación y edición | BACKEND FUTURO | Contratos de UI descritos abajo; sin endpoints, BD, cuentas o almacenamiento |
+| Google/Facebook | BACKEND FUTURO para integración; frontend cubierto | Procedencias diferenciadas sin rating, logos, badges ni reseñas externas ficticias |
+| Panel de administración, scraping, pagos y reservas | FUERA DE ALCANCE | No implementados |
+
+No se duplican cards, modales, galerías, sistemas de validación genéricos ni reproductores. Cuatro SCSS resuelven responsabilidades visuales diferentes; los estados secundarios viven en disclosures compactos. El helper PHP es exclusivo de la guía, no un motor de plantillas. El CSS compartido puede reutilizarse en páginas futuras con markup y datos de servidor escapados.
+
+### Componentes, variantes y estados
+
+| Familia | Variantes/estados | Interacción / datos |
+|---|---|---|
+| Reviews | `cl-resena`, `--compacta`; editorial en columna dominante; texto completo, corto, largo, sin avatar, sin fecha y respuesta | Una única estructura; sin truncar ni fijar altura. Avatar D1 abstracto, nunca foto de cliente. Puntuación textual 1–5, estrellas decorativas aria-hidden. Parcial sin estrellas; no disponible sin cuerpo privado |
+| Featured Testimonials | Foto de mesa real, cita protagonista, firma/contexto y CTA | Copy de estructura explícitamente placeholder; no es testimonio. Autor, fuente, fecha y permiso pendientes. Rejilla lateral desde md, offset desde lg |
+| Video Testimonials | Horizontal 16:9, vertical 478:850, pendiente, no disponible y error estático | Fotografía de archivo identificada como imagen, no poster de cliente. Sin video activo ni MP4/track con URL inventada. Transcripción pendiente rotulada fuera del contrato del reproductor |
+| Reputation | Promedio 3.2/5, seis reseñas ficticias; distribución 5→1: 1/2/1/1/1 | Calculado en PHP sobre la misma colección. Fecha de snapshot ficticio explícita. No se mezcla con Google/Facebook; sin premios ni ranking |
+| Estados de reputación | Sin datos, incompletos, fuente no disponible, loading estático y error | Selector de laboratorio cambia una sola vista; error/fuente permiten retry local a sin datos, sin fingir consulta a una plataforma |
+| Review Listing | Encabezado, contador, grid, filtro 1–5, sin puntuación/vacío, orden, loading, error | Filtra seis registros renderizados; newest/oldest dejan fechas ausentes al final; highest/lowest ordenan realmente. Reset restaura selección y límite. Show more revela hasta seis y enfoca el primer título nuevo |
+| Write a Review | Sin puntuación/seleccionada, hover/foco, incompleto, demasiado largo, espera, fallo y éxito/pendiente | Radios 1–5 nativos con leyenda y nombre; teclado con flechas. Texto 20–1.000 puntos de código tras trim; sin maxlength para conservar y corregir texto largo. Contador, ayuda y errores asociados |
+| Lifecycle | Pending review, Published, Rejected, Reported, Hidden/removed, Edited | `cl-estado` con texto; moderación interna y visibilidad pública separadas. No son controles, no alteran el listado |
+
+Todos los registros tienen nombres `Demo entry NN`, texto ficticio inequívoco, origen interno ficticio y `Not verified`. Las fechas son datos de ejemplo, no visitas confirmadas. La variante sin fecha omite el dato; no muestra una fecha actual sustitutoria. No existe una variante Verified sin evidencia.
+
+El formulario se conecta solo con JS de guía. El botón está disabled sin JS y no hay endpoint. Espera local 1.2s; Core bloquea duplicados y mantiene foco, y los campos/reset/outcome quedan bloqueados. Fallo conserva puntuación/texto/aviso; éxito explica **no enviado, guardado ni publicado**, con estado conceptual Pending moderation. No se añade la entrada al listado. Reset limpia errores, contador y feedback, devolviendo foco al primer radio. El aviso obligatorio reconoce la demo; no representa aceptación de una política legal ni permiso de publicación. No se solicita identidad ni media.
+
+Sin JS, las seis reseñas siguen legibles; filtros y acciones de demo permanecen deshabilitados. Los controles de prueba están identificados como Demo controls, separados del contenido público futuro. Los ejemplos de carga del listado/resumen son estáticos y lo dicen; solo el envío ejecuta una espera local real.
+
+### Contratos conceptuales para PHP/MySQL futuro
+
+No son un esquema SQL ni una API definitiva. El adaptador futuro debe entregar valores ya validados y escapar strings al renderizar; no debe enviar registros privados al DOM para ocultarlos después con CSS/JS.
+
+| Campo conceptual | Responsabilidad de la interfaz y del servidor futuro |
+|---|---|
+| `id`, `idAutor` | Identificadores estables; autoría y relación con usuario comprobadas en servidor, no por el nombre mostrado |
+| `fuente`, `idReferenciaExterna?`, `urlOriginal?` | Interna/Google/Facebook explícitas; referencia y enlace original comprobables, URL segura y procedencia conservada. Enlace Core contextual solo cuando exista y se verifique |
+| `puntuacion?`, `escalaOrigen` | Entero 1–5 para reseñas internas. No transformar recomendaciones Facebook en estrellas ni normalizar plataformas sin una política aprobada |
+| `texto`, `fecha?`, `editadaEn?` | Texto plano y fechas reales; omitir información ausente. Límite frontend ilustrativo; servidor valida longitud/normalización y determina política final |
+| `estadoModeracion`, `estadoPublicacion` | Decisiones separadas. Pendiente/rechazada/oculta/retirada no publica el cuerpo. Reported es una señal interna, no aprobación o retirada automática |
+| `respuestaNegocio?` | Texto, autor empresarial autorizado, fecha y estado de publicación independientes; no fabricar una respuesta |
+| `verificacion?`, `permisoReproduccion?` | Método/fuente/evidencia auditables antes de mostrar una insignia o reproducir una opinión externa. Ser usuario registrado no equivale a compra/visita verificada ni publicación automática |
+| `consentimientoMedia?`, `video?`, `poster?`, `subtitulos?`, `alternativaTextual?` | Permiso documentado con alcance/referencia, autorización de personas/audio y archivos revisados. La retirada del permiso debe impedir futuras publicaciones de esa media |
+| Resumen y colección | Por fuente: promedio, total, distribución, fecha/período y enlace original; colección y siguiente página/cursor autoritativos del servidor. No agregar plataformas automáticamente |
+
+Una edición no sustituye automáticamente la versión aprobada; mostrar solo revisión permitida y etiqueta Edited cuando corresponda. El backend deberá validar autoría, relaciones, permisos, puntuación, contenido, moderación y visibilidad; definir prevención de abuso, CSRF/autorización y política de publicación al implementar el servicio. Nada de ello se simula como operación real en esta wave.
+
+Para Google y Facebook quedan pendientes condiciones de uso vigentes, permisos de reproducción, modelo nativo, autor mostrado permitido, fecha, ID/enlace original y política de actualización/retirada. Los rótulos de fuente de la guía no implican acceso API ni verificación externa. No hay scraping, conectores ni logos nuevos.
+
+Antes de activar el contrato `<video>`: revisar clip completo/audio y autorización, añadir source/poster correspondientes, dimensiones originales, `<track kind="captions" srclang="en" label="English">` con VTT revisado cuando corresponda y transcripción/alternativa visual adyacente. Usar `controls playsinline preload="none"`, sin autoplay. Reproducción, pausa y subtítulos serán nativos. El error debe conservar alternativa/recuperación fuera del video; probar codecs, teclado, captions y fallo real al conectar material apto. La presencia de MP4 legacy no acredita esta preparación.
+
+### Responsive, accesibilidad y QA ejecutado
+
+Skill aplicada: `.agents/skills/qa-visual/SKILL.md`. Navegador Chromium integrado, URL `http://localhost:3000/style-guide/patterns.php#wave-5`. La primera apertura ocurrió antes de iniciar PHP y devolvió connection refused; al iniciar `npm run dev`, la misma URL quedó accesible. El intento de seleccionar aquella pestaña de error data: fue rechazado por política; no se accedió a ese documento. No hubo bloqueo de la URL local activa ni cambio de origen para eludir una restricción.
+
+| Prueba actual | Resultado |
+|---|---|
+| npm run lint / npm run build | PASS finales: ESLint/Stylelint y build; sin modificar configuración/reglas/dependencias |
+| php -l | PASS: los 25 PHP de Style Guide, incluidos patterns.php y cinco partials Wave 5 |
+| HTML renderizado | PASS estructural: HTMLParser/lxml, pila equilibrada, un h1, 237 IDs únicos, anclas/ARIA resueltas. No es certificación Nu/W3C |
+| Recursos locales / iconos | PASS: 51 URLs de assets HTTP 200, todos los símbolos SVG usados existen; fotografías Wave 5 cargadas. Son comprobaciones HTTP/DOM, no un HAR de Network |
+| 320/360/390/425/768/820/992/1024/1280/1440 | PASS geometría final con disclosures abiertos y seis entradas: sin overflow; selector 44×44px por opción en los diez anchos. Composiciones revisadas en móvil/tablet/desktop |
+| Texto largo / información ausente | PASS: palabra extensa, texto completo, respuesta, sin avatar/fecha y seis entradas; no se recorta contenido ni se fuerza altura uniforme |
+| Selector / teclado / foco | PASS: Space/flecha derecha seleccionan 1→2; foco champagne 2px/offset 3px en label, errores llevan al primer control inválido y reset vuelve al primer radio |
+| Formulario | PASS: incompleto, 1.001 caracteres retenidos/rechazados, espera aria-busy, bloqueo de edición, fallo conservando texto, éxito explícito sin publicación y reset con contador 0. Se corrigió el orden del contador durante reset |
+| Listado | PASS: filtro 4→dos entradas; sin puntuación→vacío; reset; lowest + Show more→1/2/3/4/4/5; contador coherente y foco al primer título revelado; loading/error/retry con filtros conservados |
+| Reputación | PASS: cinco estados compactos, skeleton solo en loading, retry sin cifras inventadas. Distribución y promedio derivados de los seis ejemplos |
+| Contraste | PASS: 179 textos/combinaciones medidos, mínimo 9.69:1, ningún fallo del umbral correspondiente; texto fuera de las fotos. Disabled excluido de requisitos de contraste |
+| Viewport corto | PASS geométrico a 320×480; scroll natural y controles accesibles, sin overlay propio que atrape contenido |
+| Reduced motion | PASS en CSS compilado: regla reduce global conservada, sin animación nueva ni carrusel. No se declara emulación de preferencia del SO |
+| Consola | PASS en las vistas observadas: sin errores/warnings de página. BrowserSync emite DEP0060 de Node preexistente; no falla dev |
+| Regresión modal/galería | PASS: Core abre con teclado, ocho Tab permanecen dentro, Escape cierra; galería abre, cambia 1→2, Escape devuelve foco al enlace original |
+| Regresión Quantity/Accordion/Toast | PASS: Quantity 1→2 y entrada real por teclado 99→2 restaurada; Accordion Enter/Space; notificación de pedido anunciada en región Core |
+| Regresión Wave 4 | PASS: Gold selección/resumen y éxito demo, Gift Card 100 y éxito demo, selección de evento y acción de preview; inquiry inválida marca cinco campos y válida completa la demo. No se certifica toda la matriz comercial histórica |
+| Protección de alcance | PASS: solo diez fuentes nuevas de Wave 5, tres entradas de integración y esta documentación. Sin páginas/legacy/backend/BD/Booking-app-php/hosting/assets originales/dependencias/Core/Waves anteriores modificados |
+
+Autoevaluación visual: se retiró height:100% de reseñas para evitar superficies vacías; la composición destacada pasa a columnas desde md para controlar el tamaño de la fotografía en tablet. Se revisaron fuente champagne/Libre Bodoni, jerarquía, radios md, densidad, encuadres y contraste. No constituye aprobación estética del usuario.
+
+Evidencia fuera del repo: `C:/Users/Mike/.codex/visualizations/2026/10/16/01a146a9-6634-73b2-b882-7a42ccd1f604/`: `final-*`, `wave5-responsive-final.json`, `wave5-contrast.json`, `wave5-html-assets.json` y mediciones before/after. Las capturas preliminares con prefijo `wave5-` de familias tomadas durante scroll/restauración no acreditan composición final; se usan las `final-*` revisadas. No se declara zoom real 200%: la API disponible no ofrece control documentado de zoom. Pendientes lector de pantalla auditivo, Firefox/Safari, dispositivos físicos y hosting Apache/GoDaddy. Video play/pausa/captions reales no aplican a un contrato inerte; deberán probarse con material autorizado.
+
+### Performance y archivos
+
+Mismo pipeline minificado de producto; gzip Node nivel 6. Guía medida con esbuild en memoria, sin minificar/minificada, sin sourcemap. No se escriben bundles de guía en build.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+| CSS producto | 77387 | 81515 | 13611 | 14161 | +550 (+4.04%) |
+| JS producto | 0 | 0 | 20 | 20 | 0 |
+| JS guía DEV, sin sourcemap | 85499 | 94499 | 19886 | 21843 | +1957 (+9.84%) |
+| JS guía minificado, solo medición | 45555 | 50905 | 14654 | 16191 | +1537 (+10.49%) |
+
+CSS crece por cuatro responsabilidades nuevas y sus elementos; JS crece solo por las demos de filtros/formulario/estados. Main.js fuente sigue intacto y su output vacío; build no contiene guía ni selectores cl-guia/cl-muestra. Cero nuevas dependencias, fotos, iconos, fuentes, videos o derivados. Dos instancias fotográficas adicionales reutilizan mesa/interior ya presentes; no añaden URLs de media únicas. Cero videos activos por contrato de markup. No se reportan Web Vitals productivos a partir de este laboratorio.
+
+Nuevos: `assets/scss/patterns/_resena.scss`, `_testimonio.scss`, `_reputacion.scss`, `_resena-formulario.scss`; `assets/js/modules/guia/resenas.js`; cinco PHP: `reputacion-wave-5.php`, `resenas-testimonios-wave-5.php`, `resumen-listado-wave-5.php`, `escribir-resena-wave-5.php`, `ciclo-resenas-wave-5.php`. Modificados: `assets/scss/main.scss`, `assets/js/style-guide.js`, `style-guide/patterns.php` y este documento. Sin eliminaciones.
+
+Revisión humana: `/style-guide/patterns.php#wave-5`, con navegación a `#reviews`, `#featured-testimonials`, `#video-testimonials`, `#reputation`, `#review-listing`, `#write-review`, `#review-lifecycle`. Core permanece en `/style-guide/`. Abrir disclosures, filtrar/ordenar, Show more y Reset; enviar sin completar, probar >1.000 caracteres, elegir Failure y recuperar a Success. Probar 390/768/1280px y zoom 200% manual. El servidor `npm run dev` ofrece recarga de PHP/JS y CSS en vivo.
+
+Pendientes reales: aprobación visual humana, contenido auténtico con procedencia/permisos, autoría/verificación, políticas comerciales/editoriales de publicación y moderación, media autorizada/poster/captions/transcripción, fuentes externas verificadas y futura implementación PHP/MySQL. No bloquean la cobertura frontend demostrativa, pero impiden publicar esos ejemplos como reputación real.
+
 ## Cierre QA Wave 4 — 2026-10-16 — parcialmente bloqueado
 
 Preflight de esta pasada: rama `feature/ui-section-patterns-wave-4`, HEAD `96f4d613eeb48a5d5b241b07cc8ac2ce19c74cc0`, árbol limpio; fetch correcto y divergencia con origin 0/0. Se consultaron AGENTS, dirección visual, UX/UI, Core y esta biblioteca. Skill aplicada: `.agents/skills/qa-visual/SKILL.md`. Sin rediseño, nuevas variantes, dependencias ni cambios de componentes/assets. No se encontraron defectos reproducibles en las comprobaciones ejecutables; esto no acredita ausencia de defectos visuales o interactivos.

@@ -1,0 +1,55 @@
+.cl-reputacion {
+  row-gap: var(--espacio-6);
+  padding-block: var(--espacio-5);
+  border-block: 1px solid var(--color-borde);
+  overflow-wrap: anywhere;
+
+  &__promedio {
+    margin: 0;
+    color: var(--color-acento);
+    font-family: var(--fuente-display);
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
+    line-height: 1.1;
+  }
+
+  &__distribucion {
+    display: grid;
+    gap: var(--espacio-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__fila {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) 2rem;
+    gap: var(--espacio-3);
+    align-items: center;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__barra {
+    width: 100%;
+    height: 0.75rem;
+    border: 0;
+    border-radius: var(--radio-md);
+    background: var(--color-superficie-hover);
+    accent-color: var(--color-acento);
+
+    &::-webkit-progress-bar {
+      border-radius: var(--radio-md);
+      background: var(--color-superficie-hover);
+    }
+
+    &::-webkit-progress-value {
+      border-radius: var(--radio-md);
+      background: var(--color-acento);
+    }
+
+    &::-moz-progress-bar {
+      border-radius: var(--radio-md);
+      background: var(--color-acento);
+    }
+  }
+}

@@ -1,0 +1,80 @@
+.cl-resena-formulario {
+  max-width: 44rem;
+  overflow-wrap: anywhere;
+
+  &__puntuacion {
+    min-width: 0;
+    margin-block-end: var(--espacio-5);
+    padding: 0;
+    border: 0;
+  }
+
+  &__opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2);
+  }
+
+  &__opcion {
+    display: flex;
+    gap: var(--espacio-1);
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    padding: var(--espacio-1);
+    border: 1px solid transparent;
+    border-radius: var(--radio-md);
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-acento);
+      background: var(--color-superficie-hover);
+    }
+
+    &:has(:focus-visible) {
+      outline: 2px solid var(--color-foco);
+      outline-offset: 3px;
+    }
+
+    &:has(:checked) {
+      border-color: var(--color-acento);
+      background: var(--color-superficie-hover);
+      color: var(--color-acento);
+    }
+  }
+
+  &__estrella {
+    position: relative;
+    color: var(--color-acento);
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  &__relleno {
+    position: absolute;
+    inset: 0;
+    visibility: hidden;
+  }
+
+  // La selección nativa ilumina también las opciones anteriores, incluso sin JS.
+  &__opcion:has(:checked) .cl-resena-formulario__relleno,
+  &__opcion:has(~ .cl-resena-formulario__opcion :checked) .cl-resena-formulario__relleno {
+    visibility: visible;
+  }
+
+  &__valor {
+    margin-block: var(--espacio-2) 0;
+    font-size: 0.875rem;
+  }
+
+  &__pie {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-3);
+    align-items: center;
+    margin-block: var(--espacio-5);
+  }
+
+  &__feedback { margin-block-start: var(--espacio-4); }
+}

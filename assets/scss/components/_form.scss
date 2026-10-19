@@ -63,6 +63,23 @@ textarea.cl-campo {
   resize: vertical;
 }
 
+// Solo desplegables nativos: el texto reserva espacio para el indicador interior.
+select.cl-campo:not([multiple], [size]),
+select.cl-campo[size="1"]:not([multiple]) {
+  appearance: none;
+  padding-inline-end: var(--espacio-7);
+  background-image: escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$champagne-300}' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4 6 4 4 4-4'/></svg>"));
+  background-repeat: no-repeat;
+  background-position: right var(--espacio-4) center;
+  background-size: var(--espacio-4) var(--espacio-4);
+
+  @media (forced-colors: active) {
+    appearance: auto;
+    padding-inline-end: var(--espacio-4);
+    background-image: none;
+  }
+}
+
 .cl-mensaje-campo {
   margin-block: var(--espacio-2) 0;
   color: var(--color-error);
