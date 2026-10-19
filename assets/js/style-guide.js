@@ -10,6 +10,8 @@ import { inicializarComercialGuia } from "./modules/guia/comercial.js";
 import { inicializarResenasGuia } from "./modules/guia/resenas.js";
 import { inicializarCarrusel } from "./modules/patterns/carrusel.js";
 import { inicializarMediaCarrusel } from "./modules/patterns/carrusel-media.js";
+import { inicializarNavegacion } from "./modules/patterns/navegacion-global.js";
+import { inicializarAcceso } from "./modules/patterns/acceso.js";
 
 // Los IDs son propios de esta guía; los módulos Core reciben elementos existentes.
 const porId = (id) => document.getElementById(id);
@@ -71,6 +73,8 @@ function inicializarCoreGuia() {
 }
 
 if (porId("cantidad-demo")) inicializarCoreGuia();
+for (const contenedor of document.querySelectorAll("[data-cl-navegacion]")) inicializarNavegacion(contenedor);
+if (porId("acceso-global")) inicializarAcceso(porId("acceso-global"), document.querySelector("[data-cl-acceso-abrir]"));
 inicializarProductosGuia();
 for (const galeria of document.querySelectorAll("[data-cl-galeria]")) inicializarGaleria(galeria);
 inicializarComercialGuia();

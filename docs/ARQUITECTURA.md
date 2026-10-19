@@ -95,7 +95,13 @@ Cuatro partials de producto amplían `main.scss`: tarjeta gastronómica comparti
 
 Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y consulta privada. `style-guide/patterns.php` incluye una entrada PHP Wave 4, cuatro familias y laboratorio de estados; reutiliza Core, Waves anteriores y fotografía existente. `modules/guia/comercial.js` conecta demostraciones locales exclusivamente desde `style-guide.js`, sin requests ni persistencia. CSS de laboratorio permanece en `_guia.scss`. No cambia el bundle JS productivo, el tooling ni las páginas legacy. Cobertura, contratos conceptuales de UI, QA, performance y pendientes comerciales: `SECTION-PATTERN-LIBRARY.md`. Aprobación visual humana pendiente.
 
+### Pattern Library — Wave 6
+
+`patterns/_navegacion-global.scss` y `_pie-global.scss` preparan Header sticky, drawer móvil/tablet, Footer/contacto y extensiones contextuales de breadcrumbs Core. `modules/patterns/navegacion-global.js` usa Bootstrap Offcanvas individual, Collapse para Discover y observers; solo `style-guide.js` lo inicializa. `_acceso.scss` y `modules/patterns/acceso.js` reutilizan Core Modal, campos, carga y alertas para acceso exclusivamente sintético, sin autenticación ni envío de credenciales. `style-guide/navigation.php` es laboratorio aislado, embebido mediante iframe lazy en Patterns y accesible a viewport completo; no es página productiva. Partials PHP comparten mapas de destinos demostrativos y un CTA de reservas sin motor. El logo UI es un derivado optimizado; el original permanece intacto. Contratos de configuración futura, cobertura, datos, QA, performance y pendientes en `SECTION-PATTERN-LIBRARY.md`. Sin cambios en main.js, backend ni páginas legacy; aprobación visual humana pendiente.
+
 ## Objetivo inmediato (futuro)
+
+Wave 6 mantiene partials compartidos de Header/Footer/modal y Topbar opcional. Los datos/rutas de la muestra se concentran en `style-guide/partials/configuracion-wave-6.php` (fixture local, no configuración productiva). El anfitrión futuro aportará configuración central confiable de rutas, contacto/redes y campos opcionales antes de incluir los mismos partials; no se migra ninguna página en esta wave. Topbar no sticky, omitida por defecto; contrato y QA de cierre en `SECTION-PATTERN-LIBRARY.md`.
 
 | Capa | Objetivo |
 |---|---|
