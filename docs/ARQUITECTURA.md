@@ -95,6 +95,10 @@ Cuatro partials de producto amplían `main.scss`: tarjeta gastronómica comparti
 
 Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y consulta privada. `style-guide/patterns.php` incluye una entrada PHP Wave 4, cuatro familias y laboratorio de estados; reutiliza Core, Waves anteriores y fotografía existente. `modules/guia/comercial.js` conecta demostraciones locales exclusivamente desde `style-guide.js`, sin requests ni persistencia. CSS de laboratorio permanece en `_guia.scss`. No cambia el bundle JS productivo, el tooling ni las páginas legacy. Cobertura, contratos conceptuales de UI, QA, performance y pendientes comerciales: `SECTION-PATTERN-LIBRARY.md`. Aprobación visual humana pendiente.
 
+### Pattern Library — Wave 6
+
+`patterns/_navegacion-global.scss` y `_pie-global.scss` preparan Header sticky, disclosure móvil/subnavegación, Footer/contacto y extensiones contextuales de breadcrumbs Core. El módulo reutilizable `modules/patterns/navegacion-global.js` usa Bootstrap Collapse y observers; solo `style-guide.js` lo inicializa. `style-guide/navigation.php` es laboratorio aislado, embebido mediante iframe lazy en Patterns y accesible a viewport completo; no es página productiva. Partials PHP de Header/Footer comparten mapas de destinos demostrativos y un CTA de reservas sin motor. Contratos de configuración futura, cobertura, datos, QA, performance y pendientes en `SECTION-PATTERN-LIBRARY.md`. Sin cambios en main.js, backend ni páginas legacy; aprobación visual humana pendiente.
+
 ## Objetivo inmediato (futuro)
 
 | Capa | Objetivo |

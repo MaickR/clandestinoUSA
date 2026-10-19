@@ -1,0 +1,200 @@
+// Superficie sólida desde el inicio: legible sobre contenido claro, oscuro o fotografía.
+.cl-estructura {
+  --navegacion-offset: 6rem;
+
+  overflow-wrap: anywhere;
+
+  [id],
+  :focus { scroll-margin-block-start: calc(var(--navegacion-offset) + var(--espacio-4)); }
+}
+
+.cl-saltar {
+  position: fixed;
+  z-index: 1100;
+  inset-block-start: var(--espacio-3);
+  inset-inline-start: var(--espacio-3);
+  max-inline-size: calc(100% - var(--espacio-5));
+  padding: var(--espacio-3) var(--espacio-4);
+  border-radius: var(--radio-md);
+  background: var(--color-acento);
+  color: var(--color-texto-inverso);
+
+  &:not(:focus) { transform: translateY(calc(-100% - var(--espacio-5))); }
+}
+
+.cl-cabecera-testigo { block-size: 1px; }
+
+.cl-cabecera {
+  position: sticky;
+  z-index: 100;
+  inset-block-start: 0;
+  border-block-end: 1px solid var(--color-borde);
+  background: var(--color-fondo);
+
+  &--fijada {
+    border-block-end-color: var(--color-borde-fuerte);
+    background: var(--color-fondo-alterno);
+  }
+
+  &__fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-3) var(--espacio-5);
+    align-items: center;
+    justify-content: space-between;
+    padding-block: var(--espacio-3);
+  }
+
+  &__marca { flex: 0 1 8rem; }
+
+  &__logo {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+  &__control[hidden] { display: none; }
+  &__control { flex-shrink: 0; }
+
+  &__nav {
+    flex: 1 0 100%;
+    min-inline-size: 0;
+    max-block-size: calc(100dvh - var(--navegacion-offset) - var(--espacio-4));
+    overflow-y: auto;
+  }
+
+  // El panel con scroll no debe recortar los laterales del anillo de foco.
+  &__nav :focus-visible { outline-offset: -3px; }
+
+  &__lista,
+  &__sublista {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  &__lista { padding-block: var(--espacio-3); }
+  &__grupo { position: relative; }
+
+  &__enlace,
+  &__expandir,
+  &__futuro {
+    display: flex;
+    gap: var(--espacio-2);
+    align-items: center;
+    min-block-size: 2.75rem;
+    padding: var(--espacio-3);
+    color: var(--color-texto-secundario);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &__enlace {
+    text-decoration: none;
+    text-underline-offset: 0.35em;
+  }
+
+  &__enlace:hover,
+  &__enlace:focus-visible,
+  &__enlace[aria-current] {
+    color: var(--color-acento);
+    text-decoration: underline;
+  }
+  &__enlace[aria-current] { text-decoration-thickness: 2px; }
+
+  &__expandir {
+    inline-size: 100%;
+    justify-content: space-between;
+    border: 0;
+    border-radius: var(--radio-md);
+    background: transparent;
+    text-align: start;
+  }
+
+  &__expandir:hover,
+  &__expandir[aria-expanded="true"] {
+    background: var(--color-superficie);
+    color: var(--color-acento);
+  }
+
+  &__sublista {
+    padding: var(--espacio-2) var(--espacio-3);
+    border-inline-start: 1px solid var(--color-borde-fuerte);
+  }
+
+  &__futuro {
+    flex-wrap: wrap;
+    color: var(--color-texto-muted);
+  }
+  &__reserva { margin-block-start: var(--espacio-4); }
+
+  @include media-breakpoint-up(xl) {
+    &__fila { flex-wrap: nowrap; }
+    &__control { display: none; }
+
+    &__nav,
+    &__nav[data-cl-nav-panel] {
+      display: flex;
+      flex: 1 1 auto;
+      gap: var(--espacio-5);
+      align-items: center;
+      justify-content: flex-end;
+      max-block-size: none;
+      overflow: visible;
+    }
+
+    &__lista {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 0;
+    }
+
+    &__sublista {
+      position: absolute;
+      inset-inline-end: 0;
+      inline-size: 15rem;
+      max-block-size: calc(100dvh - var(--navegacion-offset) - var(--espacio-4));
+      overflow-y: auto;
+      padding: var(--espacio-3);
+      border: 1px solid var(--color-borde-fuerte);
+      border-radius: var(--radio-md);
+      background: var(--color-fondo-alterno);
+    }
+
+    &__reserva {
+      flex-shrink: 0;
+      margin: 0;
+    }
+  }
+}
+
+// Extensión contextual de Core; los breadcrumbs originales permanecen intactos.
+.cl-ruta {
+  padding-block: var(--espacio-4);
+
+  .cl-migas__item {
+    display: inline;
+    min-inline-size: 0;
+  }
+  .cl-migas__separador { margin-inline-end: var(--espacio-2); }
+
+  .cl-enlace {
+    display: inline-block;
+    padding-block: var(--espacio-3);
+  }
+}
+
+.cl-contexto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3) var(--espacio-6);
+  align-items: center;
+  padding-block: var(--espacio-4);
+  border-block-start: 1px solid var(--color-borde);
+
+  .cl-enlace {
+    display: inline-flex;
+    gap: var(--espacio-2);
+    align-items: center;
+    min-block-size: 2.75rem;
+  }
+}

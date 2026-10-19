@@ -1,4 +1,13 @@
 // Presentación del style guide. No es UI de producto.
+.cl-guia-navegacion-marco {
+  display: block;
+  inline-size: 100%;
+  block-size: min(48rem, 80vh);
+  min-block-size: 22rem;
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+}
+
 .cl-guia-navegacion {
   display: flex;
   flex-wrap: wrap;

@@ -1,0 +1,106 @@
+.cl-pie {
+  padding-block: var(--espacio-7) var(--espacio-5);
+  border-block-start: 1px solid var(--color-borde-fuerte);
+  background: var(--color-fondo-alterno);
+  overflow-wrap: anywhere;
+
+  &__invitacion {
+    margin-block-end: var(--espacio-6);
+    padding-block-end: var(--espacio-6);
+    border-block-end: 1px solid var(--color-borde);
+  }
+
+  &__titulo {
+    max-inline-size: 20ch;
+    margin-block-end: var(--espacio-5);
+    font-family: var(--fuente-display);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    line-height: 1.2;
+  }
+  &__columnas { row-gap: var(--espacio-6); }
+
+  &__logo {
+    display: block;
+    inline-size: 9rem;
+    max-inline-size: 100%;
+    block-size: auto;
+    margin-block-end: var(--espacio-4);
+  }
+
+  &__descripcion {
+    max-inline-size: 32ch;
+    color: var(--color-texto-secundario);
+  }
+
+  &__etiqueta {
+    margin-block-end: var(--espacio-3);
+    color: var(--color-acento);
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+  }
+
+  &__lista {
+    display: grid;
+    gap: var(--espacio-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__lista .cl-enlace {
+    display: inline-flex;
+    gap: var(--espacio-2);
+    align-items: center;
+    min-block-size: 2.75rem;
+  }
+
+  &__base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-3) var(--espacio-5);
+    align-items: center;
+    justify-content: space-between;
+    margin-block-start: var(--espacio-6);
+    padding-block-start: var(--espacio-5);
+    border-block-start: 1px solid var(--color-borde);
+    font-size: 0.875rem;
+  }
+  &__base p { margin: 0; }
+
+  &__legales {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-4);
+  }
+
+  &__legales .cl-enlace {
+    display: inline-block;
+    padding-block: var(--espacio-3);
+  }
+
+  @include media-breakpoint-up(md) {
+    &__invitacion {
+      display: flex;
+      gap: var(--espacio-5);
+      align-items: center;
+      justify-content: space-between;
+    }
+    &__titulo { margin: 0; }
+  }
+}
+
+.cl-contacto {
+  display: grid;
+  gap: var(--espacio-3);
+  font-size: 0.875rem;
+  font-style: normal;
+
+  p { margin: 0; }
+
+  .cl-enlace {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    padding-block: var(--espacio-2);
+  }
+}
