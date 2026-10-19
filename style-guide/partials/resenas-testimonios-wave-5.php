@@ -18,6 +18,8 @@
   </div>
 </section>
 
+<?php require __DIR__ . '/carrusel-resenas-wave-5.php'; ?>
+
 <section class="cl-seccion cl-seccion--alterna" id="featured-testimonials" aria-labelledby="featured-testimonials-titulo">
   <div class="container">
     <div class="row cl-testimonio">
@@ -42,14 +44,10 @@
 <section class="cl-seccion" id="video-testimonials" aria-labelledby="video-testimonials-titulo">
   <div class="container cl-media-video">
     <div class="cl-seccion__encabezado"><p class="cl-eyebrow">Video Testimonials · content pending</p><h2 id="video-testimonials-titulo">A voice, a moment, a story</h2><p class="cl-seccion__descripcion">Space for an authorized guest film, with captions and a complete text alternative. No guest video is available for this demonstration.</p></div>
-    <div class="row cl-catalogo">
-      <div class="col-lg-8"><figure class="cl-media-video__figura"><?php $fotoEditorial('interior', 'cl-media-video__pantalla'); ?><figcaption class="cl-media-video__contexto">Horizontal layout · restaurant archive photograph only. This is not a video poster or a playable testimonial.</figcaption></figure></div>
-      <div class="col-lg-4"><div class="cl-estado-vista"><h3 class="cl-estado-vista__titulo">Guest film pending</h3><p class="cl-estado-vista__texto">Guest authorization, matching poster, reviewed captions and transcript are required before a film can appear here.</p><a class="cl-enlace" href="#galeria-editorial">Explore the restaurant photographs</a></div></div>
-    </div>
-    <details class="cl-guia-demo"><summary>Portrait layout, playback error &amp; text alternative</summary><div class="row cl-guia-rejilla">
-      <div class="col-md-5"><figure class="cl-media-video__figura"><div class="cl-media-video__pantalla cl-media-video__pantalla--vertical cl-estado-vista"><h3 class="cl-estado-vista__titulo">Portrait film pending</h3><p class="cl-estado-vista__texto">Vertical format · no approved media or poster.</p></div><figcaption class="cl-media-video__contexto">Original aspect ratio retained when media becomes available. No playback control is displayed.</figcaption></figure></div>
-      <div class="col-md-7"><div class="cl-estado-vista cl-estado-vista--error"><h3 class="cl-estado-vista__titulo">Video could not be played</h3><p class="cl-estado-vista__texto">Static error example. An approved transcript remains outside the player so it can be read even if playback fails.</p><a class="cl-enlace" href="#video-testimonial-alternativa">Read the text alternative status</a></div><p id="video-testimonial-alternativa" class="cl-media-video__contexto">Transcript pending · No guest statement is available. The photograph above shows barrel tables, the bar and hanging wine glasses; it does not describe an unreviewed film.</p></div>
-    </div>
+    <?php require __DIR__ . '/carrusel-videos-wave-5.php'; ?>
+    <details class="cl-guia-demo"><summary>Playback error &amp; native player contract</summary>
+    <div class="cl-estado-vista cl-estado-vista--error"><h3 class="cl-estado-vista__titulo">Video could not be played</h3><p class="cl-estado-vista__texto">Static error example. An approved transcript remains outside the player so it can be read even if playback fails.</p></div>
+    <p id="video-testimonial-alternativa" class="cl-media-video__contexto">Transcript pending · No approved guest film or matching poster is available. No customer statement is reproduced.</p>
     <!-- Contrato inerte: solo activar con permisos, source, poster y track reales.
          Play/pausa/subtítulos pertenecen al reproductor nativo, sin autoplay. -->
     <template id="contrato-video-testimonio"><video class="cl-media-video__pantalla" controls playsinline preload="none" width="1920" height="1080" aria-label="Authorized guest testimonial" aria-describedby="video-testimonial-alternativa"><p>Video unavailable. Read the adjacent text alternative.</p></video></template>

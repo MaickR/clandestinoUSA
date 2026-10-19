@@ -36,13 +36,22 @@ $tarjetaResena = static function (array $resena, bool $compacta = false) use ($e
     </article>
     <?php
 };
+$controlesCarrusel = static function (string $id, string $familia) use ($escaparResena): void {
+    ?>
+    <div class="cl-carrusel__controles" data-cl-carrusel-controles hidden>
+      <button class="cl-boton-icono" type="button" data-cl-carrusel-anterior aria-controls="<?= $escaparResena($id) ?>" aria-label="<?= $escaparResena('Previous ' . $familia) ?>" disabled><svg class="cl-icon cl-carrusel__flecha-anterior" aria-hidden="true" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-siguiente"></use></svg></button>
+      <p class="cl-carrusel__posicion" data-cl-carrusel-posicion></p>
+      <button class="cl-boton-icono" type="button" data-cl-carrusel-siguiente aria-controls="<?= $escaparResena($id) ?>" aria-label="<?= $escaparResena('Next ' . $familia) ?>" disabled><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="../assets/icons/cl-iconos.svg#cl-icon-siguiente"></use></svg></button>
+    </div>
+    <?php
+};
 ?>
 <section class="cl-seccion cl-seccion--alterna" id="wave-5" aria-labelledby="wave-5-titulo">
   <div class="container">
     <div class="cl-seccion__encabezado"><p class="cl-eyebrow">Wave 5 · Reviews &amp; reputation</p><h2 id="wave-5-titulo">A place for every voice</h2><p class="cl-seccion__descripcion">Considered ways to share a guest's perspective, hear feedback and keep its source clear.</p></div>
     <div class="cl-alerta cl-alerta--aviso"><div class="cl-alerta__contenido"><p class="cl-alerta__titulo">Design demonstration · no real guest reviews</p><p class="cl-alerta__mensaje">All ratings, dates and review text in Wave 5 are fictional examples. No guest identities, endorsements, verified badges or platform ratings are represented. Nothing submitted here is sent, stored or published.</p></div></div>
     <nav aria-label="Wave 5 families"><ul class="cl-guia-indice">
-      <?php foreach (['reviews' => 'Reviews', 'featured-testimonials' => 'Featured Testimonials', 'video-testimonials' => 'Video Testimonials', 'reputation' => 'Reputation', 'review-listing' => 'Review Listing', 'write-review' => 'Write a Review', 'review-lifecycle' => 'Lifecycle States'] as $ancla => $nombre) : ?>
+      <?php foreach (['reviews' => 'Reviews', 'reviews-carousel' => 'Review Carousel', 'featured-testimonials' => 'Featured Testimonials', 'video-testimonials' => 'Video Testimonials', 'reputation' => 'Reputation', 'review-listing' => 'Review Listing', 'write-review' => 'Write a Review', 'review-lifecycle' => 'Lifecycle States'] as $ancla => $nombre) : ?>
       <li><a class="cl-enlace" href="#<?= $escaparResena($ancla) ?>"><?= $escaparResena($nombre) ?></a></li>
       <?php endforeach; ?>
     </ul></nav>

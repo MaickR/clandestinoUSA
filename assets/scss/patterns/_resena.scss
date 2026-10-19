@@ -1,9 +1,10 @@
 // La reseña comparte estructura; la variante compacta reduce énfasis, no contenido.
 .cl-resena {
   padding: var(--espacio-5);
-  border: 1px solid var(--color-borde);
+  border: 1px solid transparent;
+  border-block-color: var(--color-borde);
   border-radius: var(--radio-md);
-  background: var(--color-superficie);
+  background: transparent;
   overflow-wrap: anywhere;
 
   &--compacta {
