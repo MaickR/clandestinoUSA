@@ -4,6 +4,8 @@ $pieCompleto = ($_GET['footer'] ?? '') !== 'minimal';
 $logoNavegacion = ($_GET['logo'] ?? '') === 'original' ? '/assets/images/clandestino-logo.svg' : '/assets/images/clandestino-logo-ui.svg';
 $paginaInterior = ($_GET['layout'] ?? '') === 'interior';
 $destinoActivo = ($_GET['active'] ?? '') === 'club' ? 'Wine Club' : 'Home';
+$mostrarTopbar = ($_GET['topbar'] ?? '') === 'on';
+require __DIR__ . '/partials/configuracion-wave-6.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,6 +25,7 @@ $destinoActivo = ($_GET['active'] ?? '') === 'club' ? 'Wine Club' : 'Home';
 <body class="cl-estructura" data-cl-navegacion>
   <a class="cl-saltar" href="#contenido-global">Skip to main content</a>
   <?php require __DIR__ . '/partials/acceso-wave-6.php'; ?>
+  <?php if ($mostrarTopbar) require __DIR__ . '/partials/topbar-wave-6.php'; ?>
   <?php require __DIR__ . '/partials/cabecera-wave-6.php'; ?>
   <main id="contenido-global" tabindex="-1">
     <?php if (!$paginaInterior) : ?>
@@ -49,6 +52,7 @@ $destinoActivo = ($_GET['active'] ?? '') === 'club' ? 'Wine Club' : 'Home';
         <h2 id="estructura-titulo">An invitation, from every page.</h2>
         <p>This is an isolated design system preview. Navigation opens existing examples in the guide. Sign in opens a sample interface; accounts and reservations are not available here.</p>
         <p><a class="cl-enlace" href="/style-guide/patterns.php#wave-6" target="_top">Back to Section Patterns</a></p>
+        <p><a class="cl-enlace" href="navigation.php<?= $mostrarTopbar ? '' : '?topbar=on' ?>" target="_top"><?= $mostrarTopbar ? 'Compare header without Topbar' : 'Compare optional desktop Topbar' ?></a></p>
         <nav class="cl-ruta" aria-label="Breadcrumb">
           <ol class="cl-migas"><li class="cl-migas__item"><a class="cl-enlace" href="#inicio-global">Home</a></li><li class="cl-migas__item"><span class="cl-migas__separador" aria-hidden="true">/</span><span aria-current="page">Navigation laboratory</span></li></ol>
         </nav>

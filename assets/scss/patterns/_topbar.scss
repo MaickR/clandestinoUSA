@@ -1,0 +1,27 @@
+// Variante secundaria opcional; no ocupa altura en móvil/tablet ni es sticky.
+.cl-topbar {
+  display: none;
+  border-block-end: 1px solid var(--color-borde);
+  background: var(--color-fondo-alterno);
+  color: var(--color-texto-secundario);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+
+  &__contenido {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2) var(--espacio-5);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cl-enlace {
+    display: inline-flex;
+    min-block-size: 2.75rem;
+    align-items: center;
+    color: inherit;
+  }
+
+  @include media-breakpoint-up(xl) { display: block; }
+}

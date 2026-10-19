@@ -101,6 +101,8 @@ Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y con
 
 ## Objetivo inmediato (futuro)
 
+Wave 6 mantiene partials compartidos de Header/Footer/modal y Topbar opcional. Los datos/rutas de la muestra se concentran en `style-guide/partials/configuracion-wave-6.php` (fixture local, no configuración productiva). El anfitrión futuro aportará configuración central confiable de rutas, contacto/redes y campos opcionales antes de incluir los mismos partials; no se migra ninguna página en esta wave. Topbar no sticky, omitida por defecto; contrato y QA de cierre en `SECTION-PATTERN-LIBRARY.md`.
+
 | Capa | Objetivo |
 |---|---|
 | Estilos | Foundation, Core y Wave 1 estructural; aprobar visualmente los patrones antes de migrar páginas |
