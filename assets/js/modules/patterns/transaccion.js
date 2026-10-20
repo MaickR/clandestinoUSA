@@ -11,6 +11,16 @@ export function mostrarResultado(region, titulo, mensaje, variante = "informacio
   region.replaceChildren(crearAlerta({ titulo, mensaje, variante }));
 }
 
+/** Todos los resúmenes consumen el mismo snapshot; aquí solo se presenta, no se calcula. */
+export function pintarImportes(raiz, datos) {
+  for (const nodo of raiz.querySelectorAll("[data-cl-importe]")) {
+    const clave = nodo.dataset.clImporte;
+    const valor = datos[clave];
+    nodo.textContent = valor === null ? (nodo.dataset.clPendiente || "Not determined") :
+      !datos.valido ? "Review required" : `${clave === "descuento" && valor ? "−" : ""}${moneda(valor, datos.moneda)}`;
+  }
+}
+
 /** Valida únicamente controles habilitados; asocia cada error y enfoca el primero. */
 export function validarFormulario(formulario) {
   let primero = null;
@@ -19,11 +29,16 @@ export function validarFormulario(formulario) {
     if (["text", "email"].includes(campo.type) && campo.required) {
       campo.setCustomValidity(campo.value.trim() ? "" : "Please enter a value, not only spaces.");
     }
+    if (campo.type === "tel") {
+      const valor = campo.value.trim();
+      campo.setCustomValidity(!valor || (/^\+?[\d\s().-]+$/.test(valor) && /\d/.test(valor)) ? "" : "Use digits and standard phone separators.");
+    }
     const valido = campo.checkValidity();
     campo.setAttribute("aria-invalid", String(!valido));
     const error = formulario.querySelector(`[data-cl-error="${campo.id}"]`);
     if (error) {
-      error.textContent = valido ? "" : (campo.dataset.clMensajeError || "Please complete this field with a valid value.");
+      const mensajes = { email: "Enter a valid email address.", tel: "Use digits, spaces, +, parentheses or hyphens.", date: "Choose a valid restaurant date, today or later.", time: "Enter a valid requested time." };
+      error.textContent = valido ? "" : (campo.dataset.clMensajeError || mensajes[campo.type] || "Please complete this field with a valid value.");
       error.hidden = valido;
     }
     if (!valido && !primero) primero = campo;

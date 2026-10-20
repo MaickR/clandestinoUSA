@@ -4,7 +4,8 @@ import { validarFormulario, mostrarResultado } from "./transaccion.js";
 const instancias = new WeakMap();
 
 /** Dos etapas locales: datos y revisión. El anfitrión aporta validación/contexto/resultados. */
-export function inicializarCheckout(raiz, { revisar, resultado }) {
+export function inicializarCheckout(raiz, { revisar, resultado, prepararValidacion = () => {}, alCompletar = () => {}, alInvalidar = () => {} }) {
+  if (!(raiz instanceof HTMLElement) || typeof revisar !== "function" || typeof resultado !== "function") throw new TypeError("Checkout requiere raíz y callbacks.");
   if (instancias.has(raiz)) return instancias.get(raiz);
   const formulario = raiz.querySelector("form");
   const entrada = raiz.querySelector("[data-cl-checkout-entrada]");
@@ -21,7 +22,7 @@ export function inicializarCheckout(raiz, { revisar, resultado }) {
   let revisionActual = false;
   let temporizador;
 
-  function mostrarPaso(revisando) {
+  function mostrarPaso(revisando, enfocar = true) {
     revisionActual = revisando;
     entrada.hidden = revisando;
     revision.hidden = !revisando;
@@ -29,11 +30,25 @@ export function inicializarCheckout(raiz, { revisar, resultado }) {
       if (nodo.dataset.clCheckoutPaso === (revisando ? "revision" : "datos")) nodo.setAttribute("aria-current", "step");
       else nodo.removeAttribute("aria-current");
     }
-    (revisando ? revision : entrada).querySelector("[tabindex='-1']")?.focus();
+    if (enfocar) (revisando ? revision : entrada).querySelector("[tabindex='-1']")?.focus();
   }
+  function invalidar() {
+    const anterior = ocupado || terminado || revisionActual;
+    clearTimeout(temporizador);
+    ocupado = false; terminado = false;
+    carga.establecerCarga(false); volver.disabled = false; confirmar.disabled = false;
+    if (revisionActual) mostrarPaso(false, revision.contains(document.activeElement));
+    if (anterior) mostrarResultado(region, "Review needed", "Your details are preserved. Review the current selection before continuing.");
+    alInvalidar();
+  }
+  for (const tipo of ["input", "change"]) formulario.addEventListener(tipo, () => {
+    if (ocupado || terminado || revisionActual) invalidar();
+    else alInvalidar();
+  }, opciones);
   formulario.addEventListener("submit", (evento) => {
     evento.preventDefault();
     if (ocupado || revisionActual) return;
+    prepararValidacion();
     if (!validarFormulario(formulario)) {
       mostrarResultado(region, "Check your details", "Correct the highlighted fields. Your other entries are preserved.", "error");
       return;
@@ -46,10 +61,13 @@ export function inicializarCheckout(raiz, { revisar, resultado }) {
   }, opciones);
   volver.addEventListener("click", () => {
     if (ocupado) return;
-    mostrarPaso(false);
+    invalidar(); mostrarPaso(false);
   }, opciones);
   confirmar.addEventListener("click", () => {
-    if (ocupado || terminado || !revisionActual || !revisar()) return;
+    if (ocupado || terminado || !revisionActual) return;
+    prepararValidacion();
+    if (!validarFormulario(formulario)) { mostrarPaso(false); validarFormulario(formulario); return; }
+    if (!revisar()) return;
     ocupado = true;
     carga.establecerCarga(true);
     volver.disabled = true;
@@ -63,15 +81,11 @@ export function inicializarCheckout(raiz, { revisar, resultado }) {
       confirmar.disabled = terminado;
       mostrarResultado(region, respuesta.titulo, respuesta.mensaje, respuesta.variante || "informacion");
       region.focus();
+      alCompletar(respuesta);
     }, 600);
   }, opciones);
   const api = {
-    invalidar() {
-      if (ocupado) { clearTimeout(temporizador); ocupado = false; carga.establecerCarga(false); volver.disabled = false; }
-      terminado = false;
-      confirmar.disabled = false;
-      if (revisionActual) mostrarPaso(false);
-    },
+    invalidar,
     destruir() { clearTimeout(temporizador); abortador.abort(); instancias.delete(raiz); },
   };
   instancias.set(raiz, api);

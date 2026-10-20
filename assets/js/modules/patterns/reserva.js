@@ -4,7 +4,8 @@ import { fechaRestaurante, describirFecha, mostrarResultado, validarFormulario }
 const instancias = new WeakMap();
 
 /** Selección de disponibilidad recibida por el anfitrión; ninguna consulta de red. */
-export function inicializarReserva(raiz, { escenario, alInvalidar }) {
+export function inicializarReserva(raiz, { escenario, alInvalidar, alSeleccionar = () => {} }) {
+  if (!(raiz instanceof HTMLElement)) throw new TypeError("Reserva requiere raíz existente.");
   if (instancias.has(raiz)) return instancias.get(raiz);
   const formulario = raiz.querySelector("[data-cl-reserva-busqueda]");
   const fecha = formulario.querySelector('input[type="date"]');
@@ -22,8 +23,9 @@ export function inicializarReserva(raiz, { escenario, alInvalidar }) {
   fecha.min = fechaRestaurante();
 
   function seleccion() {
+    fecha.min = fechaRestaurante();
     const hora = horarios.querySelector("input:checked");
-    return listo && hora ? { fecha: fecha.value, personas: personas.value, hora: hora.value, texto: hora.nextElementSibling.textContent } : null;
+    return listo && hora && fecha.checkValidity() ? { fecha: fecha.value, personas: personas.value, hora: hora.value, texto: hora.nextElementSibling.textContent } : null;
   }
   function invalidar() {
     clearTimeout(temporizador);
@@ -32,7 +34,7 @@ export function inicializarReserva(raiz, { escenario, alInvalidar }) {
     carga.establecerCarga(false);
     horarios.hidden = true;
     for (const radio of horarios.querySelectorAll("input")) radio.checked = false;
-    resumen.textContent = "Choose example times again after changing the date or party size.";
+    resumen.textContent = "Choose a time for your updated visit preferences.";
     alInvalidar();
   }
   for (const campo of [fecha, personas]) campo.addEventListener("change", () => {
@@ -57,13 +59,16 @@ export function inicializarReserva(raiz, { escenario, alInvalidar }) {
       }
       listo = true;
       horarios.hidden = false;
-      mostrarResultado(mensaje, "Example evening times", "Choose a time below. These options do not represent available tables.");
+      mostrarResultado(mensaje, "Example evening times", "Choose a time, then add your contact details.");
     }, 500);
   }, opciones);
   horarios.addEventListener("change", () => {
     alInvalidar();
     const datos = seleccion();
-    if (datos) resumen.textContent = `${describirFecha(datos.fecha)} · ${datos.texto} · ${datos.personas} guests. Restaurant time · America/Los_Angeles. Demonstration only.`;
+    if (datos) {
+      resumen.textContent = `${describirFecha(datos.fecha)} · ${datos.texto} · ${datos.personas} guests`;
+      alSeleccionar(datos);
+    }
   }, opciones);
   const api = {
     seleccion,

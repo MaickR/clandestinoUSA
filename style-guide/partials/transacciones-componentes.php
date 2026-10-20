@@ -32,6 +32,18 @@ $botonTransaccion = static function (string $texto, string $atributos = '') use 
     <button class="cl-boton cl-boton--con-carga" type="button" <?= $atributos ?>><span class="cl-boton__reposo"><?= $escaparTransaccion($texto) ?></span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Processing demo…</span></button>
     <?php
 };
+$importesTransaccion = static function (): void {
+    ?>
+    <dl class="cl-resumen__importes">
+      <div class="cl-resumen__fila"><dt>Items subtotal</dt><dd data-cl-importe="subtotal">—</dd></div>
+      <div class="cl-resumen__fila"><dt>Demo discount</dt><dd data-cl-importe="descuento">—</dd></div>
+      <div class="cl-resumen__fila cl-resumen__total"><dt>After demo discount</dt><dd data-cl-importe="subtotalAjustado">—</dd></div>
+      <div class="cl-resumen__fila"><dt>Tax</dt><dd data-cl-importe="impuestos">Not determined</dd></div>
+      <div class="cl-resumen__fila"><dt>Other charges</dt><dd data-cl-importe="cargos">Not determined</dd></div>
+      <div class="cl-resumen__fila cl-resumen__pendiente"><dt>Final total</dt><dd data-cl-importe="total" data-cl-pendiente="Not confirmed">Not confirmed</dd></div>
+    </dl>
+    <?php
+};
 $resultadoTransaccion = static function (): void {
     ?>
     <div class="cl-transaccion__resultado" data-cl-checkout-resultado role="status" aria-atomic="true" tabindex="-1"><p class="cl-texto-pequeno">Local demonstration. Use fictional details only. Nothing is sent or saved.</p></div>

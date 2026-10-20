@@ -128,3 +128,99 @@ No se detectaron espacios vacíos accidentales, truncamiento ni necesidad de rec
 |31|Aprobación|Técnicamente listo para revisión humana; sin PR/merge/force/deploy. No implica autorización de venta ni aprobación visual|
 
 WAVE 7 TECHNICALLY READY — WAITING FOR VISUAL APPROVAL
+
+## Refinamiento final — auditoría previa (2026-10-20)
+
+Preflight: `feature/ui-section-patterns-wave-7`, HEAD `c0b21c8`, limpio, fetch y sincronización0/0. Wave6 integrada en base9513e52; diff contra develop limitado a los22 archivos Wave7 conocidos. Sin cambios ajenos. `production-baseline` no contiene estas guías/SCSS/módulos.
+
+| Hallazgo comprobado | Clasificación / decisión |
+|---|---|
+| Payment usa USD81 fijo y el carrito cambia cantidades | CORREGIR: un snapshot de líneas/importes/versionado para Cart→Checkout→Payment; invalidar revisión/esperas al cambiar |
+| Carrito exige HTML por cada producto y restaura mediante dos botones específicos | CORREGIR: plantilla de línea, identidad estable, API de sustitución/actualización y Undo local; fixtures numerosos solo bajo demanda |
+| Precio, cantidad y Remove compiten con escasa jerarquía | REFINAR: subtotal de línea protagonista, unidad secundaria, distribución responsive y papelera accesible Core |
+| Resumen tiene CTA de ancho natural y no distingue cargos | REFINAR: CTA contextual completo, importes y pendientes explícitos |
+| No existe patrón de promo | CORREGIR: disclosure y validación demo recuperable; descuento entero validado por el anfitrión, sin motor comercial |
+| Header carece de acceso al carrito | CORREGIR: extensión optativa autorizada Wave6, enlace y contador de unidades sin acoplamiento a fixtures; laboratorio independiente sin cantidad falsa |
+| Sprite curado no contiene papelera | CORREGIR: añadir exclusivamente el símbolo trash del paquete Bootstrap Icons ya instalado al manifiesto Core; sin dependencia ni sistema nuevo |
+| Pickup no muestra dirección; contexto mesa requerido aunque puede no existir | REFINAR: dirección proporcionada, contacto teléfono opcional y contexto mesa opcional; separar solicitud y reserva |
+| Reserva muestra contacto antes de elegir horario y empieza por fecha | REFINAR: comensales→fecha→búsqueda→horario→contacto; preservar datos cuando se pierde el slot |
+| Fechas/slots son civiles LA; disponibilidad no autoritativa | CONSERVAR y DOCUMENTAR PARA BACKEND: min actualizada al revisar, DST/instantes/capacidad/bloqueo/transacción a cargo del motor futuro |
+| No hay patrones contextuales de restricción de vino/modalidad | REFINAR: avisos/estado restringido demo, sin inventar verificación legal ni elegibilidad real |
+| Gold/Diamond, Gift, Event y58 estados ya están cubiertos | CONSERVAR: comprobar coherencia, corregir copias de importe desconectado y regresiones |
+| Backend, promociones reales, pagos, identidad y publicación | FUERA DE ALCANCE; contratos de autorización/idempotencia/concurrencia y decisiones comerciales permanecen documentales |
+
+La auditoría se cierra con implementación y pruebas dentro de este refinamiento; no abre otra wave ni una nueva feature.
+
+### Cierre del refinamiento final — 2026-10-20
+
+Este registro sustituye, donde difiere, el comportamiento y QA del cierre original `c0b21c8`; conserva su auditoría histórica. Cobertura actual: **COMPLETO CON DEPENDENCIA FUTURA** para operaciones comerciales; sin defecto frontend bloqueante conocido tras las pruebas ejecutadas. No se publica un porcentaje de completitud ni se crea otra wave.
+
+Evidencia local: `C:/Users/Mike/.codex/visualizations/2026/10/20/01a15601-3a20-7b21-a875-71755abbaabb/wave-7-refinement/`. Registros: `funcional.json`, `estados.json`, `responsive-stress.json`, `responsive-reserva.json`, `accesibilidad.json`, `html-recursos.json`, `antes.json`, `despues.json`. Capturas representativas: `carrito-1280.png`, `carrito-768.png`, `carrito-320.png`, `summary-390.png`, `reserva-1280.png`, `reserva-768.png`, `reserva-390.png`, `payment-1280.png`. Las capturas de estrés y escenarios son evidencia local, no assets nuevos del sitio.
+
+| # | Área | Resultado del refinamiento / verificación |
+|---|---|---|
+|1|Git|Misma feature, base de refinamiento `c0b21c8ca4fc453545ea3ce9619bfab9f298f809`; fetch/preflight0/0 y sin cambios ajenos. Sin tocar main/develop|
+|2|Commits|Cambio coherente con fuentes, contratos, QA y regresión automatizada en español; SHA/push/sincronización final se informan al entregar|
+|3|Hallazgos|Matriz previa en este archivo: Payment fijo, líneas estáticas, precios/Remove/CTA, promo ausente, Header sin carrito, flujo de reserva y contacto|
+|4|Carrito|Plantilla y nodos estables, foto/producto/variante/unidad/cantidad/subtotal/papelera; conserva composición general y grid|
+|5|Precios|Unidad secundaria y subtotal de línea champagne, números tabulares; todo cálculo en `estado-carrito.js`. $81→$71 con DEMO10; cantidad vino3→$161 y cambio a copa→$62, iguales en cuatro resúmenes|
+|6|Eliminar/restaurar|Papelera Core con nombre específico y44px; feedback y Undo, sin modal obligatorio. Restaurar conserva cantidad/variante y devuelve foco al control de línea|
+|7|Muchos productos|1/2/8/20/40 líneas sintéticas bajo demanda;50 combinaciones con diez anchos, sin overflow.40 líneas suman120 unidades; sin paginación ni carga de catálogo|
+|8|Resumen|CTA ocupa301/301px útiles en390px y centra texto/ícono. Subtotal/descuento/ajustado separados de impuestos/cargos/final null; compacto y lateral sincronizados|
+|9|Promos demo|Sin código, introducido, validando, aplicado, inválido, expirado, no elegible, ya aplicado, error y retirado. Un descuento fijo1000 centavos con mínimo5000; no se duplica. Cambio que deja de cumplir lo retira con aviso; validación tardía se aborta. Enter conserva foco readonly durante espera|
+|10|Coherencia|Snapshot versionado Cart→Order→Review→Payment. Cambiar cantidad/variante/descuento invalida Review y Payment, conserva contacto y exige nueva revisión; respuesta pendiente cancelada no aparece sobre nueva selección|
+|11|Header Cart|Extensión mínima autorizada: ruta PHP optativa + API `actualizarCarrito`. Bolsa Core entre Reserve y Account en desktop, visible con logo/cuenta/menú en320px. Sticky/Discover/Drawer y Footer conservados|
+|12|Contador|Suma de unidades, vacío0, vista99+ sobre99 y nombre accesible completo120. Sin live announcements por cada incremento. Laboratorio Wave6 independiente: cero enlaces/contadores falsos y sin overflow a320|
+|13|Take Away|Dirección211 N Mt Shasta Blvd, Mt Shasta, CA96067; fecha/hora solicitadas, producto/contacto/teléfono opcional/notas y revisión. Ventana/aceptación no se garantizan|
+|14|Order Ahead|Referencia opcional, campos pickup ocultos deshabilitados y valores conservados al alternar; resumen aclara que no reserva mesa ni avisa cocina|
+|15|Reservas|Comensales→fecha→búsqueda→horario→contacto→revisión. Radios con Selected textual/disabled; contacto progresivo y teléfono opcional. Se corrigió estrechez de slots tablet y alineación de campos; selección se invalida por fecha/comensales y contacto se conserva|
+|16|Booking Management|Conservar/cambiar/cancelar, pendiente/restricción/error y confirmada demo. Cancelar deshabilita acciones; cambiar escenario limpia resultado anterior para evitar etiqueta contradictoria|
+|17|Payment|Método hospedado futuro explícitamente no disponible, sin logos/PAN/CVV. Procesando y seis resultados probados; consulta en pendiente/desconocido/expirado/error y reset local sin cobro. Monto sincronizado y final no autorizado|
+|18|Gift Cards|Diseñador Wave4 intacto; importación de100/dedicatoria, validación/revisión/pago pendiente; emisión separada y sin código comercial. Cambiar escenario invalida Review/espera|
+|19|Wine Club|Gold/Diamond importados; condiciones obligatorias verificadas y precio/cadencia/renovación pendientes. No promoción histórica vigente ni activación real|
+|20|Events|Selección existente, asistentes4, agotado bloquea, registro demo y estados posteriores preservados; sin ticket/waitlist. Private inquiry mantiene sus siete estados y confirmación posterior|
+|21|Estados|58 estados recorridos en siete dominios; todos con próximo paso no vacío. Cuenta conserva cuatro filas y retira todas del DOM en vacío/error/no autorizado|
+|22|Validación|Vacíos/espacios/email/teléfono sintáctico/cantidad/límites/selección/condiciones; foco en primer error. Fecha civil LA y min refrescada antes de validar; assertions de medianoche/DST y presentación civil sin desplazamiento|
+|23|Accesibilidad|PASS:328 textos, mínimo6.13:1, sin fallos de contraste, labels/ARIA correctos, un h1 e IDs únicos; targets≥44px. Tab/Shift+Tab/Enter/Space/Escape, trap y retorno de foco probados tras terminar transiciones. Contador sin live, precio sin anuncios repetidos|
+|24|Responsive|PASS:50 casos carrito y diez de reserva,320/360/390/425/768/820/992/1024/1280/1440. Nombre largo, foto ausente, precio$1,234,567.89, estados y viewport320×568; sin truncar información crítica. Zoom200% no verificable|
+|25|Performance|Tabla comparable abajo. JS productivo idéntico; sin dependencias ni fotos nuevas. Estrés generado solo al solicitarlo|
+|26|Seguridad|DOM mediante plantilla/textContent/createElement; identidad única e importes/variantes/rangos validados, imagen local sin traversal, snapshots aislados. AbortController y temporizadores cancelados, inicialización idempotente, sin red/persistencia/sesiones/credenciales ni operación comercial. Backend sigue siendo autoridad|
+|27|Regresiones|PASS de humo: Foundation/Wave1 renderizan sin cambiar fuentes; Core cantidad6/accordion/modal/trap; Wave2 cantidad3→$108; galería2/6 y retorno; Gift/Club/Event anteriores; filtro5estrellas→1 reseña; Review/Video Carousel avanzan; Header/Drawer/Discover/acceso/Footer y laboratorio independiente. No equivale a recertificación exhaustiva de todas las waves|
+|28|Cobertura|Inventario original conservado y hallazgos corregidos. Frontend preparado para Restaurant/Wines/Cart/Take Away/Order Ahead/Checkout/Gift/Club/Events/Reservations/Status/Account FUTURE, con integración posterior|
+|29|Documentación|Contratos actualizados en SECTION-PATTERN-LIBRARY; índice práctico en DESIGN-SYSTEM-READINESS; este cierre y arquitectura coherentes. Sin reescribir Foundation/Core/Waves previas|
+|30|Archivos|23 archivos:3 nuevos (`patterns/estado-carrito.js`, `patterns/promocion.js`, `scripts/probar-carrito.mjs`),20 modificados de Wave7, Header autorizado, manifiesto y cuatro docs. Inventario exacto abajo|
+|31|Pendientes reales|Proveedor, totales/impuestos/cargos, vigencia/eligibilidad/uso de promociones, disponibilidad/capacidad/duración/bloqueo, aceptación cocina, obligatoriedad de teléfono, entrega/condiciones y autorización. Vino: validar licencias/modalidades, edad/identificación y procedimiento legal; sin checkbox que finja verificación|
+|32|URLs|`http://localhost:3000/style-guide/patterns.php#w7-carrito`, `#w7-checkout`, `#w7-pago`, `#w7-reserva`; Foundation/Core `/style-guide/` y Wave6 aislada `/style-guide/navigation.php`; dev/watch activo al entregar|
+|33|Aprobación|Revisión renderizada realizada y problemas detectados corregidos; aprobación visual humana final pendiente. No hay PR, merge, force push ni deploy|
+
+Comandos finales ejecutados: `npm run lint` PASS; `node scripts/probar-carrito.mjs` PASS; `npm run build` PASS; PHP lint de9 documentos/partials PASS; `git diff --check` PASS. Tras el último ajuste de separación de resúmenes se repitieron Stylelint y PHP del partial afectado, PASS. Se verificaron build sin CSS/JS de guía/mapas/selectores de laboratorio y arranque posterior de dev.
+
+HTML renderizado por PHP: mismos dos avisos preexistentes de entidad en Google Fonts, cero errores estructurales nuevos. DOM dinámico completo: IDs únicos, un h1 y parseo sin errores de aplicación tras excluir únicamente el div vacío `codex-browser-sidebar-comments-root` que la herramienta añade después de body; se conserva evidencia cruda y filtrada. No se declara certificación W3C sin avisos.51 URLs locales declaradas devuelven200;27 símbolos del sprite y20 usados en Patterns, ninguno ausente. Consola de página sin errores/warnings relevantes; Node/BrowserSync mantiene DEP0060 preexistente.
+
+Pruebas no ejecutadas o no verificables: zoom real200% (atajo no produjo cambio de innerWidth/devicePixelRatio), emulación de prefers-reduced-motion del SO, Firefox/Safari, dispositivo físico, lector auditivo, HAR/requests efectivos/CLS/LCP/INP y Apache/GoDaddy. Reduced motion se revisó en la cascada Foundation/Core vigente (0.01ms y scroll auto); no se incorporan nuevas animaciones. El scope del navegador no expone performance. No se sustituye zoom por viewport ni un conteo de markup por red real.
+
+#### Performance del refinamiento
+
+Base `c0b21c8`; mismo pipeline/gzip Node por defecto. El JS anterior se empaquetó con esbuild/onLoad leyendo fuentes Git de esa base con los mismos paths; después usa fuentes finales. En ambos: bundle/ESM/es2020, sin sourcemap y write:false; minificado de guía únicamente en memoria. CSS/sprite medidos tras build.
+
+| Artefacto | Antes bytes | Después bytes | Antes gzip | Después gzip | Cambio gzip |
+|---|---:|---:|---:|---:|---:|
+|CSS producto|110386|113763|17944|18450|+506 (+2.82%)|
+|JS producto|0|0|20|20|0|
+|JS guía DEV|165087|191795|38612|44818|+6206 (+16.07%)|
+|JS guía minificado, medición|96775|113046|29593|34763|+5170 (+17.47%)|
+|Sprite compartido|11536|12028|3920|4038|+118 (+3.01%)|
+
+CSS crece por jerarquía comercial, CTA/disclosure, contador y horarios. JS de guía añade estado validado, plantilla dinámica, promo abortable e invalidación conectada; no entra en producto. El símbolo papelera procede del paquete ya instalado; no se sustituye el sprite ni se instala una librería. JS productivo conserva SHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+
+Imágenes reales de la muestra principal:48→48 instancias DOM con src y20 URLs únicas; cero archivos originales añadidos/modificados. El PHP fuente pasa48→47 img con src al sustituir dos líneas por una plantilla inerte; ese número no describe las líneas renderizadas ni requests. Recursos locales únicos declarados:51→51, mismos paths; trash es un símbolo del mismo recurso SVG. Alternativas picture, lazy loading, caché e iframe impiden inferir requests efectivos de este inventario. No se fabrican Web Vitals ni medidas de memoria/latencia de40 líneas.
+
+#### Inventario exacto y evaluación visual
+
+Nuevos: `assets/js/modules/patterns/estado-carrito.js`, `promocion.js`; `scripts/probar-carrito.mjs`.
+
+Modificados: `assets/js/modules/patterns/{carrito,checkout,reserva,transaccion,navegacion-global}.js`; `assets/js/modules/guia/transacciones.js`, `transacciones-fixtures.js`; `assets/scss/patterns/_{carrito,navegacion-global,reserva}.scss`; `style-guide/partials/{carrito-checkout,reservas,transacciones}-wave-7.php`, `transacciones-componentes.php`, `cabecera-wave-6.php`; `scripts/iconos.json`; `docs/{WAVE-7-COVERAGE,DESIGN-SYSTEM-READINESS,SECTION-PATTERN-LIBRARY,ARQUITECTURA}.md`. El listado Git de entrega es la autoridad exacta sobre archivos modificados.
+
+Inspección artística: fotografía auténtica, tipografía Foundation y superficies cálidas; precios escaneables con prioridad contextual, subtotal no confundido con cargo final, papelera discreta y CTA evidente. Resumen móvil y tablet legibles; reserva con pasos naturales, slots claros y menos notas técnicas repetidas. Se corrigieron horarios estrechos en tablet y separación de resúmenes tras revisar capturas. Pickup/mesa/reserva y pago/aceptación/emisión/activación conservan significados distintos. No hay rediseño de Gift/Club/Event ni Footer, ni pantallas que aparenten cobrar o reservar sin servicio.
+
+WAVE 7 REFINED — WAITING FOR FINAL VISUAL APPROVAL

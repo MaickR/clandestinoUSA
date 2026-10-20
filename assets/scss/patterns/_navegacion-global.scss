@@ -51,6 +51,35 @@
     block-size: auto;
   }
   &__cuenta { margin-inline-start: auto; }
+
+  &__carrito {
+    position: relative;
+    flex-shrink: 0;
+    margin-inline-start: auto;
+  }
+
+  &__contador {
+    position: absolute;
+    inset-block-start: calc(-1 * var(--espacio-2));
+    inset-inline-end: calc(-1 * var(--espacio-2));
+    min-inline-size: 1.25rem;
+    padding: var(--espacio-1);
+    border: 1px solid var(--color-fondo);
+    border-radius: var(--radio-md);
+    background: var(--color-acento);
+    color: var(--color-texto-inverso);
+    font-size: 0.75rem;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  &--con-carrito &__fila {
+    flex-wrap: nowrap;
+    gap: var(--espacio-3);
+  }
+  &--con-carrito &__marca { min-inline-size: 0; }
+  &--con-carrito &__cuenta { margin: 0; }
   &__origen { display: flex; }
 
   &__control {
@@ -189,6 +218,7 @@
     &__panel-pie { display: none; }
     &__panel { flex: 1 1 auto; }
     &__cuenta { margin: 0; }
+    &__carrito { margin: 0; }
 
     &__nav {
       display: flex;

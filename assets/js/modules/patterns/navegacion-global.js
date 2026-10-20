@@ -18,6 +18,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   const cierre = buscar("nav-cierre");
   const tituloPanel = buscar("nav-cabecera");
   const piePanel = buscar("nav-pie");
+  const carrito = buscar("nav-carrito");
+  const conteoCarrito = buscar("nav-carrito-conteo");
   if (![cabecera, testigo, boton, panel, expandir, subpanel, origen, cierre, tituloPanel, piePanel].every((nodo) => nodo instanceof HTMLElement)) {
     throw new TypeError("La navegación requiere cabecera, paneles y controles completos.");
   }
@@ -27,6 +29,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   expandir.hidden = false;
   tituloPanel.hidden = false;
   piePanel.hidden = false;
+  cabecera.classList.toggle("cl-cabecera--con-carrito", Boolean(carrito));
   const drawer = Offcanvas.getOrCreateInstance(panel);
   const secundaria = Collapse.getOrCreateInstance(subpanel, { toggle: false });
   const eventos = new AbortController();
@@ -115,6 +118,14 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   });
   medidas.observe(cabecera);
   const control = {
+    /** El anfitrión aporta suma de unidades; null significa que no hay estado conectado. */
+    actualizarCarrito(datos) {
+      if (!carrito || !conteoCarrito) return;
+      if (datos !== null && (!Number.isSafeInteger(datos?.unidades) || datos.unidades < 0)) throw new TypeError("Contador de carrito inválido.");
+      conteoCarrito.hidden = datos === null;
+      conteoCarrito.textContent = datos === null ? "" : datos.unidades > 99 ? "99+" : String(datos.unidades);
+      carrito.setAttribute("aria-label", datos === null ? "View cart" : `View cart, ${datos.unidades} ${datos.unidades === 1 ? "item" : "items"}`);
+    },
     destruir() {
       if (destruccion) return destruccion;
       destruccion = (async () => {
@@ -148,6 +159,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
         piePanel.hidden = true;
         contenedor.style.removeProperty("--navegacion-offset");
         cabecera.classList.remove("cl-cabecera--fijada");
+        cabecera.classList.remove("cl-cabecera--con-carrito");
+        control.actualizarCarrito(null);
         inicializados.delete(contenedor);
       })();
       return destruccion;

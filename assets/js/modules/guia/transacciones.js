@@ -1,10 +1,12 @@
 import { inicializarCarrito } from "../patterns/carrito.js";
 import { inicializarCheckout } from "../patterns/checkout.js";
 import { inicializarReserva } from "../patterns/reserva.js";
-import { moneda, fechaRestaurante, describirFecha, mostrarResultado } from "../patterns/transaccion.js";
+import { moneda, fechaRestaurante, describirFecha, mostrarResultado, pintarImportes } from "../patterns/transaccion.js";
 import { inicializarBotonCarga } from "../core/boton-carga.js";
 import { inicializarCantidad } from "../core/cantidad.js";
-import { productosEjemplo, estadosEjemplo } from "./transacciones-fixtures.js";
+import { productosEjemplo, estadosEjemplo, coleccionEjemplo, consultarCodigoEjemplo } from "./transacciones-fixtures.js";
+
+import { inicializarNavegacion } from "../patterns/navegacion-global.js";
 
 const inicializadas = new WeakSet();
 const porId = (id) => document.getElementById(id);
@@ -26,26 +28,35 @@ function respuesta(dominio, clave, repetible = false) {
   return { ...dato, mensaje: `${dato.mensaje} ${dato.siguiente}`, repetible };
 }
 
-function conectarPedido(raiz, carrito) {
+function conectarPedido(raiz, carrito, pago) {
   const zona = raiz.querySelector("[data-cl-pedido-checkout]");
   const checkoutRaiz = zona.querySelector("[data-cl-checkout]");
   const resultado = checkoutRaiz.querySelector("[data-cl-checkout-resultado]");
   const fecha = porId("w7-pedido-fecha");
-  fecha.min = fechaRestaurante();
   const modalidad = () => checkoutRaiz.querySelector('input[name="w7-modalidad"]:checked').value;
+  let pedidoRevisado = null;
+  let ultimaVersion = null;
+  fecha.min = fechaRestaurante();
   const checkout = inicializarCheckout(checkoutRaiz, {
+    prepararValidacion() { fecha.min = fechaRestaurante(); },
     revisar() {
       const datos = carrito.resumen();
       if (!datos.valido) {
-        mostrarResultado(resultado, "Review your cart first", "Add available example items and refresh any outdated summary before continuing.", "error");
+        mostrarResultado(resultado, "Review your cart first", "Refresh any outdated summary and remove unavailable example items before continuing.", "error");
         return false;
       }
-      const servicio = modalidad() === "pickup" ? `Pickup requested: ${describirFecha(fecha.value)} · ${porId("w7-pedido-hora").value}. America/Los_Angeles · unconfirmed` : `Order ahead / at table: ${porId("w7-pedido-referencia").value}. Table context unverified`;
+      const pickup = modalidad() === "pickup";
+      const servicio = pickup ? `Pickup requested: ${describirFecha(fecha.value)} · ${porId("w7-pedido-hora").value}` : `Order ahead / at table · ${porId("w7-pedido-referencia").value || "Reference not provided"}`;
+      pedidoRevisado = { version: datos.version, servicio,
+        contacto: `${porId("w7-pedido-nombre").value} · ${porId("w7-pedido-email").value}` };
       pintarDatos(checkoutRaiz.querySelector("[data-cl-checkout-datos]"), [
-        ["Example order", datos.lineas.map((l) => `${l.cantidad} × ${l.nombre} · ${moneda(l.precio * l.cantidad)}`).join("\n")],
-        ["Service preference", servicio], ["Example name", porId("w7-pedido-nombre").value],
-        ["Example email", porId("w7-pedido-email").value], ["Instructions", porId("w7-pedido-notas").value || "None"],
-        ["Fixture subtotal", `${moneda(datos.total)} USD · tax / final charge unconfirmed`],
+        ["Example selection", datos.lineas.map((l) => `${l.cantidad} × ${l.nombre} · ${l.variante} · ${moneda(l.subtotalLinea)}`).join("\n")],
+        ["Service preference", `${servicio} · America/Los_Angeles · unconfirmed`],
+        ...(pickup ? [["Pickup location", "211 N Mt Shasta Blvd, Mt Shasta, CA 96067"]] : [["Visit", "Order ahead is not a table reservation."]]),
+        ["Example contact", pedidoRevisado.contacto], ["Phone", porId("w7-pedido-telefono").value || "Not provided · optional"],
+        ["Instructions", porId("w7-pedido-notas").value || "None"],
+        ["Items subtotal", moneda(datos.subtotal)], ["Demo discount", `${datos.codigo || "None"} · ${moneda(datos.descuento)}`],
+        ["After demo discount", `${moneda(datos.subtotalAjustado)} USD`], ["Tax / charges / final total", "Not determined · not a payment authorization"],
       ]);
       return true;
     },
@@ -53,25 +64,40 @@ function conectarPedido(raiz, carrito) {
       const valor = checkoutRaiz.querySelector("[data-cl-escenario]").value;
       return respuesta("pedido", valor === "exito" ? "recibido" : valor, valor === "error");
     },
+    alInvalidar() { pedidoRevisado = null; pago.invalidar(); },
+    alCompletar(dato) {
+      if (!dato.repetible && pedidoRevisado) {
+        pago.habilitar(pedidoRevisado);
+        porId("w7-pago-titulo").focus();
+        porId("w7-pago").scrollIntoView({ block: "start" });
+      }
+    },
   });
-  for (const campo of checkoutRaiz.querySelectorAll('input[name="w7-modalidad"]')) campo.addEventListener("change", () => {
+  function modalidadActual() {
     const pickup = modalidad() === "pickup";
     for (const [selector, visible] of [["[data-cl-pedido-pickup]", pickup], ["[data-cl-pedido-mesa]", !pickup]]) {
       const panel = checkoutRaiz.querySelector(selector);
       panel.hidden = !visible;
       for (const control of panel.querySelectorAll("input")) control.disabled = !visible;
     }
-  });
+    zona.querySelector("[data-cl-pedido-direccion]").hidden = !pickup;
+    zona.querySelector("[data-cl-pedido-contexto]").textContent = pickup ? "Pickup preference · service time unconfirmed." : "Order ahead is not a table reservation. Visit and kitchen service unconfirmed.";
+  }
+  for (const campo of checkoutRaiz.querySelectorAll('input[name="w7-modalidad"]')) campo.addEventListener("change", modalidadActual);
+  checkoutRaiz.querySelector("[data-cl-escenario]").addEventListener("change", () => checkout.invalidar());
   const actualizar = () => {
-    checkout.invalidar();
     const datos = carrito.resumen();
+    if (ultimaVersion === datos.version) return;
+    ultimaVersion = datos.version;
+    checkout.invalidar();
     const lista = zona.querySelector("[data-cl-pedido-lineas]");
     lista.replaceChildren(...datos.lineas.map((linea) => {
       const item = document.createElement("li");
-      item.textContent = `${linea.cantidad} × ${linea.nombre}`;
+      item.textContent = `${linea.cantidad} × ${linea.nombre}${linea.variante ? ` · ${linea.variante}` : ""}`;
       return item;
     }));
-    zona.querySelector("[data-cl-pedido-total]").textContent = datos.valido ? moneda(datos.total) : "Review cart first";
+    pintarImportes(zona, datos);
+    pago.actualizar(datos);
   };
   raiz.addEventListener("cl:carrito", actualizar);
   raiz.addEventListener("cl:carrito-continuar", () => {
@@ -79,54 +105,115 @@ function conectarPedido(raiz, carrito) {
     checkoutRaiz.querySelector("[data-cl-checkout-entrada] h3").focus();
     zona.scrollIntoView({ block: "start" });
   });
-  actualizar();
+  modalidadActual(); actualizar();
 }
 
-function conectarPago(raiz) {
+function conectarPago(raiz, carrito) {
   const zona = raiz.querySelector("[data-cl-pago]");
   const simular = zona.querySelector("[data-cl-pago-simular]");
   const consultar = zona.querySelector("[data-cl-pago-consultar]");
-  const reiniciar = zona.querySelector("[data-cl-pago-reiniciar]");
   const selector = zona.querySelector("[data-cl-escenario]");
   const region = zona.querySelector("[data-cl-pago-resultado]");
+  const ayuda = zona.querySelector("[data-cl-pago-ayuda]");
   const carga = inicializarBotonCarga(simular);
   let ocupado = false;
   let cerrado = false;
+  let versionRevisada = null;
   let temporizador;
   function mostrar(clave) {
     const dato = respuesta("pago", clave);
     mostrarResultado(region, dato.titulo, dato.mensaje, dato.variante);
   }
+  function invalidar() {
+    clearTimeout(temporizador); ocupado = false; cerrado = false; versionRevisada = null;
+    carga.establecerCarga(false); selector.disabled = false; simular.disabled = true; consultar.hidden = true;
+    region.replaceChildren();
+    ayuda.textContent = "Review the current order details to explore a payment outcome. No amount is authorized.";
+    pintarDatos(zona.querySelector("[data-cl-pago-contexto]"), [["Order review", "Required for the current selection"]]);
+  }
   simular.addEventListener("click", () => {
-    if (ocupado || cerrado) return;
-    ocupado = true;
-    carga.establecerCarga(true);
-    selector.disabled = true;
-    mostrar("procesando");
+    const datos = carrito.resumen();
+    if (ocupado || cerrado || versionRevisada !== datos.version || !datos.valido) return;
+    const version = datos.version;
+    ocupado = true; carga.establecerCarga(true); selector.disabled = true; mostrar("procesando");
     temporizador = window.setTimeout(() => {
-      ocupado = false;
-      cerrado = true;
-      carga.establecerCarga(false);
-      simular.disabled = true;
+      if (carrito.resumen().version !== version) { invalidar(); return; }
+      ocupado = false; cerrado = true; carga.establecerCarga(false); simular.disabled = true;
       mostrar(selector.value);
       consultar.hidden = !["pendiente", "desconocido", "error", "expirado"].includes(selector.value);
       region.focus();
     }, 650);
   });
   consultar.addEventListener("click", () => {
-    mostrar("recuperacion");
-    consultar.hidden = true;
-    region.focus();
+    if (versionRevisada !== carrito.resumen().version) { invalidar(); return; }
+    mostrar("recuperacion"); consultar.hidden = true; region.focus();
   });
-  reiniciar.addEventListener("click", () => {
+  zona.querySelector("[data-cl-pago-reiniciar]").addEventListener("click", () => {
+    clearTimeout(temporizador); ocupado = false; cerrado = false; carga.establecerCarga(false);
+    selector.disabled = false; consultar.hidden = true;
+    simular.disabled = versionRevisada !== carrito.resumen().version || !carrito.resumen().valido;
+    mostrarResultado(region, "Payment demonstration reset", "The current selection is preserved. This resets the local outcome only; it does not retry a payment.");
+  });
+  return {
+    invalidar,
+    actualizar(datos) {
+      invalidar(); pintarImportes(zona, datos);
+      zona.querySelector("[data-cl-pago-referencia]").textContent = `DEMO-PAY-${String(datos.version).padStart(3, "0")} · synthetic reference · not a receipt`;
+    },
+    habilitar(datos) {
+      if (datos.version !== carrito.resumen().version || !carrito.resumen().valido) return;
+      versionRevisada = datos.version; cerrado = false; simular.disabled = false;
+      ayuda.textContent = "Example amounts in USD · tax, other charges and the final total remain unconfirmed. No payment method is connected.";
+      pintarDatos(zona.querySelector("[data-cl-pago-contexto]"), [["Requested service", datos.servicio], ["Example contact", datos.contacto], ["Restaurant time", "America/Los_Angeles · service unconfirmed"]]);
+    },
+  };
+}
+
+function conectarCarrito(raiz, carrito) {
+  const zona = raiz.querySelector("[data-cl-carrito]");
+  const region = zona.querySelector("[data-cl-carrito-mensaje]");
+  const cabecera = inicializarNavegacion(raiz);
+  let temporizador;
+  const actualizarContador = () => cabecera.actualizarCarrito(carrito.resumen());
+  raiz.addEventListener("cl:carrito", actualizarContador); actualizarContador();
+  zona.querySelector("[data-cl-carrito-coleccion]").addEventListener("change", (evento) => {
     clearTimeout(temporizador);
-    ocupado = false;
-    cerrado = false;
-    carga.establecerCarga(false);
-    simular.disabled = false;
-    selector.disabled = false;
-    consultar.hidden = true;
-    mostrarResultado(region, "Payment demonstration reset", "DEMO-PAY-001 · USD 81.00 fixture. Choose another outcome. This reset is not a payment retry.");
+    carrito.reemplazarLineas(coleccionEjemplo(Number(evento.target.value)));
+    zona.querySelector("[data-cl-escenario]").value = "listo";
+    mostrarResultado(region, "Example collection updated", "Synthetic layout data only. Review every item; the cart is not paginated.");
+  });
+  for (const boton of zona.querySelectorAll("[data-cl-agregar]")) boton.addEventListener("click", () => {
+    carrito.agregar(productosEjemplo.find((p) => p.id === boton.dataset.clAgregar));
+    mostrarResultado(region, "Selection updated", "Your connected summaries now reflect the example selection.");
+  });
+  zona.querySelector("[data-cl-carrito-reintentar]").addEventListener("click", () => {
+    clearTimeout(temporizador); carrito.establecerEstado("actualizando");
+    mostrarResultado(region, "Refreshing example selection…", "No inventory, price or promotion service is contacted.");
+    temporizador = window.setTimeout(() => {
+      carrito.establecerEstado("listo");
+      mostrarResultado(region, "Example summary refreshed", "Review the current selection. Unavailable items must still be removed.");
+    }, 500);
+  });
+  zona.querySelector("[data-cl-escenario]").addEventListener("change", (evento) => {
+    clearTimeout(temporizador);
+    const valor = evento.target.value;
+    if (valor === "vacio" || valor === "listo") carrito.reemplazarLineas(valor === "vacio" ? [] : productosEjemplo);
+    else if (["no-disponible", "restringido"].includes(valor)) {
+      carrito.establecerEstado("listo");
+      const linea = carrito.resumen().lineas.find((l) => valor === "restringido" ? l.restringido : true);
+      if (linea) carrito.disponibilidad(linea.id, false);
+    } else carrito.establecerEstado(valor === "modalidad-no-disponible" ? "error" : valor);
+    const mensajes = {
+      error: ["Summary unavailable · demo", "Your selection is preserved. Refresh the example summary to recover."],
+      desactualizado: ["Summary out of date · demo", "Review updated example amounts before continuing. Your selection is preserved."],
+      actualizando: ["Updating selection · demo", "Continuation is paused. Use Refresh example summary to finish this state."],
+      "no-disponible": ["An item is unavailable · demo", "Remove the unavailable item to continue."],
+      restringido: ["Wine restricted · example state", "The selected wine is unavailable for this example. Remove it; real eligibility must be checked separately."],
+      "modalidad-no-disponible": ["Service unavailable · demo", "Pickup or table service cannot be confirmed in this state. Refresh the example; no alternative service is assumed."],
+      vacio: ["Your table is waiting", "Add an example board or bottle to begin again."],
+      listo: ["Main example restored", "Two items, synthetic prices. No service is confirmed."],
+    };
+    mostrarResultado(region, ...mensajes[valor], valor === "error" ? "error" : "informacion");
   });
 }
 
@@ -135,7 +222,13 @@ function conectarReserva(raiz) {
   const checkoutRaiz = zona.querySelector("[data-cl-checkout]");
   const selector = zona.querySelector("[data-cl-escenario]");
   let checkout;
-  const reserva = inicializarReserva(zona, { escenario: () => selector.value, alInvalidar: () => checkout?.invalidar() });
+  const detalles = zona.querySelector("[data-cl-reserva-detalles]");
+  const ayudaContacto = zona.querySelector("[data-cl-reserva-contacto-ayuda]");
+  const reserva = inicializarReserva(zona, {
+    escenario: () => selector.value,
+    alInvalidar() { checkout?.invalidar(); detalles.hidden = true; ayudaContacto.hidden = false; },
+    alSeleccionar() { detalles.hidden = false; ayudaContacto.hidden = true; },
+  });
   checkout = inicializarCheckout(checkoutRaiz, {
     revisar() {
       const datos = reserva.seleccion();
@@ -147,6 +240,7 @@ function conectarReserva(raiz) {
       pintarDatos(checkoutRaiz.querySelector("[data-cl-checkout-datos]"), [
         ["Requested visit", `${describirFecha(datos.fecha)} · ${datos.texto} · America/Los_Angeles`],
         ["Guests", datos.personas], ["Example contact", `${porId("w7-reserva-nombre").value} · ${porId("w7-reserva-email").value}`],
+        ["Phone", porId("w7-reserva-telefono").value || "Not provided · optional"],
         ["Preferences", porId("w7-reserva-notas").value || "None"], ["Availability", "Demonstration only · no table held"],
       ]);
       return true;
@@ -161,6 +255,7 @@ function conectarReserva(raiz) {
   });
   selector.addEventListener("change", () => {
     if (["sin-horas", "error"].includes(selector.value)) reserva.perderHorario();
+    else checkout.invalidar();
   });
 }
 
@@ -177,6 +272,7 @@ function conectarGestion(raiz) {
     etiqueta.textContent = "Confirmed · simulation only";
     iniciarCambio.disabled = false;
     iniciarCancelacion.disabled = false;
+    cancelacion.hidden = true; modificacion.hidden = true; region.replaceChildren();
   });
   zona.querySelector("[data-cl-gestion-cancelar]").addEventListener("click", () => {
     cancelacion.hidden = false; modificacion.hidden = true;
@@ -264,6 +360,7 @@ function conectarComercio(raiz) {
       checkout.invalidar();
       zona.querySelector("[data-cl-evento-cupos]").textContent = selector.value === "agotado" ? "No example places available · sold out demo. No waitlist offered." : "4 example places · not real capacity. No place is held.";
     });
+    else selector.addEventListener("change", () => checkout.invalidar());
   }
 }
 
@@ -324,10 +421,10 @@ export function inicializarTransaccionesGuia() {
   if (!raiz || inicializadas.has(raiz)) return;
   inicializadas.add(raiz);
   const zonaCarrito = raiz.querySelector("[data-cl-carrito]");
-  const carrito = inicializarCarrito(zonaCarrito, productosEjemplo);
-  zonaCarrito.querySelector("[data-cl-escenario]").addEventListener("change", (evento) => carrito.escenario(evento.target.value));
-  conectarPedido(raiz, carrito);
-  conectarPago(raiz);
+  const carrito = inicializarCarrito(zonaCarrito, productosEjemplo, { consultarCodigo: consultarCodigoEjemplo });
+  conectarCarrito(raiz, carrito);
+  const pago = conectarPago(raiz, carrito);
+  conectarPedido(raiz, carrito, pago);
   conectarReserva(raiz);
   conectarGestion(raiz);
   conectarComercio(raiz);

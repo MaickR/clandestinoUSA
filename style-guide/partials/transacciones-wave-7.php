@@ -22,6 +22,7 @@
   $rutasDescubrir = ['Gift Cards' => '#w7-regalo', 'Wine Club' => '#w7-club', 'Events' => '#w7-evento'];
   $enlacesPieDescubrir = $rutasDescubrir + ['Private Experiences' => '#private-experiences'];
   $rutaReserva = '#w7-reserva';
+  $carritoNavegacion = ['destino' => '#w7-carrito'];
   $destinoActivo = '';
   $logoNavegacion = '/assets/images/clandestino-logo-ui.svg';
   $datosContacto = ['direccion' => ['Mount Shasta, California'], 'mapa' => null, 'telefono' => null, 'email' => null, 'horario' => []];

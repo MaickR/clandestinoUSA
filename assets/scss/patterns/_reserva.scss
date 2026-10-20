@@ -1,14 +1,18 @@
 .cl-reserva {
+  &__criterios { align-items: end; }
+
   &__horas {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--espacio-3);
     margin-block: var(--espacio-4);
 
-    @include media-breakpoint-up(sm) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    @include media-breakpoint-up(lg) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   }
 
   &__hora {
+    flex-direction: column;
+    align-items: flex-start;
     padding: var(--espacio-3);
     border: 1px solid var(--color-borde-fuerte);
     border-radius: var(--radio-md);
@@ -19,6 +23,17 @@
       outline: 1px solid var(--color-acento);
     }
     &:has(:disabled) { border-style: dashed; }
+
+    input:checked + span::after {
+      display: block;
+      font-size: 0.75rem;
+      content: "Selected";
+    }
+  }
+
+  &__nota {
+    display: block;
+    font-size: 0.75rem;
   }
 
   &__seleccion {

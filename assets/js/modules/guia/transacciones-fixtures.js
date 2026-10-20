@@ -1,8 +1,38 @@
 // Datos sintéticos exclusivos de Style Guide; nunca importar desde una página productiva.
 export const productosEjemplo = [
-  { id: "tabla", nombre: "Cheese & charcuterie board", variante: "Sharing board · example", precio: 3600, maximo: 6 },
-  { id: "vino", nombre: "PURE SOUL", variante: "Bottle · example", precio: 4500, maximo: 6 },
+  { id: "tabla", productoId: "tabla", nombre: "Cheese & charcuterie board", descripcion: "Sharing board · example portion", variante: "Board", precio: 3600, maximo: 6,
+    imagen: "/assets/images/webp/gallery/tapas/the-clandestino-tapas-6.webp", alt: "Sharing board with cheese and cured meats" },
+  { id: "vino", productoId: "pure-soul", nombre: "PURE SOUL", descripcion: "Photographed label · vintage unconfirmed", precio: 4500, maximo: 6, tipo: "vino", restringido: true,
+    imagen: "/assets/images/webp/wines/PURE-SOUL.webp", alt: "PURE SOUL wine bottles",
+    variantes: [{ id: "botella", nombre: "Bottle · size unconfirmed", precio: 4500 }, { id: "copa", nombre: "Glass · size unconfirmed", precio: 1200 }] },
 ];
+
+/** Se generan solo al elegir el control de estrés; la muestra principal conserva dos líneas. */
+export function coleccionEjemplo(cantidad) {
+  if (![1, 2, 8, 20, 40].includes(cantidad)) throw new RangeError("Colección demo desconocida.");
+  if (cantidad <= 2) return productosEjemplo.slice(0, cantidad).map((p) => ({ ...p }));
+  return Array.from({ length: cantidad }, (_, indice) => {
+    const base = productosEjemplo[indice % 2];
+    return { ...base, id: `muestra-${indice + 1}`, cantidad: cantidad >= 20 ? 3 : 1,
+      nombre: indice % 7 === 0 ? `A generously named sharing selection with an exceptionallylongdemonstrationproductname · layout ${indice + 1}` : `${base.nombre} · layout ${indice + 1}`,
+      imagen: indice % 5 === 4 ? null : base.imagen,
+      ...(indice % 13 === 7 ? { precio: 123456789, variantes: [], varianteId: null, descripcion: "Large amount stress · entirely synthetic" } : {}),
+    };
+  });
+}
+
+/** Servicio local abortable; no consulta códigos ni vigencias comerciales. */
+export function consultarCodigoEjemplo(codigo, datos, { signal }) {
+  return new Promise((resolver) => {
+    if (signal.aborted) { resolver({ estado: "cancelado" }); return; }
+    const temporizador = window.setTimeout(() => {
+      const estados = { "DEMO-EXPIRED": "expirado", "DEMO-INELIGIBLE": "no-elegible", "DEMO-ERROR": "error" };
+      const estado = codigo === "DEMO10" ? (datos.valido && datos.subtotal >= 5000 ? "aplicado" : "no-elegible") : estados[codigo] ?? "invalido";
+      resolver({ estado, descuento: { codigo, importe: 1000, minimo: 5000 } });
+    }, 500);
+    signal.addEventListener("abort", () => { clearTimeout(temporizador); resolver({ estado: "cancelado" }); }, { once: true });
+  });
+}
 
 const estado = (titulo, mensaje, siguiente, variante = "informacion") => ({ titulo, mensaje, siguiente, variante });
 
@@ -21,7 +51,7 @@ export const estadosEjemplo = {
   } },
   pago: { nombre: "Payment", destino: "#w7-pago", referencia: "DEMO-PAY-001", estados: {
     procesando: estado("Payment processing · demo", "This preview is displaying a processing state; no charge is running.", "Wait for the result. Do not start another payment."),
-    exito: estado("Payment approved · simulation only", "Example receipt: DEMO-PAY-001 · USD 81.00 fixture total. No funds moved.", "Review the separate order, issuance or activation result.", "exito"),
+    exito: estado("Payment approved · simulation only", "An approved-result layout for the reviewed example amount. No funds moved and no final charge was authorized.", "Review the separate order, issuance or activation result.", "exito"),
     rechazado: estado("Payment declined · demo", "The example payment was not approved. Your order details remain available.", "Review the provider response before deciding whether to try again.", "error"),
     pendiente: estado("Payment pending · demo", "No final payment result is available.", "Check this operation before starting another payment.", "aviso"),
     expirado: estado("Payment session expired · demo", "The example session is no longer usable. An expired session is not proof that no charge occurred.", "Check the previous operation result before opening a new session.", "aviso"),

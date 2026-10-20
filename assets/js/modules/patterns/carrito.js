@@ -1,118 +1,150 @@
 import { inicializarCantidad } from "../core/cantidad.js";
-import { moneda, mostrarResultado } from "./transaccion.js";
+import { crearEstadoCarrito } from "./estado-carrito.js";
+import { inicializarPromocion } from "./promocion.js";
+import { moneda, mostrarResultado, pintarImportes } from "./transaccion.js";
 
 const instancias = new WeakMap();
 
-/** Carrito local sin persistencia. El anfitrión entrega datos validados, nunca totales del DOM. */
-export function inicializarCarrito(raiz, productos) {
+/** Renderiza líneas estables desde datos del anfitrión; importes y descuentos viven en un solo estado. */
+export function inicializarCarrito(raiz, productos, { consultarCodigo } = {}) {
+  if (!(raiz instanceof HTMLElement) || !raiz.id) throw new TypeError("Carrito requiere raíz con identidad.");
   if (instancias.has(raiz)) return instancias.get(raiz);
-  if (!raiz || !Array.isArray(productos) || !productos.length || productos.some((p) =>
-    !p.id || !Number.isSafeInteger(p.precio) || p.precio < 0 || !Number.isSafeInteger(p.maximo) || p.maximo < 1)) {
-    throw new TypeError("Carrito requiere contenedor y productos con importes enteros.");
-  }
-  const abortador = new AbortController();
-  const opciones = { signal: abortador.signal };
-  const lineas = productos.map((producto) => {
-    const nodo = raiz.querySelector(`[data-cl-linea="${producto.id}"]`);
-    if (!nodo) throw new TypeError("Falta la presentación de una línea.");
-    const campo = nodo.querySelector('input[type="number"]');
-    const control = inicializarCantidad(nodo.querySelector("[data-cl-control-cantidad]"));
-    return { ...producto, nodo, campo, control, cantidad: 1, presente: true };
-  });
-  let estado = "listo";
-  const region = raiz.querySelector("[data-cl-carrito-mensaje]");
+  const lista = raiz.querySelector("[data-cl-carrito-lineas]");
+  const plantilla = raiz.querySelector("[data-cl-carrito-plantilla]");
   const continuar = raiz.querySelector("[data-cl-carrito-continuar]");
+  const region = raiz.querySelector("[data-cl-carrito-mensaje]");
+  const deshacer = raiz.querySelector("[data-cl-carrito-deshacer]");
   const vacio = raiz.querySelector("[data-cl-carrito-vacio]");
-  let temporizador;
+  if (!lista || !(plantilla instanceof HTMLTemplateElement) || !continuar || !region || !deshacer || !vacio) throw new TypeError("Presentación de carrito incompleta.");
+  const modelo = crearEstadoCarrito(productos);
+  const presentaciones = new Map();
+  const eventos = new AbortController();
+  const opciones = { signal: eventos.signal };
+  let ultimaEliminada = null;
+  let promocion;
 
-  function resumen() {
-    const activas = lineas.filter((linea) => linea.presente);
-    const valido = activas.length > 0 && activas.every((linea) => linea.campo.value !== "" && linea.campo.checkValidity());
-    const total = activas.reduce((suma, linea) => suma + linea.precio * linea.cantidad, 0);
-    if (!Number.isSafeInteger(total)) throw new RangeError("Total fuera de rango.");
-    return { lineas: activas.map(({ id, nombre, variante, cantidad, precio }) => ({ id, nombre, variante, cantidad, precio })), total, valido: valido && estado === "listo" };
+  function crearLinea(linea) {
+    const nodo = plantilla.content.firstElementChild.cloneNode(true);
+    nodo.dataset.clLinea = linea.id;
+    const buscar = (nombre) => nodo.querySelector(`[data-cl-${nombre}]`);
+    const titulo = buscar("linea-nombre");
+    titulo.id = `${raiz.id}-${linea.id}-nombre`;
+    nodo.querySelector("article").setAttribute("aria-labelledby", titulo.id);
+    const campo = nodo.querySelector('input[type="number"]');
+    campo.id = `${raiz.id}-${linea.id}-cantidad`;
+    campo.value = String(linea.cantidad); campo.max = String(linea.maximo);
+    nodo.querySelector("[data-cl-linea-cantidad-etiqueta]").htmlFor = campo.id;
+    const contexto = document.createElement("span");
+    contexto.className = "visually-hidden"; contexto.textContent = ` for ${linea.nombre}`;
+    nodo.querySelector("[data-cl-linea-cantidad-etiqueta]").append(contexto);
+    for (const [direccion, texto] of [["sumar", "Increase"], ["restar", "Decrease"]]) nodo.querySelector(`[data-cl-cantidad="${direccion}"]`).setAttribute("aria-label", `${texto} ${linea.nombre} quantity`);
+    const error = nodo.querySelector(".cl-cantidad__mensaje");
+    error.id = `${campo.id}-error`; campo.setAttribute("aria-describedby", error.id);
+    const variante = buscar("linea-variante");
+    variante.id = `${raiz.id}-${linea.id}-variante`;
+    nodo.querySelector("[data-cl-linea-variante-etiqueta]").htmlFor = variante.id;
+    variante.replaceChildren(...linea.variantes.map((v) => new Option(v.nombre, v.id)));
+    variante.value = linea.varianteId ?? "";
+    buscar("linea-variantes").hidden = linea.variantes.length < 2;
+    const quitar = buscar("quitar");
+    quitar.dataset.clQuitar = linea.id;
+    quitar.setAttribute("aria-label", `Remove ${linea.nombre} from cart`);
+    const imagen = buscar("linea-imagen");
+    imagen.hidden = !linea.imagen;
+    if (linea.imagen) { imagen.src = linea.imagen; imagen.alt = linea.alt ?? linea.nombre; }
+    else imagen.remove();
+    imagen.classList.toggle("cl-carrito__foto--vino", linea.tipo === "vino");
+    buscar("linea-sin-imagen").hidden = Boolean(linea.imagen);
+    const control = inicializarCantidad(nodo.querySelector("[data-cl-control-cantidad]"));
+    const presentacion = { nodo, campo, control, variante, titulo, buscar };
+    presentaciones.set(linea.id, presentacion);
+    lista.append(nodo);
+    return presentacion;
   }
-
   function pintar() {
-    for (const linea of lineas) {
-      linea.nodo.hidden = !linea.presente;
-      linea.nodo.querySelector("[data-cl-linea-subtotal]").textContent = linea.campo.checkValidity() && linea.campo.value !== "" ? moneda(linea.precio * linea.cantidad) : "—";
-      linea.nodo.querySelector("[data-cl-linea-estado]").textContent = estado === "no-disponible" && linea === lineas[0] ? "Unavailable · demo. Remove this item or reset the demo." : "Availability is illustrative";
+    const datos = modelo.resumen();
+    const activas = new Set(datos.lineas.map((l) => l.id));
+    for (const [id, vista] of presentaciones) vista.nodo.hidden = !activas.has(id);
+    for (const linea of datos.lineas) {
+      const vista = presentaciones.get(linea.id) ?? crearLinea(linea);
+      vista.nodo.hidden = false;
+      vista.titulo.textContent = linea.nombre;
+      vista.buscar("linea-descripcion").textContent = linea.descripcion ?? linea.variante;
+      vista.buscar("linea-unidad").textContent = `${moneda(linea.precio)} each · example`;
+      vista.buscar("linea-subtotal").textContent = vista.campo.value !== "" && vista.campo.checkValidity() ? moneda(linea.subtotalLinea) : "—";
+      vista.buscar("linea-estado").textContent = linea.disponible ? (linea.restringido ? "Wine · eligibility unconfirmed" : "Example selection") : "Unavailable · remove this item to continue";
+      vista.campo.disabled = !linea.disponible;
+      vista.variante.disabled = !linea.disponible;
+      vista.control.actualizar();
     }
-    const datos = resumen();
     vacio.hidden = datos.lineas.length > 0;
-    for (const nodo of raiz.querySelectorAll("[data-cl-carrito-total]")) nodo.textContent = datos.valido ? moneda(datos.total) : "Review required";
-    for (const nodo of raiz.querySelectorAll("[data-cl-carrito-conteo]")) nodo.textContent = `${datos.lineas.reduce((n, l) => n + l.cantidad, 0)} items · demo`;
     continuar.disabled = !datos.valido;
+    lista.setAttribute("aria-busy", String(datos.estado === "actualizando"));
+    pintarImportes(raiz, datos);
+    for (const nodo of raiz.querySelectorAll("[data-cl-carrito-conteo]")) nodo.textContent = `${datos.unidades} ${datos.unidades === 1 ? "item" : "items"}`;
+    const notaVino = raiz.querySelector("[data-cl-carrito-vino]");
+    if (notaVino) notaVino.hidden = !datos.lineas.some((l) => l.restringido);
+    promocion?.actualizar(datos);
     raiz.dispatchEvent(new CustomEvent("cl:carrito", { detail: datos, bubbles: true }));
   }
-
-  for (const linea of lineas) {
-    const actualizar = () => {
-      if (linea.campo.value !== "" && linea.campo.checkValidity()) linea.cantidad = linea.campo.valueAsNumber;
-      pintar();
-    };
-    linea.campo.addEventListener("input", actualizar, opciones);
-    linea.campo.addEventListener("change", actualizar, opciones);
-  }
-  raiz.addEventListener("click", (evento) => {
-    const boton = evento.target.closest("button");
-    if (!boton) return;
-    if (boton.hasAttribute("data-cl-quitar")) {
-      const linea = lineas.find((l) => l.id === boton.dataset.clQuitar);
-      linea.presente = false;
-      if (estado === "no-disponible" && linea === lineas[0]) estado = "listo";
-      pintar();
-      mostrarResultado(region, "Item removed · demo", `${linea.nombre} has been removed. You can add it again below.`);
-      raiz.querySelector(`[data-cl-agregar="${linea.id}"]`).focus();
-    }
-    if (boton.hasAttribute("data-cl-agregar")) {
-      const linea = lineas.find((l) => l.id === boton.dataset.clAgregar);
-      linea.presente = true;
-      linea.cantidad = Math.min(linea.maximo, linea.cantidad + (linea.nodo.hidden ? 0 : 1));
-      linea.campo.value = String(linea.cantidad);
-      linea.campo.dispatchEvent(new Event("input", { bubbles: true }));
-      mostrarResultado(region, "Selection updated · demo", "Review the example quantities and totals before continuing.");
-      pintar();
-    }
-    if (boton.hasAttribute("data-cl-carrito-reintentar")) {
-      estado = "actualizando";
-      pintar();
-      mostrarResultado(region, "Updating example summary…", "No inventory or price service is contacted.");
-      clearTimeout(temporizador);
-      temporizador = window.setTimeout(() => {
-        estado = "listo"; pintar();
-        mostrarResultado(region, "Example summary refreshed", "Fixture values restored. Real totals must be confirmed by the restaurant.");
-      }, 500);
-    }
-    if (boton === continuar && resumen().valido) raiz.dispatchEvent(new CustomEvent("cl:carrito-continuar", { bubbles: true, detail: resumen() }));
+  for (const tipo of ["input", "change"]) lista.addEventListener(tipo, (evento) => {
+    const nodo = evento.target.closest("[data-cl-linea]");
+    if (!nodo) return;
+    if (evento.target.matches('input[type="number"]')) modelo.cantidad(nodo.dataset.clLinea, evento.target.valueAsNumber);
+    else if (tipo === "change" && evento.target.matches("[data-cl-linea-variante]")) modelo.variante(nodo.dataset.clLinea, evento.target.value);
+    else return;
+    pintar();
   }, opciones);
+  lista.addEventListener("click", (evento) => {
+    const boton = evento.target.closest("[data-cl-quitar]");
+    if (!boton) return;
+    const linea = modelo.resumen().lineas.find((l) => l.id === boton.dataset.clQuitar);
+    if (!linea) return;
+    ultimaEliminada = linea.id;
+    modelo.eliminar(linea.id); pintar();
+    mostrarResultado(region, "Item removed", `${linea.nombre} was removed from your example selection.`);
+    deshacer.hidden = false;
+    deshacer.setAttribute("aria-label", `Undo removal of ${linea.nombre}`);
+    deshacer.focus();
+  }, opciones);
+  deshacer.addEventListener("click", () => {
+    if (!ultimaEliminada) return;
+    const id = ultimaEliminada;
+    modelo.restaurar(id); ultimaEliminada = null; deshacer.hidden = true; pintar();
+    mostrarResultado(region, "Item restored", "Your example quantity and selection have been restored.");
+    const vista = presentaciones.get(id);
+    (vista.campo.disabled ? vista.buscar("quitar") : vista.campo).focus();
+  }, opciones);
+  continuar.addEventListener("click", () => {
+    if (modelo.resumen().valido) raiz.dispatchEvent(new CustomEvent("cl:carrito-continuar", { detail: modelo.resumen(), bubbles: true }));
+  }, opciones);
+  const promocionRaiz = raiz.querySelector("[data-cl-promocion]");
+  if (promocionRaiz && consultarCodigo) promocion = inicializarPromocion(promocionRaiz, {
+    consultar: consultarCodigo, resumen: modelo.resumen,
+    aplicar(dato) { const estado = modelo.aplicarDescuento(dato); pintar(); return estado; },
+    quitar() { modelo.quitarDescuento(); pintar(); },
+  });
   const api = {
-    resumen,
-    escenario(valor) {
-      clearTimeout(temporizador);
-      estado = ["error", "desactualizado", "no-disponible", "actualizando"].includes(valor) ? valor : "listo";
-      if (["vacio", "listo"].includes(valor)) {
-        for (const linea of lineas) {
-          linea.presente = valor !== "vacio";
-          linea.cantidad = 1;
-          linea.campo.value = "1";
-          linea.control.actualizar();
-          linea.nodo.querySelector(".cl-cantidad__mensaje").textContent = "";
-        }
-      }
+    resumen: modelo.resumen,
+    reemplazarLineas(nuevas) {
+      modelo.reemplazar(nuevas);
+      for (const vista of presentaciones.values()) vista.nodo.remove();
+      presentaciones.clear(); ultimaEliminada = null; deshacer.hidden = true;
       pintar();
-      const mensajes = {
-        error: ["Summary unavailable · demo", "Your items are preserved. Refresh the example summary to continue."],
-        desactualizado: ["Summary out of date · demo", "Review refreshed prices before continuing. Your selection is preserved."],
-        "no-disponible": ["An item is unavailable · demo", "Remove the sharing board to continue with the remaining selection."],
-        actualizando: ["Updating selection · demo", "Continuation is paused. Refresh the example to finish this state."],
-        vacio: ["Your table is waiting", "Add a board or a bottle to explore this demonstration."],
-      };
-      const [titulo, mensaje] = mensajes[valor] || ["Example cart restored", "Amounts are fixtures in USD. Nothing is ordered or charged."];
-      mostrarResultado(region, titulo, mensaje, estado === "error" ? "error" : "informacion");
     },
-    destruir() { abortador.abort(); clearTimeout(temporizador); instancias.delete(raiz); },
+    agregar(producto) {
+      modelo.agregar(producto);
+      const vista = presentaciones.get(producto.id);
+      if (vista) { vista.campo.value = String(modelo.resumen().lineas.find((l) => l.id === producto.id).cantidad); vista.campo.dispatchEvent(new Event("input", { bubbles: true })); }
+      pintar();
+    },
+    disponibilidad(id, disponible) { modelo.disponibilidad(id, disponible); pintar(); },
+    establecerEstado(estado) { modelo.establecerEstado(estado); pintar(); },
+    destruir() {
+      eventos.abort(); promocion?.destruir();
+      for (const vista of presentaciones.values()) vista.nodo.remove();
+      presentaciones.clear(); instancias.delete(raiz);
+    },
   };
   instancias.set(raiz, api);
   pintar();

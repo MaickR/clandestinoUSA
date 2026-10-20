@@ -14,7 +14,7 @@ Referencia práctica tras Wave 7, 2026-10-20. El sistema permite componer el fro
 | Wave 4 | Gold/Diamond, diseñador Gift Card, evento/agenda y consulta privada | `assets/scss/patterns/_{membresia,regalo,evento,consulta-privada}.scss`; `style-guide/partials/*wave-4.php`; orquestación demo `modules/guia/comercial.js` |
 | Wave 5 | Reseña, testimonio, reputación, listado/filtros, formulario, carrusel y vídeo testimonial | `assets/scss/patterns/_{resena,testimonio,reputacion,resena-formulario,carrusel,media-video}.scss`; `modules/patterns/carrusel*.js`; `style-guide/partials/*wave-5.php` |
 | Wave 6 | Header sticky, drawer, Discover, Footer/contacto, acceso sintético y enlaces contextuales | `assets/scss/patterns/_{navegacion-global,pie-global,topbar,acceso}.scss`; `modules/patterns/{navegacion-global,acceso}.js`; `style-guide/partials/*wave-6.php`; `/style-guide/navigation.php` |
-| Wave 7 | Carrito/resumen, checkout compartido, pickup/mesa, pago/recuperación, reserva/gestión, transacciones de regalo/club/evento, estados privados e historial mínimo | `assets/scss/patterns/_{transaccion,carrito,reserva}.scss`; `modules/patterns/{transaccion,carrito,checkout,reserva}.js`; `style-guide/partials/*wave-7.php` y `transacciones-componentes.php` |
+| Wave 7 | Carrito/resumen, checkout compartido, pickup/mesa, pago/recuperación, reserva/gestión, transacciones de regalo/club/evento, estados privados e historial mínimo | `assets/scss/patterns/_{transaccion,carrito,reserva}.scss`; `modules/patterns/{transaccion,estado-carrito,carrito,promocion,checkout,reserva}.js`; `style-guide/partials/*wave-7.php` y `transacciones-componentes.php` |
 
 El inventario detallado, contratos y evolución viven en `SECTION-PATTERN-LIBRARY.md`; la matriz inicial y pruebas de Wave 7 en `WAVE-7-COVERAGE.md`. Esta referencia no los sustituye.
 
@@ -23,7 +23,7 @@ El inventario detallado, contratos y evolución viven en `SECTION-PATTERN-LIBRAR
 1. Contrastar la página con `production-baseline`, inventariar contenido y aprobar el alcance de su cutover. No usar `master` como autoridad productiva.
 2. Componer `container` / `row` / columnas, `cl-seccion`, Core y patrones existentes. Extraer datos de los ejemplos; no copiar sus fixtures ni sus referencias `DEMO-*` a producción.
 3. Pasar rutas/contacto confiables a los partials Wave 6. Preparar documentos legales y canales reales antes de enlazarlos. El acceso Wave 6 es una interfaz sintética, no autenticación.
-4. Usar `cl-resumen` para datos de operación; `cl-cantidad` para cantidades; `inicializarCheckout` para pasos de datos/revisión con callbacks del anfitrión. Cada dominio aporta su semántica y resultado.
+4. Conectar el snapshot de `estado-carrito.js` a las vistas y al contador optativo de Header; todas las cantidades/importes de la operación proceden de esa fuente. Usar `cl-resumen` para datos de operación; `cl-cantidad` para cantidades; `inicializarCheckout` para pasos de datos/revisión con callbacks del anfitrión. Cada dominio aporta su semántica y resultado.
 5. Conectar solo los módulos necesarios desde la entrada de esa página al hacer su integración autorizada. `style-guide.js` y `modules/guia/**` nunca son dependencias productivas. `main.js` sigue vacío.
 6. Validar la página real en navegador, con teclado y datos extremos. El QA del laboratorio no aprueba automáticamente su layout ni el motor comercial.
 
@@ -63,3 +63,13 @@ Pendientes comerciales transversales: catálogo vigente, horarios/ventanas, impu
 ## Revisión local
 
 Ejecutar `npm run dev` y abrir `http://localhost:3000/style-guide/patterns.php#wave-7`; Foundation/Core en `/style-guide/`, navegación aislada en `/style-guide/navigation.php`. Verificar `npm run lint`, `npm run build`, PHP lint y `git diff --check` antes del cierre de cada cambio. El build productivo excluye los bundles de guía; revisar el navegador de nuevo tras cada integración.
+
+## Actualización tras el refinamiento final de Wave7
+
+Carrito y checkout incorporan líneas dinámicas por plantilla, variantes, papelera/Undo, subtotal destacado, CTA de ancho completo, promo demo y snapshot común hasta Payment. El Header recibe destino confiable y suma de unidades desde su anfitrión; la muestra independiente Wave6 permanece sin cantidad ficticia. Las colecciones1/2/8/20/40 son estrés bajo demanda, no catálogo ni paginación.
+
+Para integrar una página: adaptar datos servidor al contrato documentado, usar versionado para invalidar revisiones y cobrar únicamente importes autorizados; no importar `modules/guia/`. El descuento cliente DEMO10 nunca autoriza un descuento real. Contacto telefónico es opcional en la muestra; política final pendiente. Vino/alcohol requiere validar elegibilidad, licencias y modalidad antes de publicar, con procedimiento de edad/identificación aún por decidir.
+
+Reservas presenta comensales→fecha→búsqueda→horario→contacto→revisión. Los radios señalan selección/indisponibilidad con texto, y el contacto se conserva ante pérdida del horario. Mantener esta distinción al conectar el motor existente; no confundir pickup ni order ahead con reserva.
+
+Regresión local de invariantes: `node scripts/probar-carrito.mjs`. QA y performance del refinamiento, incluidas limitaciones y aprobación humana pendiente: `WAVE-7-COVERAGE.md`. El frontend está preparado para composición e integración; proveedores, términos, disponibilidad, recepción y permisos siguen siendo dependencias futuras.

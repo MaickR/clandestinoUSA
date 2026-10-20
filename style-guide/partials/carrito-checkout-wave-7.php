@@ -1,58 +1,85 @@
-<section class="cl-seccion" id="w7-carrito" aria-labelledby="w7-carrito-titulo" data-cl-carrito>
+<section class="cl-seccion cl-carrito" id="w7-carrito" aria-labelledby="w7-carrito-titulo" data-cl-carrito tabindex="-1">
   <div class="container">
-    <div class="cl-transaccion__cabecera"><p class="cl-eyebrow">01 · For your table · local demonstration</p><h2 id="w7-carrito-titulo">Good things, brought together.</h2><p class="cl-seccion__descripcion">A sharing board. A bottle to discover. Review the details of your example order.</p><p class="cl-transaccion__nota">All amounts are synthetic USD fixtures. Inventory, taxes and service availability are unconfirmed.</p></div>
+    <div class="cl-transaccion__cabecera"><p class="cl-eyebrow">01 · For your table</p><h2 id="w7-carrito-titulo">Good things, brought together.</h2><p class="cl-seccion__descripcion">A board to share. A bottle to discover. Make the selection yours.</p><p class="cl-transaccion__nota">Local preview · Every price and availability below is synthetic. Nothing is ordered or charged.</p></div>
     <div class="row cl-transaccion__rejilla">
       <div class="col-lg-8">
-        <ul class="cl-carrito__lineas">
-          <?php foreach ([['tabla', 'Cheese & charcuterie board', 'Sharing board · example portion', 'webp/gallery/tapas/the-clandestino-tapas-6.webp', 'Sharing board with cheese and cured meats', '$36.00', false], ['vino', 'PURE SOUL', 'Bottle · photographed label, vintage unconfirmed', 'webp/wines/PURE-SOUL.webp', 'PURE SOUL wine bottle', '$45.00', true]] as [$clave, $nombre, $variante, $imagen, $alt, $precio, $esVino]) : ?>
-          <li class="cl-carrito__linea" data-cl-linea="<?= $clave ?>">
-            <article aria-labelledby="w7-<?= $clave ?>-titulo"><div class="cl-carrito__producto"><img class="cl-carrito__foto<?= $esVino ? ' cl-carrito__foto--vino' : '' ?>" src="../assets/images/<?= $imagen ?>" alt="<?= $alt ?>" width="96" height="96" loading="lazy"><div><h3 class="cl-carrito__nombre" id="w7-<?= $clave ?>-titulo"><?= $nombre ?></h3><p class="cl-transaccion__nota"><?= $variante ?></p><p class="cl-carrito__precio"><?= $precio ?> <span class="cl-transaccion__nota">/ unit · example</span></p><p class="cl-transaccion__nota" data-cl-linea-estado>Availability is illustrative</p></div></div>
-              <div class="cl-carrito__controles"><?php $cantidadTransaccion('w7-' . $clave . '-cantidad', $esVino ? 'Bottles' : 'Boards', 6); ?><p class="cl-carrito__precio">Line subtotal · demo <strong data-cl-linea-subtotal><?= $precio ?></strong></p><button class="cl-boton cl-boton--secundario" type="button" data-cl-quitar="<?= $clave ?>">Remove <span class="visually-hidden"><?= $nombre ?></span></button></div>
-            </article>
-          </li>
-          <?php endforeach; ?>
-        </ul>
-        <div class="cl-estado-vista" data-cl-carrito-vacio hidden><h3 class="cl-estado-vista__titulo">Something delicious starts here.</h3><p class="cl-estado-vista__texto">Your example cart is empty. Add something below to explore the next step.</p></div>
-        <div class="cl-transaccion__acciones"><button class="cl-boton cl-boton--secundario" type="button" data-cl-agregar="tabla">Add a board · demo</button><button class="cl-boton cl-boton--secundario" type="button" data-cl-agregar="vino">Add a bottle · demo</button><a class="cl-enlace" href="#productos-menu">Keep exploring the menu</a></div>
-        <div data-cl-carrito-mensaje role="status" aria-atomic="true"></div>
+        <ul class="cl-carrito__lineas" data-cl-carrito-lineas aria-label="Your example items"></ul>
+        <template data-cl-carrito-plantilla>
+          <li class="cl-carrito__linea"><article class="cl-carrito__articulo">
+            <div class="cl-carrito__producto">
+              <div class="cl-carrito__media"><img class="cl-carrito__foto" data-cl-linea-imagen src="/assets/images/webp/gallery/tapas/the-clandestino-tapas-6.webp" alt="" width="96" height="96" loading="lazy" hidden><span class="cl-carrito__sin-imagen" data-cl-linea-sin-imagen>Photograph pending</span></div>
+              <div class="cl-carrito__detalle"><h3 class="cl-carrito__nombre" data-cl-linea-nombre></h3><p class="cl-transaccion__nota" data-cl-linea-descripcion></p><p class="cl-carrito__unidad" data-cl-linea-unidad></p>
+                <div class="cl-carrito__variantes" data-cl-linea-variantes hidden><label class="cl-etiqueta" data-cl-linea-variante-etiqueta>Presentation</label><select class="cl-campo" data-cl-linea-variante></select></div>
+                <p class="cl-carrito__disponibilidad" data-cl-linea-estado></p>
+              </div>
+            </div>
+            <div class="cl-carrito__controles" data-cl-control-cantidad><label class="cl-etiqueta" data-cl-linea-cantidad-etiqueta>Quantity</label><div class="cl-cantidad">
+              <button class="cl-boton-icono" type="button" data-cl-cantidad="restar" aria-label="Decrease quantity"><?= iconoProducto('restar') ?></button>
+              <input class="cl-campo cl-cantidad__campo" type="number" min="1" step="1" value="1" required>
+              <button class="cl-boton-icono" type="button" data-cl-cantidad="sumar" aria-label="Increase quantity"><?= iconoProducto('sumar') ?></button>
+            </div><p class="cl-mensaje-campo cl-cantidad__mensaje" role="status"></p></div>
+            <div class="cl-carrito__importe"><span class="cl-carrito__importe-etiqueta">Line subtotal</span><strong class="cl-carrito__precio" data-cl-linea-subtotal></strong></div>
+            <button class="cl-boton-icono cl-carrito__eliminar" type="button" data-cl-quitar aria-label="Remove item from cart" title="Remove from cart"><?= iconoProducto('papelera') ?></button>
+          </article></li>
+        </template>
+        <div class="cl-estado-vista" data-cl-carrito-vacio hidden><h3 class="cl-estado-vista__titulo">Something delicious starts here.</h3><p class="cl-estado-vista__texto">Your selection is empty. Add a board or a bottle below.</p></div>
+        <div data-cl-carrito-mensaje role="status" aria-atomic="true"></div><button class="cl-boton cl-boton--secundario" type="button" data-cl-carrito-deshacer hidden>Undo removal</button>
+        <div class="cl-transaccion__acciones"><button class="cl-boton cl-boton--secundario" type="button" data-cl-agregar="tabla">Add a board</button><button class="cl-boton cl-boton--secundario" type="button" data-cl-agregar="vino">Add a bottle</button><a class="cl-enlace" href="#productos-menu">Explore the menu</a></div>
       </div>
-      <div class="col-lg-4">
-        <aside class="cl-resumen" aria-labelledby="w7-resumen-titulo"><p class="cl-eyebrow">Your selection · demo</p><h3 id="w7-resumen-titulo">A moment to share</h3><p data-cl-carrito-conteo>2 items · demo</p><dl class="cl-resumen__importes"><div class="cl-resumen__fila"><dt>Items · example</dt><dd data-cl-carrito-total>$81.00</dd></div><div class="cl-resumen__fila"><dt>Tax</dt><dd>Not calculated</dd></div><div class="cl-resumen__fila"><dt>Discount</dt><dd>None applied</dd></div><div class="cl-resumen__fila cl-resumen__total"><dt>Example subtotal</dt><dd data-cl-carrito-total>$81.00</dd></div></dl><p class="cl-transaccion__nota">This is not a final charge. The restaurant must confirm prices, tax, inventory and fulfillment.</p><button class="cl-boton" type="button" data-cl-carrito-continuar disabled>Continue to order details</button></aside>
-        <details class="cl-resumen cl-resumen--compacto mt-5"><summary>Compact cart · <span data-cl-carrito-conteo>2 items · demo</span></summary><p>Board &amp; bottle selection. Edit the full cart above.</p><p>Example subtotal: <strong data-cl-carrito-total>$81.00</strong></p><a class="cl-enlace" href="#w7-carrito-titulo">Review items</a></details>
+      <div class="col-lg-4"><aside class="cl-resumen cl-resumen--compra" aria-labelledby="w7-resumen-titulo"><p class="cl-eyebrow">Your selection</p><h3 id="w7-resumen-titulo">A moment to share</h3><p class="cl-resumen__conteo" data-cl-carrito-conteo>No items loaded</p>
+        <?php $importesTransaccion(); ?>
+        <details class="cl-resumen__promo" data-cl-promocion><summary class="cl-enlace">Have a promo code?</summary>
+          <p class="cl-transaccion__nota">Demo codes only · no current promotion.</p>
+          <form method="dialog" novalidate><label class="cl-etiqueta" for="w7-promo-codigo">Example code</label><div class="cl-resumen__codigo"><input class="cl-campo" id="w7-promo-codigo" autocomplete="off" maxlength="40" aria-describedby="w7-promo-ayuda w7-promo-mensaje"><button class="cl-boton cl-boton--secundario cl-boton--con-carga" type="submit" data-cl-promo-aplicar data-cl-demo-habilitar disabled><span class="cl-boton__reposo">Apply</span><span class="cl-boton__carga"><span class="cl-spinner" aria-hidden="true"></span>Checking…</span></button></div></form>
+          <p class="cl-transaccion__nota" id="w7-promo-ayuda">Try DEMO10: $10 off a synthetic items subtotal of $50 or more. One example code at a time.</p><p class="cl-transaccion__nota" data-cl-promo-estado>No code entered</p>
+          <p class="cl-resumen__aplicada" data-cl-promo-aplicada hidden></p><button class="cl-boton cl-boton--secundario" type="button" data-cl-promo-quitar hidden>Remove demo code</button><div id="w7-promo-mensaje" data-cl-promo-mensaje role="status" aria-atomic="true"></div>
+        </details>
+        <p class="cl-transaccion__nota">Example amounts in USD. The final charge depends on confirmed prices, tax and service availability.</p>
+        <button class="cl-boton cl-resumen__continuar" type="button" data-cl-carrito-continuar disabled>Continue to order details <?= iconoProducto('siguiente') ?></button>
+      </aside>
+      <details class="cl-resumen cl-resumen--compacto mt-5"><summary>Cart at a glance · <span data-cl-carrito-conteo>No items loaded</span></summary><p>After demo discount: <strong data-cl-importe="subtotalAjustado">—</strong></p><p class="cl-transaccion__nota">Tax and final total unconfirmed.</p><a class="cl-enlace" href="#w7-carrito-titulo">Review every item</a></details>
+      <details class="cl-transaccion__nota cl-carrito__aviso" data-cl-carrito-vino hidden><summary class="cl-enlace">Wine service information · preview</summary><p>Eligibility and permitted service are awaiting commercial review. Age verification and any identification required at collection must be defined before a real wine sale. This preview verifies neither age nor identity.</p></details>
       </div>
     </div>
     <div class="cl-transaccion__acciones"><button class="cl-boton cl-boton--secundario" type="button" data-cl-carrito-reintentar>Refresh example summary</button></div>
-    <?php $escenarioTransaccion('cart', ['listo' => 'With products', 'vacio' => 'Empty', 'actualizando' => 'Updating', 'error' => 'Error', 'no-disponible' => 'Item unavailable', 'desactualizado' => 'Outdated summary']); ?>
+    <details class="cl-guia-demo"><summary>Demo controls · cart &amp; promo</summary>
+      <label class="cl-etiqueta" for="w7-cart-escenario">Cart state</label><select class="cl-campo" id="w7-cart-escenario" data-cl-escenario><option value="listo">With products</option><option value="vacio">Empty</option><option value="actualizando">Updating</option><option value="error">Error</option><option value="no-disponible">Item unavailable</option><option value="desactualizado">Outdated summary</option><option value="restringido">Wine restricted · demo</option><option value="modalidad-no-disponible">Service unavailable · demo</option></select>
+      <label class="cl-etiqueta" for="w7-cart-coleccion">Synthetic collection size</label><select class="cl-campo" id="w7-cart-coleccion" data-cl-carrito-coleccion><option value="2">2 items · main example</option><option value="1">1 item</option><option value="8">8 items · long names / missing image</option><option value="20">20 items · amount stress</option><option value="40">40 items · amount / count stress</option></select>
+      <p>Other example codes: DEMO-EXPIRED, DEMO-INELIGIBLE, DEMO-ERROR. Any other code is invalid. No promotion service is connected.</p>
+    </details>
   </div>
 </section>
 
 <section class="cl-seccion cl-seccion--alterna" id="w7-checkout" aria-labelledby="w7-checkout-titulo" data-cl-pedido-checkout>
-  <div class="container"><div class="cl-transaccion__cabecera"><p class="cl-eyebrow">02 · Take Away &amp; Order Ahead</p><h2 id="w7-checkout-titulo">The details make it yours.</h2><p class="cl-seccion__descripcion">Pick it up, or tell us about your table. A preference begins the conversation; it does not guarantee a service time.</p></div>
+  <div class="container"><div class="cl-transaccion__cabecera"><p class="cl-eyebrow">02 · Take Away &amp; Order Ahead</p><h2 id="w7-checkout-titulo">The details make it yours.</h2><p class="cl-seccion__descripcion">Choose pickup, or plan ahead for a visit you have already arranged. We will distinguish your preferences from anything still awaiting confirmation.</p></div>
     <div class="row cl-transaccion__rejilla"><div class="col-lg-8"><div class="cl-transaccion__panel" data-cl-checkout="pedido">
       <?php $pasosTransaccion(); ?>
       <div data-cl-checkout-entrada><h3 tabindex="-1">Your order preferences</h3>
         <form method="dialog" novalidate>
           <fieldset class="cl-formulario-grupo"><legend class="cl-formulario-grupo__leyenda">How would you like to enjoy it?</legend><label class="cl-opcion"><input class="cl-opcion__control" type="radio" name="w7-modalidad" value="pickup" checked><span>Pickup · demo</span></label><label class="cl-opcion"><input class="cl-opcion__control" type="radio" name="w7-modalidad" value="mesa"><span>Order ahead / at table · demo</span></label></fieldset>
           <div data-cl-pedido-pickup><div class="row cl-transaccion__rejilla"><div class="col-md-6"><?php $campoTransaccion('w7-pedido-fecha', 'Preferred pickup date', 'date', true, 'data-cl-pedido-fecha'); ?></div><div class="col-md-6"><?php $campoTransaccion('w7-pedido-hora', 'Preferred pickup time', 'time', true); ?></div></div><p class="cl-transaccion__nota">Restaurant local time · America/Los_Angeles. A requested time is not a confirmed collection window.</p></div>
-          <div data-cl-pedido-mesa hidden><?php $campoTransaccion('w7-pedido-referencia', 'Table or reservation context', 'text', true, 'maxlength="100" disabled'); ?><p class="cl-transaccion__nota">Use a fictional reference. No table or kitchen system is connected.</p></div>
+          <div data-cl-pedido-mesa hidden><?php $campoTransaccion('w7-pedido-referencia', 'Table or reservation reference, if you have one', 'text', false, 'maxlength="100" disabled'); ?><p class="cl-transaccion__nota">Order ahead is not a table reservation. Use a fictional reference; the visit and kitchen service remain unconfirmed.</p></div>
           <div class="row cl-transaccion__rejilla"><div class="col-md-6"><?php $campoTransaccion('w7-pedido-nombre', 'Example name', 'text', true, 'maxlength="80"'); ?></div><div class="col-md-6"><?php $campoTransaccion('w7-pedido-email', 'Example email', 'email', true, 'maxlength="120" placeholder="guest@example.test"'); ?></div></div>
+          <?php $campoTransaccion('w7-pedido-telefono', 'Phone for visit or pickup updates', 'tel', false, 'maxlength="40" inputmode="tel"'); ?>
           <?php $campoTransaccion('w7-pedido-notas', 'Special instructions & dietary considerations', 'textarea', false); ?>
           <p class="cl-transaccion__nota">Use sample text only. Dietary requests require a conversation with the restaurant and cannot be guaranteed by this preview.</p>
           <button class="cl-boton" type="submit" data-cl-demo-habilitar disabled>Review example order</button>
         </form>
       </div>
-      <?php $revisionTransaccion('Review your example order', 'Preview order request'); $resultadoTransaccion(); ?>
+      <?php $revisionTransaccion('Review your example order', 'Continue to payment preview'); $resultadoTransaccion(); ?>
       <?php $escenarioTransaccion('order', ['pendiente' => 'Request pending', 'exito' => 'Received · demo', 'error' => 'Recoverable failure']); ?>
-    </div></div><div class="col-lg-4"><aside class="cl-resumen"><h3>At a glance</h3><ul data-cl-pedido-lineas></ul><dl class="cl-resumen__importes"><div class="cl-resumen__fila"><dt>Example subtotal</dt><dd data-cl-pedido-total>$81.00</dd></div><div class="cl-resumen__fila"><dt>Tax / final total</dt><dd>Awaiting confirmation</dd></div><div class="cl-resumen__fila"><dt>Service availability</dt><dd>Unconfirmed</dd></div></dl><a class="cl-enlace" href="#w7-carrito">Edit your selection</a></aside><p class="cl-transaccion__nota mt-4">Your details stay in this page while you go back and review. Reloading clears the demonstration.</p></div></div>
+    </div></div><div class="col-lg-4"><aside class="cl-resumen"><p class="cl-eyebrow">Order summary</p><h3>At a glance</h3><ul class="cl-resumen__lineas" data-cl-pedido-lineas></ul><?php $importesTransaccion(); ?><div data-cl-pedido-direccion><p class="cl-etiqueta">Pickup at The Clandestino</p><address class="cl-transaccion__nota">211 N Mt Shasta Blvd<br>Mt Shasta, CA 96067</address></div><p class="cl-transaccion__nota" data-cl-pedido-contexto>Pickup preference · service time unconfirmed.</p><a class="cl-enlace" href="#w7-carrito">Edit your selection</a></aside><p class="cl-transaccion__nota mt-4">Your details stay in this page while you go back and review. Reloading clears the demonstration.</p></div></div>
   </div>
 </section>
 
 <section class="cl-seccion" id="w7-pago" aria-labelledby="w7-pago-titulo" data-cl-pago>
-  <div class="container"><div class="row cl-transaccion__rejilla"><div class="col-md-5"><p class="cl-eyebrow">Payment · an intentional pause</p><h2 id="w7-pago-titulo">Clarity before commitment.</h2><p>Review the amount and the outcome before taking another step. A payment result belongs to its own operation.</p><p class="cl-transaccion__nota">No payment provider is connected. There are no card fields or saved payment methods.</p></div><div class="col-md-7"><div class="cl-transaccion__panel">
-    <h3>Example payment review</h3><dl class="cl-resumen__importes"><div class="cl-resumen__fila"><dt>Fixture items</dt><dd>$81.00</dd></div><div class="cl-resumen__fila"><dt>Fixture tax amount</dt><dd>$0.00 · test data, not a rate</dd></div><div class="cl-resumen__fila"><dt>Fixture discount</dt><dd>$0.00</dd></div><div class="cl-resumen__fila cl-resumen__total"><dt>Demo total</dt><dd>$81.00 USD</dd></div></dl>
-    <div class="cl-transaccion__proveedor"><p><strong>Payment service · to be selected</strong></p><p class="cl-transaccion__nota">A future hosted checkout or provider-secured elements will appear here. Do not enter financial details into this demonstration.</p></div>
-    <?php $escenarioTransaccion('payment', ['pendiente' => 'Pending', 'exito' => 'Approved · demo', 'rechazado' => 'Declined', 'desconocido' => 'Unknown result', 'expirado' => 'Expired session', 'error' => 'Recoverable error']); ?>
-    <div class="cl-transaccion__acciones"><?php $botonTransaccion('Preview payment outcome', 'data-cl-pago-simular'); ?><button class="cl-boton cl-boton--secundario" type="button" data-cl-pago-consultar hidden>Check example result</button><button class="cl-boton cl-boton--secundario" type="button" data-cl-pago-reiniciar>Reset payment demo</button></div>
-    <div role="status" aria-atomic="true" tabindex="-1" data-cl-pago-resultado><p class="cl-transaccion__nota">Reference DEMO-PAY-001 · not a receipt. No charge has been made.</p></div>
-  </div></div></div></div>
+  <div class="container"><div class="row cl-transaccion__rejilla"><div class="col-lg-5"><p class="cl-eyebrow">Payment · the considered next step</p><h2 id="w7-pago-titulo" tabindex="-1">Clarity before commitment.</h2><p>Your reviewed selection, carried through to payment. A payment result and the restaurant’s acceptance are separate decisions.</p><p class="cl-transaccion__nota">Local preview · no charge or payment authorization takes place.</p><a class="cl-enlace" href="#w7-checkout">Review order details</a></div>
+    <div class="col-lg-7"><div class="cl-transaccion__panel"><h3>Payment review</h3><dl class="cl-transaccion__datos" data-cl-pago-contexto><dt>Order details</dt><dd>Review your details before exploring a payment outcome.</dd></dl><?php $importesTransaccion(); ?>
+      <fieldset class="cl-formulario-grupo"><legend class="cl-formulario-grupo__leyenda">Payment method</legend><label class="cl-opcion"><input class="cl-opcion__control" type="radio" name="w7-payment-method" disabled><span>Hosted payment · provider pending</span></label><p class="cl-transaccion__nota">No payment method is available in this preview. The selected provider’s secure checkout will handle financial details.</p></fieldset>
+      <p class="cl-transaccion__nota" data-cl-pago-ayuda>Continue from your order review to explore an outcome.</p>
+      <?php $escenarioTransaccion('payment', ['pendiente' => 'Pending', 'exito' => 'Approved · simulation only', 'rechazado' => 'Declined', 'desconocido' => 'Unknown result', 'expirado' => 'Expired session', 'error' => 'Service error']); ?>
+      <div class="cl-transaccion__acciones"><?php $botonTransaccion('Preview payment outcome', 'data-cl-pago-simular disabled'); ?><button class="cl-boton cl-boton--secundario" type="button" data-cl-pago-consultar hidden>Check example result</button><button class="cl-boton cl-boton--secundario" type="button" data-cl-pago-reiniciar>Reset payment demo</button></div>
+      <p class="cl-transaccion__nota" data-cl-pago-referencia>DEMO-PAY · not a receipt</p><div class="cl-transaccion__resultado" data-cl-pago-resultado role="status" aria-atomic="true" tabindex="-1"></div>
+    </div></div>
+  </div></div>
 </section>
