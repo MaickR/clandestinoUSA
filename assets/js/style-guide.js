@@ -12,6 +12,7 @@ import { inicializarCarrusel } from "./modules/patterns/carrusel.js";
 import { inicializarMediaCarrusel } from "./modules/patterns/carrusel-media.js";
 import { inicializarNavegacion } from "./modules/patterns/navegacion-global.js";
 import { inicializarAcceso } from "./modules/patterns/acceso.js";
+import { inicializarTransaccionesGuia } from "./modules/guia/transacciones.js";
 
 // Los IDs son propios de esta guía; los módulos Core reciben elementos existentes.
 const porId = (id) => document.getElementById(id);
@@ -79,6 +80,7 @@ inicializarProductosGuia();
 for (const galeria of document.querySelectorAll("[data-cl-galeria]")) inicializarGaleria(galeria);
 inicializarComercialGuia();
 inicializarResenasGuia();
+inicializarTransaccionesGuia();
 for (const contenedor of document.querySelectorAll("[data-cl-carrusel]")) {
   inicializarCarrusel(contenedor);
   if (contenedor.hasAttribute("data-cl-carrusel-media")) inicializarMediaCarrusel(contenedor);

@@ -86,3 +86,8 @@
 @import "patterns/pie-global";
 @import "patterns/acceso";
 @import "patterns/topbar";
+
+// Wave 7: composiciones transaccionales, sin cambios en Foundation/Core.
+@import "patterns/transaccion";
+@import "patterns/carrito";
+@import "patterns/reserva";

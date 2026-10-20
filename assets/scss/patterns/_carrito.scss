@@ -1,0 +1,86 @@
+.cl-carrito {
+  &__lineas {
+    padding: 0;
+    list-style: none;
+  }
+
+  &__linea {
+    padding-block: var(--espacio-5);
+    border-block-end: 1px solid var(--color-borde);
+  }
+
+  &__producto {
+    display: flex;
+    gap: var(--espacio-4);
+    align-items: flex-start;
+  }
+
+  &__foto {
+    flex: 0 0 auto;
+    width: var(--espacio-9);
+    height: var(--espacio-9);
+    border-radius: var(--radio-md);
+    object-fit: cover;
+
+    &--vino {
+      object-fit: contain;
+      background: var(--color-fondo-alterno);
+    }
+  }
+
+  &__nombre { font-size: 1.5rem; }
+
+  &__controles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-4);
+    align-items: end;
+    justify-content: space-between;
+    margin-block-start: var(--espacio-4);
+  }
+
+  &__precio {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.cl-resumen {
+  min-width: 0;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+  background: var(--color-fondo);
+  overflow-wrap: anywhere;
+
+  &__importes { margin-block: var(--espacio-5); }
+
+  &__fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2) var(--espacio-4);
+    justify-content: space-between;
+    margin-block: var(--espacio-3);
+
+    dt { font-weight: 400; }
+
+    dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__total {
+    padding-block-start: var(--espacio-4);
+    border-block-start: 1px solid var(--color-borde-fuerte);
+    color: var(--color-acento);
+    font-size: 1.5rem;
+  }
+
+  &--compacto { padding: var(--espacio-4); }
+
+  summary {
+    min-height: 2.75rem;
+    cursor: pointer;
+  }
+}
