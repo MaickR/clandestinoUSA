@@ -1,5 +1,15 @@
 # Biblioteca de patrones de sección
 
+## Auditoría transversal vigente — 2026-10-21
+
+Inventario contrastado con fuentes, decisiones, defectos corregidos y evidencia actual en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). La aprobación de la dirección visual general expresada en este encargo sustituye los pendientes históricos de dirección; el cierre completo sigue esperando aprobación humana final. Los registros de QA inferiores conservan su fecha y alcance originales.
+
+Contrato añadido de Cart/Mini Cart: `crearEstadoCarrito` y el proveedor `inicializarCarrito` exponen `puedeRestaurar(id) → boolean`. Solo una línea retirada de la colección vigente admite Undo; reemplazarla o restaurarla desde otra vista invalida esa acción. Mini Cart consulta este contrato en cada notificación, sin conservar un historial paralelo. También actualiza el límite nativo, fotografía/ausencia, alt y tipo aunque el ID permanezca estable. El adaptador de otra página debe conservar estos contratos.
+
+Core conserva sus APIs y estilos. Las muestras de botones anuncian su función demostrativa y ofrecen feedback; alertas/estados/avisos no afirman stock, reservas o ventanas retenidas. Los errores que requieren corrección permanecen en contexto junto a la operación. Se retiraron dos `title` redundantes de Remove: su nombre accesible específico y Undo bastan; no se introduce otra biblioteca de Tooltip.
+
+**DESIGN SYSTEM READY — WAITING FOR FINAL HUMAN APPROVAL**, con las limitaciones de pruebas del informe; sin autorización de publicación o venta.
+
 ## Wave 6 — Cierre final de biblioteca — 2026-10-19
 
 Estado vigente sobre `bc93e59`, misma feature y base `develop` `a88845e`. Preflight limpio, fetch y sincronización 0/0; sin cambios ajenos. Se preservan los diseños aprobados de Header, Discover, drawer, acceso, breadcrumbs y Footer móvil. Este registro actualiza los contratos/QA del refinamiento histórico inferior; no autoriza PR, merge ni deploy.

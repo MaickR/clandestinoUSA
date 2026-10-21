@@ -128,6 +128,7 @@ export function crearEstadoCarrito(productos = []) {
       if (valor !== modalidad) { modalidad = valor; cambiar(); }
     },
     eliminar(id) { buscar(id).presente = false; invalidas.delete(id); cambiar(); },
+    puedeRestaurar(id) { return lineas.some((linea) => linea.id === id && !linea.presente); },
     restaurar(id) { buscar(id).presente = true; cambiar(); },
     disponibilidad(id, disponible) {
       if (typeof disponible !== "boolean") throw new TypeError("Disponibilidad debe ser booleana.");

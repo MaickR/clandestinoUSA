@@ -1,5 +1,13 @@
 # Preparación del Design System para construir páginas
 
+## Cierre transversal — 2026-10-21
+
+Registro vigente: [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). El usuario aprueba la dirección visual general; este cierre verifica defectos e integración frontend, sin aprobar automáticamente las páginas reales ni su publicación. Los estados pendientes de las waves que siguen son registros históricos.
+
+Se corrigieron Undo obsoleto entre vistas, límites/media desactualizados del mini carrito, acciones sin función en las muestras Core y mensajes que podían confundirse con disponibilidad real. El proveedor de mini carrito debe aportar `puedeRestaurar(id)` además de `suscribir`: la recuperación se invalida al restaurar la línea o sustituir su colección. Mantener una identidad no autoriza conservar límites o fotografías anteriores.
+
+**DESIGN SYSTEM READY — WAITING FOR FINAL HUMAN APPROVAL**, dentro del frontend demostrativo probado y con las limitaciones de QA enumeradas en el informe. No significa que pagos, reservas, contenido comercial, cuenta ni rutas productivas estén habilitados. Sin Wave 8, backend o migraciones productivas.
+
 Referencia práctica tras Wave 7, 2026-10-20. El sistema permite componer el frontend de las páginas previstas. La aprobación visual humana, los datos comerciales y las integraciones siguen siendo puertas distintas. Ninguna página productiva fue migrada durante Wave 7.
 
 ## Inventario y ubicación

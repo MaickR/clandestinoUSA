@@ -1,5 +1,11 @@
 # Core Component Library — UI-CORE-02
 
+## Auditoría transversal — 2026-10-21
+
+Registro vigente en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). APIs/SCSS Core preservados. Se corrigieron exclusivamente las muestras de la guía: tres botones antes inertes ahora anuncian activación demostrativa y muestran feedback; alertas/estados y toasts llevan contexto inequívoco de ejemplo, sin prometer reservas, stock ni una ventana retenida. La muestra assertive es un aviso informativo persistente; no enseña a resolver un error crítico mediante un toast. Los errores de operación y su recuperación se presentan en contexto en las waves.
+
+La dirección general está aprobada por el usuario; las afirmaciones de QA y aprobación inferiores son históricas. La aprobación humana final del cierre transversal y las limitaciones actuales figuran en el informe. No se añade Tooltip, otro sistema de feedback ni JS productivo.
+
 Biblioteca genérica entre Foundation y Pattern Library. No migra páginas, procesa reservas ni implementa carrito, cuenta o pagos. La aprobación visual humana permanece pendiente; compilar y pasar las verificaciones no autoriza un merge.
 
 ## Base y alcance

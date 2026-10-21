@@ -26,7 +26,7 @@ function iconoGuia(string $nombre): string
   <link rel="icon" href="../assets/favicon/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&amp;family=Playfair+Display:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.new.css">
   <link rel="stylesheet" href="../assets/css/style-guide.css">
   <script type="module" src="../assets/js/dist/style-guide.js"></script>
@@ -260,11 +260,12 @@ function iconoGuia(string $nombre): string
         <h2 id="buttons-title">Buttons</h2>
         <p>Hover, focus, and active each change the fill or the border. Disabled also drops opacity and uses <code>not-allowed</code>. Tab to the buttons to see the focus ring.</p>
         <div class="cl-guia-fila">
-          <button class="cl-boton" type="button">Reserve a table</button>
-          <button class="cl-boton cl-boton--secundario" type="button">View the menu</button>
+          <button class="cl-boton" type="button" data-cl-boton-demo="Primary">Try primary button</button>
+          <button class="cl-boton cl-boton--secundario" type="button" data-cl-boton-demo="Secondary">Try secondary button</button>
           <button class="cl-boton" type="button" disabled>Sold out</button>
           <button class="cl-boton cl-boton--secundario" type="button" disabled>Unavailable</button>
         </div>
+        <p id="botones-demo-resultado" role="status" aria-atomic="true">Appearance examples only. These buttons do not reserve a table or open a menu.</p>
       </div>
     </section>
 
@@ -273,7 +274,7 @@ function iconoGuia(string $nombre): string
         <h2 id="actions-title">Icon buttons &amp; quantity</h2>
         <p>Action buttons have names and a 44px minimum target at the normal browser size. Quantity uses native number input stepping.</p>
         <div class="cl-guia-fila">
-          <button class="cl-boton-icono" type="button" aria-label="Add one item"><?= iconoGuia('sumar') ?></button>
+          <button class="cl-boton-icono" type="button" data-cl-boton-demo="Icon" aria-label="Try icon button" aria-describedby="botones-demo-resultado"><?= iconoGuia('sumar') ?></button>
           <a class="cl-boton-icono" href="#breadcrumbs" aria-label="View breadcrumbs"><?= iconoGuia('volver') ?></a>
           <button class="cl-boton-icono" type="button" aria-label="Unavailable action" disabled><?= iconoGuia('restringido') ?></button>
         </div>
@@ -415,9 +416,9 @@ function iconoGuia(string $nombre): string
     <section class="cl-guia-seccion" id="alerts" aria-labelledby="alerts-title">
       <div class="container">
         <h2 id="alerts-title">Alerts &amp; notices</h2>
-        <p>Static notices have no live role. Text explains the state; icons and color support it.</p>
+        <p>Static examples only: no table, stock or collection window is confirmed. These notices have no live role. Text explains the state; icons and color support it.</p>
         <div class="cl-guia-demo">
-          <?php foreach ([['informacion', 'Collection details', 'Please arrive within your collection window.'], ['exito', 'Reservation confirmed', 'We look forward to welcoming you.'], ['aviso', 'Limited availability', 'Only 2 seats remaining.'], ['error', 'Wine unavailable', 'This wine is currently unavailable.']] as [$variante, $titulo, $mensaje]): ?>
+          <?php foreach ([['informacion', 'Collection details · example', 'A confirmed collection window would appear here.'], ['exito', 'Reservation confirmed · simulation only', 'No table has been booked.'], ['aviso', 'Limited availability · example', 'Availability must be checked with the restaurant.'], ['error', 'Wine unavailable · example', 'No current stock has been checked.']] as [$variante, $titulo, $mensaje]): ?>
           <div class="cl-alerta cl-alerta--<?= $variante ?>"><span class="cl-alerta__icono"><?= iconoGuia($variante) ?></span><div class="cl-alerta__contenido"><p class="cl-alerta__titulo"><?= $titulo ?></p><p class="cl-alerta__mensaje"><?= $mensaje ?></p></div></div>
           <?php endforeach; ?>
         </div>
@@ -428,7 +429,7 @@ function iconoGuia(string $nombre): string
     <section class="cl-guia-seccion cl-guia-banda" id="status" aria-labelledby="status-title">
       <div class="container">
         <h2 id="status-title">Status labels</h2>
-        <p>Readable, static labels. Availability is never communicated through color alone.</p>
+        <p>Readable, static example labels, not current availability. Availability is never communicated through color alone.</p>
         <div class="cl-guia-fila"><span class="cl-estado cl-estado--exito">Available</span><span class="cl-estado cl-estado--error">Sold out</span><span class="cl-estado cl-estado--aviso">Limited</span><span class="cl-estado">Members only</span><span class="cl-estado cl-estado--destacado">New</span></div>
       </div>
     </section>
@@ -436,8 +437,8 @@ function iconoGuia(string $nombre): string
     <section class="cl-guia-seccion" id="notifications" aria-labelledby="notifications-title">
       <div class="container">
         <h2 id="notifications-title">Toast notifications</h2>
-        <p>Routine updates are polite. Urgent failures are assertive and remain until closed. Up to three demos at once; showing a toast does not move focus.</p>
-        <div class="cl-guia-fila"><button class="cl-boton" id="toast-rutina" type="button">Show order update</button><button class="cl-boton cl-boton--secundario" id="toast-persistente" type="button">Show important notice</button><button class="cl-boton cl-boton--secundario" id="toast-urgente" type="button">Show urgent error</button></div>
+        <p>Routine updates are polite. Important notices remain until closed; showing a toast does not move focus. Critical errors and recovery belong beside the affected operation, as shown in the transaction examples. Up to three demos at once.</p>
+        <div class="cl-guia-fila"><button class="cl-boton" id="toast-rutina" type="button">Show order update</button><button class="cl-boton cl-boton--secundario" id="toast-persistente" type="button">Show important notice</button><button class="cl-boton cl-boton--secundario" id="toast-urgente" type="button">Show urgent notice</button></div>
       </div>
     </section>
 

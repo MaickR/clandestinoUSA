@@ -1,5 +1,15 @@
 # Wave 7 — matriz de cobertura y verificación
 
+## Auditoría transversal posterior — 2026-10-21
+
+Estado vigente y evidencia independiente sobre `4c6ec25`: [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). Sustituye las afirmaciones de ausencia de defectos de los cierres históricos inferiores, sin reutilizar sus pruebas como actuales.
+
+- Corregido Undo del mini carrito tras reemplazar la colección: antes producía `Línea desconocida`. `puedeRestaurar(id)` consulta el modelo compartido; ambas vistas retiran acciones obsoletas cuando otra vista restaura/reincorpora el producto.
+- Corregida la proyección con el mismo ID: `maximo`, imagen ausente, imagen nueva, alt y tipo de fotografía se reconcilian desde cada snapshot. Fixture de navegador: límite 6→2 sin imagen→3 con imagen; carrito principal y mini coherentes.
+- Dos suites Node, lint/build/PHP/diff, 59 estados, siete resultados de pago, formularios y regresiones representativas; diez anchos de documento y carrito de 40 líneas, mini carrito con scroll interno y teclado a 320×360. Alcance exacto, capturas, métricas y pruebas no ejecutadas en el informe. No se afirma recertificación exhaustiva de las waves.
+
+El usuario aprueba la dirección general. Cierre frontend: **DESIGN SYSTEM READY — WAITING FOR FINAL HUMAN APPROVAL**; backend, datos/condiciones y aceptación de páginas reales siguen siendo dependencias separadas. No hay PR, merge ni deploy.
+
 Base: `9513e52` (PR #12, Wave 6 integrada en develop). Preflight limpio, fetch y fast-forward ejecutados el 2026-10-19. Rama exclusiva `feature/ui-section-patterns-wave-7`. Este registro se inicia antes de implementar; el cierre y la evidencia se incorporan tras las pruebas.
 
 ## Auditoría inicial

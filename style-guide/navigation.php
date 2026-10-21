@@ -18,7 +18,7 @@ require __DIR__ . '/partials/configuracion-wave-6.php';
   <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&amp;family=Playfair+Display:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.new.css">
   <link rel="stylesheet" href="/assets/css/style-guide.css">
 </head>

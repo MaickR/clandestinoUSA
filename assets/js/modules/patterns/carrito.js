@@ -74,6 +74,10 @@ export function inicializarCarrito(raiz, productos, { consultarCodigo } = {}) {
   }
   function pintar() {
     const datos = modelo.resumen();
+    if (ultimaEliminada && !modelo.puedeRestaurar(ultimaEliminada)) {
+      ultimaEliminada = null;
+      deshacer.hidden = true;
+    }
     const proyeccion = paginarCarrito(datos.lineas.length, pagina);
     pagina = proyeccion.pagina;
     const visibles = datos.lineas.slice(proyeccion.inicio, proyeccion.fin);
@@ -165,6 +169,7 @@ export function inicializarCarrito(raiz, productos, { consultarCodigo } = {}) {
     cantidad(id, valor) { modelo.cantidad(id, valor); pintar(); },
     variante(id, valor) { modelo.variante(id, valor); pintar(); },
     eliminar(id) { modelo.eliminar(id); pintar(); },
+    puedeRestaurar: modelo.puedeRestaurar,
     restaurar(id) { modelo.restaurar(id); pintar(); },
     modalidad(valor) { modelo.modalidad(valor); pintar(); },
     continuar() { if (modelo.resumen().valido) continuar.click(); },

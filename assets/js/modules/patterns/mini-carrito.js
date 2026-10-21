@@ -8,7 +8,8 @@ const instancias = new WeakMap();
 /** Vista compacta del proveedor conectado. Bootstrap posee trap, backdrop y scroll lock. */
 export function inicializarMiniCarrito(panel, activador, proveedor) {
   if (instancias.has(panel)) return instancias.get(panel);
-  if (!(panel instanceof HTMLElement) || !panel.id || !activador || typeof proveedor?.suscribir !== "function") throw new TypeError("Mini-cart requiere panel, activador y proveedor observable.");
+  if (!(panel instanceof HTMLElement) || !panel.id || !activador || typeof proveedor?.suscribir !== "function"
+    || typeof proveedor.puedeRestaurar !== "function") throw new TypeError("Mini-cart requiere panel, activador y proveedor observable con recuperación.");
   const lista = panel.querySelector("[data-cl-mini-lineas]");
   const plantilla = panel.querySelector("template");
   const mensaje = panel.querySelector("[data-cl-mini-mensaje]");
@@ -54,6 +55,12 @@ export function inicializarMiniCarrito(panel, activador, proveedor) {
     document.addEventListener(`hidden.bs.${tipo}`, continuarPendiente, opciones);
   }
   function pintar(datos) {
+    // Otra vista puede restaurar la línea o sustituir toda la colección.
+    if (eliminada && !proveedor.puedeRestaurar(eliminada)) {
+      eliminada = null;
+      deshacer.hidden = true;
+      mensaje.replaceChildren();
+    }
     const lineas = datos.lineas.slice(0, 3);
     const visibles = new Set(lineas.map((l) => l.id));
     for (const [id, vista] of vistas) {
@@ -69,12 +76,21 @@ export function inicializarMiniCarrito(panel, activador, proveedor) {
         const etiqueta = nodo.querySelector("label"); etiqueta.htmlFor = campo.id;
         const error = nodo.querySelector(".cl-cantidad__mensaje"); error.id = `${campo.id}-error`; campo.setAttribute("aria-describedby", error.id);
         const foto = nodo.querySelector("img");
-        if (linea.imagen) { foto.src = linea.imagen; foto.alt = linea.alt ?? linea.nombre; foto.classList.toggle("cl-mini-carrito__foto--vino", linea.tipo === "vino"); } else foto.remove();
+        foto.removeAttribute("src"); foto.hidden = true;
         lista.append(nodo);
         vista = { nodo, campo, control: inicializarCantidad(nodo.querySelector("[data-cl-control-cantidad]")) };
         vistas.set(linea.id, vista);
       }
       vista.nodo.querySelector("[data-cl-mini-nombre]").textContent = linea.nombre;
+      // La misma identidad puede recibir nuevos límites o media tras una actualización.
+      vista.campo.max = String(linea.maximo);
+      const foto = vista.nodo.querySelector("img");
+      foto.hidden = !linea.imagen;
+      if (linea.imagen) {
+        if (foto.getAttribute("src") !== linea.imagen) foto.src = linea.imagen;
+        foto.alt = linea.alt ?? linea.nombre;
+        foto.classList.toggle("cl-mini-carrito__foto--vino", linea.tipo === "vino");
+      } else foto.removeAttribute("src");
       vista.nodo.querySelector("[data-cl-mini-variante]").textContent = linea.variante || "Example presentation";
       const contexto = `${linea.nombre} · ${linea.variante}`;
       vista.nodo.querySelector("label").textContent = `Quantity for ${contexto}`;
@@ -106,7 +122,7 @@ export function inicializarMiniCarrito(panel, activador, proveedor) {
     mostrarResultado(mensaje, "Item removed", "Your full cart and connected summaries have been updated."); deshacer.focus();
   }, opciones);
   deshacer.addEventListener("click", () => {
-    if (!eliminada) return;
+    if (!eliminada || !proveedor.puedeRestaurar(eliminada)) return;
     proveedor.restaurar(eliminada); eliminada = null; deshacer.hidden = true;
     mostrarResultado(mensaje, "Item restored", "Your previous quantity and presentation are restored."); cerrar.focus();
   }, opciones);

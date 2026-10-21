@@ -7,6 +7,17 @@ import { validarGrupo } from '../assets/js/modules/patterns/reserva.js';
 import { productosEjemplo, coleccionEjemplo, horarioEjemplo, horarioExcepcionEjemplo } from '../assets/js/modules/guia/transacciones-fixtures.js';
 
 const carrito = crearEstadoCarrito(productosEjemplo);
+// Undo pierde validez al restaurar desde otra vista o reemplazar la colección.
+assert.equal(carrito.puedeRestaurar('tabla'), false);
+carrito.eliminar('tabla');
+assert.equal(carrito.puedeRestaurar('tabla'), true);
+carrito.agregar(productosEjemplo[0]);
+assert.equal(carrito.puedeRestaurar('tabla'), false);
+carrito.eliminar('tabla');
+carrito.reemplazar(coleccionEjemplo(8));
+assert.equal(carrito.puedeRestaurar('tabla'), false);
+carrito.reemplazar(productosEjemplo);
+assert.equal(carrito.puedeRestaurar('tabla'), false);
 const idCopa = carrito.agregar({ ...productosEjemplo[1], id: 'vino-copa', varianteId: 'copa', cantidad: 2 });
 assert.equal(idCopa, 'vino-copa');
 assert.equal(carrito.resumen().lineas.length, 3);
