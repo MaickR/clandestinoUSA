@@ -6,6 +6,12 @@ Reglas globales para cualquier agente de IA o colaborador. El detalle vive en `d
 
 The Clandestino USA (theclandestinousa.com) es un restaurante español en Mt. Shasta, CA. Se hace un **refactor incremental del sitio actual** (HTML/CSS/JS/PHP en producción) hacia una plataforma de venta digital. Enfoque **revenue-first**: primero lo que genera ingresos (Take Away, Gift Cards, Wine Club, Reservas, Eventos).
 
+## Design System e integración en páginas reales
+
+- Foundation, Core y Waves 1–7 están integradas en `develop`; la fase de construcción del Design System está cerrada.
+- El siguiente trabajo consiste en implementar páginas reales reutilizando los componentes y patrones existentes, sin nuevas Waves ni rediseños innecesarios.
+- Las demostraciones del Style Guide no equivalen a funciones comerciales reales integradas. Los servicios comerciales y sus dependencias requieren integración y validación propias; el cierre técnico no sustituye la aprobación humana final ni autoriza su activación.
+
 ## Stack y restricciones
 
 - HTML5 semántico, CSS legacy hoy; SCSS + Bootstrap 5 (Sass) + JS con esbuild + Gulp como objetivo.
