@@ -1,5 +1,15 @@
 # Biblioteca de patrones de sección
 
+## Auditoría transversal vigente — 2026-10-21
+
+Inventario contrastado con fuentes, decisiones, defectos corregidos y evidencia actual en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). La aprobación de la dirección visual general expresada en este encargo sustituye los pendientes históricos de dirección; el cierre completo sigue esperando aprobación humana final. Los registros de QA inferiores conservan su fecha y alcance originales.
+
+Contrato añadido de Cart/Mini Cart: `crearEstadoCarrito` y el proveedor `inicializarCarrito` exponen `puedeRestaurar(id) → boolean`. Solo una línea retirada de la colección vigente admite Undo; reemplazarla o restaurarla desde otra vista invalida esa acción. Mini Cart consulta este contrato en cada notificación, sin conservar un historial paralelo. También actualiza el límite nativo, fotografía/ausencia, alt y tipo aunque el ID permanezca estable. El adaptador de otra página debe conservar estos contratos.
+
+Core conserva sus APIs y estilos. Las muestras de botones anuncian su función demostrativa y ofrecen feedback; alertas/estados/avisos no afirman stock, reservas o ventanas retenidas. Los errores que requieren corrección permanecen en contexto junto a la operación. Se retiraron dos `title` redundantes de Remove: su nombre accesible específico y Undo bastan; no se introduce otra biblioteca de Tooltip.
+
+**DESIGN SYSTEM READY — WAITING FOR FINAL HUMAN APPROVAL**, con las limitaciones de pruebas del informe; sin autorización de publicación o venta.
+
 ## Wave 6 — Cierre final de biblioteca — 2026-10-19
 
 Estado vigente sobre `bc93e59`, misma feature y base `develop` `a88845e`. Preflight limpio, fetch y sincronización 0/0; sin cambios ajenos. Se preservan los diseños aprobados de Header, Discover, drawer, acceso, breadcrumbs y Footer móvil. Este registro actualiza los contratos/QA del refinamiento histórico inferior; no autoriza PR, merge ni deploy.
@@ -1486,3 +1496,97 @@ Las limitaciones anteriores siguen explícitas: zoom 200%, Firefox/Safari, lecto
 Performance medida con el mismo pipeline/gzip: CSS producto 60558→61050 bytes, gzip 11413→11464 (**+51 bytes, +0.45%**). JS producto idéntico y vacío (gzip 20); JS guía conserva 65653 bytes/15120 gzip en dev y 33411/10688 minificado en memoria. No cambia ningún fuente JS. Imágenes/peticiones conservan 19 instancias, trece fotografías únicas, 35 alternativas y 42 recursos locales; cero fotos, iconos o dependencias nuevas. El incremento CSS corresponde exclusivamente a agrupación de precios y ajuste responsive del pie.
 
 Se integra como un ajuste coherente sobre el refinamiento publicado, sin reconstruir Wave 2 ni crear otra rama. El contrato de backend futuro y todos los pendientes comerciales se mantienen. **Pendiente de aprobación visual humana.**
+
+## Wave 7 — experiencias transaccionales frontend (2026-10-20)
+
+Base `9513e526794ad4a3205dd1d5161122fed254fabd`, Wave 6 integrada en develop mediante PR #12. Rama `feature/ui-section-patterns-wave-7`. La auditoría inicial, decisiones CREAR/EXTENDER/REUTILIZAR/DIFERIR, estados, riesgos y criterios de aceptación se registraron antes de implementar en `WAVE-7-COVERAGE.md`. No se reconstruyen Waves 1–6 ni se abre Wave 8.
+
+### Cobertura y responsabilidad
+
+Todas las familias obligatorias tienen cobertura frontend completa, con dependencia backend para cualquier operación real. Una confirmación de laboratorio lleva identificación explícita de simulación. Los precios de prueba, límites, fechas, referencias y cupos no son información comercial vigente.
+
+| Familia / ancla | Resultado implementado | Límite de autoridad |
+|---|---|---|
+| Cart / `#w7-carrito` | Líneas por plantilla, variantes, cantidad, papelera/Undo, subtotales y promo demo en centavos enteros; resumen lateral/compacto/móvil; vacío, inválido, actualización, fallo, no disponible, desactualizado y recuperación | Reprecio, impuestos, descuentos, stock y fulfillment pertenecen al servidor; el subtotal demo no es un cargo |
+| Take Away / `#w7-checkout` | Pickup o order ahead/mesa; fecha/hora restaurante, contexto de mesa, notas, contacto, selección y revisión; los campos de modalidad inactiva se deshabilitan | Una preferencia no garantiza ventana de recogida ni avisa a cocina. Sin delivery |
+| Checkout compartido | Datos → revisión → resultado; volver conserva datos; validación y primer error con foco; carga y bloqueo de confirmación duplicada | Callbacks del anfitrión aportan contexto y resultados; no hay envío comercial |
+| Payment / `#w7-pago` | Importe/referencia, contenedor de proveedor futuro, procesando/aprobado demo/rechazado/pendiente/expirado/fallo/desconocido y consulta de recuperación | Snapshot compartido con el carrito, revisión de pedido obligatoria y consulta del resultado ficticio; reset solo reinicia el outcome local. Impuestos/cargos/total final sin confirmar; sin PAN/CVV/método guardado |
+| Reservations / `#w7-reserva` | Comensales/fecha, búsqueda con carga, radios de horario con selección/disabled textual, contacto progresivo y teléfono opcional, revisión, pendiente/confirmada demo/pérdida del slot | Sin calendario de disponibilidad real ni bloqueo de mesa; cambiar fecha/comensales invalida el slot, conserva contacto |
+| Booking management / `#w7-gestion` | Referencia/visita/comensales/política pendiente, solicitud de cambio y confirmación de cancelación, conservar/volver, pendiente/fallo/restricción/modificada/cancelada | Registro sintético independiente. Cambio es solicitud textual; el motor futuro deberá ofrecer fechas y condiciones válidas. Cancelada demo deshabilita nuevas acciones |
+| Gift transaction / `#w7-regalo` | Importa monto/dedicatoria del diseñador Wave 4, correo, resumen, pago pendiente/emisión demo/fallo; estados compactos de emisión pendiente | No vuelve a crear el diseñador; sin código, saldo, redención, PDF, dirección ni canal de entrega inventado |
+| Club transaction / `#w7-club` | Importa Gold/Diamond Wave 4, resumen de perfil histórico, precio/cadencia pendientes, condiciones explícitas de ejemplo obligatorias; pago/activación demo y ciclo de suscripción | No presenta $149 como promoción disponible ni inventa periodicidad/renovación/beneficios actuales |
+| Event / `#w7-evento` | Importa evento Wave 4, asistentes 1–4 fixture, correo/revisión, cupos demo/agotado, pendiente/registro demo/error; cancelación/reprogramación compactas | Fecha hipotética; precio por consulta, sin tickets ni waitlist |
+| Private inquiry / `#w7-estados` | Recibida, revisión, información adicional, propuesta, confirmación posterior demo, no disponible/cerrada; enlace al formulario Wave 4 | Consulta → evaluación → propuesta → confirmación separada. No hay administración de cotizaciones |
+| Confirmation/recovery / `#w7-estados` | 58 estados específicos en siete dominios; mensaje/contexto/referencia/siguiente paso/enlace contextual; Core Alert/Estado | El frontend nunca determina éxito comercial; pagos, prestación, emisión y activación se comprueban por separado |
+| Account FUTURE / `#w7-cuenta` | Cuatro operaciones ficticias (pedido/reserva/club/regalo), enlaces contextuales, sin operaciones, fallo/reintentar, no autorizado | Las filas se retiran del DOM en estado no autorizado; no hay dashboard, login nuevo, roles, facturas ni sesión |
+
+### Piezas creadas y reutilización
+
+Nuevas responsabilidades visuales: `cl-transaccion` compone panel/pasos/datos/acciones/resultado; `cl-carrito` representa líneas; `cl-resumen` representa un resumen o importes de operación (variante compacta); `cl-reserva` compone horarios y selección. La retícula sigue Bootstrap y los colores/tipografía/espacios/bordes siguen tokens. Botellas usan contain; fotografía editorial cover; el arte oficial Gift Card conserva sus proporciones.
+
+Se reutilizan `cl-seccion`, `cl-media-contenido`, la familia de producto y sus datos/selecciones de Waves 2/4, `cl-membresia`, Gift Cards, Events y Private Experiences, Core Forms/opciones/cantidad/alertas/estados/vacío/error/loading/spinner, Header/Footer/acceso Modal de Wave 6 y el sprite existente. Bandas CTA, breadcrumbs y Skeleton siguen disponibles donde su responsabilidad lo requiere; no se insertan artificialmente en cada flujo. Los estados no crean un sistema nuevo de notificaciones.
+
+SCSS nuevo: `assets/scss/patterns/_{transaccion,carrito,reserva}.scss`, importado al final de `main.scss`. JS reutilizable: `assets/js/modules/patterns/{transaccion,carrito,checkout,reserva}.js`. Entrada demo: `assets/js/style-guide.js` → `modules/guia/transacciones.js` + `transacciones-fixtures.js`. `main.js`, dependencias y tooling intactos. PHP: `style-guide/partials/{transacciones,carrito-checkout,reservas,comercio,operaciones}-wave-7.php` y helpers `transacciones-componentes.php`; inclusión única en `patterns.php`.
+
+### Contratos de los módulos
+
+- `crearEstadoCarrito(productos)` en `patterns/estado-carrito.js` es la única fuente de cantidades, variantes, disponibilidad e importes locales. Un snapshot aporta `version`, líneas con `subtotalLinea`, `unidades`, `subtotal`, `descuento`, `codigo`, `subtotalAjustado`, `impuestos`, `cargos`, `total`, `valido` y motivo de promoción. Los tres importes finales permanecen null sin autoridad servidor. Las unidades suman cantidades, no líneas.
+- `inicializarCarrito(raiz, productos, {consultarCodigo})` recibe una raíz con id y una plantilla inerte `data-cl-carrito-plantilla`; crea nodos seguros y estables, reutiliza Core Cantidad y devuelve `resumen()`, `reemplazarLineas(lista)`, `agregar(producto)`, `disponibilidad(id, bool)`, `establecerEstado(valor)`, `destruir()`. `cl:carrito` y `cl:carrito-continuar` transportan el snapshot. Los productos no se limitan a dos registros ni requieren HTML específico por cada línea.
+- Cada línea tiene `id` estable y único (independiente de `productoId`), nombre, descripción/variante, precio entero, cantidad1…maximo y disponibilidad; puede aportar imagen local confiable/alt/tipo, `restringido` y variantes `{id,nombre,precio}` con `varianteId`. Un cambio de variante conserva la identidad de línea. El servidor futuro define consolidación de líneas iguales y elegibilidad comercial; no se descarga un catálogo al carrito.
+- `inicializarPromocion(raiz, {consultar,resumen,aplicar,quitar})` controla disclosure/validación/feedback; `actualizar(snapshot)` reconcilia cambios y `destruir()` aborta su consulta. El callback recibe código, snapshot y AbortSignal. Solo el estado de carrito aplica/descuenta/reconcilia; una respuesta tardía nunca altera una versión distinta. Enter mantiene el foco en el campo readonly durante la espera.
+- Regla sintética: DEMO10 resta1000 centavos de un subtotal válido de al menos5000; un solo código, sin acumulación. Bajada de subtotal que deja de cumplir retira el descuento con feedback. Códigos DEMO-EXPIRED/DEMO-INELIGIBLE/DEMO-ERROR exploran fallos, cualquier otro es inválido. No son promociones vigentes.
+- `pintarImportes(raiz,snapshot)` presenta importes en Cart/compacto/Order/Payment sin recalcular ni leer precios del DOM. `version` permite invalidar revisión, contexto y temporizadores de pago al cambiar selección, variante, disponibilidad o descuento.
+- `inicializarCheckout(raiz, {revisar,resultado,prepararValidacion,alCompletar,alInvalidar})` conserva los dos pasos y Core. `prepararValidacion` refresca criterios antes de validar; `alCompletar` conecta la revisión de pedido con Payment y `alInvalidar` cancela su contexto. `invalidar()` no roba el foco a una cantidad externa; `destruir()` cancela temporizador/listeners. La confirmación verifica de nuevo el formulario y el contexto.
+- `inicializarReserva(raiz, {escenario,alInvalidar,alSeleccionar})` conserva `seleccion()`, `perderHorario()`, `destruir()`; el anfitrión muestra contacto al elegir horario y conserva valores al invalidar. Fecha mínima y selección civil se revisan en America/Los_Angeles; no se resuelve disponibilidad ni DST autoritativo en el cliente.
+- Header Wave6 admite configuración optativa PHP `carritoNavegacion['destino']` y `actualizarCarrito({unidades})` en su controlador existente. `actualizarCarrito(null)` oculta contador y deja nombre genérico; sin ruta no se dibuja acceso ni cantidad falsa. La vista muestra99+ sobre99 y el nombre accesible mantiene el valor completo. No usa live region. Orden desktop: Reserve→Cart→Account; móvil conserva logo, Cart, Account y menú a320px. Drawer/Discover/Footer y breakpoints se conservan.
+
+Inicialización idempotente, datos mediante textContent/createElement/plantilla, IDs derivados de identidad validada, imágenes locales sin traversal y callbacks explícitos. Eventos reutilizables con AbortController; cantidades antiguas desaparecen con sus nodos al sustituir colección. Solo `modules/guia/` contiene fixtures, códigos de prueba, retardos y controles de estrés1/2/8/20/40 generados bajo demanda. Sin fetch/XHR/POST de negocio, storage, sesiones ni dependencias. `main.js` conserva su entrada vacía. La navegación comparte únicamente una extensión autorizada y el sprite curado incorpora trash como `papelera` desde Bootstrap Icons ya instalado.
+
+### Contratos conceptuales PHP/MySQL futuros
+
+No son endpoints implementados ni un esquema definitivo. Toda salida comercial debe proceder del servicio autorizado. Las referencias deben ser opacas; un ID no sustituye autorización.
+
+| Dominio | Entrada esperada | Salida esperada / invariantes |
+|---|---|---|
+| Cart | IDs de item/variante, cantidad, contexto, versión de catálogo | Líneas repriciadas, disponibilidad/motivo, moneda, subtotal/impuestos/descuentos/cargos/total en unidades menores, versión y vencimiento; no confiar en importe del DOM |
+| Order | Snapshot validado, modalidad pickup/mesa, fecha/hora local/zona, referencia de contexto, instrucciones/contacto | ID/referencia opaca, líneas/totales congelados, estado, ventana confirmada o pendiente; distinguir recibido/preparación/listo/completado/cancelado/rechazado |
+| Payment | Referencia de operación, importe autorizado servidor, moneda, idempotency key y sesión segura del proveedor | Referencia del proveedor, importe/moneda, estado/resultado seguro y estado de conciliación; timeout desconocido requiere consulta antes de otro intento |
+| Reservation | Fecha civil, horario/slot y versión, comensales, zona IANA, titular/contacto autorizado y preferencias | Disponibilidad/expiración, instante UTC y representación local consistentes, referencia/estado; conflicto invalida slot; cambios/cancelaciones autorizados y bajo política confirmada |
+| Gift Card | Importe/moneda permitidos, presentación/dedicatoria, entrega y términos confirmados | Referencia, pago y emisión/entrega separados; cualquier código/saldo solo por canal autorizado; no exponerlo en listado público |
+| Membership | Plan/versionado, precio/cadencia/beneficios/términos vigentes aceptados y referencia de proveedor | Estado de pago/suscripción, activación, renovación/fin efectivos y condiciones confirmadas; gestión de pago por proveedor seguro |
+| Event | Evento/versionado, asistentes, identidad/contexto y precio confirmado | Cupos/disponibilidad verificados, referencia/estado, fecha/cancelación/reprogramación y resultado de registro; capacidad protegida por concurrencia |
+| Private inquiry | Datos mínimos del formulario existente, referencia y titular autorizado | Estado de evaluación, información solicitada/propuesta y confirmación posterior separada; sin reserva implícita |
+| Account | Usuario autorizado, referencia de operación, alcance/paginación | Solo registros visibles para ese titular; estado y acciones permitidas por operación; denegación sin datos personales ni existencia revelada |
+
+El backend futuro debe aplicar validación servidor, autorización por recurso, CSRF en mutaciones, escaping contextual contra XSS, prepared statements y transacciones de BD. Debe prevenir doble reserva y exceso de cupos con concurrencia real, mantener integridad de transiciones y auditabilidad, manejar errores sin filtrar datos, hacer cobros idempotentes y verificar firma/duplicados/orden de webhooks si el proveedor los utiliza. No se implementan estas responsabilidades en Wave 7 ni se modifica `Booking-app-php`.
+
+### Auditoría global y próxima construcción
+
+`DESIGN-SYSTEM-READINESS.md` es el índice práctico Foundation/Core/Waves 1–7 y el mapa Home/Restaurant/Wines/Gift Cards/Wine Club/Events/Reservations/Contact/Take Away/Account FUTURE. Se puede componer el frontend con los patrones existentes; adaptar filtros de vinos, motor de reservas, proveedor y canales/condiciones corresponde a integrar cada página. La autorización humana del aspecto visual sigue pendiente; no se declara que el sitio comercial esté listo para vender.
+
+El registro final de comandos, accesibilidad, responsive, regresiones, performance y limitaciones se encuentra en el cierre de `WAVE-7-COVERAGE.md`.
+
+### Refinamiento final de Wave7 — criterios de integración
+
+El recorrido conectado es Cart→Order Details→Review→Payment Preview→Outcome. Payment muestra el mismo subtotal/descuento que la selección revisada, exige revisión actual y cancela esperas/resultados al cambiar versión. Reiniciar un outcome no repite cobros; pendiente/desconocido/expirado/error ofrecen consulta antes de otro intento. Pago y aceptación del pedido siguen separados.
+
+Pickup muestra dirección211 N Mt Shasta Blvd, Mt Shasta, CA96067, fecha/hora solicitadas y contacto. Mesa admite referencia opcional y explica que order ahead no reserva una mesa. Teléfono de pedido/reserva es opcional en la demo y valida solo sintaxis básica; obligatoriedad, país y normalización corresponden a política/servidor. No se inventan ventanas de cocina ni delivery.
+
+Para vino, la UI ofrece información contextual de elegibilidad/identificación pendientes y escenarios sintéticos de producto restringido o modalidad no disponible. No se solicita documento ni se presenta checkbox como verificación de edad. Licencias, modalidades permitidas y requisitos legales concretos deben validarse comercialmente antes de vender.
+
+Contrato servidor ampliado: líneas/variantes con identidad estable, versión de selección/precio, todos los importes en unidades menores y moneda uniforme; promociones verificadas por existencia/vigencia/uso/identidad/compatibilidad/límites, repricio e impuestos/cargos autoritativos. Reserva requiere fecha/hora civil y zonaIANA, conversión UTC/DST explícita, comensales/duración/capacidad/restricciones/expiración de bloqueo y confirmación transaccional. Pago requiere importe autorizado servidor, checkout hospedado/componentes seguros, idempotencia, conciliación y webhooks firmados/verificados cuando procedan. Ninguna de estas responsabilidades se implementa aquí.
+
+Auditoría previa, pruebas ejecutadas/no ejecutadas, performance, archivos y aprobación final del refinamiento: cierre actualizado de `WAVE-7-COVERAGE.md`. La cobertura de58 estados se conserva sin inflar el catálogo; no se crea Wave8 ni se migran páginas productivas.
+
+
+### Cierre de comercio Wave7 — 2026-10-21
+
+Este contrato amplía el refinamiento anterior: `id` es la línea transaccional estable; `productoId` y `varianteId` definen la equivalencia de agregación, con verificación de precio/límite. Cambiar variante conserva ID y otras líneas. `modalidades` permite elegibilidad por producto/presentación; no constituye autorización comercial. Quantity queda visualmente oculto como label, manteniendo asociación y contexto accesible. La proyección `paginarCarrito(total,pagina)` presenta máximo diez líneas; importes/unidades/descuentos siempre abarcan todo el modelo. Undo mantiene orden y recupera página/foco.
+
+`inicializarCarrito` incorpora `suscribir(callback) → retirar`, mutadores `cantidad/variante/eliminar/restaurar/modalidad` y `continuar`. Header admite `conectarCarrito(proveedor,panel)` o `proveedorCarrito/panelCarrito` iniciales; sin conexión sigue neutral. El panel `cl-mini-carrito` usa `inicializarMiniCarrito`: Bootstrap Offcanvas, máximo28rem, primeras tres líneas, cantidad/eliminar/Undo, resumen global y destinos aportados por el anfitrión. Click, Escape, backdrop, trap y retorno de foco; se espera hidden antes de cambiar de overlay o enfocar destino. No hover accidental ni precios/modelo paralelos. Desmontar retira suscripción/eventos y dispone overlay; no hay IDs de Style Guide dentro del Header.
+
+`horario-servicio.js` expone reloj civil/ventanas/validación/hora legible desde configuración inyectada; `horario-formulario.js` adapta fecha/select nativos con `validar`, `actualizarConfiguracion`, `destruir`. Configuración: versión, zona, semana, excepciones por fecha, servicios con habilitación/intervalo/anticipación/duración/última hora. Cierre exclusivo, revalidación en Review/confirmación, ningún cálculo según timezone del dispositivo. El anfitrión invalida selecciones al cambiar configuración. `inicializarReserva` recibe `configuracion()`, ofrece API `actualizarConfiguracion`, tamaños1–10 o entero mayor de10 mediante consulta manual pendiente, conservando contacto. El backend resolverá capacidad, instantes/DST y concurrencia.
+
+Un código por pedido; Apply100% contextual; DEMO-REDEEMED representa redención histórica sin consultar clientes. Campaña/límites/identidad guest/canje y reversión atómicos pertenecen al servidor. Métodos Payment serán habilitados por proveedor real y sesión segura; ninguno activo ahora. Mantener conciliación e independencia entre pago y prestación/emisión/activación. Los58 estados previos permanecen y el explorador suma únicamente conciliación (59). La revisión del evento respeta la configuración común; una apertura especial necesita autorización explícita. Gift/Wine Club y Private Inquiry preservan sus contratos.
+
+Matriz completa de APIs/datos demo, reglas y excepciones sintéticas, seguridad, dependencias por dominio, QA/performance y límites: `WAVE-7-COVERAGE.md`, cierre2026-10-21. No hay pagos/reservas/envíos reales ni páginas migradas; revisión visual humana pendiente.

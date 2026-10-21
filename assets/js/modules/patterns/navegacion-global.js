@@ -1,10 +1,11 @@
 import Collapse from "bootstrap/js/src/collapse.js";
 import Offcanvas from "bootstrap/js/src/offcanvas.js";
+import { inicializarMiniCarrito } from "./mini-carrito.js";
 
 const inicializados = new WeakMap();
 
 /** Un único árbol responsive; Bootstrap conserva trap, backdrop, Escape y scroll. */
-export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
+export function inicializarNavegacion(contenedor, { raizScroll = null, proveedorCarrito = null, panelCarrito = null } = {}) {
   if (!(contenedor instanceof HTMLElement)) throw new TypeError("Se requiere un contenedor de navegación.");
   if (inicializados.has(contenedor)) return inicializados.get(contenedor);
   const buscar = (nombre) => contenedor.querySelector(`[data-cl-${nombre}]`);
@@ -18,6 +19,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   const cierre = buscar("nav-cierre");
   const tituloPanel = buscar("nav-cabecera");
   const piePanel = buscar("nav-pie");
+  const carrito = buscar("nav-carrito");
+  const conteoCarrito = buscar("nav-carrito-conteo");
   if (![cabecera, testigo, boton, panel, expandir, subpanel, origen, cierre, tituloPanel, piePanel].every((nodo) => nodo instanceof HTMLElement)) {
     throw new TypeError("La navegación requiere cabecera, paneles y controles completos.");
   }
@@ -27,6 +30,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   expandir.hidden = false;
   tituloPanel.hidden = false;
   piePanel.hidden = false;
+  cabecera.classList.toggle("cl-cabecera--con-carrito", Boolean(carrito));
   const drawer = Offcanvas.getOrCreateInstance(panel);
   const secundaria = Collapse.getOrCreateInstance(subpanel, { toggle: false });
   const eventos = new AbortController();
@@ -36,6 +40,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   let cerrarPendiente = false;
   let destinoPendiente = null;
   let destruccion = null;
+  let miniCarrito = null;
+  let retirarCarrito = null;
   function cerrar() {
     if (transicion) cerrarPendiente = true;
     else drawer.hide();
@@ -89,6 +95,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
     }
   }, { ...opciones, capture: true });
   cabecera.addEventListener("click", (evento) => {
+    if (evento.defaultPrevented) return;
     const enlace = evento.target.closest("a[href]");
     if (!enlace || !cabecera.contains(enlace)) return;
     const url = new URL(enlace.href);
@@ -115,9 +122,24 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   });
   medidas.observe(cabecera);
   const control = {
+    /** El anfitrión conecta estado y markup; el Header no conoce IDs ni fixtures del laboratorio. */
+    conectarCarrito(proveedor, panelResumen) {
+      if (!carrito || miniCarrito) return;
+      miniCarrito = inicializarMiniCarrito(panelResumen, carrito, proveedor);
+      retirarCarrito = proveedor.suscribir(control.actualizarCarrito);
+    },
+    /** El anfitrión aporta suma de unidades; null significa que no hay estado conectado. */
+    actualizarCarrito(datos) {
+      if (!carrito || !conteoCarrito) return;
+      if (datos !== null && (!Number.isSafeInteger(datos?.unidades) || datos.unidades < 0)) throw new TypeError("Contador de carrito inválido.");
+      conteoCarrito.hidden = datos === null;
+      conteoCarrito.textContent = datos === null ? "" : datos.unidades > 99 ? "99+" : String(datos.unidades);
+      carrito.setAttribute("aria-label", datos === null ? "View cart" : `View cart, ${datos.unidades} ${datos.unidades === 1 ? "item" : "items"}`);
+    },
     destruir() {
       if (destruccion) return destruccion;
       destruccion = (async () => {
+        await miniCarrito?.destruir(); retirarCarrito?.();
         if (panel.classList.contains("show") || transicion) {
           await new Promise((resolver) => {
             panel.addEventListener("hidden.bs.offcanvas", resolver, { once: true });
@@ -148,11 +170,14 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
         piePanel.hidden = true;
         contenedor.style.removeProperty("--navegacion-offset");
         cabecera.classList.remove("cl-cabecera--fijada");
+        cabecera.classList.remove("cl-cabecera--con-carrito");
+        control.actualizarCarrito(null);
         inicializados.delete(contenedor);
       })();
       return destruccion;
     },
   };
   inicializados.set(contenedor, control);
+  if (proveedorCarrito && panelCarrito) control.conectarCarrito(proveedorCarrito, panelCarrito);
   return control;
 }

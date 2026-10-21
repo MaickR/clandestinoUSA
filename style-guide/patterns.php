@@ -14,7 +14,7 @@ $paginaGuia = 'patrones';
   <link rel="icon" href="../assets/favicon/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;1,400&amp;family=Playfair+Display:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.new.css">
   <link rel="stylesheet" href="../assets/css/style-guide.css">
 </head>
@@ -24,7 +24,7 @@ $paginaGuia = 'patrones';
     <div class="container">
       <p class="cl-eyebrow">The Clandestino USA</p>
       <h1>Section Patterns</h1>
-      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Explore Waves 1–6; global navigation awaits human visual review.</p>
+      <p class="cl-texto-secundario">Warm, editorial compositions for our table. Explore Waves 1–7; transactional previews await human visual review.</p>
       <?php require __DIR__ . '/partials/navegacion-guia.php'; ?>
       <nav aria-label="On this page">
         <ul class="cl-guia-indice">
@@ -56,6 +56,7 @@ $paginaGuia = 'patrones';
           <li><a class="cl-enlace" href="#wave-4-states">Wave 4 states</a></li>
           <li><a class="cl-enlace" href="#wave-5">Wave 5 · Reviews &amp; reputation</a></li>
           <li><a class="cl-enlace" href="#wave-6">Wave 6 · Global navigation</a></li>
+          <li><a class="cl-enlace" href="#wave-7">Wave 7 · Transactional experiences</a></li>
         </ul>
       </nav>
     </div>
@@ -67,6 +68,7 @@ $paginaGuia = 'patrones';
     <?php require __DIR__ . '/partials/comercial-wave-4.php'; ?>
     <?php require __DIR__ . '/partials/reputacion-wave-5.php'; ?>
     <?php require __DIR__ . '/partials/navegacion-wave-6.php'; ?>
+    <?php require __DIR__ . '/partials/transacciones-wave-7.php'; ?>
   </main>
   <script type="module" src="../assets/js/dist/style-guide.js"></script>
 </body>

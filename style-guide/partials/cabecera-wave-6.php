@@ -32,6 +32,9 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
       </nav>
       <div class="cl-cabecera__panel-pie" data-cl-nav-pie hidden><p class="cl-texto-pequeno">Spanish hospitality in Mount Shasta</p><?php if ($datosContacto['telefono']) : ?><a class="cl-enlace" href="<?= $escaparNavegacion($datosContacto['telefono']['url']) ?>"><?= $escaparNavegacion($datosContacto['telefono']['texto']) ?></a><?php endif; ?></div>
     </div>
+    <?php if (!empty($carritoNavegacion['destino'])) : ?>
+    <a class="cl-boton-icono cl-cabecera__carrito" href="<?= $escaparNavegacion($carritoNavegacion['destino']) ?>" data-cl-nav-carrito aria-label="View cart"><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-pedido"></use></svg><span class="cl-cabecera__contador" data-cl-nav-carrito-conteo aria-hidden="true" hidden></span></a>
+    <?php endif; ?>
     <button class="cl-boton-icono cl-cabecera__cuenta" type="button" data-cl-acceso-abrir aria-label="Sign in" aria-controls="acceso-global" hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-cuenta"></use></svg></button>
     <span class="cl-cabecera__origen" data-cl-nav-origen>
       <button class="cl-boton-icono cl-cabecera__control" type="button" data-cl-nav-control aria-controls="navegacion-global" aria-expanded="false" aria-label="Open main navigation" hidden>

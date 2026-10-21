@@ -1,0 +1,322 @@
+.cl-carrito {
+  .cl-resumen--compacto { margin-block-start: var(--espacio-5); }
+
+  &__aviso { margin-block-start: var(--espacio-5); }
+  &__paginacion { padding-block: var(--espacio-4); }
+
+  &__lineas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__linea {
+    padding-block: var(--espacio-5);
+    border-block-end: 1px solid var(--color-borde);
+  }
+
+  &__articulo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--espacio-4);
+    align-items: start;
+  }
+
+  &__producto {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: var(--espacio-4);
+    align-items: flex-start;
+    min-width: 0;
+  }
+  &__detalle { min-width: 0; }
+
+  &__media {
+    flex: 0 0 var(--espacio-8);
+    aspect-ratio: 1;
+  }
+
+  &__foto {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: var(--radio-md);
+    object-fit: cover;
+
+    &--vino {
+      object-fit: contain;
+      background: var(--color-fondo-alterno);
+    }
+  }
+
+  &__sin-imagen {
+    display: grid;
+    min-height: var(--espacio-8);
+    align-content: center;
+    padding: var(--espacio-2);
+    border: 1px dashed var(--color-borde-fuerte);
+    border-radius: var(--radio-md);
+    color: var(--color-texto-secundario);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  &__nombre {
+    margin-block-end: var(--espacio-2);
+    font-size: 1.5rem;
+  }
+
+  &__unidad,
+  &__disponibilidad {
+    margin-block: var(--espacio-2);
+    color: var(--color-texto-secundario);
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+  }
+  &__disponibilidad { font-size: 0.75rem; }
+
+  &__variantes {
+    max-inline-size: 20rem;
+    margin-block: var(--espacio-3);
+  }
+  &__variantes .cl-campo { font-size: 0.875rem; }
+
+  &__controles {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  &__eliminar {
+    grid-column: 2;
+    place-self: center end;
+  }
+
+  &__importe {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    padding-block-start: var(--espacio-2);
+  }
+
+  &__importe-etiqueta {
+    display: block;
+    color: var(--color-texto-secundario);
+    font-size: 0.75rem;
+  }
+
+  &__precio {
+    display: block;
+    color: var(--color-acento);
+    font-family: var(--fuente-cuerpo);
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @include media-breakpoint-up(md) {
+    &__linea { padding-block: var(--espacio-6); }
+    &__media { flex-basis: var(--espacio-9); }
+    &__producto { grid-column: 1; }
+    &__controles { padding-inline-start: calc(var(--espacio-9) + var(--espacio-4)); }
+
+    &__importe {
+      grid-column: 2;
+      grid-row: 1;
+      max-inline-size: 15ch;
+      padding: 0;
+      text-align: end;
+    }
+    &__precio { font-size: 1.75rem; }
+  }
+}
+
+.cl-resumen {
+  min-width: 0;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde-fuerte);
+  border-radius: var(--radio-md);
+  background: var(--color-fondo);
+  overflow-wrap: anywhere;
+
+  &__conteo { color: var(--color-texto-secundario); }
+  &__importes { margin-block: var(--espacio-5); }
+
+  &__fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--espacio-2) var(--espacio-4);
+    justify-content: space-between;
+    margin-block: var(--espacio-3);
+
+    dt { font-weight: 400; }
+
+    dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  &__total {
+    margin-block: var(--espacio-5);
+    padding-block-start: var(--espacio-4);
+    border-block-start: 1px solid var(--color-borde-fuerte);
+    color: var(--color-acento);
+
+    dt {
+      flex: 1 1 100%;
+      font-size: 0.875rem;
+    }
+
+    dd {
+      font-size: 1.75rem;
+      line-height: 1.3;
+    }
+  }
+
+  &__pendiente {
+    color: var(--color-texto-secundario);
+    font-size: 0.875rem;
+  }
+  &__lineas { padding-inline-start: var(--espacio-5); }
+  &__lineas li { margin-block-end: var(--espacio-3); }
+
+  &__continuar {
+    display: flex;
+    width: 100%;
+    gap: var(--espacio-3);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__promo {
+    padding-block: var(--espacio-4);
+    border-block: 1px solid var(--color-borde);
+  }
+
+  &__codigo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--espacio-3);
+    margin-block: var(--espacio-3);
+
+    .cl-campo {
+      width: 100%;
+    }
+
+    .cl-boton {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+  }
+  &__aplicada { color: var(--color-acento); }
+  &--compacto { padding: var(--espacio-4); }
+
+  summary {
+    min-height: 2.75rem;
+    cursor: pointer;
+  }
+}
+
+// El pie participa del layout; su scroll propio permite operar también con poca altura.
+.cl-mini-carrito {
+  --bs-offcanvas-width: min(28rem, 100vw);
+
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100dvh;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  overflow-wrap: anywhere;
+
+  &__cabecera {
+    display: flex;
+    gap: var(--espacio-4);
+    align-items: start;
+    justify-content: space-between;
+    padding: var(--espacio-5);
+    border-block-end: 1px solid var(--color-borde);
+
+    h2 {
+      margin: 0;
+      font-size: 1.75rem;
+    }
+    .cl-eyebrow { margin-block-end: var(--espacio-2); }
+  }
+
+  &__contenido {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--espacio-5);
+  }
+
+  &__lineas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__linea {
+    display: flex;
+    gap: var(--espacio-3);
+    align-items: start;
+    padding-block: var(--espacio-4);
+    border-block-end: 1px solid var(--color-borde);
+
+    h3 { font-size: 1.25rem; }
+    p { margin-block: var(--espacio-2); }
+
+    .cl-cantidad {
+      display: inline-flex;
+      max-width: 100%;
+      gap: var(--espacio-1);
+    }
+
+    .cl-cantidad__campo {
+      inline-size: 3rem;
+      min-inline-size: 0;
+    }
+  }
+
+  &__detalle {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__foto {
+    width: var(--espacio-7);
+    height: var(--espacio-7);
+    border-radius: var(--radio-md);
+    object-fit: cover;
+
+    &--vino { object-fit: contain; }
+  }
+
+  &__pie {
+    max-height: 50dvh;
+    overflow-y: auto;
+    padding: var(--espacio-4) var(--espacio-5);
+    border-block-start: 1px solid var(--color-borde-fuerte);
+
+    .cl-resumen__importes { margin-block: var(--espacio-3); }
+
+    .cl-resumen__total {
+      margin-block: var(--espacio-3);
+      padding-block-start: var(--espacio-3);
+    }
+    .cl-resumen__total dt { flex-basis: auto; }
+    .cl-resumen__total dd { font-size: 1.25rem; }
+
+    .cl-enlace {
+      display: block;
+      min-height: 2.75rem;
+      padding-block: var(--espacio-3);
+      text-align: center;
+    }
+  }
+}

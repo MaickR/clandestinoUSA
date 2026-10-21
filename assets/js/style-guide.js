@@ -12,11 +12,15 @@ import { inicializarCarrusel } from "./modules/patterns/carrusel.js";
 import { inicializarMediaCarrusel } from "./modules/patterns/carrusel-media.js";
 import { inicializarNavegacion } from "./modules/patterns/navegacion-global.js";
 import { inicializarAcceso } from "./modules/patterns/acceso.js";
+import { inicializarTransaccionesGuia } from "./modules/guia/transacciones.js";
 
 // Los IDs son propios de esta guía; los módulos Core reciben elementos existentes.
 const porId = (id) => document.getElementById(id);
 // Cada página conecta únicamente sus ejemplos; las APIs Core no cambian.
 function inicializarCoreGuia() {
+  for (const boton of document.querySelectorAll("[data-cl-boton-demo]")) boton.addEventListener("click", () => {
+    porId("botones-demo-resultado").textContent = `${boton.dataset.clBotonDemo} button activated — demonstration only. No commercial action took place.`;
+  });
   inicializarCantidad(porId("cantidad-demo"));
   for (const panel of document.querySelectorAll(".cl-acordeon .collapse")) inicializarAcordeon(panel);
   inicializarModal(porId("modal-detalles"), { focoInicial: porId("modal-detalles-cerrar") });
@@ -33,9 +37,9 @@ function inicializarCoreGuia() {
   });
   const botonesToast = [porId("toast-rutina"), porId("toast-persistente"), porId("toast-urgente")];
   const ejemplos = [
-    { mensaje: "Added to your order", variante: "exito" },
-    { mensaje: "Your collection window is held for 10 minutes.", titulo: "Collection notice", persistente: true },
-    { mensaje: "We couldn't confirm availability. Please try again.", variante: "error", urgente: true },
+    { mensaje: "Example selection updated — demonstration only.", variante: "exito" },
+    { mensaje: "Collection details need restaurant confirmation. No window is held.", titulo: "Collection notice · demo", persistente: true },
+    { mensaje: "No orders or reservations can be made from this guide.", titulo: "Important notice · demo", variante: "aviso", urgente: true },
   ];
   for (const [indice, boton] of botonesToast.entries()) {
     boton.addEventListener("click", () => {
@@ -79,6 +83,7 @@ inicializarProductosGuia();
 for (const galeria of document.querySelectorAll("[data-cl-galeria]")) inicializarGaleria(galeria);
 inicializarComercialGuia();
 inicializarResenasGuia();
+inicializarTransaccionesGuia();
 for (const contenedor of document.querySelectorAll("[data-cl-carrusel]")) {
   inicializarCarrusel(contenedor);
   if (contenedor.hasAttribute("data-cl-carrusel-media")) inicializarMediaCarrusel(contenedor);

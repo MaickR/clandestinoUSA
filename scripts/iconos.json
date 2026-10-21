@@ -12,6 +12,7 @@
   { "nombre": "hora", "archivo": "clock" },
   { "nombre": "personas", "archivo": "people" },
   { "nombre": "pedido", "archivo": "bag" },
+  { "nombre": "papelera", "archivo": "trash" },
   { "nombre": "regalo", "archivo": "gift" },
   { "nombre": "sumar", "archivo": "plus-lg" },
   { "nombre": "restar", "archivo": "dash-lg" },

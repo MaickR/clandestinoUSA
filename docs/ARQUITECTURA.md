@@ -99,6 +99,10 @@ Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y con
 
 `patterns/_navegacion-global.scss` y `_pie-global.scss` preparan Header sticky, drawer móvil/tablet, Footer/contacto y extensiones contextuales de breadcrumbs Core. `modules/patterns/navegacion-global.js` usa Bootstrap Offcanvas individual, Collapse para Discover y observers; solo `style-guide.js` lo inicializa. `_acceso.scss` y `modules/patterns/acceso.js` reutilizan Core Modal, campos, carga y alertas para acceso exclusivamente sintético, sin autenticación ni envío de credenciales. `style-guide/navigation.php` es laboratorio aislado, embebido mediante iframe lazy en Patterns y accesible a viewport completo; no es página productiva. Partials PHP comparten mapas de destinos demostrativos y un CTA de reservas sin motor. El logo UI es un derivado optimizado; el original permanece intacto. Contratos de configuración futura, cobertura, datos, QA, performance y pendientes en `SECTION-PATTERN-LIBRARY.md`. Sin cambios en main.js, backend ni páginas legacy; aprobación visual humana pendiente.
 
+### Pattern Library — Wave 7
+
+Tres partials SCSS (`transaccion`, `carrito`, `reserva`) añaden composiciones de operación sobre Foundation/Core. Los módulos `patterns/{transaccion,estado-carrito,carrito,promocion,checkout,reserva}.js` separan estado de compra, presentación y callbacks de contexto; el snapshot versionado alimenta Cart/Order/Payment y el contador optativo de Header Wave6; `modules/guia/transacciones.js` y `transacciones-fixtures.js` conectan exclusivamente el laboratorio desde `style-guide.js`. PHP de referencia en `style-guide/partials/*wave-7.php` y `transacciones-componentes.php`; incluye Header/Footer/acceso Wave 6 existentes. No hay requests comerciales ni persistencia. `main.js` permanece vacío y el build excluye el JS de guía. Contratos futuros y QA en `SECTION-PATTERN-LIBRARY.md` / `WAVE-7-COVERAGE.md`; índice para construir páginas en `DESIGN-SYSTEM-READINESS.md`. La aprobación visual humana sigue pendiente.
+
 ## Objetivo inmediato (futuro)
 
 Wave 6 mantiene partials compartidos de Header/Footer/modal y Topbar opcional. Los datos/rutas de la muestra se concentran en `style-guide/partials/configuracion-wave-6.php` (fixture local, no configuración productiva). El anfitrión futuro aportará configuración central confiable de rutas, contacto/redes y campos opcionales antes de incluir los mismos partials; no se migra ninguna página en esta wave. Topbar no sticky, omitida por defecto; contrato y QA de cierre en `SECTION-PATTERN-LIBRARY.md`.
@@ -134,3 +138,8 @@ flowchart LR
 - Sin Redis, colas ni procesos persistentes (limitación del hosting).
 - PHP: validación de input, escaping de output, CSRF en POST nuevos, importes recalculados en servidor.
 - Los cambios de arquitectura se documentan aquí en el mismo commit que los introduce.
+
+
+### Extensión de comercio Wave7
+
+`patterns/mini-carrito.js` proyecta el proveedor observable de `carrito.js` dentro de Offcanvas; Header recibe proveedor/panel explícitos. `paginacion-carrito.js` separa diez líneas visibles del estado global producto/variante/línea. `horario-servicio.js` concentra lógica civil de configuración por servicio/excepción y `horario-formulario.js` adapta selectores nativos; reservas consume esa misma fuente. Fixtures permanecen en `modules/guia/transacciones-fixtures.js`, sin persistencia ni backend. Contratos y QA del cierre2026-10-21 en `WAVE-7-COVERAGE.md`.
