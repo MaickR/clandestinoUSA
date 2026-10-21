@@ -1,10 +1,12 @@
 import { inicializarCarrito } from "../patterns/carrito.js";
 import { inicializarCheckout } from "../patterns/checkout.js";
 import { inicializarReserva } from "../patterns/reserva.js";
-import { moneda, fechaRestaurante, describirFecha, mostrarResultado, pintarImportes } from "../patterns/transaccion.js";
+import { moneda, describirFecha, mostrarResultado, pintarImportes } from "../patterns/transaccion.js";
+import { inicializarHorarioFormulario } from "../patterns/horario-formulario.js";
+import { validarHorario } from "../patterns/horario-servicio.js";
 import { inicializarBotonCarga } from "../core/boton-carga.js";
 import { inicializarCantidad } from "../core/cantidad.js";
-import { productosEjemplo, estadosEjemplo, coleccionEjemplo, consultarCodigoEjemplo } from "./transacciones-fixtures.js";
+import { productosEjemplo, estadosEjemplo, coleccionEjemplo, consultarCodigoEjemplo, horarioEjemplo, horarioExcepcionEjemplo, horarioEventoEjemplo } from "./transacciones-fixtures.js";
 
 import { inicializarNavegacion } from "../patterns/navegacion-global.js";
 
@@ -28,17 +30,19 @@ function respuesta(dominio, clave, repetible = false) {
   return { ...dato, mensaje: `${dato.mensaje} ${dato.siguiente}`, repetible };
 }
 
-function conectarPedido(raiz, carrito, pago) {
+function conectarPedido(raiz, carrito, pago, configuracion) {
   const zona = raiz.querySelector("[data-cl-pedido-checkout]");
   const checkoutRaiz = zona.querySelector("[data-cl-checkout]");
   const resultado = checkoutRaiz.querySelector("[data-cl-checkout-resultado]");
-  const fecha = porId("w7-pedido-fecha");
   const modalidad = () => checkoutRaiz.querySelector('input[name="w7-modalidad"]:checked').value;
   let pedidoRevisado = null;
   let ultimaVersion = null;
-  fecha.min = fechaRestaurante();
+  const horarios = [
+    ["pickup", "w7-pedido-fecha", "w7-pedido-hora", "[data-cl-pedido-horario-ayuda]"],
+    ["mesa", "w7-visita-fecha", "w7-visita-hora", "[data-cl-visita-horario-ayuda]"],
+  ].map(([servicio, fecha, hora, ayuda]) => inicializarHorarioFormulario({ fecha: porId(fecha), hora: porId(hora), ayuda: checkoutRaiz.querySelector(ayuda), servicio, configuracion, alInvalidar: () => checkout?.invalidar() }));
   const checkout = inicializarCheckout(checkoutRaiz, {
-    prepararValidacion() { fecha.min = fechaRestaurante(); },
+    prepararValidacion() { horarios[modalidad() === "pickup" ? 0 : 1].validar(); },
     revisar() {
       const datos = carrito.resumen();
       if (!datos.valido) {
@@ -46,7 +50,9 @@ function conectarPedido(raiz, carrito, pago) {
         return false;
       }
       const pickup = modalidad() === "pickup";
-      const servicio = pickup ? `Pickup requested: ${describirFecha(fecha.value)} · ${porId("w7-pedido-hora").value}` : `Order ahead / at table · ${porId("w7-pedido-referencia").value || "Reference not provided"}`;
+      const fecha = porId(pickup ? "w7-pedido-fecha" : "w7-visita-fecha");
+      const hora = porId(pickup ? "w7-pedido-hora" : "w7-visita-hora").value;
+      const servicio = `${pickup ? "Pickup requested" : "Order ahead / arranged visit"}: ${describirFecha(fecha.value)} · ${hora}${pickup ? "" : ` · ${porId("w7-pedido-referencia").value || "Reference not provided"}`}`;
       pedidoRevisado = { version: datos.version, servicio,
         contacto: `${porId("w7-pedido-nombre").value} · ${porId("w7-pedido-email").value}` };
       pintarDatos(checkoutRaiz.querySelector("[data-cl-checkout-datos]"), [
@@ -78,10 +84,11 @@ function conectarPedido(raiz, carrito, pago) {
     for (const [selector, visible] of [["[data-cl-pedido-pickup]", pickup], ["[data-cl-pedido-mesa]", !pickup]]) {
       const panel = checkoutRaiz.querySelector(selector);
       panel.hidden = !visible;
-      for (const control of panel.querySelectorAll("input")) control.disabled = !visible;
+      for (const control of panel.querySelectorAll("input, select")) control.disabled = !visible;
     }
     zona.querySelector("[data-cl-pedido-direccion]").hidden = !pickup;
     zona.querySelector("[data-cl-pedido-contexto]").textContent = pickup ? "Pickup preference · service time unconfirmed." : "Order ahead is not a table reservation. Visit and kitchen service unconfirmed.";
+    carrito.modalidad(modalidad());
   }
   for (const campo of checkoutRaiz.querySelectorAll('input[name="w7-modalidad"]')) campo.addEventListener("change", modalidadActual);
   checkoutRaiz.querySelector("[data-cl-escenario]").addEventListener("change", () => checkout.invalidar());
@@ -106,6 +113,7 @@ function conectarPedido(raiz, carrito, pago) {
     zona.scrollIntoView({ block: "start" });
   });
   modalidadActual(); actualizar();
+  return { actualizarConfiguracion() { for (const horario of horarios) horario.actualizarConfiguracion(); checkout.invalidar(); } };
 }
 
 function conectarPago(raiz, carrito) {
@@ -140,7 +148,7 @@ function conectarPago(raiz, carrito) {
       if (carrito.resumen().version !== version) { invalidar(); return; }
       ocupado = false; cerrado = true; carga.establecerCarga(false); simular.disabled = true;
       mostrar(selector.value);
-      consultar.hidden = !["pendiente", "desconocido", "error", "expirado"].includes(selector.value);
+      consultar.hidden = !["pendiente", "desconocido", "error", "expirado", "conciliacion"].includes(selector.value);
       region.focus();
     }, 650);
   });
@@ -158,6 +166,7 @@ function conectarPago(raiz, carrito) {
     invalidar,
     actualizar(datos) {
       invalidar(); pintarImportes(zona, datos);
+      zona.querySelector("[data-cl-pago-lineas]").replaceChildren(...datos.lineas.map((l) => { const item = document.createElement("li"); item.textContent = `${l.cantidad} × ${l.nombre} · ${l.variante} · ${moneda(l.subtotalLinea)}`; return item; }));
       zona.querySelector("[data-cl-pago-referencia]").textContent = `DEMO-PAY-${String(datos.version).padStart(3, "0")} · synthetic reference · not a receipt`;
     },
     habilitar(datos) {
@@ -173,17 +182,18 @@ function conectarCarrito(raiz, carrito) {
   const zona = raiz.querySelector("[data-cl-carrito]");
   const region = zona.querySelector("[data-cl-carrito-mensaje]");
   const cabecera = inicializarNavegacion(raiz);
+  cabecera.conectarCarrito(carrito, raiz.querySelector("[data-cl-mini-carrito]"));
   let temporizador;
-  const actualizarContador = () => cabecera.actualizarCarrito(carrito.resumen());
-  raiz.addEventListener("cl:carrito", actualizarContador); actualizarContador();
   zona.querySelector("[data-cl-carrito-coleccion]").addEventListener("change", (evento) => {
     clearTimeout(temporizador);
     carrito.reemplazarLineas(coleccionEjemplo(Number(evento.target.value)));
     zona.querySelector("[data-cl-escenario]").value = "listo";
-    mostrarResultado(region, "Example collection updated", "Synthetic layout data only. Review every item; the cart is not paginated.");
+    mostrarResultado(region, "Example collection updated", "Synthetic layout data only. Up to ten lines per page; every summary includes all pages.");
   });
   for (const boton of zona.querySelectorAll("[data-cl-agregar]")) boton.addEventListener("click", () => {
-    carrito.agregar(productosEjemplo.find((p) => p.id === boton.dataset.clAgregar));
+    const id = boton.dataset.clAgregar;
+    const base = productosEjemplo.find((p) => p.id === id) ?? productosEjemplo[id === "vino-copa" ? 1 : 0];
+    carrito.agregar({ ...base, id, varianteId: id === "vino-copa" ? "copa" : id === "tabla-cuatro" ? "cuatro" : base.variantes[0].id });
     mostrarResultado(region, "Selection updated", "Your connected summaries now reflect the example selection.");
   });
   zona.querySelector("[data-cl-carrito-reintentar]").addEventListener("click", () => {
@@ -217,7 +227,7 @@ function conectarCarrito(raiz, carrito) {
   });
 }
 
-function conectarReserva(raiz) {
+function conectarReserva(raiz, configuracion) {
   const zona = raiz.querySelector("[data-cl-reserva]");
   const checkoutRaiz = zona.querySelector("[data-cl-checkout]");
   const selector = zona.querySelector("[data-cl-escenario]");
@@ -225,6 +235,7 @@ function conectarReserva(raiz) {
   const detalles = zona.querySelector("[data-cl-reserva-detalles]");
   const ayudaContacto = zona.querySelector("[data-cl-reserva-contacto-ayuda]");
   const reserva = inicializarReserva(zona, {
+    configuracion,
     escenario: () => selector.value,
     alInvalidar() { checkout?.invalidar(); detalles.hidden = true; ayudaContacto.hidden = false; },
     alSeleccionar() { detalles.hidden = false; ayudaContacto.hidden = true; },
@@ -246,10 +257,11 @@ function conectarReserva(raiz) {
       return true;
     },
     resultado() {
+      const datos = reserva.seleccion();
+      if (datos?.grande) return { titulo: "Large group inquiry pending · demo", mensaje: `${datos.personas} guests · ${describirFecha(datos.fecha)}. Capacity, time and table require manual confirmation. Nothing was sent.`, variante: "informacion" };
       if (selector.value === "perdido") { reserva.perderHorario(); return respuesta("reserva", "perdido"); }
       if (selector.value === "error") return respuesta("reserva", "error", true);
       if (selector.value === "pendiente") return respuesta("reserva", "pendiente");
-      const datos = reserva.seleccion();
       return { titulo: "Reservation confirmed · simulation only", mensaje: `DEMO-BOOK-LOCAL · ${describirFecha(datos.fecha)} · ${datos.texto} · ${datos.personas} guests · America/Los_Angeles. No table has been booked.`, variante: "exito" };
     },
   });
@@ -257,6 +269,7 @@ function conectarReserva(raiz) {
     if (["sin-horas", "error"].includes(selector.value)) reserva.perderHorario();
     else checkout.invalidar();
   });
+  return reserva;
 }
 
 function conectarGestion(raiz) {
@@ -303,7 +316,8 @@ function conectarGestion(raiz) {
   });
 }
 
-function conectarComercio(raiz) {
+function conectarComercio(raiz, configuracion) {
+  const invalidarEventos = [];
   for (const zona of raiz.querySelectorAll("[data-cl-comercio]")) {
     const familia = zona.dataset.clComercio;
     const checkoutRaiz = zona.querySelector("[data-cl-checkout]");
@@ -323,6 +337,10 @@ function conectarComercio(raiz) {
           mostrarResultado(region, "Event sold out · demo", "No places are available in this state. Your details remain. Choose another demo outcome to explore registration.", "aviso");
           return false;
         }
+        if (familia === "evento" && !validarHorario(horarioEventoEjemplo.fecha, horarioEventoEjemplo.hora, "evento", configuracion())) {
+          mostrarResultado(region, "Event schedule needs review · demo", "The shared demo schedule does not permit this example event time. No authorized special opening is configured; no place is held.", "aviso");
+          return false;
+        }
         pintarDatos(checkoutRaiz.querySelector("[data-cl-checkout-datos]"), [
           ...datos, ["Example contact email", porId(`w7-${familia}-email`).value],
           ...(familia === "evento" ? [["Attendees", porId("w7-evento-cantidad").value], ["Price / tax / total", "On inquiry · no final amount"]] : []),
@@ -337,6 +355,7 @@ function conectarComercio(raiz) {
         return respuesta(familia, familia === "regalo" ? "emitida" : familia === "club" ? "activacion" : "confirmado");
       },
     });
+    if (familia === "evento") invalidarEventos.push(() => checkout.invalidar());
     zona.querySelector("[data-cl-comercio-importar]").addEventListener("click", () => {
       checkout.invalidar();
       datos = null;
@@ -362,6 +381,7 @@ function conectarComercio(raiz) {
     });
     else selector.addEventListener("change", () => checkout.invalidar());
   }
+  return invalidarEventos;
 }
 
 function conectarEstados(raiz) {
@@ -424,10 +444,17 @@ export function inicializarTransaccionesGuia() {
   const carrito = inicializarCarrito(zonaCarrito, productosEjemplo, { consultarCodigo: consultarCodigoEjemplo });
   conectarCarrito(raiz, carrito);
   const pago = conectarPago(raiz, carrito);
-  conectarPedido(raiz, carrito, pago);
-  conectarReserva(raiz);
+  let horario = horarioEjemplo;
+  const configuracion = () => horario;
+  const pedido = conectarPedido(raiz, carrito, pago, configuracion);
+  const reserva = conectarReserva(raiz, configuracion);
+  raiz.querySelector("[data-cl-horario-config]").addEventListener("change", (evento) => {
+    horario = evento.target.value === "base" ? horarioEjemplo : horarioExcepcionEjemplo;
+    pedido.actualizarConfiguracion(); reserva.actualizarConfiguracion();
+    for (const invalidar of comercios) invalidar();
+  });
   conectarGestion(raiz);
-  conectarComercio(raiz);
+  const comercios = conectarComercio(raiz, configuracion);
   conectarEstados(raiz);
   conectarCuenta(raiz);
   for (const boton of raiz.querySelectorAll("[data-cl-demo-habilitar]")) boton.disabled = false;

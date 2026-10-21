@@ -8,7 +8,7 @@ $campoTransaccion = static function (string $id, string $etiqueta, string $tipo 
       <?php if ($tipo === 'textarea') : ?>
         <textarea class="cl-campo" id="<?= $escaparTransaccion($id) ?>" maxlength="300" rows="3" aria-describedby="<?= $escaparTransaccion($id) ?>-error"<?= $obligatorio ? ' required' : '' ?> <?= $atributos ?>></textarea>
       <?php else : ?>
-        <input class="cl-campo" id="<?= $escaparTransaccion($id) ?>" type="<?= $escaparTransaccion($tipo) ?>" autocomplete="off" aria-describedby="<?= $escaparTransaccion($id) ?>-error"<?= $obligatorio ? ' required' : '' ?> <?= $atributos ?>>
+        <input class="cl-campo" id="<?= $escaparTransaccion($id) ?>" type="<?= $escaparTransaccion($tipo) ?>" <?= str_contains($atributos, 'autocomplete=') ? '' : 'autocomplete="off"' ?> aria-describedby="<?= $escaparTransaccion($id) ?>-error"<?= $obligatorio ? ' required' : '' ?> <?= $atributos ?>>
       <?php endif; ?>
       <p class="cl-mensaje-campo" id="<?= $escaparTransaccion($id) ?>-error" data-cl-error="<?= $escaparTransaccion($id) ?>" hidden></p>
     </div>

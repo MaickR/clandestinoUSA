@@ -76,6 +76,8 @@ export function inicializarCheckout(raiz, { revisar, resultado, prepararValidaci
       ocupado = false;
       carga.establecerCarga(false);
       volver.disabled = false;
+      prepararValidacion();
+      if (!validarFormulario(formulario) || !revisar()) { invalidar(); return; }
       const respuesta = resultado();
       terminado = respuesta.repetible !== true;
       confirmar.disabled = terminado;

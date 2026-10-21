@@ -6,8 +6,10 @@ const mensajes = {
   aplicado: ["Demo code applied", "The synthetic discount is included in every connected summary."],
   invalido: ["Code not recognized · demo", "Check the example code and try again. Your cart is preserved."],
   expirado: ["Code expired · demo", "This synthetic code is outside its example validity period."],
-  "no-elegible": ["Code not eligible · demo", "DEMO10 requires a valid example selection of at least $50. No discount has been applied."],
+  "no-elegible": ["Code not eligible · demo", "DEMO10 requires a valid example selection of at least $50. This check did not change any existing discount."],
   "ya-aplicado": ["Code already applied", "Your example discount is already included. It has not been applied twice."],
+  "otro-codigo-activo": ["One code per order", "Remove your current example code before applying a different one."],
+  "ya-canjeado": ["Already redeemed by this customer · demo", "This synthetic campaign allows one redemption per verified customer. No customer history was checked."],
   error: ["Code could not be checked · demo", "Your selection and any existing discount are preserved. Try Apply again."],
   retirado: ["Demo code removed", "Every connected summary now shows the amount without that discount."],
 };

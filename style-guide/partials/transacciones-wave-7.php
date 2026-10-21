@@ -31,6 +31,9 @@
   $descripcionPie = 'Spanish hospitality, from the first invitation to the details of your visit. Local demonstration only.';
   require __DIR__ . '/acceso-wave-6.php';
   require __DIR__ . '/cabecera-wave-6.php';
+  ?>
+  <div class="container"><details class="cl-guia-demo"><summary>Shared demo hours · configuration</summary><p>Demo reference only: Mon–Tue closed; Wed–Sun 2–8 PM, America/Los_Angeles. Intervals, cutoffs, lead time and duration are synthetic and require owner confirmation before publication.</p><label class="cl-etiqueta" for="w7-horario-config">Schedule fixture</label><select class="cl-campo" id="w7-horario-config" data-cl-horario-config><option value="base">Base demo hours</option><option value="excepcion">Synthetic exceptions: May 18, 2028 closed; May 19, 4–6 PM</option></select></details></div>
+  <?php
   require __DIR__ . '/carrito-checkout-wave-7.php';
   require __DIR__ . '/reservas-wave-7.php';
   require __DIR__ . '/comercio-wave-7.php';

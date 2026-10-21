@@ -73,3 +73,12 @@ Para integrar una página: adaptar datos servidor al contrato documentado, usar 
 Reservas presenta comensales→fecha→búsqueda→horario→contacto→revisión. Los radios señalan selección/indisponibilidad con texto, y el contacto se conserva ante pérdida del horario. Mantener esta distinción al conectar el motor existente; no confundir pickup ni order ahead con reserva.
 
 Regresión local de invariantes: `node scripts/probar-carrito.mjs`. QA y performance del refinamiento, incluidas limitaciones y aprobación humana pendiente: `WAVE-7-COVERAGE.md`. El frontend está preparado para composición e integración; proveedores, términos, disponibilidad, recepción y permisos siguen siendo dependencias futuras.
+
+
+## Cierre de comercio de Wave7 — 2026-10-21
+
+El carrito distingue producto/variante/línea, admite presentaciones simultáneas, paginas de diez líneas y un mini-cart Offcanvas conectado al Header mediante proveedor observable. Cantidades/importes/descuentos se comparten con Order/Payment. Quantity conserva su etiqueta accesible; Apply100% es contextual. El Header independiente sin carrito conserva su contrato Wave6.
+
+Pickup, Order Ahead, reservas y revisión de Events comparten configuración de horarios inyectada con excepciones y reglas por servicio. La referencia DEMO es miércoles–domingo14:00–20:00, lunes/martes cerrados, America/Los_Angeles; el propietario debe confirmar datos y cortes antes de publicar. Reserva ofrece1–10 y consulta mayor de10 sin asumir capacidad. Payment conserva método no disponible y resultados separados del servicio, con conciliación explícita. Gift/Club no heredan cupones de carrito; redención por cliente necesita identidad y canje atómico en backend.
+
+Contratos detallados y límites, pruebas ejecutadas/no ejecutadas, performance y capturas: `WAVE-7-COVERAGE.md`, cierre2026-10-21. Lógica local comprobable con `node scripts/probar-carrito.mjs` y `node scripts/probar-cierre-comercio.mjs`. Sin backend ni publicación; aprobación visual final pendiente.

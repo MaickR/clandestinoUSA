@@ -1,19 +1,35 @@
 // Datos sintéticos exclusivos de Style Guide; nunca importar desde una página productiva.
 export const productosEjemplo = [
-  { id: "tabla", productoId: "tabla", nombre: "Cheese & charcuterie board", descripcion: "Sharing board · example portion", variante: "Board", precio: 3600, maximo: 6,
+  { id: "tabla", productoId: "tabla", nombre: "Cheese & charcuterie board", descripcion: "Presentation is the board size; quantity is the number of boards. Demo only.", precio: 3600, maximo: 6,
+    variantes: [{ id: "dos", nombre: "Board for Two · demo", precio: 3600 }, { id: "cuatro", nombre: "Board for Four · demo", precio: 6400 }],
     imagen: "/assets/images/webp/gallery/tapas/the-clandestino-tapas-6.webp", alt: "Sharing board with cheese and cured meats" },
   { id: "vino", productoId: "pure-soul", nombre: "PURE SOUL", descripcion: "Photographed label · vintage unconfirmed", precio: 4500, maximo: 6, tipo: "vino", restringido: true,
     imagen: "/assets/images/webp/wines/PURE-SOUL.webp", alt: "PURE SOUL wine bottles",
-    variantes: [{ id: "botella", nombre: "Bottle · size unconfirmed", precio: 4500 }, { id: "copa", nombre: "Glass · size unconfirmed", precio: 1200 }] },
+    variantes: [{ id: "botella", nombre: "Bottle · size unconfirmed", precio: 4500, modalidades: ["pickup", "mesa"] }, { id: "copa", nombre: "Glass · at table only in demo", precio: 1200, modalidades: ["mesa"] }] },
 ];
+
+// Referencia DEMO solicitada. Intervalos, duración, corte y excepción son sintéticos, no políticas vigentes.
+export const horarioEjemplo = {
+  version: "demo-1", zona: "America/Los_Angeles",
+  semana: [0, 1, 2, 3, 4, 5, 6].map((dia) => [1, 2].includes(dia) ? null : { desde: "14:00", hasta: "20:00" }),
+  servicios: {
+    pickup: { intervalo: 30, anticipacion: 30, ultima: "19:30" },
+    mesa: { intervalo: 30, anticipacion: 30, duracion: 60, ultima: "19:00" },
+    reserva: { intervalo: 30, anticipacion: 30, duracion: 60, ultima: "19:00" },
+    evento: { intervalo: 30, duracion: 120, ultima: "18:00" },
+  },
+  excepciones: {},
+};
+export const horarioExcepcionEjemplo = { ...horarioEjemplo, version: "demo-2", excepciones: { "2028-05-18": { apertura: null }, "2028-05-19": { apertura: { desde: "16:00", hasta: "18:00" } } } };
+export const horarioEventoEjemplo = { fecha: "2028-05-18", hora: "18:00" };
 
 /** Se generan solo al elegir el control de estrés; la muestra principal conserva dos líneas. */
 export function coleccionEjemplo(cantidad) {
-  if (![1, 2, 8, 20, 40].includes(cantidad)) throw new RangeError("Colección demo desconocida.");
+  if (![1, 2, 8, 10, 11, 20, 40].includes(cantidad)) throw new RangeError("Colección demo desconocida.");
   if (cantidad <= 2) return productosEjemplo.slice(0, cantidad).map((p) => ({ ...p }));
   return Array.from({ length: cantidad }, (_, indice) => {
     const base = productosEjemplo[indice % 2];
-    return { ...base, id: `muestra-${indice + 1}`, cantidad: cantidad >= 20 ? 3 : 1,
+    return { ...base, id: `muestra-${indice + 1}`, productoId: `producto-layout-${indice + 1}`, cantidad: cantidad >= 20 ? 3 : 1,
       nombre: indice % 7 === 0 ? `A generously named sharing selection with an exceptionallylongdemonstrationproductname · layout ${indice + 1}` : `${base.nombre} · layout ${indice + 1}`,
       imagen: indice % 5 === 4 ? null : base.imagen,
       ...(indice % 13 === 7 ? { precio: 123456789, variantes: [], varianteId: null, descripcion: "Large amount stress · entirely synthetic" } : {}),
@@ -26,7 +42,7 @@ export function consultarCodigoEjemplo(codigo, datos, { signal }) {
   return new Promise((resolver) => {
     if (signal.aborted) { resolver({ estado: "cancelado" }); return; }
     const temporizador = window.setTimeout(() => {
-      const estados = { "DEMO-EXPIRED": "expirado", "DEMO-INELIGIBLE": "no-elegible", "DEMO-ERROR": "error" };
+      const estados = { "DEMO-EXPIRED": "expirado", "DEMO-INELIGIBLE": "no-elegible", "DEMO-ERROR": "error", "DEMO-REDEEMED": "ya-canjeado" };
       const estado = codigo === "DEMO10" ? (datos.valido && datos.subtotal >= 5000 ? "aplicado" : "no-elegible") : estados[codigo] ?? "invalido";
       resolver({ estado, descuento: { codigo, importe: 1000, minimo: 5000 } });
     }, 500);
@@ -58,6 +74,7 @@ export const estadosEjemplo = {
     error: estado("Payment service unavailable · demo", "The preview could not complete. The outcome needs verification.", "Check the operation result before attempting another payment.", "error"),
     desconocido: estado("Payment result unknown · demo", "A timeout does not establish whether a charge succeeded.", "Check the existing operation. Do not pay again while its result is unknown.", "aviso"),
     recuperacion: estado("Payment result recovered · demo", "This fictional lookup reports an approved example. It does not repeat a charge.", "Review the example receipt and separate fulfillment status.", "exito"),
+    conciliacion: estado("Reconciliation required · demo", "The provider result and operation record need reconciliation. No payment is retried.", "Check the existing operation with the future service before another authorization.", "aviso"),
   } },
   reserva: { nombre: "Reservation & booking management", destino: "#w7-reserva", referencia: "DEMO-BOOK-001", estados: {
     inicial: estado("Plan your visit", "Choose guests and a restaurant local date.", "Explore example times."),

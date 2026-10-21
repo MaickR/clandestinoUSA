@@ -13,7 +13,7 @@ function normalizar(productos) {
     ids.add(producto.id);
     const cantidad = producto.cantidad ?? 1;
     if (!Number.isSafeInteger(cantidad) || cantidad < 1 || cantidad > producto.maximo) throw new RangeError("Cantidad inicial inválida.");
-    const variantes = (producto.variantes ?? []).map((variante) => ({ ...variante }));
+    const variantes = (producto.variantes ?? []).map((variante) => ({ ...variante, ...(variante.modalidades ? { modalidades: [...variante.modalidades] } : {}) }));
     const idsVariantes = new Set();
     for (const variante of variantes) {
       if (typeof variante.id !== "string" || !/^[a-zA-Z0-9_-]+$/.test(variante.id) || idsVariantes.has(variante.id) ||
@@ -27,11 +27,16 @@ function normalizar(productos) {
     if (variantes.length && !seleccion) throw new TypeError("La variante seleccionada no existe.");
     if (producto.imagen && (!/^\/assets\/images\/[a-zA-Z0-9_./-]+$/.test(producto.imagen) || producto.imagen.includes(".."))) throw new TypeError("La imagen debe ser un recurso local confiable.");
     if (producto.disponible !== undefined && typeof producto.disponible !== "boolean") throw new TypeError("Disponibilidad inválida.");
-    return { ...producto, cantidad, variantes, varianteId, precio: seleccion?.precio ?? producto.precio,
+    const productoId = producto.productoId ?? producto.id;
+    if (typeof productoId !== "string" || !/^[a-zA-Z0-9_-]+$/.test(productoId)) throw new TypeError("Identidad de producto inválida.");
+    for (const dato of [producto, ...variantes]) {
+      if (dato.modalidades != null && (!Array.isArray(dato.modalidades) || dato.modalidades.some((m) => !["pickup", "mesa"].includes(m)))) throw new TypeError("Modalidades inválidas.");
+    }
+    return { ...producto, productoId, modalidades: producto.modalidades ? [...producto.modalidades] : null, cantidad, variantes, varianteId, precio: seleccion?.precio ?? producto.precio,
       variante: seleccion?.nombre ?? producto.variante ?? "", disponible: producto.disponible !== false, presente: true };
   });
   const maximo = lineas.reduce((suma, l) => suma + Math.max(l.precio, ...l.variantes.map((v) => v.precio)) * l.maximo, 0);
-  if (!Number.isSafeInteger(maximo)) throw new RangeError("Los límites de importe exceden el rango seguro.");
+  if (!Number.isSafeInteger(maximo) || !Number.isSafeInteger(lineas.reduce((s, l) => s + l.maximo, 0))) throw new RangeError("Los límites exceden el rango seguro.");
   return lineas;
 }
 
@@ -42,6 +47,7 @@ export function crearEstadoCarrito(productos = []) {
   let descuento = null;
   let promocionEstado = "sin-codigo";
   let version = 0;
+  let modalidad = null;
   const invalidas = new Set();
   const buscar = (id) => {
     const linea = lineas.find((l) => l.id === id);
@@ -65,11 +71,15 @@ export function crearEstadoCarrito(productos = []) {
     resumen() {
       const activas = lineas.filter((l) => l.presente);
       const importe = subtotal();
-      return { version, estado, moneda: "USD", lineas: activas.map((l) => ({ ...l, subtotalLinea: l.precio * l.cantidad, variantes: l.variantes.map((v) => ({ ...v })) })),
+      const elegible = (l) => {
+        const permitidas = l.variantes.find((v) => v.id === l.varianteId)?.modalidades ?? l.modalidades;
+        return !modalidad || !permitidas || permitidas.includes(modalidad);
+      };
+      return { version, estado, modalidad, moneda: "USD", lineas: activas.map((l) => ({ ...l, modalidades: l.modalidades ? [...l.modalidades] : null, elegible: elegible(l), cantidadValida: !invalidas.has(l.id), subtotalLinea: l.precio * l.cantidad, variantes: l.variantes.map((v) => ({ ...v, ...(v.modalidades ? { modalidades: [...v.modalidades] } : {}) })) })),
         unidades: activas.reduce((suma, l) => suma + l.cantidad, 0), subtotal: importe,
         descuento: descuento?.importe ?? 0, codigo: descuento?.codigo ?? null, promocionEstado,
         subtotalAjustado: importe - (descuento?.importe ?? 0), impuestos: null, cargos: null, total: null,
-        valido: activas.length > 0 && estado === "listo" && activas.every((l) => l.disponible && !invalidas.has(l.id)) };
+        valido: activas.length > 0 && estado === "listo" && activas.every((l) => l.disponible && elegible(l) && !invalidas.has(l.id)) };
     },
     reemplazar(nuevas) {
       const validadas = normalizar(nuevas);
@@ -79,16 +89,25 @@ export function crearEstadoCarrito(productos = []) {
       lineas = validadas; estado = "listo"; invalidas.clear(); cambiar();
     },
     agregar(producto) {
-      const existente = lineas.find((l) => l.id === producto.id);
+      const nueva = normalizar([producto])[0];
+      const existente = lineas.find((l) => l.productoId === nueva.productoId && l.varianteId === nueva.varianteId);
       if (existente) {
-        if (existente.presente) existente.cantidad = Math.min(existente.maximo, existente.cantidad + 1);
+        if (existente.precio !== nueva.precio || existente.maximo !== nueva.maximo) throw new TypeError("Reprecio requerido antes de fusionar líneas.");
+        if (existente.presente) existente.cantidad = Math.min(existente.maximo, existente.cantidad + nueva.cantidad);
         existente.presente = true;
         invalidas.delete(existente.id);
       } else {
-        normalizar([...lineas, producto]);
-        lineas.push(...normalizar([producto]));
+        if (lineas.some((l) => l.id === nueva.id)) {
+          const prefijo = `${nueva.id}-${nueva.varianteId ?? "base"}`;
+          let indice = 1;
+          while (lineas.some((l) => l.id === `${prefijo}-${indice}`)) indice += 1;
+          nueva.id = `${prefijo}-${indice}`;
+        }
+        normalizar([...lineas, nueva]);
+        lineas.push(nueva);
       }
       cambiar();
+      return existente?.id ?? nueva.id;
     },
     cantidad(id, valor) {
       const linea = buscar(id);
@@ -103,6 +122,10 @@ export function crearEstadoCarrito(productos = []) {
       const variante = linea.variantes.find((v) => v.id === varianteId);
       if (!variante) throw new TypeError("Variante desconocida.");
       linea.varianteId = varianteId; linea.variante = variante.nombre; linea.precio = variante.precio; cambiar();
+    },
+    modalidad(valor) {
+      if (valor !== null && !["pickup", "mesa"].includes(valor)) throw new TypeError("Modalidad desconocida.");
+      if (valor !== modalidad) { modalidad = valor; cambiar(); }
     },
     eliminar(id) { buscar(id).presente = false; invalidas.delete(id); cambiar(); },
     restaurar(id) { buscar(id).presente = true; cambiar(); },
@@ -120,6 +143,7 @@ export function crearEstadoCarrito(productos = []) {
         throw new TypeError("Descuento inválido: código e importes enteros requeridos.");
       }
       if (descuento?.codigo === dato.codigo) return "ya-aplicado";
+      if (descuento) return "otro-codigo-activo";
       if (!api.resumen().valido || subtotal() < dato.minimo || subtotal() < dato.importe) return "no-elegible";
       descuento = { codigo: dato.codigo, importe: dato.importe, minimo: dato.minimo };
       promocionEstado = "aplicado"; cambiar();

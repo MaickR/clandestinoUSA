@@ -1,10 +1,11 @@
 import Collapse from "bootstrap/js/src/collapse.js";
 import Offcanvas from "bootstrap/js/src/offcanvas.js";
+import { inicializarMiniCarrito } from "./mini-carrito.js";
 
 const inicializados = new WeakMap();
 
 /** Un único árbol responsive; Bootstrap conserva trap, backdrop, Escape y scroll. */
-export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
+export function inicializarNavegacion(contenedor, { raizScroll = null, proveedorCarrito = null, panelCarrito = null } = {}) {
   if (!(contenedor instanceof HTMLElement)) throw new TypeError("Se requiere un contenedor de navegación.");
   if (inicializados.has(contenedor)) return inicializados.get(contenedor);
   const buscar = (nombre) => contenedor.querySelector(`[data-cl-${nombre}]`);
@@ -39,6 +40,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   let cerrarPendiente = false;
   let destinoPendiente = null;
   let destruccion = null;
+  let miniCarrito = null;
+  let retirarCarrito = null;
   function cerrar() {
     if (transicion) cerrarPendiente = true;
     else drawer.hide();
@@ -92,6 +95,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
     }
   }, { ...opciones, capture: true });
   cabecera.addEventListener("click", (evento) => {
+    if (evento.defaultPrevented) return;
     const enlace = evento.target.closest("a[href]");
     if (!enlace || !cabecera.contains(enlace)) return;
     const url = new URL(enlace.href);
@@ -118,6 +122,12 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
   });
   medidas.observe(cabecera);
   const control = {
+    /** El anfitrión conecta estado y markup; el Header no conoce IDs ni fixtures del laboratorio. */
+    conectarCarrito(proveedor, panelResumen) {
+      if (!carrito || miniCarrito) return;
+      miniCarrito = inicializarMiniCarrito(panelResumen, carrito, proveedor);
+      retirarCarrito = proveedor.suscribir(control.actualizarCarrito);
+    },
     /** El anfitrión aporta suma de unidades; null significa que no hay estado conectado. */
     actualizarCarrito(datos) {
       if (!carrito || !conteoCarrito) return;
@@ -129,6 +139,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
     destruir() {
       if (destruccion) return destruccion;
       destruccion = (async () => {
+        await miniCarrito?.destruir(); retirarCarrito?.();
         if (panel.classList.contains("show") || transicion) {
           await new Promise((resolver) => {
             panel.addEventListener("hidden.bs.offcanvas", resolver, { once: true });
@@ -167,5 +178,6 @@ export function inicializarNavegacion(contenedor, { raizScroll = null } = {}) {
     },
   };
   inicializados.set(contenedor, control);
+  if (proveedorCarrito && panelCarrito) control.conectarCarrito(proveedorCarrito, panelCarrito);
   return control;
 }

@@ -224,3 +224,90 @@ Modificados: `assets/js/modules/patterns/{carrito,checkout,reserva,transaccion,n
 Inspección artística: fotografía auténtica, tipografía Foundation y superficies cálidas; precios escaneables con prioridad contextual, subtotal no confundido con cargo final, papelera discreta y CTA evidente. Resumen móvil y tablet legibles; reserva con pasos naturales, slots claros y menos notas técnicas repetidas. Se corrigieron horarios estrechos en tablet y separación de resúmenes tras revisar capturas. Pickup/mesa/reserva y pago/aceptación/emisión/activación conservan significados distintos. No hay rediseño de Gift/Club/Event ni Footer, ni pantallas que aparenten cobrar o reservar sin servicio.
 
 WAVE 7 REFINED — WAITING FOR FINAL VISUAL APPROVAL
+
+
+## Cierre de comercio — 2026-10-21
+
+Este cierre parte de `567cf7d`, en `feature/ui-section-patterns-wave-7`, con árbol limpio, fetch y sincronización 0/0 con origin. `origin/develop` y la integración de Wave6 (`9513e52`) son ancestros. `production-baseline` no contiene este laboratorio; no se modifican páginas desplegadas. Se conserva la composición aprobada, Foundation/Core y Waves1–6. Sin rama nueva, PR, merge, force push o deploy.
+
+### Auditoría y resolución
+
+| Hallazgo comprobado | Resolución |
+|---|---|
+| Agregar dependía de un ID que podía confundir producto y línea | `productoId` + `varianteId` definen equivalencia; `id` identifica la línea. Coexisten Bottle/Glass y Board for Two/Four |
+| Header solo llevaba al ancla | Mini-cart Bootstrap Offcanvas conectado al mismo proveedor observable; sin IDs del laboratorio en Header |
+| Colección extensa sin páginas | Proyección local de diez líneas, independiente del modelo global; páginas1/2/4 para8/20/40 |
+| Horarios de reserva estáticos y pickup libre | Configuración compartida inyectada, reloj civil de Los Ángeles, selectores derivados y revalidación en revisión/confirmación |
+| Fixture de hasta seis invitados | Opciones1–10 y consulta de grupo mayor de10, con cantidad entera y confirmación manual pendiente |
+| Apply contextual estrecho y teléfono próximo a la fila anterior | Apply ocupa100% y centra texto; ritmo mediante el token de espacio5, sin alterar Core |
+
+### Contratos frontend vigentes
+
+- `estado-carrito.js`: `id` estable por línea, `productoId`, `varianteId`, cantidad y precio entero de variante. Cambiar presentación conserva la línea y no modifica otra. `agregar` fusiona solo producto/variante equivalentes con precio/límite coherentes; si un ID quedó ocupado por otra presentación crea otro ID local. Un reprecio inconsistente falla antes de fusionar. Undo conserva orden/cantidad/variante. No hay motor de modificadores: su incorporación futura deberá extender explícitamente la equivalencia.
+- Elegibilidad local: `modalidades` en producto o variante, `modalidad('pickup'|'mesa'|null)`, `elegible` y `cantidadValida` por línea. Glass es exclusivamente mesa en la fixture; Bottle admite ambas modalidades solo para explorar el frontend. No se verifica normativa, edad ni autorización real de alcohol. Board for Four describe la presentación; cantidad2 son dos tablas de esa presentación. Precios y tamaños de ejemplo no son oferta vigente.
+- `carrito.js`: extiende API con `suscribir(callback) → retirar`, `cantidad`, `variante`, `eliminar`, `restaurar`, `modalidad` y `continuar`. Todas las vistas consumen snapshots, no precios del DOM. Las etiquetas Quantity permanecen asociadas y visualmente ocultas; los nombres accesibles incluyen producto/presentación y se actualizan al cambiar variante.
+- `paginarCarrito(total,pagina)` devuelve límites de una proyección de diez líneas. El modelo nunca pierde productos fuera de página; subtotal, descuentos y unidades siempre son globales. Navegar no cambia la versión comercial ni invalida Review. Se acota la última página al eliminar; Undo lleva a la página de la línea restaurada y enfoca su cantidad. Previous/Next semánticos con disabled en extremos, lista enfocada y un anuncio por navegación.
+- Header: extensión compatible `conectarCarrito(proveedor,panel)` o parámetros iniciales `proveedorCarrito`/`panelCarrito`. `actualizarCarrito` sigue disponible. Sin conexión conserva el enlace neutral; sin ruta no aparece carrito. Badge99+ mantiene el número completo en el nombre accesible.
+- `mini-carrito.js`: Offcanvas derecho de28rem como máximo, adaptado al viewport; cabecera/cierre, cuerpo desplazable y pie sin superposición. Primeras tres líneas con imagen opcional, presentación, cantidad Core, subtotal de línea, disponibilidad, eliminar y Undo. Importes globales, View Cart y Continue to Checkout. Click es el único disparador de apertura: evita aperturas accidentales por hover y conserva un único recorrido táctil/teclado. Bootstrap aporta trap/backdrop/Escape/scroll lock. Un guard en captura espera el cierre del overlay anterior antes de abrir carrito, navegación o acceso; los destinos reciben foco después de hidden. `destruir()` espera el cierre, aborta eventos, retira suscripción y dispone Bootstrap; Header conserva limpieza de observers.
+- Promoción: un código activo por pedido; el mismo no se acumula y otro requiere retirar el anterior. DEMO10 mantiene la regla1000 centavos con mínimo5000. DEMO-REDEEMED añade redención histórica sintética; DEMO-EXPIRED/INELIGIBLE/ERROR y cualquier código inválido conservan la selección y descuentos previos. Respuestas tardías se abortan/rechazan por versión. Apply es contextual, no un cambio global de botón.
+- Horario: `horario-servicio.js` es lógica pura; `horario-formulario.js` adapta fecha/select nativos. Configuración con `version`, `zona`, `semana`, `excepciones` por fecha y `servicios` habilitados, intervalo, anticipación, duración y última hora. Se valida fecha civil real/pasada, reloj del restaurante, cierre exclusivo, corte, duración y hora anterior al momento local. No convierte una fecha civil según timezone del dispositivo. La autoridad de instantes UTC, ambigüedad DST, concurrencia/capacidad y disponibilidad es del servidor.
+- Fixture única `horarioEjemplo`: America/Los_Angeles; lunes/martes cerrados; miércoles–domingo14:00–20:00. Solo la referencia solicitada para DEMO. Reglas sintéticas: pasos30min; pickup/mesa/reserva anticipación30min; última recogida19:30; mesa/reserva duración60min y última entrada19:00. Evento hipotético existente de18:00–20:00 utiliza duración120min. Excepciones exclusivamente sintéticas activables:18mayo2028 cerrado y19mayo16:00–18:00; nunca se presentan como eventos o cierres publicados. El cierre exclusivo evita ofrecer18:00 para recogida en esa jornada especial. Sin duplicación de cálculo por formulario; Header/Footer no publican horas demo.
+- Pickup: cambiar fecha limpia hora, informa cierre o ventanas derivadas y conserva contacto. Revisión y confirmación recalculan opciones vigentes; un cambio de configuración invalida la selección y Payment. Teléfono opcional, tipos/autocomplete de contacto y espaciado contextual. No se captura/envía/almacena información personal mediante servicios.
+- Order Ahead: fecha/hora contextual según servicio mesa y referencia opcional de visita acordada; no crea reserva, asigna mesa ni implica aceptación de cocina. Una copa demo no puede pasar a pickup. Los campos inactivos permanecen deshabilitados y conservan sus valores.
+- Reserva: configuración común, radios de horas generadas y revalidación; cambio de fecha, comensales o configuración invalida selección y Review, preservando contacto. Opciones1–10 son una fixture, no capacidad verificada. Large group solicita entero mayor de10 y contacto/preferencias mediante el mismo checkout: siempre Inquiry pending, incluso si el escenario normal dice confirmed demo. No hay horario ni mesa reservados para el grupo. Booking-app-php permanece intacto.
+- Payment: revisar carrito → datos/modalidad → revisión → método habilitado por proveedor → autorización segura → procesamiento → resultado → confirmación de servicio independiente. La demo no tiene método activo ni captura PAN/CVV. Muestra productos/presentaciones/cantidades, descuento, referencia sintética y tax/cargos/total sin confirmar. Cambios comerciales invalidan contexto/timer; procesamiento y duplicados bloqueados. Conserva pending/approved demo/declined/unknown/expired/error/recuperación y añade reconciliation required. Reset cambia solo la simulación, nunca reintenta un cobro.
+- Gift/Wine Club mantienen selección/importación/revisión, sin descuentos generales heredados. La revisión de Events comprueba fecha/hora explícita contra la configuración común: una excepción de cierre bloquea la revisión si no existe apertura especial autorizada. Private Experiences sigue siendo consulta, no reserva. Los58 estados previos permanecen; el explorador tiene59 por la incorporación justificada de conciliación. Empty/loading/inválido/no disponible/cantidad/eliminación/Undo/resumen no disponible y listo se exploran en el mismo drawer; paginación, cierre y grupo grande se prueban en sus recorridos, sin inflar el catálogo.
+
+### Dependencias comerciales y backend
+
+| Dominio | Pendiente real antes de publicar |
+|---|---|
+| Catálogo/cart | Presentaciones, precios/versiones, moneda, inventario, elegibilidad por modalidad y alcohol, repricing e importes autoritativos |
+| Promociones | Campaña/código/configuración de elegibilidad; límites por pedido y cliente verificado; historial de redenciones y estado de pago; reserva/canje/reversión en cancelación; concurrencia y verificación atómica. No todos los códigos son de un uso. Guest checkout necesita política de identidad definida; email no verificado, cookies/localStorage no acreditan al cliente |
+| Horarios | Propietario confirma horario vigente, excepciones y reglas por servicio. Servidor entrega configuración/versionado, recalcula fecha/hora/zona/instante, lead time, duración, corte y disponibilidad; frontend disabled no autoriza una operación. Eventos extraordinarios requieren programación y autorización explícitas |
+| Pedido/Order Ahead | Validar visita/referencia cuando corresponda, stock/preparación/recogida, contacto mínimo, aceptación y notificación; no confundir recepción con aceptación/listo |
+| Reserva/grupo grande | Adaptar motor, capacidad y concurrencia; duración y último inicio autorizados; evaluación manual para grupos. Identidad/autorización de gestión y políticas de cambio/cancelación |
+| Payment | Seleccionar proveedor; lista de métodos habilitados `{id,etiqueta,habilitado,motivo}` y sesión hospedada/elementos seguros. Backend calcula total final e importe/moneda, idempotencia, resultado/conciliación y webhooks verificados. Timeout no prueba fallo; consultar la operación existente antes de repetir. Pago no implica pedido aceptado, recogida lista, reserva confirmada, Gift emitida o club activo |
+| Gift / Club / Events / Private | Términos/emisión/redención/entrega; precio/cadencia/renovación; evento/cupos/registro; evaluación/propuesta/acuerdo, respectivamente. Autorización por titular, CSRF en futuras mutaciones, escaping, prepared statements y transacciones cuando exista backend |
+
+No hay backend, esquema MySQL, APIs comerciales, cookies de usuario, persistencia, pago, reserva, mensajes ni solicitudes reales. No se añadieron dependencias, imágenes originales ni iconos. Fixtures aisladas en guía; `main.js` sigue vacío. DOM seguro mediante plantilla/createElement/textContent, validación de identidades/recursos locales, snapshots copiados e importes enteros seguros. Inicializadores idempotentes y limpieza de módulos compartidos; la orquestación y timers de demo pertenecen exclusivamente al laboratorio.
+
+### Pruebas ejecutadas en este cierre
+
+Skill qa-visual; Chromium integrado. Evidencia fuera del repositorio: `C:/Users/Mike/.codex/visualizations/2026/10/21/01a15601-3a20-7b21-a875-71755abbaabb/wave-7-closure/`. JSON funcional/responsive/accessibility/estados/recursos, HTML y capturas. Algunas capturas muestran parte de la sección anterior por el scroll; las capturas finales de drawer son la referencia para su aprobación.
+
+| Verificación | Resultado |
+|---|---|
+| `npm run lint`, `npm run build`, PHP lint y `git diff --check` | PASS; dev restablecido para revisión local |
+| `node scripts/probar-carrito.mjs` | PASS: invariantes, cantidad/variante/importes, descuento, datos inválidos atómicos, snapshots, colecciones y59 estados |
+| `node scripts/probar-cierre-comercio.mjs` | PASS: líneas simultáneas/equivalencia/reprecio/Undo/modalidad, un código activo, páginas globales y extremos; lunes/martes cerrados, miércoles/domingo abiertos, hora fuera de apertura/cierre/pasada, fecha pasada/inexistente, excepción/cambio, reloj LA y cambios DST de marzo/noviembre2028; grupos1/6/10/11/15 e inválidos |
+| Responsive carrito | PASS:70 combinaciones de1/2/8/10/11/20/40 líneas ×320/360/390/425/768/820/992/1024/1280/1440px, hasta diez líneas visibles, sin overflow horizontal |
+| Mini-cart / grupo grande | PASS: diez anchos cada uno; mini320×568 con scroll interno y pie accesible; targets comprobados ≥44px; primerastres de40, badge99+ y nombre completo120 |
+| Paginación / sincronización | PASS: página intermedia y última, eliminar última línea de página2 con11, página válida, Undo vuelve a página2 y enfoca cantidad; cambio de cantidad en mini actualiza todas las vistas; variantes simultáneas y copa bloqueada en pickup |
+| Promoción | PASS: aplicado, duplicado, inválido, expirado, ineligible, fallo y redeemed sintético; descuentos previos preservados; Apply100% y centrado a320/390/768/1280 |
+| Horario / pedido / reserva | PASS: lunes y martes cerrados sin horas; pickup/mesa revisados con fecha abierta; excepción invalida ambas selecciones, conserva contacto y bloquea evento;10 invitados con confirmación sintética y15 con consulta pendiente; cantidad10 inválida en opción grande |
+| Payment | PASS: contexto del pedido, importes, siete resultados seleccionables, procesamiento y cambio de carrito invalidan resultado/contexto y conservan contacto; no método activo ni cobro |
+| Teclado / foco / overlays | PASS: ciclo Tab/Shift+Tab en mini, Escape/backdrop, View Cart enfoca ancla y Checkout enfoca encabezado; Discover cierra con Escape y conserva drawer principal; cierre de drawer/modal devuelve foco; un overlay visible en recorridos probados y sin backdrops/scroll lock residuales |
+| Accesibilidad | PASS: un h1, sin IDs duplicados/labels visibles ausentes/referencias ARIA rotas;363 textos visibles, mínimo6.13:1 y ningún fallo; foco sólido2px; drawer dialog/aria-modal de Bootstrap, sin regiones live anidadas |
+| HTML / consola / recursos | PASS: DOM de aplicación parseado sin errores con doctype restituido (outerHTML lo omite); se excluye únicamente el div vacío externo de la herramienta colocado después de body. Fuente PHP mantiene dos avisos preexistentes de ampersands en Google Fonts; no nuevos. Consola de página sin errores/warnings;51 recursos locales declarados consultados con HTTP200 |
+| Regresión Foundation/Core/Waves1–7 | PASS de humo: Core Quantity6, Accordion Enter, Modal Escape/retorno; Wave2 cantidad3→$108; Wave3 visor2/6 y retorno; Wave4 Gift100/dedicatoria, Diamond/términos y evento; Wave5 filtro5estrellas→1, carruseles con desplazamiento; Wave6 independiente320 sin acceso carrito, Footer/drawer conservados; Header/Discover/acceso Wave7. No es una recertificación exhaustiva de todas las waves |
+
+### Performance antes/después de567cf7d
+
+Misma configuración local, Node gzip por defecto; CSS de build minificado, JS guía empaquetado esbuild ESM/es2020 sin sourcemap, minificación en memoria como comparación adicional. JS productivo y sprite medidos en build; build deja solo main.js, sin guía ni maps. Después se vuelve a dev.
+
+| Artefacto | Bytes antes → después | Gzip antes → después | Cambio gzip |
+|---|---:|---:|---:|
+| CSS producto |113763 →115904 |18450 →18726 |+276B (+1.50%) |
+| JS productivo |0 →0 |20 →20 |0 |
+| JS guía desarrollo |191795 →219670 |44818 →51512 |+6694B (+14.94%) |
+| JS guía minificado en memoria |113046 →130104 |34763 →39850 |+5087B (+14.63%) |
+| Sprite |12028 →12028 |4038 →4038 |0 |
+
+SHA256 main.js: `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`. No nuevas imágenes, derivados, fuentes ni librerías. Comparación de HTML PHP renderizado del commit base y actual:51→51 URLs locales declaradas únicas; imágenes declaradas50→51 (incluidas plantillas inertes), URLs de img20→21 por la referencia de vino del template nuevo, recurso ya usado dinámicamente por el carrito anterior. Los duplicados del drawer reutilizan los mismos archivos; no se afirma una reducción de requests efectivos. Cantidad de recursos declarados y consultas HTTP de QA no equivalen a un HAR, transferencia real del navegador, memoria ni Core Web Vitals.
+
+### Pruebas no ejecutadas y límites
+
+No se certificó zoom real200%, preferencia reduced-motion del SO, lector de pantalla auditivo, Firefox/Safari, dispositivo físico o Apache/GoDaddy. Foundation/Bootstrap ya contienen tratamiento de reduced motion; no se añade un sistema de animación. No se midieron HAR/requests efectivos antes-después, LCP/CLS/INP, latencia real, capacidad ni concurrencia de servidor. No se hizo consulta comercial, cobro, reserva, envío ni prueba de backend. Los intentos de automatización antes de terminar transiciones Bootstrap se repitieron esperando foco/shown; los resultados registrados corresponden al recorrido completado.
+
+Revisión: `/style-guide/patterns.php#w7-carrito`, icono del Header, `#w7-checkout`, `#w7-pago` y `#w7-reserva`; controles compactos de colección, promoción y configuración compartida. Quedan aprobación visual humana, datos comerciales y backend/proveedor. No hay bloqueantes frontend conocidos tras las pruebas aquí ejecutadas; no se declara autorización de integración o publicación.

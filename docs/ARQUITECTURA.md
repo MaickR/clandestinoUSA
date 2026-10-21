@@ -138,3 +138,8 @@ flowchart LR
 - Sin Redis, colas ni procesos persistentes (limitación del hosting).
 - PHP: validación de input, escaping de output, CSRF en POST nuevos, importes recalculados en servidor.
 - Los cambios de arquitectura se documentan aquí en el mismo commit que los introduce.
+
+
+### Extensión de comercio Wave7
+
+`patterns/mini-carrito.js` proyecta el proveedor observable de `carrito.js` dentro de Offcanvas; Header recibe proveedor/panel explícitos. `paginacion-carrito.js` separa diez líneas visibles del estado global producto/variante/línea. `horario-servicio.js` concentra lógica civil de configuración por servicio/excepción y `horario-formulario.js` adapta selectores nativos; reservas consume esa misma fuente. Fixtures permanecen en `modules/guia/transacciones-fixtures.js`, sin persistencia ni backend. Contratos y QA del cierre2026-10-21 en `WAVE-7-COVERAGE.md`.
