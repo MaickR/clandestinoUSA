@@ -1,21 +1,27 @@
 import { inicializarNavegacion } from "./modules/patterns/navegacion-global.js";
-import { inicializarEscenasHero } from "./modules/patterns/escenas-hero.js";
 import { inicializarAcceso } from "./modules/patterns/acceso.js";
 import { inicializarModal } from "./modules/core/modal.js";
 
-// La vista previa es el único anfitrión; no activa ejemplos ni lógica comercial.
-const home = document.querySelector("[data-cl-home-preview]");
-if (home) {
-  const navegacion = inicializarNavegacion(home);
-  inicializarAcceso(home.querySelector("[data-cl-acceso]"), home.querySelector("[data-cl-acceso-abrir]"));
+// Inicialización pública optativa; no activa páginas legacy ni lógica comercial.
+const pagina = document.querySelector("[data-cl-site]");
+if (pagina) {
+  const navegacion = inicializarNavegacion(pagina);
+  inicializarAcceso(pagina.querySelector("[data-cl-acceso]"), pagina.querySelector("[data-cl-acceso-abrir]"));
   // Demostración vacía explícita, sin proveedor comercial ni productos ficticios.
-  const carrito = home.querySelector("[data-cl-nav-carrito]");
-  navegacion.actualizarCarrito({ unidades: 0, estado: "listo" });
-  carrito.setAttribute("aria-controls", "carrito-preview");
-  carrito.setAttribute("aria-haspopup", "dialog");
-  carrito.setAttribute("data-bs-toggle", "modal");
-  carrito.setAttribute("data-bs-target", "#carrito-preview");
-  const aviso = home.querySelector("#carrito-preview");
-  inicializarModal(aviso, { focoInicial: aviso.querySelector("button") });
-  for (const escenas of home.querySelectorAll("[data-cl-escenas]")) inicializarEscenasHero(escenas);
+  const carrito = pagina.querySelector("[data-cl-nav-carrito]");
+  const aviso = pagina.querySelector("#carrito-preview");
+  if (carrito && aviso) {
+    navegacion.actualizarCarrito({ unidades: 0, estado: "listo" });
+    carrito.setAttribute("aria-controls", "carrito-preview");
+    carrito.setAttribute("aria-haspopup", "dialog");
+    carrito.setAttribute("data-bs-toggle", "modal");
+    carrito.setAttribute("data-bs-target", "#carrito-preview");
+    inicializarModal(aviso, { focoInicial: aviso.querySelector("button") });
+  }
+  // El módulo del slider se solicita únicamente si el documento contiene escenas.
+  if (pagina.querySelector("[data-cl-escenas]")) {
+    import("./modules/patterns/escenas-hero.js").then(({ inicializarEscenasHero }) => {
+      for (const escenas of pagina.querySelectorAll("[data-cl-escenas]")) inicializarEscenasHero(escenas);
+    });
+  }
 }

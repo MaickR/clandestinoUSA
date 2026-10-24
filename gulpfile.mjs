@@ -42,7 +42,7 @@ const paths = {
   jsGuideEntry: "assets/js/style-guide.js",
   jsGuideOut: "assets/js/dist/style-guide.js",
   jsWatch: ["assets/js/main.js", "assets/js/style-guide.js", "assets/js/modules/**/*.js"],
-  guideWatch: "style-guide/**/*.php",
+  guideWatch: ["style-guide/**/*.php", "includes/**/*.php"],
   iconWatch: ["scripts/iconos.json", "scripts/generar-iconos.mjs"],
   iconOut: "assets/icons/cl-iconos.svg",
   jsDist: "assets/js/dist",
@@ -122,8 +122,8 @@ const jsOptions = {
   logLevel: "warning",
 };
 
-const jsDev = () => esbuild({ ...jsOptions, sourcemap: true, minify: false });
-const jsBuild = () => esbuild({ ...jsOptions, sourcemap: false, minify: true });
+const jsDev = () => esbuild({ ...jsOptions, outfile: undefined, outdir: paths.jsDist, splitting: true, sourcemap: true, minify: false });
+const jsBuild = () => esbuild({ ...jsOptions, outfile: undefined, outdir: paths.jsDist, splitting: true, sourcemap: false, minify: true });
 const jsGuideDev = () => esbuild({
   ...jsOptions, entryPoints: [paths.jsGuideEntry], outfile: paths.jsGuideOut,
   sourcemap: true, minify: false,

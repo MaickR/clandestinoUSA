@@ -6,14 +6,10 @@ if (PHP_SAPI !== 'cli-server') {
 }
 header('X-Robots-Tag: noindex, nofollow');
 
-$escaparNavegacion = static fn (string $valor): string => htmlspecialchars($valor, ENT_QUOTES, 'UTF-8');
-$rutasNavegacion = ['Home' => '/home-preview.php', 'Experiences' => '/index.html#services', 'Restaurant' => '/menu.html', 'Wine Shop' => '/wines.html'];
-$rutasDescubrir = ['Wine Club' => '/swc.html', 'About Us' => '/about.html', 'Contact' => '/contact.html'];
+require __DIR__ . '/includes/site.php';
+// Contexto local explícito; las rutas públicas no dependen de esta vista.
+$rutasNavegacion['Home'] = '/home-preview.php';
 $destinoActivo = 'Home';
-$rutaReserva = '/index.html#reservation';
-$atributoDestinoNavegacion = '';
-$logoNavegacion = '/assets/images/clandestino-logo-ui.svg';
-$datosContacto = ['telefono' => ['url' => 'tel:+14086090027', 'texto' => '+1 (408) 609-0027']];
 $carritoNavegacion = ['destino' => '#carrito-preview'];
 $fotografias = [
     ['archivo' => 'banner-the_clandestino_1', 'encuadre' => 'mesa', 'titulo' => 'Spanish Wine & Tapas in Mount Shasta', 'descripcion' => 'A taste of Spain. A table to share. Make yourself at home.', 'alt' => 'Spanish tapas and red wine on a candlelit table at The Clandestino'],
@@ -42,9 +38,9 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
   <link rel="stylesheet" href="/assets/css/home.css">
   <script type="module" blocking="render" src="/assets/js/dist/main.js"></script>
 </head>
-<body class="cl-estructura cl-home-preview" data-cl-home-preview>
+<body class="cl-estructura cl-home-preview" data-cl-site>
   <a class="cl-saltar" href="#contenido">Skip to main content</a>
-  <?php require __DIR__ . '/style-guide/partials/acceso-wave-6.php'; ?>
+  <?php require __DIR__ . '/includes/access.php'; ?>
   <div class="modal fade cl-modal" id="carrito-preview" tabindex="-1" aria-labelledby="carrito-preview-titulo" aria-describedby="carrito-preview-nota" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"><div class="modal-content cl-modal__superficie">
       <div class="modal-header cl-modal__cabecera">
@@ -54,7 +50,7 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
       <div class="modal-body"><p>Your cart is empty.</p><p id="carrito-preview-nota">Preview only. No cart or checkout service is connected.</p><a class="cl-enlace" href="/menu.html">Explore the menu</a></div>
     </div></div>
   </div>
-  <?php require __DIR__ . '/style-guide/partials/cabecera-wave-6.php'; ?>
+  <?php require __DIR__ . '/includes/header.php'; ?>
   <main id="contenido" tabindex="-1">
     <h1 class="visually-hidden">Spanish Wine &amp; Tapas in Mount Shasta · The Clandestino</h1>
     <section class="cl-hero cl-hero--slider" aria-label="The Clandestino. Spanish hospitality in Mount Shasta." aria-roledescription="carousel" data-cl-escenas>
@@ -79,12 +75,15 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
               'entrada' => $entradasEscenas[$indice], 'titulo' => $fotografia['titulo'], 'descripcion' => $fotografia['descripcion'],
               'acciones' => $accionesEscenas[$indice],
           ];
-          require __DIR__ . '/style-guide/partials/hero-editorial-wave-1.php';
+          require __DIR__ . '/includes/hero.php';
           ?>
         </div>
         <?php endforeach; ?>
       </div>
     </section>
+    <?php require __DIR__ . '/includes/welcome.php'; ?>
+    <?php require __DIR__ . '/includes/spanish-table.php'; ?>
   </main>
+  <?php require __DIR__ . '/includes/footer.php'; ?>
 </body>
 </html>

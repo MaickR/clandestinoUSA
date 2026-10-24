@@ -1,4 +1,11 @@
 <?php
+// Las plantillas se incluyen desde un documento, nunca como páginas independientes.
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+    http_response_code(404);
+    exit;
+}
+?>
+<?php
 // Datos y rutas recibidos del documento anfitrión; sin fixtures internos.
 $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
 ?>

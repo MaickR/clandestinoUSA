@@ -25,6 +25,8 @@
 @import "components/icon";
 @import "components/boton-icono";
 @import "patterns/seccion";
+@import "patterns/media-contenido";
+@import "patterns/pie-global";
 @import "patterns/hero";
 @import "patterns/navegacion-global";
 @import "patterns/acceso";
@@ -185,3 +187,9 @@
     transform: none;
   }
 }
+
+// Ajustes de composición locales; Foundation y los patrones conservan sus contratos.
+.cl-home__bienvenida { margin-inline: auto; }
+
+// La mesa completa forma parte del relato; se conserva el encuadre 4:3 en tablet.
+.cl-home__mesa { aspect-ratio: 4 / 3; }

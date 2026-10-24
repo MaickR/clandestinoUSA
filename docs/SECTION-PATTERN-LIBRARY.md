@@ -1,5 +1,9 @@
 # Biblioteca de patrones de sección
 
+## Consumo compartido en Home — 2026-10-24
+
+Header, Hero editorial/interior, Footer y acceso residen ahora en `includes/{header,hero,footer,access}.php`. Home, Navigation y los partials de Patterns/transacciones consumen esas mismas fuentes, sin fixtures en Home. Los nombres Wave de los registros inferiores son históricos. Welcome y Spanish Table reutilizan Section System, Media + Content, Foundation y Core; el diseño aprobado de Header/Hero/Footer no cambia. Contratos, archivos, evidencia comparativa y límites de la integración: [HOME-PHASE-B.md](HOME-PHASE-B.md).
+
 ## Auditoría transversal vigente — 2026-10-21
 
 Inventario contrastado con fuentes, decisiones, defectos corregidos y evidencia actual en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). La aprobación de la dirección visual general expresada en este encargo sustituye los pendientes históricos de dirección; el cierre completo sigue esperando aprobación humana final. Los registros de QA inferiores conservan su fecha y alcance originales.
