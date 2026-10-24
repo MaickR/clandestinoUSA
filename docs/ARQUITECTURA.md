@@ -1,5 +1,11 @@
 # Arquitectura — The Clandestino USA
 
+## Base pública compartida de Home — 2026-10-24
+
+Estado de integración local en [HOME-PHASE-B.md](HOME-PHASE-B.md). Header, Hero, Footer y acceso se extraen a `includes/{header,hero,footer,access}.php`; Home y Style Guide incluyen una única implementación. `includes/site.php` aporta configuración pública mínima independiente de fixtures, y `welcome.php`/`spanish-table.php` componen las dos nuevas secciones. No cambia `index.html` ni se publica la vista previa.
+
+`main.js` inicializa el anfitrión optativo `[data-cl-site]` y solicita el módulo de escenas solo cuando existe slider; esbuild genera chunks ESM junto a la misma entrada global. El paquete futuro debe incluir todo `assets/js/dist`. Home amplía su SCSS reducido mediante los patrones existentes Media + Content y Footer; no carga hojas de guía ni legacy. Los registros inferiores conservan las rutas y estados históricos anteriores a esta extracción.
+
 Describe la arquitectura **vigente** y el **objetivo inmediato**. Lo marcado como *futuro* aún no existe en el repo.
 
 ## Vigente

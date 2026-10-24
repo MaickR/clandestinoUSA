@@ -1,7 +1,15 @@
 <?php
+// Las plantillas se incluyen desde un documento, nunca como páginas independientes.
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+    http_response_code(404);
+    exit;
+}
+?>
+<?php
 // Marcado editorial único de Wave 1; el anfitrión aporta datos, semántica y carga.
 $escaparHero = static fn (string $valor): string => htmlspecialchars($valor, ENT_QUOTES, 'UTF-8');
 $etiquetaHero = $hero['etiqueta'] ?? 'h2';
+$claseTituloHero = ($hero['interior'] ?? false) ? 'cl-titulo-1' : 'cl-display';
 if (!in_array($etiquetaHero, ['h1', 'h2', 'h3'], true)) {
     throw new InvalidArgumentException('Jerarquía de Hero no admitida.');
 }
@@ -18,7 +26,7 @@ if (!in_array($etiquetaHero, ['h1', 'h2', 'h3'], true)) {
   <div class="row">
     <div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
       <p class="cl-eyebrow"><?= $escaparHero($hero['entrada']) ?></p>
-      <<?= $etiquetaHero ?> class="cl-display"<?= isset($hero['id']) ? ' id="' . $escaparHero($hero['id']) . '"' : '' ?>><?= $escaparHero($hero['titulo']) ?></<?= $etiquetaHero ?>>
+      <<?= $etiquetaHero ?> class="<?= $claseTituloHero ?>"<?= isset($hero['id']) ? ' id="' . $escaparHero($hero['id']) . '"' : '' ?>><?= $escaparHero($hero['titulo']) ?></<?= $etiquetaHero ?>>
       <p class="cl-seccion__descripcion"><?= $escaparHero($hero['descripcion']) ?></p>
       <div class="cl-seccion__acciones">
         <?php foreach ($hero['acciones'] as $numeroAccion => $accion) : ?>

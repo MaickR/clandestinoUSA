@@ -49,28 +49,23 @@
         'descripcion' => 'Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.',
         'acciones' => [['Explore the tapas', '../tapas.html'], ['Ask about a table', '../contact.html#contact-form']],
     ];
-    require __DIR__ . '/hero-editorial-wave-1.php';
+    require dirname(__DIR__, 2) . '/includes/hero.php';
     ?>
   </section>
   <div class="cl-guia-seccion container"><p class="cl-texto-pequeno">Interior hero · A shorter introduction for a focused page.</p></div>
   <section class="cl-hero cl-hero--interior" aria-labelledby="hero-interior-titulo">
-    <picture class="cl-hero__media">
-      <source srcset="../assets/images/avif/bg/the-clandestino-usa.avif" type="image/avif">
-      <source srcset="../assets/images/webp/bg/the-clandestino-usa.webp" type="image/webp">
-      <img class="cl-hero__imagen" src="../assets/images/bg/the-clandestino-usa.jpg" width="1920" height="1080" alt="Spanish wine bottles displayed inside The Clandestino" loading="lazy" decoding="async">
-    </picture>
-    <div class="container cl-hero__estructura">
-      <div class="row">
-        <div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
-          <p class="cl-eyebrow">Spanish wines</p>
-          <h3 class="cl-titulo-1" id="hero-interior-titulo">Discover a different side of Spain</h3>
-          <p class="cl-seccion__descripcion">Explore the wines that accompany our table, from familiar regions to new discoveries.</p>
-          <div class="cl-seccion__acciones">
-            <a class="cl-boton" href="../wines.html">Explore the wines</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php
+    $hero = [
+        'fuentes' => [['tipo' => 'image/avif', 'srcset' => '../assets/images/avif/bg/the-clandestino-usa.avif'], ['tipo' => 'image/webp', 'srcset' => '../assets/images/webp/bg/the-clandestino-usa.webp']],
+        'imagen' => '../assets/images/bg/the-clandestino-usa.jpg', 'ancho' => 1920, 'alto' => 1080,
+        'alt' => 'Spanish wine bottles displayed inside The Clandestino',
+        'etiqueta' => 'h3', 'interior' => true, 'id' => 'hero-interior-titulo', 'entrada' => 'Spanish wines',
+        'titulo' => 'Discover a different side of Spain',
+        'descripcion' => 'Explore the wines that accompany our table, from familiar regions to new discoveries.',
+        'acciones' => [['Explore the wines', '../wines.html']],
+    ];
+    require dirname(__DIR__, 2) . '/includes/hero.php';
+    ?>
   </section>
 </section>
 

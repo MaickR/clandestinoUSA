@@ -24,9 +24,9 @@ require __DIR__ . '/partials/configuracion-wave-6.php';
 </head>
 <body class="cl-estructura" data-cl-navegacion>
   <a class="cl-saltar" href="#contenido-global">Skip to main content</a>
-  <?php require __DIR__ . '/partials/acceso-wave-6.php'; ?>
+  <?php require dirname(__DIR__) . '/includes/access.php'; ?>
   <?php if ($mostrarTopbar) require __DIR__ . '/partials/topbar-wave-6.php'; ?>
-  <?php require __DIR__ . '/partials/cabecera-wave-6.php'; ?>
+  <?php require dirname(__DIR__) . '/includes/header.php'; ?>
   <main id="contenido-global" tabindex="-1">
     <?php if (!$paginaInterior) : ?>
     <section class="cl-hero" id="inicio-global" tabindex="-1" aria-labelledby="inicio-global-titulo">
@@ -40,7 +40,7 @@ require __DIR__ . '/partials/configuracion-wave-6.php';
           'descripcion' => 'Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.',
           'acciones' => [['Reserve a Table', $rutaReserva], ['Explore Wines', '/style-guide/patterns.php#productos-vinos', '_top']],
       ];
-      require __DIR__ . '/partials/hero-editorial-wave-1.php';
+      require dirname(__DIR__) . '/includes/hero.php';
       ?>
     </section>
     <?php else : ?>
@@ -86,7 +86,7 @@ require __DIR__ . '/partials/configuracion-wave-6.php';
       </div>
     </section>
   </main>
-  <?php require __DIR__ . '/partials/pie-wave-6.php'; ?>
+  <?php require dirname(__DIR__) . '/includes/footer.php'; ?>
   <script type="module" src="/assets/js/dist/style-guide.js"></script>
 </body>
 </html>

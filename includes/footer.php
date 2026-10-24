@@ -1,3 +1,10 @@
+<?php
+// Las plantillas se incluyen desde un documento, nunca como páginas independientes.
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+    http_response_code(404);
+    exit;
+}
+?>
 <!-- Cuatro áreas editoriales con datos de archivo; sin servicios comerciales simulados. -->
 <footer class="cl-pie" id="pie-global" aria-label="The Clandestino USA">
   <div class="container cl-pie__principal">

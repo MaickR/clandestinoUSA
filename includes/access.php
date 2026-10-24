@@ -1,3 +1,10 @@
+<?php
+// Las plantillas se incluyen desde un documento, nunca como páginas independientes.
+if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+    http_response_code(404);
+    exit;
+}
+?>
 <!-- Solo credenciales sintéticas readonly. No existe endpoint ni envío de autenticación. -->
 <div class="modal fade cl-modal cl-acceso" id="acceso-global" data-cl-acceso tabindex="-1" aria-labelledby="acceso-global-titulo" aria-describedby="acceso-global-nota" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content cl-modal__superficie">
