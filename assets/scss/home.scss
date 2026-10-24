@@ -1,0 +1,187 @@
+// Entrada reducida de la vista previa: mismos tokens y fuentes, sin estilos legacy ni demos.
+@import "bootstrap/scss/functions";
+@import "abstracts/tokens";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/helpers/visually-hidden";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/offcanvas";
+@import "base/root";
+@import "base/typography";
+@import "base/a11y";
+@import "components/button";
+@import "components/link";
+@import "components/form";
+@import "components/modal";
+@import "components/spinner";
+@import "components/alerta";
+@import "components/eyebrow";
+@import "components/icon";
+@import "components/boton-icono";
+@import "patterns/seccion";
+@import "patterns/hero";
+@import "patterns/navegacion-global";
+@import "patterns/acceso";
+
+// Adaptador de escenas sobre el mismo grid superpuesto de Wave 1.
+.cl-hero--slider {
+  position: relative;
+
+  .cl-hero__pista {
+    display: grid;
+    grid-area: 1 / 1;
+    min-inline-size: 0;
+    touch-action: pan-y pinch-zoom;
+
+    &:focus-visible { outline-offset: -4px; }
+  }
+
+  .cl-hero__diapositiva {
+    grid-area: 1 / 1;
+    min-inline-size: 0;
+    background: transparent;
+    visibility: hidden;
+    transition: visibility 0s linear 720ms;
+    pointer-events: none;
+  }
+
+  .cl-hero__diapositiva--activa {
+    z-index: 1;
+    visibility: visible;
+    transition-delay: 0s;
+    pointer-events: auto;
+
+    // La foto entrante revela la anterior, sin fundir ambas contra negro.
+    .cl-hero__media { animation: cl-hero-fotografia 720ms ease-out backwards; }
+
+    .cl-eyebrow,
+    .cl-display,
+    .cl-seccion__descripcion,
+    .cl-seccion__acciones { animation: cl-hero-relato 520ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards; }
+
+    .cl-display { animation-delay: 40ms; }
+    .cl-seccion__descripcion { animation-delay: 90ms; }
+    .cl-seccion__acciones { animation-delay: 120ms; }
+  }
+
+  // Se cruzan las fotografías, sin superponer dos titulares o juegos de acciones.
+  .cl-hero__diapositiva:not(.cl-hero__diapositiva--activa) .cl-hero__contenido { visibility: hidden; }
+
+  // La protección pertenece a la fotografía completa, nunca a la caja del copy.
+  .cl-hero__contenido::before { content: none; }
+
+  .cl-hero__media {
+    isolation: isolate;
+
+    &::after {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba($neutral-950, 0.12), rgba($neutral-950, 0.61) 12%, rgba($neutral-950, 0.61) 70%, rgba($neutral-950, 0)),
+        rgba($neutral-950, 0.14);
+      content: "";
+      pointer-events: none;
+    }
+  }
+
+  // La composición, padding y acciones proceden íntegramente de Wave 1.
+  .cl-hero__diapositiva--mesa { --hero-foco: 51% center; }
+  .cl-hero__diapositiva--encuentro { --hero-foco: right center; }
+  .cl-hero__diapositiva--vino { --hero-foco: 62% center; }
+
+  .cl-hero__controles {
+    position: absolute;
+    z-index: 3;
+    inset-block-end: var(--espacio-3);
+    inset-inline-start: 50%;
+    display: flex;
+    transform: translateX(-50%);
+
+    &[hidden] { display: none; }
+  }
+
+  .cl-hero__indicador {
+    display: inline-grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radio-md);
+    background: transparent;
+    cursor: pointer;
+
+    &::after {
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border: 1px solid var(--color-acento);
+      outline: 1px solid var(--color-fondo-alterno);
+      border-radius: 1rem;
+      background: var(--color-fondo-alterno);
+      content: "";
+    }
+
+    &[aria-current]::after {
+      inline-size: var(--espacio-5);
+      background: var(--color-acento);
+    }
+  }
+
+  // Disponible a lector de pantalla y al recibir foco; ausente de la composición normal.
+  .cl-hero__pausa {
+    position: absolute;
+    z-index: 4;
+    inset-block-start: var(--espacio-4);
+    inset-inline-start: var(--espacio-4);
+    width: auto;
+  }
+
+  @include media-breakpoint-up(md) {
+    .cl-hero__diapositiva--encuentro { --hero-foco: center; }
+  }
+
+  @include media-breakpoint-up(lg) {
+    .cl-hero__media::after {
+      background:
+        linear-gradient(to right, rgba($neutral-950, 0.61), rgba($neutral-950, 0.61) 40%, rgba($neutral-950, 0.28) 64%, rgba($neutral-950, 0) 92%),
+        rgba($neutral-950, 0.14);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cl-hero__diapositiva { transition: none; }
+
+    .cl-hero__diapositiva--activa {
+      .cl-hero__media,
+      .cl-eyebrow,
+      .cl-display,
+      .cl-seccion__descripcion,
+      .cl-seccion__acciones { animation: none; }
+    }
+  }
+}
+
+@keyframes cl-hero-fotografia {
+  from { opacity: 0; }
+
+  to { opacity: 1; }
+}
+
+@keyframes cl-hero-relato {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

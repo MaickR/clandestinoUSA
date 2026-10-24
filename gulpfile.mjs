@@ -28,11 +28,14 @@ const PHP_READY_INTERVAL_MS = 100;
 
 const paths = {
   scssEntry: "assets/scss/main.scss",
+  scssHomeEntry: "assets/scss/home.scss",
   scssGuideEntry: "assets/scss/style-guide.scss",
   scssWatch: "assets/scss/**/*.scss",
   cssDir: "assets/css",
   cssOut: "assets/css/style.new.css",
   cssMap: "assets/css/style.new.css.map",
+  cssHomeOut: "assets/css/home.css",
+  cssHomeMap: "assets/css/home.css.map",
   cssGuideOut: "assets/css/style-guide.css",
   cssGuideMap: "assets/css/style-guide.css.map",
   jsEntry: "assets/js/main.js",
@@ -50,6 +53,7 @@ const paths = {
     "assets/css/*.css",
     "!assets/css/style.new.css",
     "!assets/css/style-guide.css",
+    "!assets/css/home.css",
     "assets/js/*.js",
     "!assets/js/main.js",
     "!assets/js/style-guide.js",
@@ -69,21 +73,24 @@ let phpProcess = null;
 // --- Clean: solo outputs generados por este pipeline ---
 export async function clean() {
   await Promise.all(
-    [paths.cssOut, paths.cssMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist, paths.iconOut].map((p) =>
+    [paths.cssOut, paths.cssMap, paths.cssHomeOut, paths.cssHomeMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist, paths.iconOut].map((p) =>
       rm(p, { recursive: true, force: true }),
     ),
   );
 }
 
 // --- CSS ---
-function cssDev() {
-  return src(paths.scssEntry, { sourcemaps: true })
+function cssDevDesde(entrada, salida) {
+  return src(entrada, { sourcemaps: true })
     .pipe(sass(sassOptions).on("error", sass.logError))
     .pipe(postcss([autoprefixer()]))
-    .pipe(rename("style.new.css"))
+    .pipe(rename(salida))
     .pipe(dest(paths.cssDir, { sourcemaps: "." }))
     .pipe(server.stream({ match: "**/*.css" }));
 }
+
+const cssDev = () => cssDevDesde(paths.scssEntry, "style.new.css");
+const cssHomeDev = () => cssDevDesde(paths.scssHomeEntry, "home.css");
 
 function cssGuideDev() {
   return src(paths.scssGuideEntry, { sourcemaps: true })
@@ -94,13 +101,16 @@ function cssGuideDev() {
     .pipe(server.stream({ match: "**/*.css" }));
 }
 
-function cssBuild() {
-  return src(paths.scssEntry)
+function cssBuildDesde(entrada, salida) {
+  return src(entrada)
     .pipe(sass(sassOptions).on("error", sass.logError))
     .pipe(postcss([autoprefixer(), cssnano()]))
-    .pipe(rename("style.new.css"))
+    .pipe(rename(salida))
     .pipe(dest(paths.cssDir));
 }
+
+const cssBuild = () => cssBuildDesde(paths.scssEntry, "style.new.css");
+const cssHomeBuild = () => cssBuildDesde(paths.scssHomeEntry, "home.css");
 
 // --- JS ---
 const jsOptions = {
@@ -210,7 +220,7 @@ function serve(done) {
 const reload = (done) => { server.reload(); done(); };
 
 function watcher() {
-  watch(paths.scssWatch, parallel(cssDev, cssGuideDev));
+  watch(paths.scssWatch, parallel(cssDev, cssHomeDev, cssGuideDev));
   watch(paths.jsWatch, series(parallel(jsDev, jsGuideDev), reload));
   watch(paths.guideWatch, reload);
   watch(paths.iconWatch, series(iconos, reload));
@@ -223,6 +233,6 @@ for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
 }
 process.on("exit", stopPhp);
 
-export const dev = series(clean, generarIconos, parallel(cssDev, cssGuideDev, jsDev, jsGuideDev), php, serve, watcher);
-export const build = series(clean, generarIconos, parallel(cssBuild, jsBuild));
+export const dev = series(clean, generarIconos, parallel(cssDev, cssHomeDev, cssGuideDev, jsDev, jsGuideDev), php, serve, watcher);
+export const build = series(clean, generarIconos, parallel(cssBuild, cssHomeBuild, jsBuild));
 export default dev;

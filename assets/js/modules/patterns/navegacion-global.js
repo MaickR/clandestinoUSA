@@ -1,11 +1,10 @@
 import Collapse from "bootstrap/js/src/collapse.js";
 import Offcanvas from "bootstrap/js/src/offcanvas.js";
-import { inicializarMiniCarrito } from "./mini-carrito.js";
 
 const inicializados = new WeakMap();
 
 /** Un único árbol responsive; Bootstrap conserva trap, backdrop, Escape y scroll. */
-export function inicializarNavegacion(contenedor, { raizScroll = null, proveedorCarrito = null, panelCarrito = null } = {}) {
+export function inicializarNavegacion(contenedor, { raizScroll = null, proveedorCarrito = null, panelCarrito = null, crearMiniCarrito = null } = {}) {
   if (!(contenedor instanceof HTMLElement)) throw new TypeError("Se requiere un contenedor de navegación.");
   if (inicializados.has(contenedor)) return inicializados.get(contenedor);
   const buscar = (nombre) => contenedor.querySelector(`[data-cl-${nombre}]`);
@@ -63,7 +62,12 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
     if (cerrarPendiente || escritorio.matches) {
       cerrarPendiente = false;
       drawer.hide();
-    } else boton.focus();
+    } else {
+      // El activador se reubica: confirmar su caja tras pintar, también sin transición.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (panel.classList.contains("show") && !transicion && boton.getClientRects().length) boton.focus();
+      }));
+    }
   }, opciones);
   panel.addEventListener("hide.bs.offcanvas", (evento) => {
     if (transicion) { evento.preventDefault(); cerrarPendiente = true; return; }
@@ -123,9 +127,10 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   medidas.observe(cabecera);
   const control = {
     /** El anfitrión conecta estado y markup; el Header no conoce IDs ni fixtures del laboratorio. */
-    conectarCarrito(proveedor, panelResumen) {
+    conectarCarrito(proveedor, panelResumen, crearPanel = crearMiniCarrito) {
       if (!carrito || miniCarrito) return;
-      miniCarrito = inicializarMiniCarrito(panelResumen, carrito, proveedor);
+      if (typeof crearPanel !== "function") throw new TypeError("El anfitrión debe aportar el inicializador del mini-carrito.");
+      miniCarrito = crearPanel(panelResumen, carrito, proveedor);
       retirarCarrito = proveedor.suscribir(control.actualizarCarrito);
     },
     /** El anfitrión aporta suma de unidades; null significa que no hay estado conectado. */
@@ -135,6 +140,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
       conteoCarrito.hidden = datos === null;
       conteoCarrito.textContent = datos === null ? "" : datos.unidades > 99 ? "99+" : String(datos.unidades);
       carrito.setAttribute("aria-label", datos === null ? "View cart" : `View cart, ${datos.unidades} ${datos.unidades === 1 ? "item" : "items"}`);
+      carrito.setAttribute("aria-busy", String(datos?.estado === "actualizando"));
     },
     destruir() {
       if (destruccion) return destruccion;
@@ -178,6 +184,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
     },
   };
   inicializados.set(contenedor, control);
+  control.actualizarCarrito(null);
   if (proveedorCarrito && panelCarrito) control.conectarCarrito(proveedorCarrito, panelCarrito);
   return control;
 }
