@@ -30,17 +30,18 @@ require __DIR__ . '/partials/configuracion-wave-6.php';
   <main id="contenido-global" tabindex="-1">
     <?php if (!$paginaInterior) : ?>
     <section class="cl-hero" id="inicio-global" tabindex="-1" aria-labelledby="inicio-global-titulo">
-      <picture class="cl-hero__media">
-        <source srcset="/assets/images/avif/bg/clandestino-usa.avif" type="image/avif">
-        <source srcset="/assets/images/webp/bg/clandestino-usa.webp" type="image/webp">
-        <img class="cl-hero__imagen" src="/assets/images/bg/clandestino-usa.jpg" width="1880" height="920" alt="Wine glasses above the bar and barrel tables at The Clandestino">
-      </picture>
-      <div class="container cl-hero__estructura"><div class="row"><div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
-        <p class="cl-eyebrow">The Clandestino · Mount Shasta</p>
-        <h1 class="cl-display" id="inicio-global-titulo">A little Spain. A table to share.</h1>
-        <p class="cl-seccion__descripcion">Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.</p>
-        <div class="cl-seccion__acciones"><a class="cl-boton" href="<?= $escaparNavegacion($rutaReserva) ?>">Reserve a Table</a><a class="cl-boton cl-boton--secundario" href="/style-guide/patterns.php#productos-vinos" target="_top">Explore Wines</a></div>
-      </div></div></div>
+      <?php
+      $hero = [
+          'fuentes' => [['tipo' => 'image/avif', 'srcset' => '/assets/images/avif/bg/clandestino-usa.avif'], ['tipo' => 'image/webp', 'srcset' => '/assets/images/webp/bg/clandestino-usa.webp']],
+          'imagen' => '/assets/images/bg/clandestino-usa.jpg', 'ancho' => 1880, 'alto' => 920,
+          'alt' => 'Wine glasses above the bar and barrel tables at The Clandestino', 'carga' => 'eager',
+          'etiqueta' => 'h1', 'id' => 'inicio-global-titulo', 'entrada' => 'The Clandestino · Mount Shasta',
+          'titulo' => 'A little Spain. A table to share.',
+          'descripcion' => 'Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.',
+          'acciones' => [['Reserve a Table', $rutaReserva], ['Explore Wines', '/style-guide/patterns.php#productos-vinos', '_top']],
+      ];
+      require __DIR__ . '/partials/hero-editorial-wave-1.php';
+      ?>
     </section>
     <?php else : ?>
     <section class="cl-seccion" id="inicio-global" tabindex="-1" aria-labelledby="interior-titulo"><div class="container"><p class="cl-eyebrow">Interior composition · design laboratory</p><h1 id="interior-titulo">An unhurried evening of Spanish hospitality, from the first welcome to the last glass</h1><p>A long title without a photographic hero. The same header, breadcrumbs, form controls and footer remain in place.</p></div></section>

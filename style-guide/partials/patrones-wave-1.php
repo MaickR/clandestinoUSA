@@ -39,24 +39,18 @@
     <p>Editorial and interior compositions. Photography and content share one banner at every size.</p>
   </div>
   <section class="cl-hero" aria-labelledby="hero-editorial-titulo">
-    <picture class="cl-hero__media">
-      <source srcset="../assets/images/avif/bg/clandestino-usa.avif" type="image/avif">
-      <source srcset="../assets/images/webp/bg/clandestino-usa.webp" type="image/webp">
-      <img class="cl-hero__imagen" src="../assets/images/bg/clandestino-usa.jpg" width="1880" height="920" alt="Wine glasses above the bar and barrel tables at The Clandestino" loading="lazy" decoding="async">
-    </picture>
-    <div class="container cl-hero__estructura">
-      <div class="row">
-        <div class="cl-hero__contenido col-12 col-md-10 col-lg-7">
-          <p class="cl-eyebrow">The Clandestino · Mount Shasta</p>
-          <h3 class="cl-display" id="hero-editorial-titulo">A little Spain. A&nbsp;table to share.</h3>
-          <p class="cl-seccion__descripcion">Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.</p>
-          <div class="cl-seccion__acciones">
-            <a class="cl-boton" href="../tapas.html">Explore the tapas</a>
-            <a class="cl-boton cl-boton--secundario" href="../contact.html#contact-form">Ask about a table</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php
+    $hero = [
+        'fuentes' => [['tipo' => 'image/avif', 'srcset' => '../assets/images/avif/bg/clandestino-usa.avif'], ['tipo' => 'image/webp', 'srcset' => '../assets/images/webp/bg/clandestino-usa.webp']],
+        'imagen' => '../assets/images/bg/clandestino-usa.jpg', 'ancho' => 1880, 'alto' => 920,
+        'alt' => 'Wine glasses above the bar and barrel tables at The Clandestino',
+        'etiqueta' => 'h3', 'id' => 'hero-editorial-titulo', 'entrada' => 'The Clandestino · Mount Shasta',
+        'titulo' => 'A little Spain. A table to share.',
+        'descripcion' => 'Spanish tapas, a glass of wine, and the pleasure of good company in Northern California.',
+        'acciones' => [['Explore the tapas', '../tapas.html'], ['Ask about a table', '../contact.html#contact-form']],
+    ];
+    require __DIR__ . '/hero-editorial-wave-1.php';
+    ?>
   </section>
   <div class="cl-guia-seccion container"><p class="cl-texto-pequeno">Interior hero · A shorter introduction for a focused page.</p></div>
   <section class="cl-hero cl-hero--interior" aria-labelledby="hero-interior-titulo">

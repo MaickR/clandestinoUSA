@@ -63,6 +63,10 @@
     inset-block-start: calc(-1 * var(--espacio-2));
     inset-inline-end: calc(-1 * var(--espacio-2));
     min-inline-size: 1.25rem;
+    min-block-size: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: var(--espacio-1);
     border: 1px solid var(--color-fondo);
     border-radius: var(--radio-md);
@@ -72,6 +76,8 @@
     line-height: 1;
     font-variant-numeric: tabular-nums;
     text-align: center;
+
+    &[hidden] { display: none; }
   }
 
   &--con-carrito &__fila {

@@ -9,6 +9,7 @@ import { inicializarCantidad } from "../core/cantidad.js";
 import { productosEjemplo, estadosEjemplo, coleccionEjemplo, consultarCodigoEjemplo, horarioEjemplo, horarioExcepcionEjemplo, horarioEventoEjemplo } from "./transacciones-fixtures.js";
 
 import { inicializarNavegacion } from "../patterns/navegacion-global.js";
+import { inicializarMiniCarrito } from "../patterns/mini-carrito.js";
 
 const inicializadas = new WeakSet();
 const porId = (id) => document.getElementById(id);
@@ -182,7 +183,7 @@ function conectarCarrito(raiz, carrito) {
   const zona = raiz.querySelector("[data-cl-carrito]");
   const region = zona.querySelector("[data-cl-carrito-mensaje]");
   const cabecera = inicializarNavegacion(raiz);
-  cabecera.conectarCarrito(carrito, raiz.querySelector("[data-cl-mini-carrito]"));
+  cabecera.conectarCarrito(carrito, raiz.querySelector("[data-cl-mini-carrito]"), inicializarMiniCarrito);
   let temporizador;
   zona.querySelector("[data-cl-carrito-coleccion]").addEventListener("change", (evento) => {
     clearTimeout(temporizador);
