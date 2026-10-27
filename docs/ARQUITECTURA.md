@@ -2,6 +2,8 @@
 
 ## Base pública compartida de Home — 2026-10-24
 
+Home C2 incorpora `includes/private-experiences.php` inmediatamente después de Pure Soul, con el ancla histórica `private-events` y una consulta hacia `/contact.html#contact-form`. Reutiliza elementos de experiencia y storytelling sin la variante lateral destacada, con ajustes locales en `home.scss` y derivados independientes de fotografía existente. No añade JavaScript, formularios ni servicios comerciales. Selección fotográfica, QA y revisión visual pendiente: [HOME-PHASE-C2.md](HOME-PHASE-C2.md).
+
 Home C1 añade `includes/wines.php` después de Spanish Table, sin JavaScript nuevo. Reutiliza la entrada `home.scss`, el media de vino existente y los derivados AVIF/WebP del archivo. Contrato, QA y validación comercial pendiente en [HOME-PHASE-C1.md](HOME-PHASE-C1.md); no cambia la Home pública ni activa comercio.
 
 Estado de integración local en [HOME-PHASE-B.md](HOME-PHASE-B.md). Header, Hero, Footer y acceso se extraen a `includes/{header,hero,footer,access}.php`; Home y Style Guide incluyen una única implementación. `includes/site.php` aporta configuración pública mínima independiente de fixtures, y `welcome.php`/`spanish-table.php` componen las dos nuevas secciones. No cambia `index.html` ni se publica la vista previa.
