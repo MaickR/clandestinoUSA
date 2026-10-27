@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Entrada reducida de la vista previa: mismos tokens y fuentes, sin estilos legacy ni demos.
 @import "bootstrap/scss/functions";
 @import "abstracts/tokens";
@@ -26,6 +28,8 @@
 @import "components/boton-icono";
 @import "patterns/seccion";
 @import "patterns/media-contenido";
+@import "patterns/vino";
+@import "patterns/historia";
 @import "patterns/pie-global";
 @import "patterns/hero";
 @import "patterns/navegacion-global";
@@ -193,3 +197,103 @@
 
 // La mesa completa forma parte del relato; se conserva el encuadre 4:3 en tablet.
 .cl-home__mesa { aspect-ratio: 4 / 3; }
+
+// El vino recupera una atmósfera cálida, limitada a esta sección.
+.cl-home-vinos {
+  background: linear-gradient(135deg, color.mix($wine-700, $neutral-950, 26%), color.mix($wine-700, $neutral-950, 12%));
+}
+
+.cl-home-vinos__composicion {
+  display: grid;
+  gap: var(--espacio-6);
+
+  @include media-breakpoint-up(md) {
+    grid-template-areas: "retrato cabecera" "retrato relato";
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--espacio-5) var(--espacio-7);
+  }
+
+  @include media-breakpoint-up(lg) { column-gap: var(--espacio-8); }
+}
+
+.cl-home-vinos__cabecera {
+  @include media-breakpoint-up(md) {
+    grid-area: cabecera;
+    align-self: end;
+  }
+}
+
+.cl-home-vinos__identidad {
+  display: grid;
+  gap: var(--espacio-2);
+}
+
+.cl-home-vinos__firma {
+  margin: 0;
+  color: var(--color-acento);
+  font-family: var(--fuente-display);
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.cl-home-vinos__protagonista {
+  margin: 0;
+  padding-block-end: var(--espacio-3);
+  padding-inline-end: var(--espacio-3);
+
+  @include media-breakpoint-up(md) {
+    grid-area: retrato;
+    align-self: center;
+    padding-block-end: var(--espacio-4);
+    padding-inline-end: var(--espacio-4);
+  }
+}
+
+.cl-home-vinos__retrato {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  max-inline-size: 17rem;
+  margin-inline: auto;
+
+  &::before {
+    position: absolute;
+    inset: var(--espacio-3) calc(-1 * var(--espacio-3)) calc(-1 * var(--espacio-3)) var(--espacio-3);
+    border: 1px solid rgba($champagne-300, 0.55);
+    content: "";
+    pointer-events: none;
+  }
+
+  @include media-breakpoint-up(md) {
+    max-inline-size: 26rem;
+
+    &::before {
+      inset: var(--espacio-4) calc(-1 * var(--espacio-4)) calc(-1 * var(--espacio-4)) var(--espacio-4);
+    }
+  }
+}
+
+// Solo este retrato sustituye el slot 4:3 del vino por la proporción íntegra del arte.
+.cl-home-vinos__botella {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border-radius: var(--radio-md);
+}
+
+.cl-home-vinos__relato {
+  @include media-breakpoint-up(md) {
+    grid-area: relato;
+    align-self: start;
+  }
+
+  .cl-seccion__descripcion { max-inline-size: 48ch; }
+}
+
+.cl-home-vinos__entrada {
+  margin-block-end: var(--espacio-5);
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+}
