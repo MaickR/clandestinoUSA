@@ -83,6 +83,7 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
     </section>
     <?php require __DIR__ . '/includes/welcome.php'; ?>
     <?php require __DIR__ . '/includes/spanish-table.php'; ?>
+    <?php require __DIR__ . '/includes/wines.php'; ?>
   </main>
   <?php require __DIR__ . '/includes/footer.php'; ?>
 </body>

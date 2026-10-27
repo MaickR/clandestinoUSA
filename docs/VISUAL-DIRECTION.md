@@ -62,6 +62,7 @@ Champagne para jerarquía/acción y bordes selectivos para separación. Superfic
 - **Wave 2 / `cl-producto-gastronomico`:** fotografía protagonista y pie comercial con precio/acción agrupados. La experiencia editorial no debe copiar ese pie de catálogo.
 - **Wave 2 / `cl-item-menu`:** filas con media opcional, metadatos y acciones compactas; no simples líneas de título/precio sin contexto.
 - **Wave 2 / `cl-vino`:** botella completa con contain y ficha legible, sin recortar etiquetas para imitar una foto ambiental.
+- **Home C1 / Pure Soul:** marco editorial desplazado aprobado para esta imagen protagonista: línea champagne fina detrás de la fotografía, desplazamiento moderado y adaptable, sin sombras ni decoración excesiva. Es un recurso selectivo; ante un segundo caso real se evaluará una abstracción breve y reutilizable, sin convertirlo por ahora en componente global.
 - **Wave 3 / `cl-experiencia--destacada`:** el usuario aprobó expresamente esta composición antes del refinamiento. Se conserva su distribución y comportamiento; la normalización local de radio no cambia esa dirección.
 
 ## Antipatrones que debemos detectar
