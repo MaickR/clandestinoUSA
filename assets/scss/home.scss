@@ -30,6 +30,7 @@
 @import "patterns/media-contenido";
 @import "patterns/vino";
 @import "patterns/historia";
+@import "patterns/experiencia";
 @import "patterns/pie-global";
 @import "patterns/hero";
 @import "patterns/navegacion-global";
@@ -296,4 +297,90 @@
 .cl-home-vinos__entrada {
   margin-block-end: var(--espacio-5);
   font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+}
+
+// La invitación cruza el borde de la foto; el contenido conserva su orden y altura natural.
+.cl-home-privadas { background: var(--color-fondo); }
+
+.cl-home-privadas__composicion { display: grid; }
+
+.cl-home-privadas__escenario {
+  margin: 0;
+
+  // Clip conserva el viewport como referencia de la animación; hidden crearía otro scroll container.
+  .cl-experiencia__media { overflow: clip; }
+}
+
+.cl-home-privadas__imagen {
+  --experiencia-foco: center 20%;
+
+  aspect-ratio: 3 / 2;
+
+  @include media-breakpoint-up(md) { aspect-ratio: 2 / 1; }
+}
+
+.cl-home-privadas__invitacion {
+  position: relative;
+  z-index: 1;
+  inline-size: calc(100% - var(--espacio-4));
+  margin-block-start: calc(-1 * var(--espacio-5));
+  margin-inline: auto;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+
+  // Una leve aportación de champagne recoge la calidez de la madera sin crear otra superficie global.
+  background: color.mix($champagne-500, $neutral-800, 5%);
+
+  .cl-eyebrow {
+    display: flex;
+    gap: var(--espacio-4);
+    align-items: center;
+    white-space: nowrap;
+
+    // El sello del original se recolorea con Foundation; no representa una acción.
+    &::after {
+      flex: 0 1 4rem;
+      min-inline-size: var(--espacio-5);
+      block-size: 0.625rem;
+      background: var(--color-acento);
+      mask: url("/assets/images/separator.svg") center / 100% 100% no-repeat;
+      content: "";
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    inline-size: min(calc(100% - var(--espacio-6)), 48rem);
+    margin-block-start: calc(-1 * var(--espacio-7));
+    padding: var(--espacio-6);
+  }
+
+  @include media-breakpoint-up(lg) {
+    margin-block-start: calc(-1 * var(--espacio-8));
+    margin-inline-end: var(--espacio-7);
+  }
+}
+
+.cl-home-privadas__titulo { max-inline-size: none; }
+
+.cl-home-privadas__relato {
+  max-inline-size: 58ch;
+  margin-block-start: var(--espacio-4);
+}
+
+// Mejora CSS opcional: termina al entrar y nunca oculta ni demora el CTA.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cl-home-privadas__imagen {
+      animation: cl-privadas-entrada 1ms linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes cl-privadas-entrada {
+  from { transform: scale(1.015); }
+
+  to { transform: scale(1); }
 }
