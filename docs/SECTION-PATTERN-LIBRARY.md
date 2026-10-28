@@ -1,5 +1,21 @@
 # Biblioteca de patrones de sección
 
+## Encabezado ornamentado
+
+Contrato de presentación selectiva para aperturas editoriales y bienvenidas destacadas. Usar `cl-seccion__encabezado--ornamentado` sobre un encabezado con eyebrow directo, seguido de título y descripción opcional. Su `::after` vacío dibuja el separador bajo el eyebrow con `separator.svg`, `--color-acento` y espaciado semántico. No agrega contenido accesible ni tab stops.
+
+```html
+<header class="cl-seccion__encabezado cl-seccion__encabezado--ornamentado">
+  <p class="cl-eyebrow">Welcome to The Clandestino</p>
+  <h2>A little Spain. A world to discover.</h2>
+</header>
+```
+
+Disponibilidad actual: `assets/scss/home.scss` → `home.css`, sin modificar `_seccion.scss`, Core ni componentes aprobados. El modificador tiene nombre reutilizable y una única regla; no está disponible automáticamente en páginas que solo cargan `style.new.css`. Ante un siguiente uso aprobado, mover esa misma regla al patrón compartido, eliminando la definición local y verificando los consumidores; no duplicarla ni aplicarla masivamente. El ancho de lectura y la tipografía siguen siendo responsabilidad de la composición.
+
+Uso moderado: encabezados editoriales destacados, bienvenidas y aperturas. No aplicarlo a cada heading, tarjeta o componente. Los botánicos `shape-1/2` son una decisión local de Discovery: decorativos, periféricos, recortados, sin interacción y ausentes en móvil. En futuras páginas evaluar cada contexto y mantenerlos fuera del texto; no convertirlos en fondo global ni repetirlos en todas las secciones.
+
+
 ## Consumo compartido en Home — 2026-10-24
 
 Header, Hero editorial/interior, Footer y acceso residen ahora en `includes/{header,hero,footer,access}.php`. Home, Navigation y los partials de Patterns/transacciones consumen esas mismas fuentes, sin fixtures en Home. Los nombres Wave de los registros inferiores son históricos. Welcome y Spanish Table reutilizan Section System, Media + Content, Foundation y Core; el diseño aprobado de Header/Hero/Footer no cambia. Contratos, archivos, evidencia comparativa y límites de la integración: [HOME-PHASE-B.md](HOME-PHASE-B.md).

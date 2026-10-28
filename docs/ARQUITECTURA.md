@@ -2,6 +2,8 @@
 
 ## Base pública compartida de Home — 2026-10-24
 
+Home Discovery integra bienvenida y galería editorial mediante `includes/discovery.php`, inmediatamente después del Hero y antes de Pure Soul: vinos, tapas/Take Away y hampers con una acción hacia cada página legacy. Welcome y Spanish Table permanecen en sus partials originales. Reutiliza Foundation/Core, Grid, breakpoints Bootstrap y fotografías existentes, con estilos locales en `home.scss`, sin JavaScript nuevo ni cambios comerciales. Estado y QA: [HOME-DISCOVERY.md](HOME-DISCOVERY.md). Composición visual y responsive aprobada y congelada; cierre técnico preparado para PR hacia develop.
+
 Home C2 incorpora `includes/private-experiences.php` inmediatamente después de Pure Soul, con el ancla histórica `private-events` y una consulta hacia `/contact.html#contact-form`. Reutiliza elementos de experiencia y storytelling sin la variante lateral destacada, con ajustes locales en `home.scss` y derivados independientes de fotografía existente. No añade JavaScript, formularios ni servicios comerciales. Selección fotográfica, QA y revisión visual pendiente: [HOME-PHASE-C2.md](HOME-PHASE-C2.md).
 
 Home C1 añade `includes/wines.php` después de Spanish Table, sin JavaScript nuevo. Reutiliza la entrada `home.scss`, el media de vino existente y los derivados AVIF/WebP del archivo. Contrato, QA y validación comercial pendiente en [HOME-PHASE-C1.md](HOME-PHASE-C1.md); no cambia la Home pública ni activa comercio.
