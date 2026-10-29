@@ -30,6 +30,7 @@
 @import "patterns/media-contenido";
 @import "patterns/vino";
 @import "patterns/historia";
+@import "patterns/membresia";
 @import "patterns/experiencia";
 @import "patterns/pie-global";
 @import "patterns/hero";
@@ -510,4 +511,136 @@
   from { transform: scale(1.015); }
 
   to { transform: scale(1); }
+}
+
+// Diamond y Gold comparten la columna comercial; la foto conserva su encuadre en el área editorial.
+.cl-home-club { background: var(--color-fondo-alterno); }
+
+.cl-home-club__composicion {
+  display: grid;
+  gap: var(--espacio-6);
+
+  @include media-breakpoint-between(md, xl) {
+    grid-template-areas: "cabecera cabecera" "diamante oro" "seleccion seleccion";
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--espacio-5);
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-template-areas: "cabecera cabecera" "diamante seleccion" "oro seleccion";
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+    column-gap: var(--espacio-7);
+  }
+}
+
+.cl-home-club__cabecera {
+  display: grid;
+  gap: var(--espacio-5);
+  justify-items: center;
+  margin: 0;
+  text-align: center;
+
+  @include media-breakpoint-between(md, xl) { grid-area: cabecera; }
+
+  @include media-breakpoint-up(xl) { grid-area: cabecera; }
+}
+
+.cl-home-club__titulo {
+  max-inline-size: 24ch;
+  font-size: clamp(2.5rem, 1.75rem + 2vw, 3.5rem);
+}
+
+.cl-home-club__descripcion { max-inline-size: 56ch; }
+
+.cl-home-club__diamante {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: color.mix($wine-700, $neutral-800, 45%);
+
+  .cl-membresia__nombre {
+    margin-block: var(--espacio-5);
+    font-size: clamp(3rem, 2rem + 3vw, 5rem);
+    line-height: 1.05;
+  }
+
+  @include media-breakpoint-up(md) {
+    padding: var(--espacio-6);
+  }
+
+  @include media-breakpoint-up(lg) { padding: var(--espacio-7); }
+
+  @include media-breakpoint-between(md, xl) { grid-area: diamante; }
+
+  @include media-breakpoint-up(xl) { grid-area: diamante; }
+}
+
+.cl-home-club__tipo {
+  display: block;
+  margin-block-start: var(--espacio-2);
+  font-size: 1.5rem;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.cl-home-club__oro {
+  min-inline-size: 0;
+  padding-block: var(--espacio-5);
+  border-block-start-color: var(--color-borde-fuerte);
+
+  .cl-membresia__nombre { margin-block: 0 var(--espacio-5); }
+
+  @include media-breakpoint-up(md) {
+    padding-block-end: 0;
+
+    .cl-home-club__tipo {
+      display: inline;
+      margin-inline-start: var(--espacio-2);
+    }
+  }
+
+  @include media-breakpoint-between(md, xl) {
+    grid-area: oro;
+    align-self: center;
+  }
+
+  @include media-breakpoint-up(xl) { grid-area: oro; }
+}
+
+.cl-home-club__seleccion {
+  min-inline-size: 0;
+  max-inline-size: 18rem;
+  margin: 0 auto;
+  text-align: center;
+
+  picture { display: block; }
+
+  @include media-breakpoint-between(md, xl) {
+    grid-area: seleccion;
+    inline-size: 100%;
+    max-inline-size: none;
+    margin: 0;
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-area: seleccion;
+    align-self: center;
+    inline-size: 100%;
+    max-inline-size: none;
+    margin: 0;
+    text-align: start;
+  }
+}
+
+.cl-home-club__imagen {
+  aspect-ratio: 4 / 3;
+  padding: 0;
+
+  // El recorte horizontal retira solo ambiente superior y utensilios de la barra.
+  @include media-breakpoint-between(md, xl) {
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: center;
+  }
 }
