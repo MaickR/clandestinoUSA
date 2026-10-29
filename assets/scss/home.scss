@@ -644,3 +644,132 @@
     object-position: center;
   }
 }
+
+// Atelier local: fotografía protagonista, relato y alternativa comercial con jerarquías distintas.
+.cl-home-regalos { background: var(--color-fondo); }
+
+.cl-home-regalos__cabecera {
+  display: grid;
+  gap: var(--espacio-5);
+  justify-items: center;
+  max-inline-size: 48rem;
+  margin-inline: auto;
+  text-align: center;
+
+  .cl-seccion__descripcion { max-inline-size: 58ch; }
+}
+
+.cl-home-regalos__titulo {
+  max-inline-size: 23ch;
+  font-size: clamp(2.5rem, 1.75rem + 2vw, 3.5rem);
+
+  em { color: var(--color-acento); }
+}
+
+.cl-home-regalos__composicion {
+  display: grid;
+  gap: var(--espacio-6);
+  text-align: center;
+
+  @include media-breakpoint-up(md) {
+    grid-template-areas: "foto relato" "tarjeta tarjeta";
+    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+    gap: var(--espacio-6);
+    text-align: start;
+  }
+
+  @include media-breakpoint-up(lg) { column-gap: var(--espacio-7); }
+}
+
+.cl-home-regalos__seleccion {
+  min-inline-size: 0;
+  margin: 0;
+
+  @include media-breakpoint-up(md) { grid-area: foto; }
+}
+
+.cl-home-regalos__imagen {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radio-md);
+  object-fit: cover;
+  object-position: center 48%;
+
+  @include media-breakpoint-up(md) { aspect-ratio: 1; }
+
+  @include media-breakpoint-up(lg) { aspect-ratio: 4 / 3; }
+}
+
+.cl-home-regalos__firma {
+  margin-block-start: var(--espacio-3);
+  color: var(--color-acento);
+  font-family: var(--fuente-display);
+  font-size: 1.125rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.cl-home-regalos__hampers {
+  min-inline-size: 0;
+
+  .cl-seccion__acciones { margin-inline: auto; }
+
+  @include media-breakpoint-up(md) {
+    grid-area: relato;
+    align-self: center;
+
+    // Compensa ópticamente el caption de la columna vecina, sin separar el grupo editorial.
+    margin-block-end: var(--espacio-6);
+
+    .cl-home-regalos__subtitulo { max-inline-size: 16ch; }
+
+    .cl-seccion__descripcion { max-inline-size: 42ch; }
+
+    .cl-seccion__acciones { margin-inline: 0; }
+  }
+}
+
+.cl-home-regalos__subtitulo {
+  margin-block: var(--espacio-4);
+  font-size: clamp(2rem, 1.5rem + 1vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.cl-home-regalos__tarjeta {
+  display: grid;
+  gap: var(--espacio-5);
+  min-inline-size: 0;
+  padding: var(--espacio-5);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-md);
+  background: color.mix($wine-700, $neutral-800, 35%);
+
+  .cl-seccion__descripcion { font-size: 0.875rem; }
+
+  .cl-seccion__acciones {
+    max-inline-size: 16rem;
+    margin-inline: auto;
+  }
+
+  @include media-breakpoint-up(md) {
+    grid-area: tarjeta;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    align-items: center;
+    gap: var(--espacio-6);
+    padding: var(--espacio-6);
+
+    .cl-seccion__acciones { margin-inline: 0; }
+  }
+}
+
+.cl-home-regalos__arte {
+  display: block;
+  inline-size: 100%;
+  max-inline-size: 15rem;
+  block-size: auto;
+  margin-inline: auto;
+  border-radius: var(--radio-md);
+  object-fit: contain;
+}
