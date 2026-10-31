@@ -1,0 +1,67 @@
+// Adaptación semántica del H3 de muestra a un H2 real, con la misma escala del patrón.
+.cl-home-visita__titulo {
+  margin-block-end: var(--espacio-5);
+  font-size: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
+}
+
+.cl-home-visita__datos {
+  display: grid;
+  gap: var(--espacio-4) var(--espacio-3);
+  margin-block: var(--espacio-5);
+  color: var(--color-texto-secundario);
+}
+
+.cl-home-visita__direccion { margin: 0; }
+
+.cl-home-visita__confirmacion {
+  margin-block: var(--espacio-3) 0;
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
+
+.cl-home-visita__telefono {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-1) var(--espacio-3);
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  margin-block-start: var(--espacio-2);
+  font-size: 0.875rem;
+}
+
+// Ajustes locales: la retícula, superficie, padding y radios siguen perteneciendo al patrón.
+.cl-home-visita {
+  // El centrado del texto móvil no debe desplazar la posición estática de la foto absoluta.
+  .cl-banda-cta__imagen { inset: 0; }
+
+  .cl-banda-cta__contenido { align-items: stretch; }
+
+  .cl-banda-cta__acciones {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-inline-size: none;
+
+    > .cl-boton {
+      inline-size: 100%;
+      max-inline-size: none;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    // Cada columna requiere 10rem efectivos; con texto ampliado vuelve a una columna.
+    .cl-home-visita__datos,
+    .cl-banda-cta__acciones { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+
+    .cl-home-visita__telefono {
+      align-self: start;
+      justify-content: start;
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    text-align: center;
+
+    .cl-seccion__descripcion { margin-inline: auto; }
+  }
+}

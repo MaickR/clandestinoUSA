@@ -43,8 +43,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
           <?php if ($datosContacto['mapa']) : ?><p><a class="cl-enlace" href="<?= $escaparNavegacion($datosContacto['mapa']) ?>" target="_blank" rel="noopener noreferrer">Find us on Google Maps<span class="visually-hidden"> (opens a new tab)</span></a></p><?php endif; ?>
           <?php if ($datosContacto['telefono']) : ?><p><a class="cl-enlace" href="<?= $escaparNavegacion($datosContacto['telefono']['url']) ?>"><?= $escaparNavegacion($datosContacto['telefono']['texto']) ?></a></p><?php endif; ?>
           <?php if ($datosContacto['email']) : ?><p><a class="cl-enlace" href="mailto:<?= $escaparNavegacion($datosContacto['email']) ?>"><?= $escaparNavegacion($datosContacto['email']) ?></a></p><?php endif; ?>
-          <?php if ($datosContacto['horario']) : ?><p><?= implode('<br>', array_map($escaparNavegacion, $datosContacto['horario'])) ?></p>
-          <?php else : ?><p class="cl-pie__nota">Opening hours · awaiting confirmation.</p><?php endif; ?>
+          <?php if ($datosContacto['horario']) : ?><p><?= implode('<br>', array_map($escaparNavegacion, $datosContacto['horario'])) ?></p><?php endif; ?>
         </address>
       </div>
     </div>
