@@ -27,6 +27,7 @@
 @import "components/icon";
 @import "components/boton-icono";
 @import "patterns/seccion";
+@import "patterns/banda-cta";
 @import "patterns/media-contenido";
 @import "patterns/vino";
 @import "patterns/historia";
@@ -36,6 +37,7 @@
 @import "patterns/hero";
 @import "patterns/navegacion-global";
 @import "patterns/acceso";
+@import "pages/home-visita";
 
 // Adaptador de escenas sobre el mismo grid superpuesto de Wave 1.
 .cl-hero--slider {
