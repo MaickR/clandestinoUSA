@@ -1,0 +1,151 @@
+// Banda panorámica local: la invitación comparte superficie con la fotografía, sin panel solapado.
+.cl-home-privadas__ancho {
+  padding-inline: var(--espacio-4);
+
+  @include media-breakpoint-up(md) { padding-inline: var(--espacio-6); }
+
+  @include media-breakpoint-up(xl) { padding-inline: var(--espacio-7); }
+}
+
+.cl-home-privadas__composicion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: clip;
+  border-radius: var(--radio-md);
+  background: var(--color-fondo-alterno);
+
+  @include media-breakpoint-down(md) {
+    // El comienzo de la lectura determina la protección, incluso cuando crece el texto.
+    --privadas-aire: clamp(14rem, 64vw, 22rem);
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    min-block-size: clamp(34rem, 38vw, 40rem);
+  }
+}
+
+.cl-home-privadas__escenario {
+  position: relative;
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+  margin: 0;
+  overflow: clip;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba($neutral-950, 0) 0, rgba($neutral-950, 0.06) calc(var(--privadas-aire) - 9rem), rgba($neutral-950, 0.45) calc(var(--privadas-aire) - 4rem), rgba($neutral-950, 0.94) var(--privadas-aire), rgba($neutral-950, 0.97) calc(var(--privadas-aire) + 8rem), rgba($neutral-950, 0.98) 100%);
+    content: "";
+    pointer-events: none;
+  }
+
+  @include media-breakpoint-up(md) {
+    &::after {
+      background: linear-gradient(to right, rgba($neutral-950, 0.97), rgba($neutral-950, 0.94) 48%, rgba($neutral-950, 0.85) 62%, rgba($neutral-950, 0) 100%);
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    grid-area: 1 / 4 / 2 / -1;
+
+    // La transición nace en el borde de la foto y deja intacta su zona protagonista.
+    &::after {
+      background: linear-gradient(to right, $neutral-950, rgba($neutral-950, 0.94) 24%, rgba($neutral-950, 0) 58%);
+    }
+  }
+}
+
+.cl-home-privadas__escenario .cl-experiencia__media {
+  block-size: 100%;
+  border-radius: 0;
+}
+
+.cl-home-privadas__imagen {
+  --experiencia-foco: center 58%;
+
+  position: absolute;
+  block-size: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+
+  @include media-breakpoint-down(md) {
+    // Se recorta la franja alta de estanterías para llevar botella y copa al área visible.
+    --experiencia-foco: 60% center;
+
+    inset-block-end: 0;
+    block-size: 145%;
+  }
+}
+
+.cl-home-privadas__invitacion {
+  position: relative;
+  grid-area: 1 / 1;
+  align-self: end;
+  min-inline-size: 0;
+  padding: var(--privadas-aire) var(--espacio-5) var(--espacio-6);
+  text-align: center;
+
+  .cl-seccion__acciones {
+    justify-content: center;
+    margin-inline: auto;
+  }
+
+  @include media-breakpoint-up(md) {
+    align-self: center;
+    inline-size: min(100%, 30rem);
+    padding: var(--espacio-7);
+    text-align: start;
+
+    .cl-seccion__acciones {
+      justify-content: start;
+      margin-inline: 0;
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    display: block;
+    grid-area: 1 / 1 / 2 / 7;
+    inline-size: auto;
+    padding: var(--espacio-8);
+  }
+}
+
+.cl-home-privadas__titulo {
+  max-inline-size: 14ch;
+  margin-inline: auto;
+  font-size: clamp(2.25rem, 1.5rem + 2.5vw, 4rem);
+  text-wrap: balance;
+
+  @include media-breakpoint-up(md) {
+    margin-inline: 0;
+    font-size: clamp(2.25rem, 1.5rem + 1.5vw, 2.75rem);
+  }
+
+  @include media-breakpoint-up(xl) { font-size: clamp(3rem, 1.5rem + 2.5vw, 4rem); }
+}
+
+.cl-home-privadas__relato {
+  max-inline-size: 46ch;
+  margin-block-start: var(--espacio-5);
+  margin-inline: auto;
+
+  @include media-breakpoint-up(md) { margin: var(--espacio-5) 0 0; }
+}
+
+// Se conserva la mejora local existente; no se introduce una nueva estrategia de movimiento.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .cl-home-privadas__imagen {
+      animation: cl-privadas-entrada 1ms linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes cl-privadas-entrada {
+  from { transform: scale(1.015); }
+
+  to { transform: scale(1); }
+}
