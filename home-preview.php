@@ -84,6 +84,7 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
     <?php require __DIR__ . '/includes/discovery.php'; ?>
     <?php require __DIR__ . '/includes/wines.php'; ?>
     <?php require __DIR__ . '/includes/private-experiences.php'; ?>
+    <?php require __DIR__ . '/includes/guest-stories.php'; ?>
     <?php require __DIR__ . '/includes/wine-club.php'; ?>
     <?php require __DIR__ . '/includes/gifting.php'; ?>
     <?php require __DIR__ . '/includes/visit.php'; ?>

@@ -1,0 +1,105 @@
+// Adaptación editorial local sobre el carrusel audiovisual de Wave 5.
+.cl-home-historias {
+  background: var(--color-fondo-alterno);
+
+  &__composicion {
+    display: grid;
+    gap: var(--espacio-5);
+  }
+
+  &__editorial {
+    align-self: center;
+    max-inline-size: 36rem;
+    margin-inline: auto;
+    text-align: center;
+
+    .cl-display { margin-block: var(--espacio-5); }
+  }
+
+  &__relato {
+    display: grid;
+    gap: var(--espacio-4);
+  }
+
+  &__coleccion {
+    display: grid;
+
+    // Reservar la fila de navegación antes de que llegue el módulo dinámico.
+    grid-template-rows: calc(2.75rem + var(--espacio-2)) 1fr;
+    min-inline-size: 0;
+  }
+
+  .cl-carrusel__controles {
+    position: relative;
+    min-block-size: 2.75rem;
+    margin-block: 0 var(--espacio-2);
+  }
+
+  // Sin mejora JS se conserva la barra nativa como ayuda de descubrimiento.
+  &:has([data-cl-carrusel-controles]:not([hidden])) .cl-carrusel__pista {
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .cl-carrusel__pista {
+    grid-row: 2;
+    grid-auto-columns: min(86%, 19rem);
+    gap: var(--espacio-4);
+    align-items: stretch;
+  }
+
+  .cl-carrusel__item {
+    position: relative;
+    background: var(--color-superficie);
+  }
+
+  .cl-media-video__pantalla {
+    max-inline-size: none;
+    border: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .cl-carrusel__contexto {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--espacio-3);
+    align-items: baseline;
+    padding: var(--espacio-4);
+
+    h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+  }
+
+  &__duracion {
+    color: var(--color-acento);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  @include media-breakpoint-up(md) {
+    .cl-carrusel__pista { grid-auto-columns: calc((100% - 2 * var(--espacio-4)) / 2.25); }
+  }
+
+  @include media-breakpoint-up(xl) {
+    &__composicion {
+      grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+      column-gap: var(--espacio-7);
+    }
+
+    &__editorial {
+      margin-inline: 0;
+      text-align: left;
+
+      &.cl-seccion__encabezado--ornamentado > .cl-eyebrow::after { margin-inline: 0; }
+    }
+
+    .cl-display { font-size: clamp(2.5rem, 3.5vw, 3.5rem); }
+
+    .cl-carrusel__pista { grid-auto-columns: calc((100% - 2 * var(--espacio-4)) / 2.2); }
+  }
+}
