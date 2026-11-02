@@ -24,4 +24,16 @@ if (pagina) {
       for (const escenas of pagina.querySelectorAll("[data-cl-escenas]")) inicializarEscenasHero(escenas);
     });
   }
+  // Los módulos audiovisuales se descargan solo en documentos con esta colección.
+  if (pagina.querySelector("[data-cl-carrusel-media]")) {
+    Promise.all([
+      import("./modules/patterns/carrusel.js"),
+      import("./modules/patterns/carrusel-media.js"),
+    ]).then(([{ inicializarCarrusel }, { inicializarMediaCarrusel }]) => {
+      for (const coleccion of pagina.querySelectorAll("[data-cl-carrusel-media]")) {
+        inicializarMediaCarrusel(coleccion);
+        inicializarCarrusel(coleccion);
+      }
+    });
+  }
 }
