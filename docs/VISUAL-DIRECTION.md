@@ -37,6 +37,14 @@ Combinar una imagen principal con invitaciones secundarias compactas. Alternar s
 
 Todos los contenedores y fotografías nuevos usan `--radio-md`; revisar el resultado renderizado, no solo el wrapper. Un `<picture>` intermedio no hereda automáticamente el radio de su abuelo. No añadir imágenes externas, generar derivados ni alterar originales sin autorización. Reservar dimensiones/proporciones y evitar distorsión. En el visor, `contain` conserva toda la fotografía; los recortes pertenecen exclusivamente a miniaturas.
 
+### Degradado cinematográfico editorial
+
+Tratamiento disponible como criterio para futuros banners: enlazar progresivamente la fotografía y la lectura mediante una capa de neutro cálido Foundation sobre el media, debajo del contenido. C7 — Private Experiences es la referencia aprobada. Adaptar dirección, densidad y puntos de transición a la posición real del texto; proteger cada escena sin apagar uniformemente la fotografía. Evitar mesetas extensas de opacidad, velos globales superpuestos, parches radiales perceptibles y cajas opacas para el relato. No filtrar el contenedor que incluye texto o acciones.
+
+Home Hero aplica este criterio en su overlay local: transición vertical de altura completa y densidad decreciente para lectura centrada por debajo de `lg`, y lateral desde `lg`. En mobile/tablet se evita un máximo oscuro central entre dos extremos mucho más luminosos: esa curva dibujaba zonas horizontales perceptibles. Las tres escenas comparten la corrección, sin cambiar composición, imágenes ni movimiento. Se validan juntas, incluidos contraste de glifos sobre el recorte real, CTA y extremos responsive. Implementación y evidencia en [HOME-HEADER-HERO-REWORK.md](HOME-HEADER-HERO-REWORK.md), cierre del 2026-11-02; **Hero definitivo aprobado visualmente por el responsable en desktop, tablet y móvil, incluido el degradado vertical**.
+
+Su disponibilidad editorial no implica una variante global nueva: el código permanece en `.cl-hero--slider` de `home.scss`. No se aplica a interiores ni a otras secciones. Ante otro uso real autorizado, reutilizar el criterio y evaluar la extracción mínima de estilos tras comprobar sus consumidores; no duplicar marcado ni adoptar automáticamente los mismos porcentajes para otra composición.
+
 ## Acciones y controles
 
 Una sección debe hacer evidente su siguiente paso. Explorar carta/club y consultar un encuentro son acciones distintas de reservar o comprar. Una invitación principal puede usar el botón Core con borde o superficie; enlaces editoriales secundarios conservan subrayado, foco y target suficiente. La fotografía de una galería es un enlace/control real, con nombre accesible y una indicación visible para ampliar.
@@ -57,6 +65,7 @@ Champagne para jerarquía/acción y bordes selectivos para separación. Superfic
 ## Referencias concretas aprobadas
 
 - **Wave 1 / `cl-hero`:** copy y foto superpuestos en todos los tamaños; la protección elíptica es localizada, sin rectángulo opaco global. El texto no cae debajo de la fotografía en móvil.
+- **Home Hero / refinamiento 2026-11-02:** conserva el contrato superpuesto de Wave 1 y desactiva su radial mediante el adaptador local existente. El acabado lateral de desktop y el degradado vertical de mobile/tablet están aprobados. Son referencia editorial para futuros banners; el código pertenece exclusivamente a Home y requiere evaluación contextual antes de otro uso autorizado.
 - **Wave 1 / `cl-media-contenido`:** columnas desde md, proporciones contextuales y orden imagen/narrativa conservado. Es la primera opción para un split que no requiere otra responsabilidad.
 - **Wave 1 / `cl-banda-cta--destacada`:** fotografía lateral, invitación con nota útil y acciones claras; sirve de referencia para densidad y CTA contextual.
 - **Wave 2 / `cl-producto-gastronomico`:** fotografía protagonista y pie comercial con precio/acción agrupados. La experiencia editorial no debe copiar ese pie de catálogo.
