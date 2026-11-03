@@ -31,10 +31,8 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
 
-// Start session for CSRF and rate limiting
-if (session_status() !== PHP_SESSION_ACTIVE) {
-  @session_start();
-}
+require_once __DIR__ . '/includes/formularios.php';
+iniciarSesionFormulario();
 
 // Quick response function
 function respond($code, $data) {
@@ -94,6 +92,7 @@ $SPAM_KEYWORDS = [
 // Only POST allowed
 // ---------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Allow: POST');
   respond(405, ['success' => false, 'errorMessage' => 'Method not allowed']);
 }
 
@@ -102,8 +101,14 @@ if (empty($_POST)) {
   respond(400, ['success' => false, 'errorMessage' => 'No data received']);
 }
 
+verificarSolicitudFormulario();
+
 $now = time();
 $spamScore = 0;
+// Conservar la señal antispam débil cuando el navegador omite ambas cabeceras.
+if (!isset($_SERVER['HTTP_ORIGIN']) && !isset($_SERVER['HTTP_REFERER'])) {
+    $spamScore += 1;
+}
 
 // ---------------------------------------------------------------------------
 // Honeypot check (multiple traps — humans never see these fields)
@@ -137,36 +142,11 @@ if ($loadedAt <= 0) {
 // ---------------------------------------------------------------------------
 // Same-site check: legitimate fetch() requests carry our Origin/Referer.
 // ---------------------------------------------------------------------------
-$host = strtolower($_SERVER['HTTP_HOST'] ?? '');
-$originHost = strtolower(parse_url($_SERVER['HTTP_ORIGIN'] ?? '', PHP_URL_HOST) ?: '');
-$refererHost = strtolower(parse_url($_SERVER['HTTP_REFERER'] ?? '', PHP_URL_HOST) ?: '');
-if (($originHost !== '' && $originHost !== $host) || ($refererHost !== '' && $refererHost !== $host)) {
-  $spamScore += 2; // cross-site forgery attempt
-} elseif ($originHost === '' && $refererHost === '') {
-  $spamScore += 1; // missing entirely: slightly suspicious (browsers always send it)
-}
+// El origen ya se verificó junto al token de sesión.
 
 // ---------------------------------------------------------------------------
 // Sanitizers
 // ---------------------------------------------------------------------------
-function clean($value, $type = 'text') {
-  if (is_array($value)) return '';
-  $value = trim($value);
-  $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $value);
-
-  switch ($type) {
-    case 'email':
-      return filter_var($value, FILTER_SANITIZE_EMAIL);
-    case 'phone':
-      return preg_replace('/[^0-9+()\-\s]/', '', $value);
-    case 'name':
-      return preg_replace('/[^\p{L}\s\-\'\.]/u', '', $value);
-    default:
-      return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-  }
-}
-
-/** Header-injection guard: CR/LF characters are never legitimate here. */
 function hasInjection($value) {
   return is_string($value) && preg_match('/[\r\n]/', $value);
 }
@@ -178,18 +158,19 @@ foreach (['name', 'email', 'tel', 'subject'] as $field) {
 }
 
 // Get and sanitize inputs
-$name = clean($_POST['name'] ?? '', 'name');
-$email = clean($_POST['email'] ?? '', 'email');
-$phone = clean($_POST['tel'] ?? '', 'phone');
-$subject = clean($_POST['subject'] ?? '');
-$message = clean($_POST['message'] ?? '');
+$name = trim($_POST['name'] ?? '');
+$email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['tel'] ?? '');
+$subject = trim($_POST['subject'] ?? '');
+$message = trim($_POST['message'] ?? '');
 
 // ---------------------------------------------------------------------------
 // Validation (honest errors for real users)
 // ---------------------------------------------------------------------------
 $errors = [];
 
-if (mb_strlen($name) < 2 || mb_strlen($name) > 80) {
+if (mb_strlen($name) < 2 || mb_strlen($name) > 80
+    || !preg_match('/^[\p{L}\p{M}\s\x{2019}\x{2018}\x{201c}\x{201d}\x{22}\x{27}&.\-]+$/u', $name)) {
   $errors[] = 'Name must be 2-80 characters';
 }
 
@@ -197,7 +178,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 120) {
   $errors[] = 'Valid email required';
 }
 
-if (mb_strlen($phone) < 6) {
+if (mb_strlen($phone) < 6 || mb_strlen($phone) > 30 || !preg_match('/^[0-9+()\-\s]+$/D', $phone)) {
   $errors[] = 'Valid phone required';
 }
 
@@ -319,11 +300,11 @@ $_SESSION['clx_submit_count'] = $submitCount + 1;
 // ---------------------------------------------------------------------------
 $date = date('F j, Y');
 $time = date('g:i A');
-$nameSafe = htmlspecialchars($name);
-$emailSafe = htmlspecialchars($email);
-$phoneSafe = htmlspecialchars($phone);
-$subjectSafe = htmlspecialchars($subject ?: 'General Question');
-$messageSafe = nl2br(htmlspecialchars($message));
+$nameSafe = escaparCorreo($name);
+$emailSafe = escaparCorreo($email);
+$phoneSafe = escaparCorreo($phone);
+$subjectSafe = escaparCorreo($subject ?: 'General Question');
+$messageSafe = nl2br(escaparCorreo($message));
 
 $emailBody = <<<HTML
 <!DOCTYPE html>
@@ -429,38 +410,14 @@ HTML;
 
 // ---------------------------------------------------------------------------
 // One message per inbox. Cc/Bcc is dropped by some hosts, so each
-// address gets its own delivery. Success only when all three accept it.
+// dirección conserva su envío individual; el éxito depende del destinatario principal.
 // ---------------------------------------------------------------------------
-function deliver_all($subject, $html, $plain, $replyTo) {
-  $subject = str_replace(["\r", "\n"], ' ', $subject);
-  $replyTo = str_replace(["\r", "\n"], '', $replyTo);
-  $recipients = [MAIL_TO_PRIMARY, MAIL_TO_COPY, MAIL_TO_BCC];
-
-  foreach ($recipients as $addr) {
-    $headers = implode("\r\n", [
-      'From: ' . MAIL_FROM_NAME . ' <' . MAIL_FROM . '>',
-      'Reply-To: ' . $replyTo,
-      'MIME-Version: 1.0',
-      'Content-Type: text/html; charset=UTF-8',
-      'X-Mailer: ClandestinoUSA/4.1'
-    ]);
-    $sent = @mail($addr, $subject, $html, $headers, '-f' . MAIL_FROM);
-    if (!$sent) {
-      $plainHeaders = 'From: ' . MAIL_FROM . "\r\nReply-To: " . $replyTo . "\r\nContent-Type: text/plain; charset=UTF-8";
-      $sent = @mail($addr, $subject, $plain, $plainHeaders);
-    }
-    if (!$sent) {
-      return false;
-    }
-  }
-  return true;
-}
 
 $emailSubject = ($subject ?: 'Contact') . ' - ' . $name;
-$replyTo = $name . ' <' . $email . '>';
+$replyTo = $email;
 $plainBody = "NEW CONTACT MESSAGE\n==================\n\nFrom: {$name}\nEmail: {$email}\nPhone: {$phone}\nSubject: {$subject}\n\nMessage:\n{$message}\n\nReceived: {$date} at {$time}";
 
-if (deliver_all($emailSubject, $emailBody, $plainBody, $replyTo)) {
+if (enviarNotificacionesFormulario('contact', $emailSubject, $emailBody, $plainBody, $replyTo)) {
   respond(200, [
     'success' => true,
     'message' => 'Thank you for contacting The Clandestino USA. We will get back to you soon.'

@@ -167,6 +167,9 @@ FileETag MTime Size
   RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
   RewriteRule ^index\.html$ https://theclandestinousa.com/ [R=301,L]
 
+  # Token de sesión después de los redirects canónicos; diseño y URL conservados.
+  RewriteRule ^contact\.html$ contact-page.php [L]
+
   # Backups and source maps are not public documents
   RewriteRule \.(?:backup|bak|old|map)$ - [F,L]
 </IfModule>

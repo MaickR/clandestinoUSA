@@ -1257,6 +1257,7 @@
             <form id="clandestino-reservation-form" class="form-left" novalidate>
               <!-- Anti-spam: timestamp + hidden traps (humans never see these) -->
               <input type="hidden" name="form_loaded_at" id="reservation-loaded-at" value="">
+              <input type="hidden" name="csrf_token" value="">
               <div class="clx-honeypot" aria-hidden="true">
                 <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
                 <label>Leave this field empty <input type="text" name="company" tabindex="-1" autocomplete="off"></label>
@@ -1832,6 +1833,7 @@
     });
   </script>
   <script src="./assets/js/form-feedback.js" defer></script>
+  <script src="./assets/js/forms-security.js" defer></script>
   <!-- Reservation form: validate, email the team, show a dismissible result -->
   <script>
     (function () {
@@ -1909,18 +1911,28 @@
         }
 
         if (btn) { btn.setAttribute('data-sending', '1'); btn.disabled = true; }
-        var fd = new FormData(form);
+        var solicitudIniciada = false;
         var controller = new AbortController();
         var timeout = setTimeout(function () { controller.abort(); }, 25000);
 
-        fetch(ENDPOINT, {
-          method: 'POST',
-          body: fd,
-          headers: { 'Accept': 'application/json' },
-          credentials: 'same-origin',
-          signal: controller.signal
+        Promise.resolve().then(function () {
+          return window.ClandestinoForms.preparar(form, controller.signal);
+        }).then(function () {
+          solicitudIniciada = true;
+          return fetch(ENDPOINT, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' },
+            credentials: 'same-origin',
+            signal: controller.signal
+          });
         }).then(function (res) {
-          return res.json().catch(function () { return { success: false, errorMessage: 'Unexpected server response.' }; });
+          return res.json().then(function (data) {
+            if (!data || typeof data.success !== 'boolean' || (data.success && !res.ok)) {
+              throw new Error('Invalid form response');
+            }
+            return data;
+          });
         }).then(function (data) {
           if (data && data.success) {
             feedback(true, 'Request sent', data.message || 'Your reservation request was sent. We will confirm by email or phone.');
@@ -1935,9 +1947,9 @@
           }
         }).catch(function (err) {
           var timedOut = err && err.name === 'AbortError';
-          feedback(false, timedOut ? 'Request timed out' : 'Connection problem', timedOut
-            ? 'The server took too long. Please try again or call +1 408-609-0027.'
-            : 'We could not reach the server. Check your connection, or call +1 408-609-0027.');
+          feedback(false, timedOut ? 'Request timed out' : 'Connection problem', solicitudIniciada
+            ? 'We could not confirm the result. Please call +1 408-609-0027 before submitting again to avoid a duplicate request.'
+            : 'Your form session could not be prepared. No request was sent. Please refresh the page or call +1 408-609-0027.');
         }).finally(function () {
           clearTimeout(timeout);
           if (btn) { btn.removeAttribute('data-sending'); btn.disabled = false; }
