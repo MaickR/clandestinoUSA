@@ -128,6 +128,10 @@ export function inicializarEscenasHero(contenedor) {
   reducido.addEventListener("change", () => cambiarPausa("reduced-motion", reducido.matches), { signal: eventos.signal });
   const observador = new IntersectionObserver(([entrada]) => cambiarPausa("intersection", !entrada.isIntersecting));
   observador.observe(contenedor);
+  // La pausa y los atajos solo son operables con la mejora inicializada.
+  pausa.hidden = false;
+  pista.tabIndex = 0;
+  pista.setAttribute("aria-label", "Restaurant scenes. Use the arrow keys to explore.");
   controles.hidden = false;
   const api = {
     destruir() {
@@ -139,6 +143,9 @@ export function inicializarEscenasHero(contenedor) {
       eventos.abort();
       observador.disconnect();
       controles.hidden = true;
+      pausa.hidden = true;
+      pista.removeAttribute("tabindex");
+      pista.setAttribute("aria-label", "Restaurant scenes");
       programar();
       inicializados.delete(contenedor);
     },

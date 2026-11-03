@@ -25,11 +25,14 @@
 .cl-cabecera-testigo { block-size: 1px; }
 
 .cl-cabecera {
-  position: sticky;
+  position: relative;
   z-index: 100;
   inset-block-start: 0;
   border-block-end: 1px solid var(--color-borde);
   background: var(--color-fondo);
+
+  // Sin drawer la navegación expandida debe poder salir del viewport al hacer scroll.
+  &--mejorada { position: sticky; }
 
   &--fijada {
     background: var(--color-fondo-alterno);
@@ -81,10 +84,14 @@
   }
 
   &--con-carrito &__fila {
-    flex-wrap: nowrap;
     gap: var(--espacio-3);
   }
-  &--con-carrito &__marca { min-inline-size: 0; }
+
+  &--con-carrito &__marca {
+    // Reservar tres controles y sus gaps; si no caben, envolver sin colapsar el logo.
+    flex-basis: clamp(2.75rem, calc(100% - 3 * (2.75rem + var(--espacio-3))), 8rem);
+    min-inline-size: 0;
+  }
   &--con-carrito &__cuenta { margin: 0; }
   &__origen { display: flex; }
 

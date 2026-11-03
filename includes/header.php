@@ -15,7 +15,7 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
     <a class="cl-cabecera__marca" href="<?= $escaparNavegacion($rutasNavegacion['Home']) ?>" data-cl-nav-marca aria-label="The Clandestino USA · Home">
       <img class="cl-cabecera__logo" src="<?= $escaparNavegacion($logoNavegacion) ?>" width="174" height="79" alt="The Clandestino USA">
     </a>
-    <div class="cl-cabecera__panel" id="navegacion-global" data-cl-nav-panel tabindex="-1" aria-labelledby="navegacion-global-titulo">
+    <div class="cl-cabecera__panel" id="navegacion-global" data-cl-nav-panel tabindex="-1">
       <div class="cl-cabecera__panel-cabecera" data-cl-nav-cabecera hidden>
         <p class="cl-eyebrow" id="navegacion-global-titulo">Explore The Clandestino</p>
         <span class="cl-cabecera__cierre-slot" data-cl-nav-cierre></span>

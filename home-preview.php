@@ -54,7 +54,7 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
   <main id="contenido" tabindex="-1">
     <h1 class="visually-hidden">Spanish Wine &amp; Tapas in Mount Shasta · The Clandestino</h1>
     <section class="cl-hero cl-hero--slider" aria-label="The Clandestino. Spanish hospitality in Mount Shasta." aria-roledescription="carousel" data-cl-escenas>
-      <button class="cl-boton cl-hero__pausa visually-hidden-focusable" type="button" data-cl-escenas-pausa>Pause automatic slides</button>
+      <button class="cl-boton cl-hero__pausa visually-hidden-focusable" type="button" data-cl-escenas-pausa hidden>Pause automatic slides</button>
       <div class="cl-hero__controles" data-cl-escenas-controles hidden>
         <div class="cl-hero__indicadores" role="group" aria-label="Choose a photograph">
           <?php foreach ($fotografias as $indice => $fotografia) : ?>
@@ -63,7 +63,7 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
         </div>
         <span class="visually-hidden" aria-live="polite" aria-atomic="true" data-cl-escenas-posicion></span>
       </div>
-      <div class="cl-hero__pista" id="home-fotografias" role="group" aria-label="Restaurant scenes. Use the arrow keys to explore." tabindex="0" data-cl-escenas-pista>
+      <div class="cl-hero__pista" id="home-fotografias" role="group" aria-label="Restaurant scenes" data-cl-escenas-pista>
         <?php foreach ($fotografias as $indice => $fotografia) : ?>
         <div class="cl-hero cl-hero__diapositiva cl-hero__diapositiva--<?= $escaparNavegacion($fotografia['encuadre']) ?><?= $indice === 0 ? ' cl-hero__diapositiva--activa' : '' ?>" role="group" aria-label="<?= $indice + 1 ?> of 3" aria-roledescription="slide"<?= $indice === 0 ? '' : ' aria-hidden="true" inert' ?>>
           <?php
