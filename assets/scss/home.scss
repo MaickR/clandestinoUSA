@@ -97,9 +97,9 @@
       position: absolute;
       z-index: 1;
       inset: 0;
-      background:
-        linear-gradient(to bottom, rgba($neutral-950, 0.12), rgba($neutral-950, 0.61) 12%, rgba($neutral-950, 0.61) 70%, rgba($neutral-950, 0)),
-        rgba($neutral-950, 0.14);
+
+      // Altura completa y densidad decreciente: sin máximos centrales ni franjas de luz en los extremos.
+      background: linear-gradient(to bottom, rgba($neutral-950, 0.72), rgba($neutral-950, 0.58));
       content: "";
       pointer-events: none;
     }
@@ -163,9 +163,8 @@
 
   @include media-breakpoint-up(lg) {
     .cl-hero__media::after {
-      background:
-        linear-gradient(to right, rgba($neutral-950, 0.61), rgba($neutral-950, 0.61) 40%, rgba($neutral-950, 0.28) 64%, rgba($neutral-950, 0) 92%),
-        rgba($neutral-950, 0.14);
+      // Como en C7, una sola transición cálida enlaza lectura y fotografía, sin velo global.
+      background: linear-gradient(to right, rgba($neutral-950, 0.94), rgba($neutral-950, 0.86) 18%, rgba($neutral-950, 0.72) 34%, rgba($neutral-950, 0.58) 50%, rgba($neutral-950, 0.26) 68%, rgba($neutral-950, 0.06) 84%, rgba($neutral-950, 0));
     }
   }
 
