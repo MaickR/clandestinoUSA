@@ -1073,6 +1073,7 @@
   </style>
 
   <script src="./assets/js/form-feedback.js" defer></script>
+  <script src="./assets/js/forms-security.js" defer></script>
   <script type="module" src="./assets/js/script.js" defer></script>
 
   <!-- Contact Form Modal Handler -->
@@ -1113,6 +1114,8 @@
         // Override the form submission
         form.addEventListener('submit', async function(e) {
           e.preventDefault();
+          // Un único envío: el modal sustituye los listeners legacy de burbujeo.
+          e.stopImmediatePropagation();
           
           const submitBtn = document.getElementById('clx-submit-btn');
           if (submitBtn.classList.contains('is-loading')) return;
@@ -1136,13 +1139,16 @@
           submitBtn.classList.add('is-loading');
           submitBtn.disabled = true;
           
-          const formData = new FormData(form);
+          let solicitudIniciada = false;
           
           // Create abort controller for timeout
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 25000); // 25 second timeout
           
           try {
+            await window.ClandestinoForms.preparar(form, controller.signal);
+            const formData = new FormData(form);
+            solicitudIniciada = true;
             const response = await fetch(form.action, {
               method: 'POST',
               headers: { 'Accept': 'application/json' },
@@ -1151,9 +1157,10 @@
               signal: controller.signal
             });
             
-            clearTimeout(timeoutId);
-            
-            const data = await response.json().catch(() => ({ success: false, error: 'parse' }));
+            const data = await response.json();
+            if (!data || typeof data.success !== 'boolean' || (data.success && !response.ok)) {
+              throw new Error('Invalid form response');
+            }
             
             // Hide inline status
             if (statusEl) {
@@ -1161,9 +1168,10 @@
             }
             
             if (data.success) {
-              showModal(true, 'Message Sent Successfully!', 'Thank you for contacting The Clandestino USA. We will get back to you as soon as possible.');
-              form.reset();
-              regenerateCSRF();
+              showModal(true, 'Message Sent Successfully!', data.message);
+              if (window.ClandestinoContact) window.ClandestinoContact.resetForm();
+              else form.reset();
+              if (loadedAtField) loadedAtField.value = String(Math.floor(Date.now() / 1000));
             } else {
               const errorMsg = data.errorMessage || 'There was an error sending your message. Please try again or call us directly.';
               showModal(false, 'Error Sending Message', errorMsg);
@@ -1176,14 +1184,16 @@
             
             // Check if it was a timeout
             const errorTitle = error.name === 'AbortError' ? 'Request Timeout' : 'Network Error';
-            const errorMsg = error.name === 'AbortError' 
-              ? 'The server is taking too long to respond. Please try again or call us directly at +1 408-609-0027.'
-              : 'Unable to send your message. Please check your connection and try again, or call us directly at +1 408-609-0027.';
-            
+            const errorMsg = solicitudIniciada
+              ? 'We could not confirm the result. Please call +1 408-609-0027 before submitting again to avoid a duplicate request.'
+              : 'Your form session could not be prepared. No message was sent. Please refresh the page or call +1 408-609-0027.';
+
             showModal(false, errorTitle, errorMsg);
           } finally {
+            clearTimeout(timeoutId);
             submitBtn.classList.remove('is-loading');
             submitBtn.disabled = false;
+            if (window.ClandestinoContact) window.ClandestinoContact.checkFormCompleteness();
             if (statusEl) {
               statusEl.removeAttribute('aria-busy');
             }
@@ -1326,16 +1336,7 @@
           
           return valid;
         }
-        
-        // Regenerate CSRF token
-        function regenerateCSRF() {
-          const csrfToken = document.getElementById('clx-csrf-token');
-          if (csrfToken) {
-            const timestamp = Math.floor(Date.now() / 1000);
-            const random = Math.random().toString(36).substring(2);
-            csrfToken.value = btoa(timestamp + '.' + random);
-          }
-        }
+
       }
     })();
   </script>

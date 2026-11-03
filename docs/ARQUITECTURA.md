@@ -1,5 +1,9 @@
 # Arquitectura — The Clandestino USA
 
+## Formularios legacy — Phase R1 (2026-11-03)
+
+Contacto y reserva conservan endpoints PHP y contratos JSON. `includes/formularios.php` comparte sesión/token CSRF, origen explícito, calendario civil `America/Los_Angeles` y notificaciones con éxito respecto del destinatario principal. `form-token.php` y `assets/js/forms-security.js` preparan el envío AJAX; `/contact.html` se resuelve internamente mediante `contact-page.php` para insertar también el token en navegación convencional. No hay framework, persistencia comercial ni proveedor nuevo. Sin activación de Home ni entrega real certificada; pruebas, requisitos de Apache/cPanel/Cloudflare y límites en [FORMS-RELIABILITY-SECURITY.md](FORMS-RELIABILITY-SECURITY.md).
+
 ## Base pública compartida de Home — 2026-10-24
 
 Home C8 incorpora `includes/reservation-cta.php` entre Guest Stories y Wine Club, exclusivamente en Home Preview. Adapta localmente Banda CTA con Grid Bootstrap, fotografía integrada, eyebrow, acciones y botón Core; `home.scss` importa `pages/_home-reserva.scss`. Usa los derivados AVIF/WebP existentes de una mesa de tapas en tablet/escritorio y un encuadre con vinos en teléfono. El CTA consume `$rutaReserva` de `site.php`, hacia `/index.html#reservation`, y aclara que la solicitud requiere confirmación. Sin formulario, JavaScript, animaciones, dependencias ni cambios de backend. No altera Visit ni activa la Home pública; C8 aprobada visualmente en móvil, tablet y escritorio el 2026-11-02, con cierre técnico para commit/push de la feature y PR manual hacia develop. Decisiones, evidencia y limitaciones operativas: [HOME-PHASE-C8.md](HOME-PHASE-C8.md).

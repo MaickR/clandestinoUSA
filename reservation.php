@@ -4,8 +4,8 @@
  * Optimized for GoDaddy/cPanel hosting
  *
  * Receives background POSTs from #clandestino-reservation-form (index.html).
- * The visible flow still opens WhatsApp for instant confirmation; this
- * endpoint guarantees the request ALSO lands in the business inboxes.
+ * The visible flow reports a pending request via JSON; this
+ * endpoint submits the request to the configured mail transport (not proof of delivery).
  *
  * Recipients:
  *  - To (primary / preferred public contact): ntcusa@nicolastena.com
@@ -27,9 +27,8 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: same-origin');
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-  @session_start();
-}
+require_once __DIR__ . '/includes/formularios.php';
+iniciarSesionFormulario();
 
 function respond($code, $data) {
   http_response_code($code);
@@ -71,6 +70,7 @@ $SPAM_KEYWORDS = [
 
 // ---------------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+  header('Allow: POST');
   respond(405, ['success' => false, 'errorMessage' => 'Method not allowed']);
 }
 
@@ -78,8 +78,14 @@ if (empty($_POST)) {
   respond(400, ['success' => false, 'errorMessage' => 'No data received']);
 }
 
+verificarSolicitudFormulario();
+
 $now = time();
 $spamScore = 0;
+// Conservar la señal antispam débil cuando el navegador omite ambas cabeceras.
+if (!isset($_SERVER['HTTP_ORIGIN']) && !isset($_SERVER['HTTP_REFERER'])) {
+    $spamScore += 1;
+}
 
 // Honeypots — any filled trap = certain bot
 foreach (['website', 'url', 'company'] as $trap) {
@@ -103,35 +109,9 @@ if ($loadedAt <= 0) {
 }
 
 // Same-site check
-$host = strtolower($_SERVER['HTTP_HOST'] ?? '');
-$originHost = strtolower(parse_url($_SERVER['HTTP_ORIGIN'] ?? '', PHP_URL_HOST) ?: '');
-$refererHost = strtolower(parse_url($_SERVER['HTTP_REFERER'] ?? '', PHP_URL_HOST) ?: '');
-if (($originHost !== '' && $originHost !== $host) || ($refererHost !== '' && $refererHost !== $host)) {
-  $spamScore += 2;
-} elseif ($originHost === '' && $refererHost === '') {
-  $spamScore += 1;
-}
+// El origen ya se verificó junto al token de sesión.
 
 // ---------------------------------------------------------------------------
-function clean($value, $type = 'text') {
-  if (is_array($value)) return '';
-  $value = trim($value);
-  $value = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', '', $value);
-
-  switch ($type) {
-    case 'phone':
-      return preg_replace('/[^0-9+()\-\s]/', '', $value);
-    case 'email':
-      return filter_var($value, FILTER_SANITIZE_EMAIL);
-    case 'name':
-      return preg_replace('/[^\p{L}\s\-\'\.]/u', '', $value);
-    case 'digits':
-      return preg_replace('/[^0-9]/', '', $value);
-    default:
-      return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-  }
-}
-
 function hasInjection($value) {
   return is_string($value) && preg_match('/[\r\n]/', $value);
 }
@@ -145,18 +125,18 @@ foreach (['name', 'email', 'phone', 'guests', 'time', 'date', 'eventType', 'cust
 // ---------------------------------------------------------------------------
 // Inputs
 // ---------------------------------------------------------------------------
-$name        = clean($_POST['name'] ?? '', 'name');
-$email       = clean($_POST['email'] ?? '', 'email');
-$phone       = clean($_POST['phone'] ?? '', 'phone');
-$guests      = clean($_POST['guests'] ?? '', 'digits');
-$time        = clean($_POST['time'] ?? '');
-$date        = clean($_POST['date'] ?? '');
-$eventType   = clean($_POST['eventType'] ?? '');
-$customTitle = clean($_POST['customTitle'] ?? '');
-$duration    = clean($_POST['duration'] ?? '', 'digits');
-$winePref    = clean($_POST['winePreference'] ?? '');
-$budget      = clean($_POST['budget'] ?? '');
-$notes       = clean($_POST['notes'] ?? '');
+$name        = trim($_POST['name'] ?? '');
+$email       = trim($_POST['email'] ?? '');
+$phone       = trim($_POST['phone'] ?? '');
+$guests      = trim($_POST['guests'] ?? '');
+$time        = $_POST['time'] ?? '';
+$date        = $_POST['date'] ?? '';
+$eventType   = trim($_POST['eventType'] ?? '');
+$customTitle = trim($_POST['customTitle'] ?? '');
+$duration    = trim($_POST['duration'] ?? '');
+$winePref    = trim($_POST['winePreference'] ?? '');
+$budget      = trim($_POST['budget'] ?? '');
+$notes       = trim($_POST['notes'] ?? '');
 $accepted    = isset($_POST['accept']);
 
 $dietRaw = $_POST['diet'] ?? [];
@@ -175,7 +155,8 @@ foreach ($dietRaw as $d) {
 // ---------------------------------------------------------------------------
 $errors = [];
 
-if (mb_strlen($name) < 2 || mb_strlen($name) > 80) {
+if (mb_strlen($name) < 2 || mb_strlen($name) > 80
+    || !preg_match('/^[\p{L}\p{M}\s\x{2019}\x{2018}\x{201c}\x{201d}\x{22}\x{27}&.\-]+$/u', $name)) {
   $errors[] = 'Name must be 2-80 characters';
 }
 
@@ -183,7 +164,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 120) {
   $errors[] = 'Valid email required';
 }
 
-if (mb_strlen(preg_replace('/\D/', '', $phone)) < 6 || mb_strlen($phone) > 25) {
+if (mb_strlen(preg_replace('/\D/', '', $phone)) < 6 || mb_strlen($phone) > 25 || !preg_match('/^[0-9+()\-\s]+$/D', $phone)) {
   $errors[] = 'Valid phone required';
 }
 
@@ -202,7 +183,8 @@ if (!in_array($eventType, $allowedTypes, true)) {
   $errors[] = 'Please select a valid event type';
 }
 
-if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) || $date < date('Y-m-d')) {
+$fechaReserva = fechaSolicitudReserva($date, $time);
+if ($fechaReserva === null) {
   $errors[] = 'Please select a valid date';
 }
 
@@ -313,21 +295,21 @@ $eventLabels = [
 ];
 $eventLabel = $eventLabels[$eventType] ?? $eventType;
 
-$dateFmt = date('l, F j, Y', strtotime($date));
-$dateSafe = htmlspecialchars($dateFmt);
-$timeSafe = htmlspecialchars(date('g:i A', strtotime('2000-01-01 ' . $time)));
-$guestsSafe = htmlspecialchars($guests);
-$customSafe = $customTitle !== '' ? htmlspecialchars($customTitle) : '—';
-$durationSafe = $duration !== '' ? htmlspecialchars($duration) . ' h' : '—';
-$wineSafe = $winePref !== '' ? htmlspecialchars(ucfirst($winePref)) : '—';
-$dietSafe = !empty($diets) ? htmlspecialchars(implode(', ', $diets)) : 'None';
-$budgetSafe = $budget !== '' ? htmlspecialchars($budget) : '—';
-$notesSafe = $notes !== '' ? nl2br(htmlspecialchars($notes)) : '—';
-$nameSafe = htmlspecialchars($name);
-$emailSafe = htmlspecialchars($email);
-$phoneSafe = htmlspecialchars($phone);
-$phoneDigits = htmlspecialchars(preg_replace('/[^0-9]/', '', $phone));
-$received = date('F j, Y \a\t g:i A');
+$dateFmt = $fechaReserva->format('l, F j, Y');
+$dateSafe = escaparCorreo($dateFmt);
+$timeSafe = escaparCorreo($fechaReserva->format('g:i A'));
+$guestsSafe = escaparCorreo($guests);
+$customSafe = $customTitle !== '' ? escaparCorreo($customTitle) : '—';
+$durationSafe = $duration !== '' ? escaparCorreo($duration) . ' h' : '—';
+$wineSafe = $winePref !== '' ? escaparCorreo(ucfirst($winePref)) : '—';
+$dietSafe = !empty($diets) ? escaparCorreo(implode(', ', $diets)) : 'None';
+$budgetSafe = $budget !== '' ? escaparCorreo($budget) : '—';
+$notesSafe = $notes !== '' ? nl2br(escaparCorreo($notes)) : '—';
+$nameSafe = escaparCorreo($name);
+$emailSafe = escaparCorreo($email);
+$phoneSafe = escaparCorreo($phone);
+$phoneDigits = escaparCorreo(preg_replace('/[^0-9]/', '', $phone));
+$received = (new DateTimeImmutable('now', new DateTimeZone('America/Los_Angeles')))->format('F j, Y \a\t g:i A T');
 
 $emailSubject = "Reservation Request — {$name} — {$date} {$time} ({$guests} guests)";
 
@@ -381,43 +363,19 @@ $emailBody = <<<HTML
 HTML;
 
 // ---------------------------------------------------------------------------
-function deliver_all($subject, $html, $plain, $replyTo) {
-  $subject = str_replace(["\r", "\n"], ' ', $subject);
-  $replyTo = str_replace(["\r", "\n"], '', $replyTo);
-  $recipients = [MAIL_TO_PRIMARY, MAIL_TO_COPY, MAIL_TO_BCC];
-
-  foreach ($recipients as $addr) {
-    $headers = implode("\r\n", [
-      'From: ' . MAIL_FROM_NAME . ' <' . MAIL_FROM . '>',
-      'Reply-To: ' . $replyTo,
-      'MIME-Version: 1.0',
-      'Content-Type: text/html; charset=UTF-8',
-      'X-Mailer: ClandestinoUSA/1.1'
-    ]);
-    $sent = @mail($addr, $subject, $html, $headers, '-f' . MAIL_FROM);
-    if (!$sent) {
-      $plainHeaders = 'From: ' . MAIL_FROM . "\r\nReply-To: " . $replyTo . "\r\nContent-Type: text/plain; charset=UTF-8";
-      $sent = @mail($addr, $subject, $plain, $plainHeaders);
-    }
-    if (!$sent) {
-      return false;
-    }
-  }
-  return true;
-}
 
 $emailSubject = 'Reservation - ' . $name . ' - ' . $date . ' ' . $time;
-$replyTo = $name . ' <' . $email . '>';
+$replyTo = $email;
 $plainBody = "NEW RESERVATION REQUEST\n========================\n\n";
 $plainBody .= "Name: {$name}\nEmail: {$email}\nPhone: {$phone}\nDate: {$date}\nTime: {$time}\n";
 $plainBody .= "Guests: {$guests}\nEvent: {$eventLabel}\nCustom title: {$customTitle}\n";
 $plainBody .= "Duration: {$duration}\nWine: {$winePref}\nDietary: " . implode(', ', $diets) . "\n";
 $plainBody .= "Budget: {$budget}\nNotes: {$notes}\n\nReceived: {$received}";
 
-if (deliver_all($emailSubject, $emailBody, $plainBody, $replyTo)) {
+if (enviarNotificacionesFormulario('reservation', $emailSubject, $emailBody, $plainBody, $replyTo)) {
   respond(200, [
     'success' => true,
-    'message' => 'Your reservation request was sent. We will confirm by email or phone.'
+    'message' => 'Your reservation request was accepted for processing. We will confirm by email or phone.'
   ]);
 }
 
