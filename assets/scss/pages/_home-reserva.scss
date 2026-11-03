@@ -1,0 +1,85 @@
+// Adaptación local de Banda CTA: fotografía completa e invitación a la derecha.
+.cl-home-reserva__ancho {
+  padding-inline: var(--espacio-4);
+
+  @include media-breakpoint-up(md) { padding-inline: var(--espacio-6); }
+
+  @include media-breakpoint-up(xl) { padding-inline: var(--espacio-7); }
+}
+
+.cl-home-reserva__escena {
+  position: relative;
+  isolation: isolate;
+  justify-content: end;
+  border-radius: var(--radio-md);
+  background: var(--color-fondo-alterno);
+
+  @include media-breakpoint-up(md) { min-block-size: 22rem; }
+}
+
+.cl-home-reserva__media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: clip;
+  border-radius: inherit;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+
+    // Protección continua: deja aire fotográfico arriba y acompaña la lectura centrada.
+    background: linear-gradient(to bottom, rgba($neutral-950, 0.12), rgba($neutral-950, 0.78) var(--espacio-9), rgba($neutral-950, 0.94));
+    content: "";
+    pointer-events: none;
+  }
+
+  @include media-breakpoint-up(md) {
+    &::after {
+      background: linear-gradient(to right, rgba($neutral-950, 0.02), rgba($neutral-950, 0.36) 28%, rgba($neutral-950, 0.89) 56%, rgba($neutral-950, 0.96));
+    }
+  }
+}
+
+.cl-home-reserva__imagen {
+  border-radius: inherit;
+  object-position: 43% center;
+
+  @include media-breakpoint-up(md) { object-position: center; }
+}
+
+.cl-home-reserva__contenido {
+  position: relative;
+  align-items: center;
+  padding: var(--espacio-9) var(--espacio-5) var(--espacio-6);
+  text-align: center;
+
+  .cl-seccion__descripcion { max-inline-size: 54ch; }
+
+  .cl-seccion__acciones {
+    inline-size: 100%;
+    max-inline-size: 16rem;
+    margin-block-start: var(--espacio-5);
+  }
+
+  @include media-breakpoint-up(md) {
+    align-items: start;
+    padding: var(--espacio-6);
+    text-align: start;
+  }
+
+  @include media-breakpoint-up(xl) { padding-inline: var(--espacio-7); }
+}
+
+.cl-home-reserva__titulo {
+  max-inline-size: 17ch;
+  margin-block-end: var(--espacio-4);
+  font-size: clamp(2rem, 1.5rem + 1vw, 2.75rem);
+  text-wrap: balance;
+}
+
+.cl-home-reserva__nota {
+  margin-block: var(--espacio-3) 0;
+  color: var(--color-texto-secundario);
+  font-size: 0.875rem;
+}
