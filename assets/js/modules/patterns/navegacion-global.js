@@ -29,6 +29,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   expandir.hidden = false;
   tituloPanel.hidden = false;
   piePanel.hidden = false;
+  cabecera.classList.add("cl-cabecera--mejorada");
   cabecera.classList.toggle("cl-cabecera--con-carrito", Boolean(carrito));
   const drawer = Offcanvas.getOrCreateInstance(panel);
   const secundaria = Collapse.getOrCreateInstance(subpanel, { toggle: false });
@@ -50,6 +51,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   }, opciones);
   panel.addEventListener("show.bs.offcanvas", () => {
     transicion = true;
+    // Solo el diálogo abierto necesita nombre; el contenedor genérico no admite etiquetado.
+    panel.setAttribute("aria-labelledby", tituloPanel.querySelector("[id]").id);
     boton.setAttribute("aria-disabled", "true");
     boton.setAttribute("aria-expanded", "true");
     boton.setAttribute("aria-label", "Close main navigation");
@@ -76,6 +79,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   }, opciones);
   panel.addEventListener("hidden.bs.offcanvas", () => {
     transicion = false;
+    panel.removeAttribute("aria-labelledby");
     cerrarPendiente = false;
     origen.append(boton);
     boton.removeAttribute("aria-disabled");
@@ -176,6 +180,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
         piePanel.hidden = true;
         contenedor.style.removeProperty("--navegacion-offset");
         cabecera.classList.remove("cl-cabecera--fijada");
+        cabecera.classList.remove("cl-cabecera--mejorada");
         cabecera.classList.remove("cl-cabecera--con-carrito");
         control.actualizarCarrito(null);
         inicializados.delete(contenedor);

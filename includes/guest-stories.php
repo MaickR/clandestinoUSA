@@ -5,10 +5,10 @@ if (PHP_SAPI !== 'cli-server' || !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.
     return;
 }
 $historiasInvitados = [
-    ['archivo' => 'Client-1', 'poster' => 'conversacion', 'titulo' => 'A glass at the table', 'duracion' => '0:51', 'descripcion' => 'A seated guest holds a wine glass and speaks to the camera inside the restaurant.'],
-    ['archivo' => 'Cliente-2', 'poster' => 'juntos', 'titulo' => 'Together at the bar', 'duracion' => '1:31', 'descripcion' => 'The camera moves from a board of food to two guests seated behind wine bottles at the bar.'],
-    ['archivo' => 'clandetino-user', 'poster' => 'encuentro', 'titulo' => 'By the window', 'duracion' => '1:18', 'descripcion' => 'Guests sit near the window. The camera moves from a wine bottle to a guest speaking, with another guest beside her.'],
-    ['archivo' => 'clandestino-experience', 'poster' => 'momento', 'titulo' => 'Sharing the porron', 'duracion' => '0:06', 'descripcion' => 'A guest drinks from a Spanish porron beside a board of food.'],
+    ['archivo' => 'Client-1', 'poster' => 'conversacion', 'titulo' => 'A glass of red', 'duracion' => '0:51', 'descripcion' => 'A seated guest holds a glass of red wine at a table inside The Clandestino.'],
+    ['archivo' => 'Cliente-2', 'poster' => 'juntos', 'titulo' => 'Tapas & company', 'duracion' => '1:31', 'descripcion' => 'The camera moves from cheese and cured meats to two guests at the bar, with wine bottles in front of them.'],
+    ['archivo' => 'clandetino-user', 'poster' => 'encuentro', 'titulo' => 'By the window', 'duracion' => '1:18', 'descripcion' => 'The camera moves from a wine bottle to a seated guest by the window; another guest is visible nearby.'],
+    ['archivo' => 'clandestino-experience', 'poster' => 'momento', 'titulo' => 'A sip of tradition', 'duracion' => '0:06', 'descripcion' => 'A guest drinks from a leather wineskin beside a board of tapas, then lowers it as the camera returns to the food.'],
 ];
 $escaparHistoria = static fn (string $valor): string => htmlspecialchars($valor, ENT_QUOTES, 'UTF-8');
 ?>
