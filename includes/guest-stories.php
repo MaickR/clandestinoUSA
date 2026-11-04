@@ -37,7 +37,7 @@ $escaparHistoria = static fn (string $valor): string => htmlspecialchars($valor,
         <?php foreach ($historiasInvitados as $indice => $historia) : ?>
         <li class="cl-carrusel__item">
           <figure class="cl-media-video__figura">
-            <video class="cl-media-video__pantalla cl-media-video__pantalla--vertical" controls playsinline preload="none" width="478" height="850" poster="/assets/images/guest-stories/<?= $escaparHistoria($historia['poster']) ?>.webp" aria-labelledby="guest-story-<?= $indice ?>-titulo" aria-describedby="guest-story-<?= $indice ?>-contexto">
+            <video class="cl-media-video__pantalla cl-media-video__pantalla--vertical" controls playsinline preload="none" loading="lazy" width="478" height="850" poster="/assets/images/guest-stories/<?= $escaparHistoria($historia['poster']) ?>.webp" aria-labelledby="guest-story-<?= $indice ?>-titulo" aria-describedby="guest-story-<?= $indice ?>-contexto">
               <source src="/assets/images/gallery/videos/<?= $escaparHistoria($historia['archivo']) ?>.mp4" type="video/mp4">
               Your browser does not support HTML5 video.
             </video>

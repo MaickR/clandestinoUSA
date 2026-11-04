@@ -4,6 +4,8 @@ if (!isset($esVistaPreviaHome) || realpath($_SERVER['SCRIPT_FILENAME'] ?? '') ==
     exit;
 }
 // Documento único de Home: los anfitriones solo aportan contexto y metadatos.
+// Derivado de entrega exclusivo de Home; las demás páginas conservan su logo.
+$logoNavegacion = '/assets/images/clandestino-logo-home.svg';
 $fotografias = [
     ['archivo' => 'banner-the_clandestino_1', 'encuadre' => 'mesa', 'titulo' => 'Spanish Wine & Tapas in Mount Shasta', 'descripcion' => 'A taste of Spain. A table to share. Make yourself at home.', 'alt' => 'Spanish tapas and red wine on a candlelit table at The Clandestino'],
     ['archivo' => 'banner-the_clandestino_2', 'encuadre' => 'encuentro', 'titulo' => 'Gather, Sip & Celebrate', 'descripcion' => 'Good wine, shared plates, and the pleasure of being together.', 'alt' => 'Three guests raising glasses of red wine around a shared tapas table'],
@@ -54,7 +56,11 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
         <div class="cl-hero cl-hero__diapositiva cl-hero__diapositiva--<?= $escaparNavegacion($fotografia['encuadre']) ?><?= $indice === 0 ? ' cl-hero__diapositiva--activa' : '' ?>" role="group" aria-label="<?= $indice + 1 ?> of 3" aria-roledescription="slide"<?= $indice === 0 ? '' : ' aria-hidden="true" inert' ?>>
           <?php
           $hero = [
-              'fuentes' => [['tipo' => 'image/webp', 'srcset' => '/assets/images/' . $fotografia['archivo'] . '-768.webp 768w, /assets/images/' . $fotografia['archivo'] . '-1672.webp 1672w', 'sizes' => '100vw']],
+              // Cover necesita más anchura que el viewport cuando la fotografía es verticalmente recortada.
+              'fuentes' => [
+                  ['tipo' => 'image/avif', 'srcset' => '/assets/images/' . $fotografia['archivo'] . '-1024.avif 1024w, /assets/images/' . $fotografia['archivo'] . '-1672.avif 1672w', 'sizes' => '(min-width: 992px) 100vw, max(100vw, 960px)'],
+                  ['tipo' => 'image/webp', 'srcset' => '/assets/images/' . $fotografia['archivo'] . '-768.webp 768w, /assets/images/' . $fotografia['archivo'] . '-1672.webp 1672w', 'sizes' => '(min-width: 992px) 100vw, max(100vw, 960px)'],
+              ],
               'imagen' => '/assets/images/' . $fotografia['archivo'] . '-768.webp',
               'ancho' => 1672, 'alto' => 941, 'alt' => $fotografia['alt'],
               'carga' => $indice === 0 ? 'eager' : 'lazy', 'prioridad' => $indice === 0 ? 'high' : 'low', 'diferida' => $indice !== 0,
