@@ -1,7 +1,7 @@
-# Posters de revisión local de C6: no publicar mientras falten permisos y accesibilidad.
-# El servidor PHP local ignora .htaccess; Apache deniega también las URLs directas.
+# El marcador solo se crea tras aprobar el release y sus requisitos audiovisuales.
+# Sin él se conserva la denegación de C6; PHP built-in ignora .htaccess.
 <IfModule mod_authz_core.c>
-  Require all denied
+  Require expr "-f '%{DOCUMENT_ROOT}/.home-public-enabled'"
 </IfModule>
 <IfModule !mod_authz_core.c>
   Deny from all

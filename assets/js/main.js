@@ -1,12 +1,16 @@
 import { inicializarNavegacion } from "./modules/patterns/navegacion-global.js";
 import { inicializarAcceso } from "./modules/patterns/acceso.js";
 import { inicializarModal } from "./modules/core/modal.js";
+import { inicializarAnclasLegacy } from "./modules/patterns/anclas-legacy.js";
 
 // Inicialización pública optativa; no activa páginas legacy ni lógica comercial.
 const pagina = document.querySelector("[data-cl-site]");
 if (pagina) {
   const navegacion = inicializarNavegacion(pagina);
-  inicializarAcceso(pagina.querySelector("[data-cl-acceso]"), pagina.querySelector("[data-cl-acceso-abrir]"));
+  const acceso = pagina.querySelector("[data-cl-acceso]");
+  const abrirAcceso = pagina.querySelector("[data-cl-acceso-abrir]");
+  if (acceso && abrirAcceso) inicializarAcceso(acceso, abrirAcceso);
+  inicializarAnclasLegacy(pagina);
   // Demostración vacía explícita, sin proveedor comercial ni productos ficticios.
   const carrito = pagina.querySelector("[data-cl-nav-carrito]");
   const aviso = pagina.querySelector("#carrito-preview");

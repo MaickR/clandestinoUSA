@@ -7,6 +7,10 @@
 
 # Seguridad y saneamiento básico
 Options -Indexes
+# El anfitrión PHP solo entra mediante el rewrite explícito habilitado abajo.
+<IfModule mod_dir.c>
+  DirectoryIndex index.html
+</IfModule>
 ServerSignature Off
 AddDefaultCharset utf-8
 FileETag MTime Size
@@ -20,7 +24,25 @@ FileETag MTime Size
   # Variaciones por compresión/idioma/origen
   Header append Vary "Accept-Encoding"
   Header append Vary "Accept-Language"
+
+  # Conservar /index.html y sus fragments sin una segunda Home indexable.
+  <Files "index.html">
+    Header always set X-Robots-Tag "noindex, follow" "expr=-f '%{DOCUMENT_ROOT}/.home-public-enabled'"
+  </Files>
 </IfModule>
+
+# Preview y marcador de activación nunca son recursos públicos de Apache.
+<FilesMatch "^(?:home-preview\.php|\.home-public-enabled)$">
+  <IfModule mod_headers.c>
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </IfModule>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Deny from all
+  </IfModule>
+</FilesMatch>
 
 # HSTS (solo si TODO el sitio usa HTTPS). Descomenta cuando estés listo.
  <IfModule mod_headers.c>
@@ -146,7 +168,7 @@ FileETag MTime Size
 # Canonical URLs
 # www and http on the public domain become https://theclandestinousa.com
 # Other hosts (local, temporary cPanel preview) are left untouched.
-# index.html is folded into / so Google has a single homepage.
+# Sin release activo se conserva el redirect histórico de index.html.
 # ------------------------------------------------------------
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -154,6 +176,7 @@ FileETag MTime Size
   # Guía del design system: visible en local (PHP built-in ignora .htaccess)
   # y denegada en Apache/GoDaddy. No bloquea assets compartidos.
   RewriteRule ^style-guide(/|$) - [F,L]
+  RewriteRule ^(?:includes|docs|scripts)(/|$) - [F,END]
 
   RewriteCond %{HTTP_HOST} ^www\.theclandestinousa\.com$ [NC]
   RewriteRule ^ https://theclandestinousa.com%{REQUEST_URI} [L,R=301]
@@ -165,7 +188,22 @@ FileETag MTime Size
 
   RewriteCond %{HTTP_HOST} ^(www\.)?theclandestinousa\.com$ [NC]
   RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteCond %{DOCUMENT_ROOT}/.home-public-enabled !-f
   RewriteRule ^index\.html$ https://theclandestinousa.com/ [R=301,L]
+
+  # No activar una Home nueva si no puede emitirse noindex para el legacy.
+  <IfModule !mod_headers.c>
+    RewriteCond %{DOCUMENT_ROOT}/.home-public-enabled -f
+    RewriteRule ^(?:home\.php|index\.html)?$ - [R=503,END]
+  </IfModule>
+
+  # THE_REQUEST distingue la URL externa del rewrite interno y evita ciclos.
+  RewriteCond %{DOCUMENT_ROOT}/.home-public-enabled -f
+  RewriteCond %{THE_REQUEST} \s/+home\.php[\s?] [NC]
+  RewriteRule ^home\.php$ / [R=301,END]
+
+  RewriteCond %{DOCUMENT_ROOT}/.home-public-enabled -f
+  RewriteRule ^$ home.php [END]
 
   # Token de sesión después de los redirects canónicos; diseño y URL conservados.
   RewriteRule ^contact\.html$ contact-page.php [L]

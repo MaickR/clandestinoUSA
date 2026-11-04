@@ -5,7 +5,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     exit;
 }
 ?>
-<section class="cl-seccion cl-historia cl-home-privadas" id="private-events" aria-labelledby="private-events-titulo">
+<section class="cl-seccion cl-historia cl-home-privadas" id="private-events" aria-labelledby="private-events-titulo" tabindex="-1">
   <div class="container-fluid cl-home-privadas__ancho">
     <div class="cl-home-privadas__composicion">
       <figure class="cl-historia__figura cl-home-privadas__escenario">

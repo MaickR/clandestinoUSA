@@ -1,6 +1,10 @@
 <?php
-// Revisión local exclusivamente: permisos, subtítulos y alternativa integral pendientes.
-if (PHP_SAPI !== 'cli-server' || !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true) || realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
+// Publicación futura solo desde el anfitrión habilitado; no se abre por URL o query.
+$contextoPublicoHistorias = isset($esVistaPreviaHome) && !$esVistaPreviaHome
+    && function_exists('homePublicaHabilitada') && homePublicaHabilitada();
+$contextoLocalHistorias = PHP_SAPI === 'cli-server'
+    && in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'], true);
+if ((!$contextoPublicoHistorias && !$contextoLocalHistorias) || realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     http_response_code(404);
     return;
 }

@@ -12,6 +12,13 @@ Allow: /assets/images/
 Allow: /assets/favicon/
 Disallow: /contact.php
 Disallow: /reservation.php
+Disallow: /form-token.php
+Disallow: /contact-page.php
+Disallow: /includes/
+Disallow: /scripts/
+Disallow: /docs/
+Disallow: /style-guide/
+Disallow: /.home-public-enabled
 Disallow: /offline.html
 Disallow: /node_modules/
 Disallow: /.git/
@@ -47,4 +54,3 @@ User-agent: SemrushBot
 Disallow: /
 
 Sitemap: https://theclandestinousa.com/sitemap.xml
-Host: https://theclandestinousa.com

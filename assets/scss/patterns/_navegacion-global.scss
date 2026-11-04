@@ -95,6 +95,9 @@
   &--con-carrito &__cuenta { margin: 0; }
   &__origen { display: flex; }
 
+  // Sin acciones demostrativas, conservar el menú móvil en su extremo aprobado.
+  &--publica &__origen { margin-inline-start: auto; }
+
   &__control {
     display: inline-grid;
     flex-shrink: 0;
