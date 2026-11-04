@@ -3,28 +3,10 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://theclandestinousa.com/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
     <image:image>
-      <image:loc>https://theclandestinousa.com/assets/images/bg/the-clandestino-usa.jpg</image:loc>
-      <image:title>The Clandestino USA dining room</image:title>
-      <image:caption>Spanish tapas and wine restaurant in Mount Shasta, California</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://theclandestinousa.com/assets/images/bg/clandestino-tapas.jpg</image:loc>
-      <image:title>Spanish tapas at The Clandestino USA</image:title>
-      <image:caption>Handcrafted tapas served Tuesday through Sunday</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://theclandestinousa.com/assets/images/inside-clandestino-2.jpg</image:loc>
-      <image:title>Inside The Clandestino USA</image:title>
-      <image:caption>Wine shelves, oak barrels and the dining room in Mount Shasta</image:caption>
-    </image:image>
-    <image:image>
-      <image:loc>https://theclandestinousa.com/assets/images/pure-soul.png</image:loc>
-      <image:title>Pure Soul 2023 by NTC &amp; Sons</image:title>
-      <image:caption>Flagship barrel-aged Garnacha from D.O.P. Cariñena, $45 per bottle and $12 per glass</image:caption>
+      <image:loc>https://theclandestinousa.com/assets/images/banner-the_clandestino_1.png</image:loc>
+      <image:title>The Clandestino USA</image:title>
+      <image:caption>Spanish tapas and red wine on a candlelit table at The Clandestino</image:caption>
     </image:image>
   </url>
   <url>

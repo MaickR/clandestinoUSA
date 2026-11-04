@@ -10,7 +10,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
 $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
 ?>
 <div class="cl-cabecera-testigo" data-cl-cabecera-testigo aria-hidden="true"></div>
-<header class="cl-cabecera" data-cl-cabecera>
+<header class="cl-cabecera<?= ($mostrarAccesoNavegacion ?? true) ? '' : ' cl-cabecera--publica' ?>" data-cl-cabecera>
   <div class="container cl-cabecera__fila">
     <a class="cl-cabecera__marca" href="<?= $escaparNavegacion($rutasNavegacion['Home']) ?>" data-cl-nav-marca aria-label="The Clandestino USA · Home">
       <img class="cl-cabecera__logo" src="<?= $escaparNavegacion($logoNavegacion) ?>" width="174" height="79" alt="The Clandestino USA">
@@ -42,7 +42,9 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
     <?php if (!empty($carritoNavegacion['destino'])) : ?>
     <a class="cl-boton-icono cl-cabecera__carrito" href="<?= $escaparNavegacion($carritoNavegacion['destino']) ?>" data-cl-nav-carrito aria-label="View cart"><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-pedido"></use></svg><span class="cl-cabecera__contador" data-cl-nav-carrito-conteo aria-hidden="true" hidden></span></a>
     <?php endif; ?>
+    <?php if ($mostrarAccesoNavegacion ?? true) : ?>
     <button class="cl-boton-icono cl-cabecera__cuenta" type="button" data-cl-acceso-abrir aria-label="Sign in" aria-controls="acceso-global" hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-cuenta"></use></svg></button>
+    <?php endif; ?>
     <span class="cl-cabecera__origen" data-cl-nav-origen>
       <button class="cl-boton-icono cl-cabecera__control" type="button" data-cl-nav-control aria-controls="navegacion-global" aria-expanded="false" aria-label="Open main navigation" hidden>
         <svg class="cl-icon cl-cabecera__hamburguesa" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-menu"></use></svg>
