@@ -21,7 +21,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
         <p class="cl-seccion__descripcion">Start with tapas, pass a board around, and let the conversation find its own pace.</p>
         <div class="cl-seccion__acciones">
           <a class="cl-boton" href="/tapas.html">Explore the Tapas</a>
-          <a class="cl-boton cl-boton--secundario" href="<?= $escaparNavegacion($rutaReserva) ?>">Reserve a Table</a>
+          <a class="cl-boton cl-boton--secundario" href="<?= $escaparNavegacion($rutaReserva) ?>">Request a Table</a>
         </div>
       </div>
     </div>

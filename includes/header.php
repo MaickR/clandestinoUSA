@@ -35,7 +35,7 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
           </ul>
         </li>
       </ul>
-      <a class="cl-boton cl-cabecera__reserva" href="<?= $escaparNavegacion($rutaReserva) ?>">Reserve a Table</a>
+      <a class="cl-boton cl-cabecera__reserva" href="<?= $escaparNavegacion($rutaReserva) ?>">Request a Table</a>
       </nav>
       <div class="cl-cabecera__panel-pie" data-cl-nav-pie hidden><p class="cl-texto-pequeno">Spanish hospitality in Mount Shasta</p><?php if ($datosContacto['telefono']) : ?><a class="cl-enlace" href="<?= $escaparNavegacion($datosContacto['telefono']['url']) ?>"><?= $escaparNavegacion($datosContacto['telefono']['texto']) ?></a><?php endif; ?></div>
     </div>

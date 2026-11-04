@@ -9,10 +9,10 @@ $logoNavegacion = '/assets/images/clandestino-logo-home.svg';
 $fotografias = [
     ['archivo' => 'banner-the_clandestino_1', 'encuadre' => 'mesa', 'titulo' => 'Spanish Wine & Tapas in Mount Shasta', 'descripcion' => 'A taste of Spain. A table to share. Make yourself at home.', 'alt' => 'Spanish tapas and red wine on a candlelit table at The Clandestino'],
     ['archivo' => 'banner-the_clandestino_2', 'encuadre' => 'encuentro', 'titulo' => 'Gather, Sip & Celebrate', 'descripcion' => 'Good wine, shared plates, and the pleasure of being together.', 'alt' => 'Three guests raising glasses of red wine around a shared tapas table'],
-    ['archivo' => 'banner-the_clandestino_3', 'encuadre' => 'vino', 'titulo' => 'Discover Pure Soul & Our Wine Selection', 'descripcion' => 'Explore Spanish wines with character, from the first glass to the last.', 'alt' => 'A bottle of Pure Soul red wine with two glasses and Spanish tapas'],
+    ['archivo' => 'banner-the_clandestino_3', 'encuadre' => 'vino', 'titulo' => 'Pure Soul & Spanish Wines', 'descripcion' => 'Explore Spanish wines with character, from the first glass to the last.', 'alt' => 'A bottle of Pure Soul red wine with two glasses and Spanish tapas'],
 ];
 $accionesEscenas = [
-    [['Reserve a Table', $rutaReserva], ['Explore Wines', '/wines.html']],
+    [['Request a Table', $rutaReserva], ['Explore Wines', '/wines.html']],
     [['Private Experiences', $esVistaPreviaHome ? '/index.html#private-events' : '/#private-events'], ['Explore the Wine Club', '/swc.html']],
     [['Explore Wines', '/wines.html'], ['Discover Pure Soul', $esVistaPreviaHome ? '/index.html#pure-soul' : '/#spanish-wines']],
 ];

@@ -20,7 +20,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
           <p class="cl-eyebrow">Private Experiences</p>
           <h2 class="cl-historia__declaracion cl-home-privadas__titulo" id="private-events-titulo">The evening, held for you.</h2>
         </header>
-        <p class="cl-seccion__descripcion cl-historia__texto cl-home-privadas__relato">Some moments deserve more than an ordinary night out. From intimate celebrations to gatherings around Spanish wines and shared plates, tell us what you have in mind. We'll help you explore the possibilities.</p>
+        <p class="cl-seccion__descripcion cl-historia__texto cl-home-privadas__relato">Bring your celebration to The Clandestino. Tell us about your occasion, group, and plans for an evening of Spanish wines and shared plates. We'll explore the possibilities with you.</p>
         <div class="cl-seccion__acciones">
           <a class="cl-boton" href="/contact.html#contact-form">Plan Your Private Gathering</a>
         </div>
