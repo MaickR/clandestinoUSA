@@ -26,7 +26,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
         </div>
       </article>
       <article class="cl-home-regalos__tarjeta" aria-labelledby="gifting-card-titulo">
-        <img class="cl-home-regalos__arte" src="/assets/images/gift-cards/gift-card.webp" width="3137" height="2030" alt="The Clandestino USA Gift Card, with gold lettering and wine illustrations on a dark background" loading="lazy" decoding="async">
+        <img class="cl-home-regalos__arte" src="/assets/images/gift-cards/gift-card-720.webp" width="3137" height="2030" alt="The Clandestino USA Gift Card, with gold lettering and wine illustrations on a dark background" loading="lazy" decoding="async">
         <div class="cl-home-regalos__invitacion">
           <h3 id="gifting-card-titulo">A Clandestino moment, <em>their way.</em></h3>
           <p class="cl-seccion__descripcion">Thinking of a Gift Card? Let’s explore a thoughtful way to give The Clandestino.</p>

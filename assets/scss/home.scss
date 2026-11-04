@@ -689,6 +689,9 @@
   inline-size: 100%;
   max-inline-size: 15rem;
   block-size: auto;
+
+  // Reservar la proporción aprobada incluso con el redondeo del derivado de 720 px.
+  aspect-ratio: 3137 / 2030;
   margin-inline: auto;
   border-radius: var(--radio-md);
   object-fit: contain;
