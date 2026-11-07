@@ -169,7 +169,8 @@
   &__grupo { position: relative; }
 
   &__enlace,
-  &__expandir {
+  &__expandir,
+  &__accion {
     display: flex;
     gap: var(--espacio-2);
     align-items: center;
@@ -226,10 +227,35 @@
   }
   &__reserva { margin-block-start: var(--espacio-5); }
 
+  &__comercio {
+    display: grid;
+    gap: var(--espacio-2);
+    margin-block-start: var(--espacio-5);
+    padding-block-start: var(--espacio-3);
+    border-block-start: 1px solid var(--color-borde);
+
+    &[hidden] { display: none; }
+  }
+
+  &__accion {
+    gap: var(--espacio-3);
+    border: 0;
+    border-radius: var(--radio-md);
+    background: transparent;
+    text-align: start;
+
+    &:hover,
+    &:focus-visible { color: var(--color-acento); }
+    &[hidden] { display: none; }
+  }
+
+  &__unidades { margin-inline-start: auto; }
+
   @include media-breakpoint-up(xl) {
     &__fila { flex-wrap: nowrap; }
 
     &__origen,
+    &__comercio,
     &__panel-cabecera,
     &__panel-pie { display: none; }
     &__panel { flex: 1 1 auto; }

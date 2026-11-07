@@ -36,6 +36,16 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
         </li>
       </ul>
       <a class="cl-boton cl-cabecera__reserva" href="<?= $escaparNavegacion($rutaReserva) ?>">Request a Table</a>
+      <?php if (($mostrarAccesoNavegacion ?? true) || !empty($carritoNavegacion['destino'])) : ?>
+      <div class="cl-cabecera__comercio" data-cl-nav-comercio hidden>
+        <?php if ($mostrarAccesoNavegacion ?? true) : ?>
+        <button class="cl-cabecera__accion" type="button" data-cl-nav-cuenta-panel aria-controls="acceso-global" aria-haspopup="dialog" hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-cuenta"></use></svg><span>Account</span></button>
+        <?php endif; ?>
+        <?php if (!empty($carritoNavegacion['destino'])) : ?>
+        <button class="cl-cabecera__accion" type="button" data-cl-nav-carrito-panel hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-pedido"></use></svg><span>View cart</span><span class="cl-cabecera__unidades" data-cl-nav-carrito-panel-conteo aria-hidden="true" hidden></span></button>
+        <?php endif; ?>
+      </div>
+      <?php endif; ?>
       </nav>
       <div class="cl-cabecera__panel-pie" data-cl-nav-pie hidden><p class="cl-texto-pequeno">Spanish hospitality in Mount Shasta</p><?php if ($datosContacto['telefono']) : ?><a class="cl-enlace" href="<?= $escaparNavegacion($datosContacto['telefono']['url']) ?>"><?= $escaparNavegacion($datosContacto['telefono']['texto']) ?></a><?php endif; ?></div>
     </div>

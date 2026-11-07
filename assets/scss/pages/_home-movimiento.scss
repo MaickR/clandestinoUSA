@@ -1,0 +1,10 @@
+// Mejora exclusiva de Home: conserva los estados Core y las transiciones de Hero y Header.
+@media (prefers-reduced-motion: no-preference) {
+  .cl-home-preview main :is(.cl-seccion, .cl-banda-cta) :is(.cl-boton, .cl-boton-icono, .cl-enlace) {
+    // Mismo easing del menú; solo se suaviza la respuesta cromática, sin mover el contenido.
+    transition: color 180ms cubic-bezier(0.22, 0.61, 0.36, 1), background-color 180ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+    // El teclado, la pulsación y la indisponibilidad necesitan confirmación inmediata.
+    &:is(:focus-visible, :active, :disabled, [aria-disabled="true"]) { transition-duration: 0s; }
+  }
+}

@@ -14,17 +14,17 @@ export function inicializarMediaCarrusel(contenedor) {
   }, { capture: true, signal: eventos.signal });
   for (const nombre of ["cl:carrusel-cambio", "cl:carrusel-navegar"]) contenedor.addEventListener(nombre, () => pausar(), { signal: eventos.signal });
   document.addEventListener("visibilitychange", () => { if (document.hidden) pausar(); }, { signal: eventos.signal });
-  const observador = new IntersectionObserver((entradas) => {
+  const observador = typeof IntersectionObserver === "function" ? new IntersectionObserver((entradas) => {
     if (entradas.some((entrada) => !entrada.isIntersecting)) pausar();
-  });
-  observador.observe(contenedor);
+  }) : null;
+  observador?.observe(contenedor);
   const api = {
     destruir() {
       if (destruido) return;
       destruido = true;
       pausar();
       eventos.abort();
-      observador.disconnect();
+      observador?.disconnect();
       inicializados.delete(contenedor);
     },
   };

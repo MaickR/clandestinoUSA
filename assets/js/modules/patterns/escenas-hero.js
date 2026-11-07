@@ -126,8 +126,11 @@ export function inicializarEscenasHero(contenedor) {
   contenedor.addEventListener("focusout", () => queueMicrotask(() => { if (!destruido) cambiarPausa("focus", contenedor.contains(document.activeElement)); }), { signal: eventos.signal });
   document.addEventListener("visibilitychange", () => cambiarPausa("hidden", document.hidden), { signal: eventos.signal });
   reducido.addEventListener("change", () => cambiarPausa("reduced-motion", reducido.matches), { signal: eventos.signal });
-  const observador = new IntersectionObserver(([entrada]) => cambiarPausa("intersection", !entrada.isIntersecting));
-  observador.observe(contenedor);
+  const observador = typeof IntersectionObserver === "function"
+    ? new IntersectionObserver(([entrada]) => cambiarPausa("intersection", !entrada.isIntersecting)) : null;
+  observador?.observe(contenedor);
+  // Sin observación, conservar selección manual y evitar autoplay fuera de pantalla.
+  if (!observador) cambiarPausa("intersection", true);
   // La pausa y los atajos solo son operables con la mejora inicializada.
   pausa.hidden = false;
   pista.tabIndex = 0;
@@ -141,7 +144,7 @@ export function inicializarEscenasHero(contenedor) {
       clearTimeout(temporizador);
       temporizador = null;
       eventos.abort();
-      observador.disconnect();
+      observador?.disconnect();
       controles.hidden = true;
       pausa.hidden = true;
       pista.removeAttribute("tabindex");

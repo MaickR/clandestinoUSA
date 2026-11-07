@@ -21,7 +21,8 @@
     "node": ">=20.19"
   },
   "dependencies": {
-    "bootstrap": "^5.3.8"
+    "bootstrap": "^5.3.8",
+    "gsap": "3.15.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

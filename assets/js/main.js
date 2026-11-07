@@ -9,7 +9,10 @@ if (pagina) {
   const navegacion = inicializarNavegacion(pagina);
   const acceso = pagina.querySelector("[data-cl-acceso]");
   const abrirAcceso = pagina.querySelector("[data-cl-acceso-abrir]");
-  if (acceso && abrirAcceso) inicializarAcceso(acceso, abrirAcceso);
+  if (acceso && abrirAcceso) {
+    const modalAcceso = inicializarAcceso(acceso, abrirAcceso);
+    navegacion.conectarAccesoPanel("nav-cuenta-panel", () => modalAcceso.abrir(abrirAcceso));
+  }
   inicializarAnclasLegacy(pagina);
   // Demostración vacía explícita, sin proveedor comercial ni productos ficticios.
   const carrito = pagina.querySelector("[data-cl-nav-carrito]");
@@ -20,7 +23,11 @@ if (pagina) {
     carrito.setAttribute("aria-haspopup", "dialog");
     carrito.setAttribute("data-bs-toggle", "modal");
     carrito.setAttribute("data-bs-target", "#carrito-preview");
-    inicializarModal(aviso, { focoInicial: aviso.querySelector("button") });
+    const modalCarrito = inicializarModal(aviso, { focoInicial: aviso.querySelector("button") });
+    navegacion.conectarAccesoPanel("nav-carrito-panel", () => modalCarrito.abrir(carrito));
+    const carritoPanel = pagina.querySelector("[data-cl-nav-carrito-panel]");
+    carritoPanel?.setAttribute("aria-controls", "carrito-preview");
+    carritoPanel?.setAttribute("aria-haspopup", "dialog");
   }
   // El módulo del slider se solicita únicamente si el documento contiene escenas.
   if (pagina.querySelector("[data-cl-escenas]")) {
@@ -39,5 +46,17 @@ if (pagina) {
         inicializarCarrusel(coleccion);
       }
     });
+  }
+  if (pagina.matches(".cl-home-preview") && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const cargarMovimiento = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (document.hidden || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      import("./modules/patterns/movimiento-home.js")
+        .then(({ inicializarMovimientoHome }) => inicializarMovimientoHome(pagina))
+        .catch(error => console.warn("Motion Home GSAP no disponible; contenido visible.", error));
+    }));
+    // El recurso LCP y su primer frame tienen prioridad sobre el motor decorativo.
+    const portada = pagina.querySelector("[data-cl-escenas] img");
+    if (portada && typeof portada.decode === "function") portada.decode().then(cargarMovimiento, cargarMovimiento);
+    else cargarMovimiento();
   }
 }
