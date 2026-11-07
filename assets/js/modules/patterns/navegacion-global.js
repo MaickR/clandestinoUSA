@@ -26,7 +26,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   if (![cabecera, testigo, boton, panel, expandir, subpanel, origen, cierre, tituloPanel, piePanel].every((nodo) => nodo instanceof HTMLElement)) {
     throw new TypeError("La navegación requiere cabecera, paneles y controles completos.");
   }
-  panel.classList.add("offcanvas-xl", "offcanvas-end");
+  panel.classList.add("offcanvas-cabecera", "offcanvas-end");
   subpanel.classList.add("collapse");
   boton.hidden = false;
   expandir.hidden = false;
@@ -38,7 +38,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   const secundaria = Collapse.getOrCreateInstance(subpanel, { toggle: false });
   const eventos = new AbortController();
   const opciones = { signal: eventos.signal };
-  const escritorio = window.matchMedia("(min-width: 1200px)");
+  const limiteEscritorio = getComputedStyle(cabecera).getPropertyValue("--cabecera-escritorio").trim();
+  const escritorio = window.matchMedia(`(min-width: ${limiteEscritorio})`);
   let transicion = false;
   let cerrarPendiente = false;
   let destinoPendiente = null;
@@ -130,6 +131,13 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   contenedor.addEventListener("click", (evento) => {
     if (escritorio.matches && !cabecera.contains(evento.target)) secundaria.hide();
   }, opciones);
+  escritorio.addEventListener("change", () => {
+    secundaria.hide();
+    if (escritorio.matches) {
+      if (panel.classList.contains("show") || transicion) cerrar();
+      else if (document.activeElement === boton) expandir.focus({ preventScroll: true });
+    } else if (panel.contains(document.activeElement)) boton.focus({ preventScroll: true });
+  }, opciones);
   const observador = typeof IntersectionObserver === "function" ? new IntersectionObserver(([entrada]) => {
     cabecera.classList.toggle("cl-cabecera--fijada", !entrada.isIntersecting && entrada.boundingClientRect.top < (entrada.rootBounds?.top ?? 0));
   }, { root: raizScroll }) : null;
@@ -205,7 +213,7 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
         medidas.disconnect();
         drawer.dispose();
         secundaria.dispose();
-        panel.classList.remove("offcanvas-xl", "offcanvas-end");
+        panel.classList.remove("offcanvas-cabecera", "offcanvas-end");
         subpanel.classList.remove("collapse", "show");
         boton.hidden = true;
         expandir.hidden = true;

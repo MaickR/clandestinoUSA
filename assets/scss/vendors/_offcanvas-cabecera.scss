@@ -1,0 +1,16 @@
+@use "sass:map";
+
+// Excepción autorizada: Header horizontal desde 1024px, sin mover grid ni otros componentes.
+$cl-cabecera-escritorio: 1024px;
+$cl-breakpoints-originales: $grid-breakpoints;
+$cl-cabecera-breakpoints: map.merge(
+  map.remove($grid-breakpoints, xl, xxl),
+  (cabecera: $cl-cabecera-escritorio, xl: map.get($grid-breakpoints, xl), xxl: map.get($grid-breakpoints, xxl))
+);
+
+// Bootstrap genera su clase responsive nativa; restaurar el mapa antes del resto del sitio.
+$grid-breakpoints: $cl-cabecera-breakpoints;
+
+@import "bootstrap/scss/offcanvas";
+
+$grid-breakpoints: $cl-breakpoints-originales;

@@ -1,3 +1,147 @@
+# R6 — cierre final aprobado para integración
+
+## Estado vigente — 2026-11-07
+
+**R6 aprobada por el responsable para integración mediante PR manual hacia `develop`.** Esta aprobación comprende GSAP/ScrollTrigger, escritorio desde 1024 CSS px y Account/View cart en la parte superior del panel responsive de Preview. Sustituye los estados pendientes de revisión de los registros históricos conservados íntegramente debajo. Este cierre no añade cambios de diseño, funcionalidad ni optimizaciones.
+
+Sobre el commit publicado `d2455c57e27c3b9031f495878f110471f0b5a89f`, se cierran exclusivamente las correcciones locales aprobadas en `feature/home-motion-design`: adaptador responsive Bootstrap a 1024, sincronización SCSS/JavaScript, gestión de foco y resize, fallback sin JS, traslado del bloque comercial compartido y scroll independiente de la lista. Los seis archivos fuente permanecen byte a byte iguales al estado aprobado al iniciar este cierre; solo se añade esta actualización documental.
+
+Commit autorizado: `fix(nav): perfeccionar navegación responsive y accesos comerciales`. Push normal a `origin/feature/home-motion-design`. No se crea PR automáticamente, no se hace merge ni deploy, no se modifica `main` ni se activa Home pública. Los tres informes locales sin seguimiento continúan excluidos del commit.
+
+## Verificación final
+
+Evidencia local **F**: `C:/Users/Mike/.codex/visualizations/2026/11/04/01a1a576-2a20-7210-bca0-5884301a5373/home-r6/final-publication-2026-11-07/`.
+
+- `git fetch origin` confirmó HEAD y rama publicada coincidentes antes del cierre; diff limitado a navegación, sus imports SCSS y documentación. Sin cambios accidentales de GSAP, Hero, otras secciones, copy, fotografías, paquetes, formularios ni documentos anfitriones. Se verificaron 1027 hashes protegidos, el bundle GSAP compilado y los informes históricos.
+- PASS: `npm run lint`, `npm run build`, PHP lint de 65 archivos, suites Node de formularios (126 casos y 27 fechas), carrito, cierre comercial y Home pública (72 contratos), HTML sin errores de parseo ni IDs duplicados y `git diff --check`. Los logs se conservan en F.
+- PASS en navegador Chrome real: Preview y candidata pública a 768×560, 1023×768, 1024×708, 1200×800 y 1440×900. Drawer hasta 1023 y horizontal desde 1024; geometría de escritorio idéntica a la referencia aprobada. `chromium-qa.json` y `browser.log`.
+- Preview a 768×560: Account y View cart visibles arriba, antes de la lista, incluso con Discover expandido; contador 0 conectado a la demo vacía; cierre de menú antes del único diálogo existente, Tab/Shift+Tab, foco, Escape y retorno correctos. Candidata pública sin zona comercial ni modales demostrativos por configuración PHP, sin espacio vacío reservado.
+- `servidores.json` confirma el checkout y assets versionados actuales en ambos servidores, el Header compartido y las diferencias intencionales de disponibilidad. Se mantienen la protección local de Preview y la ausencia de `.home-public-enabled`.
+
+Las evidencias visuales, matriz responsive ampliada y fallbacks de las correcciones aprobadas permanecen en los registros N y H siguientes. No se repite Lighthouse: GSAP y sus secuencias no cambian. Se conserva la penalización medida de LCP simulado, la mejora parcial de TBT tras estabilización y la ausencia de regresiones observadas de CLS; no se declaran Core Web Vitals de campo. Quedan las validaciones previamente documentadas en Safari/iOS físico y staging/hosting, y la futura integración de servicios comerciales reales V1.0. La aprobación de esta rama no activa demos públicas ni sustituye esos servicios.
+
+---
+
+# Registros anteriores preservados íntegramente
+
+
+# R6 — corrección UX de Account y View cart en el panel responsive
+
+## Estado — 2026-11-07
+
+**Cambio local pendiente de revisión visual.** El responsable aprobó el breakpoint de escritorio a 1024 px y GSAP; ambos se conservan. Rama `feature/home-motion-design`, HEAD publicado `d2455c57e27c3b9031f495878f110471f0b5a89f`. Sin commit, push, PR, merge, deploy, cambio de `main` ni activación pública. Los ajustes locales anteriores y los informes históricos se preservan.
+
+Evidencia **N**: `C:/Users/Mike/.codex/visualizations/2026/11/04/01a1a576-2a20-7210-bca0-5884301a5373/home-r6/commerce-navigation/`. `evidencia.html` contiene las capturas completas del viewport, URL exacta, dimensiones y estado; `capturas.json` permite comprobar esos metadatos. No son screenshots aislados de elementos ni capturas de página completa redimensionadas.
+
+## Diagnóstico reproducido antes de modificar
+
+- `http://localhost:3000/home-preview.php`, 768×560: Account y View cart estaban en el DOM, `hidden=false`, habilitados y con `display:flex`/`visibility:visible`. La zona comercial estaba **después** de la lista y de Request a Table, dentro del scrollport de navegación (y=93…454). Con Discover cerrado, Account ocupaba y=446,5…493 y View cart y=501…547,5: estaban recortados por el ancestro aunque sus cajas geométricas quedaran dentro del viewport. Con Discover expandido pasaban a y=602…648,5 y y=656,5…703, completamente debajo de la pantalla. No era un problema de inicialización ni de listeners.
+- `http://127.0.0.1:8017/`: zona comercial, botones del panel y diálogos demostrativos **no existen** en el HTML. `home.php` conserva `$mostrarAccesoNavegacion=false` y `$carritoNavegacion=[]`; no es ocultación accidental de CSS.
+- Preview conserva `true` y el destino `#carrito-preview`. El atributo `hidden` inicial protege controles hasta conectar sus componentes; después de la conexión desaparece. No se eliminan esas guardas de disponibilidad.
+- `diagnosis.json` y `before/*-768-*.png` registran los estados originales, con Discover cerrado y expandido. Sin la captura original del responsable no se atribuye su URL: se documenta la reproducción exacta en cada ruta.
+
+## Distribución definitiva
+
+El mismo bloque comercial se mueve inmediatamente después de la cabecera del panel y **antes** de `<nav>`. No se duplica. Dos columnas compactas con iconos existentes, textos Account / View cart y contador conectado al mismo estado que el Header; targets de al menos 44 px. Tokens oscuros, tipografía, bordes y foco existentes; sin nuevos componentes ni dependencias.
+
+En el drawer, cabecera, comercio y pie no se contraen. La lista de enlaces tiene su propio scroll vertical. Request a Table queda fuera de ese scroll y permanece visible por encima del pie de contacto. A poca altura, Discover y sus enlaces se alcanzan desplazando la lista; ese desplazamiento no mueve las acciones comerciales. `fallbacks.json` verifica una rueda de scroll real a 768×560 y `*-768-expanded-scrolled.png` muestra el resultado.
+
+El reparto del scroll se limita al modo mejorado por debajo del breakpoint **ya aprobado** mediante el mapa existente. Sin JavaScript, la lista expandida conserva su flujo normal y la zona comercial sigue oculta. A partir de 1024, la distribución horizontal y sus medidas coinciden exactamente con la referencia del ajuste anterior en 1024, 1200, 1280 y 1440 px. No se cambia el valor del breakpoint, el adaptador Bootstrap ni JavaScript.
+
+## Funcionalidad y disponibilidad
+
+Se reutiliza `conectarAccesoPanel` y `ejecutarAccion`: cierre completo del Offcanvas, retirada de backdrop/trap, apertura del mismo modal existente, foco interior, Escape y retorno al icono compacto válido del Header. El orden de Tab después del cierre del panel es Account → View cart → navegación. No se incorporan listeners ni modales nuevos. El contador de la demo vacía es **0**, sincronizado con el Header y su nombre accesible; no implica un carrito comercial real.
+
+La candidata pública no genera el bloque y no reserva espacio para él. Header, documentos anfitriones, condiciones PHP y motor GSAP no cambian salvo el traslado del markup compartido. `servidores.json` confirma el mismo checkout, Preview idéntico vía BrowserSync→8018 y PHP8017, Header compartido normalizando flags/enlaces intencionales, hashes y versiones de assets equivalentes. Se conservan `no-store`, `noindex`, la protección local de Preview y la raíz legacy del backend; no se crea `.home-public-enabled`.
+
+Para V1.0: conectar proveedor real de identidad/sesión y controlador de acceso, estados de usuario y acciones funcionales en este mismo bloque; proveedor persistente de carrito, suscripción `actualizarCarrito`, mini-carrito mediante `conectarCarrito`, pedidos y checkout con validaciones en servidor. Aportar destinos navegables para fallbacks sin JS. El anfitrión debe renderizar las acciones solo cuando los servicios estén disponibles y conectarlos mediante las APIs existentes. Cambiar una bandera o reutilizar los fixtures no habilita servicios reales ni autoriza su publicación. No se añade otra navegación.
+
+## QA ejecutado
+
+| Comprobación | Resultado / evidencia |
+|---|---|
+| Chrome real | PASS en Preview y candidata pública: 320×568, 390×844, 425×560, 768×560, 820×1180, 1023×768, 1024×708; además 1200, 1280 y 1440. 20 casos, estados cerrado/abierto, Discover, rectángulos y hit testing para detectar clipping, overflow, targets y geometría de escritorio. `chromium-qa.json`. |
+| Firefox real | PASS en ambas rutas a 390×844, 768×560, 820×1180 y 1024×708: ocho casos con las mismas acciones funcionales; `firefox-qa.json`. |
+| Account / View cart | PASS desde Discover expandido en los seis tamaños de drawer: controles inmediatamente visibles, contador 0 sincronizado, una sola instancia de diálogo, cierre de menú previo, foco, Tab/Shift+Tab, Escape, retorno y limpieza de scroll lock/backdrop. Capturas `preview-768-account.png` y `preview-768-cart.png`. |
+| Scroll y teclado | PASS: lista desplazable con rueda, acciones inmóviles, Contact visible al recibir foco, retorno desde Discover y desde el panel. Request a Table, cabecera y pie visibles en todos los tamaños pedidos. |
+| Resize / orientación / reduced motion | PASS: panel abierto 768→1024, limpieza y foco en Discover; vuelta a móvil y cambio 768×560→390×844. Misma navegación funcional con reduced motion; `fallbacks.json`. |
+| Sin JS | PASS: 14 casos (siete tamaños × dos rutas), sin overflow, sin activadores modales inertes, navegación y reserva disponibles. |
+| Accesibilidad / consola | PASS en los escenarios probados: axe WCAG2 A/AA y 2.1 AA sobre Header con Discover expandido en diez estados, foco visible y cero errores de consola/página/HTTP en la matriz funcional. No equivale a certificación WCAG. |
+| Técnico | PASS: `npm run lint`, `npm run build`, PHP lint de 65 archivos; suites Node de formularios (126 + 27 fechas), carrito, cierre comercial y Home pública (72); HTML parseado sin errores ni IDs duplicados; `git diff --check`. |
+| Protección | Hashes del resto de fuentes/paquetes, adaptador 1024, documentos anfitriones y tres informes históricos intactos. Main JS y movimiento GSAP no se modifican. Sin nuevas dependencias ni mediciones Lighthouse innecesarias. |
+
+Esta corrección modifica únicamente `includes/header.php`, `assets/scss/patterns/_navegacion-global.scss` y este documento respecto al estado local recibido; conserva los ajustes de breakpoint anteriores. Se actualizan assets únicamente mediante build. Pendientes: revisión visual humana, Safari/iOS y dispositivos físicos. En los casos probados no quedan fallos conocidos; no se extrapola la prueba a todos los tamaños o navegadores.
+
+Reproducción: recargar Preview, fijar 768×560, abrir menú; comprobar Account y View cart debajo del título. Abrir Discover, desplazar solo la lista, activar cada acción y cerrar con Escape. Repetir en la candidata pública para comprobar la ausencia intencional de demos y en 1024×708 para la navegación horizontal.
+
+---
+
+# Registro anterior preservado íntegramente
+
+
+# R6 — corrección puntual del Header responsive a 1024 px
+
+## Estado vigente — 2026-11-07
+
+**Corrección local de Header pendiente de revisión. Motion GSAP aprobado y protegido.** La rama permanece en `feature/home-motion-design`, HEAD publicado `d2455c57e27c3b9031f495878f110471f0b5a89f`. Esta revisión no hace commit, push, PR, merge ni deploy, no modifica `main` ni activa Home pública. El cierre anterior se conserva íntegro debajo como registro histórico y no autoriza publicar esta corrección sin revisión.
+
+Evidencia **H**: `C:/Users/Mike/.codex/visualizations/2026/11/04/01a1a576-2a20-7210-bca0-5884301a5373/home-r6/header-responsive-1024/`. `evidencia.html` reúne capturas reales comparables, el antes/después y enlaces a resultados JSON y scripts reproducibles.
+
+## Causa y estrategia única
+
+La candidata publicada utilizaba tres piezas coherentes, pero con el umbral equivocado para este requisito: `@include media-breakpoint-up(xl)`, clase Bootstrap `offcanvas-xl` y `matchMedia('(min-width: 1200px)')`. A 1024 px el panel lateral era el comportamiento programado, no una caché antigua. `before/preview-1024.png` y `before/geometry.json` conservan la reproducción.
+
+Se establece **1024 CSS px exactos** como escritorio exclusivamente para la navegación. 991, 992 y 1023 siguen siendo drawer; 1024, 1025, 1100, 1199 y 1200 son horizontales. No se mueve el breakpoint global `lg=992` ni `xl=1200`, el grid, los contenedores o las composiciones de Home.
+
+`vendors/_offcanvas-cabecera.scss` define `$cl-cabecera-escritorio: 1024px` y añade la entrada `cabecera` a un mapa local ordenado de Bootstrap. El import original de Offcanvas se compila con ese mapa, generando la clase responsive nativa `offcanvas-cabecera`, y restaura inmediatamente `$grid-breakpoints`. Los mismos puntos de entrada `home.scss` y `main.scss` usan este adaptador. Es una excepción local a la regla habitual de breakpoints, expresamente requerida por el responsable; no se amplía el Design System ni se duplican manualmente las reglas del componente.
+
+El Header utiliza ese mapa con el mixin Bootstrap. Expone el valor mediante `--cabecera-escritorio`; JavaScript lo lee para su `matchMedia`, utiliza `offcanvas-cabecera` y retira la misma clase al destruir. No hay un segundo umbral numérico en JS. Se conserva la mecánica oficial de Offcanvas: backdrop, Escape, scroll lock y trap. Referencia contrastada con el paquete instalado y la [documentación de Bootstrap Offcanvas](https://getbootstrap.com/docs/5.3/components/offcanvas/).
+
+Al cambiar de modo se cierra Discover, se completa el cierre del drawer cuando corresponde y se lleva el foco a un control visible: Discover en escritorio, hamburguesa al volver a móvil si el foco estaba dentro del panel. Un cambio 1199↔1200 ya no cambia el modo ni descarta un Discover abierto.
+
+## Resultado visual y fallbacks
+
+A 1024 px, todos los destinos —Home, Experiences, Restaurant, Wine Shop, Discover y Request a Table— caben en una fila, también con los iconos compactos de Preview. Se mantienen tipografía, targets, logo y CTA: no fue necesario reducir texto, padding ni tamaño del logo para forzarlo. Los enlaces y Discover conservan aproximadamente 46,5 px de alto y el CTA 44 px con la raíz predeterminada. El Header conserva su altura aproximada de 83,55 px. A 1200 y 1440, su geometría, tipografía y colores coinciden con la referencia anterior en ambas variantes.
+
+Se permite reflow de la navegación con texto al 200%, manteniendo todos los destinos y targets. No se impone una fila rígida a texto ampliado. Sin JavaScript, Discover permanece expandido en el flujo, para evitar la superposición que causaba su posicionamiento absoluto. Los controles que requieren JS siguen indisponibles y el icono de carrito con destino exclusivamente modal se oculta; un enlace a un carrito real conserva su fallback navegable.
+
+La prueba a 1024×220 detectó que el offset de foco de las anclas de página dejaba Contact parcialmente recortado en el scroll interno de Discover. Se acota `scroll-margin-block` dentro de la navegación, preservando el offset de las secciones. Se verificó con Tab que los tres destinos quedan completamente visibles a 220 y 320 px de alto (`foco-corto.json` y `*-1024-keyboard-*.png`). No se modifica el motor de motion para resolverlo.
+
+## Preview y candidata pública
+
+| Documento | Estado comercial | Servidor |
+|---|---|---|
+| `http://localhost:3000/home-preview.php` | Demos Account y View cart; compactos en Header y acciones dentro del drawer | BrowserSync → PHP `127.0.0.1:8018`, checkout actual. |
+| `http://127.0.0.1:8017/home-preview.php` | El mismo Preview, con demos y el mismo Header | PHP CLI directo con router local de QA. |
+| `http://127.0.0.1:8017/` | Sin controles ni diálogos comerciales de demostración | El mismo checkout, anfitrión `home.php` y flag local de QA. |
+
+Ambos anfitriones incluyen `includes/home-document.php` e `includes/header.php`. `home-preview.php` aporta `$mostrarAccesoNavegacion=true` y `$carritoNavegacion=['destino'=>'#carrito-preview']`; `home.php` conserva `false` y `[]`. La ausencia pública se verifica en HTML, no depende de CSS que oculte iconos. Esos archivos PHP y `main.js` permanecen byte a byte intactos. El menú Preview usa los diálogos existentes: cierra primero, transfiere foco, mantiene contador 0 y retorna al control compacto al pulsar Escape; no se fabrican sesiones ni se duplican modales.
+
+`servidores.json` compara los documentos, SHA256 de CSS/main/chunks, `?v=`, cache headers y variantes. Los Preview coinciden al retirar el script BrowserSync; el documento público comparte main/Header/Footer al normalizar flags, aliases y destinos intencionales. Los assets coinciden entre hosts y disco. Las respuestas PHP siguen `no-store` y `noindex`; no se cambió la protección loopback de Preview ni se creó `.home-public-enabled`. El backend 8018 continúa sirviendo la raíz legacy.
+
+Para V1.0 deberán conectarse un proveedor real de autenticación/sesión y su controlador de acceso, un proveedor de carrito persistente con validación de precios/disponibilidad en servidor, el mini-carrito mediante `conectarCarrito` y la suscripción de `actualizarCarrito`, y servicios reales de pedidos/checkout. El anfitrión solo debe renderizar los accesos cuando estén funcionalmente disponibles. Debe aportar destinos navegables reales para el fallback sin JS y conservar `conectarAccesoPanel`, cierre previo, Escape, trap y retorno del foco. No basta con cambiar flags o mostrar fixtures. No se activa ninguno de esos servicios aquí.
+
+## QA y protección
+
+| Comprobación | Resultado y evidencia |
+|---|---|
+| 17 anchos exigidos | PASS: 320/360/390/425/600/768/820/991/992/1023/1024/1025/1100/1199/1200/1280/1440 en Preview y pública (34 casos). Geometría de cada destino, centros de fila, targets, modo CSS, visibilidad, popup, foco y acciones; `qa.json`. |
+| Firefox | PASS: 390/820/991/992/1023/1024/1025/1199/1200/1440 en ambas variantes, 20 casos; `firefox.json`. |
+| Estados de transición | PASS: 1023 abierta→1024, 1024 Discover→1023, resize durante apertura, 1199↔1200, orientación 390×844→844×390 y alturas 320/220. Se comprueban foco real y limpieza del backdrop/scroll lock; `transiciones.json`. |
+| Teclado con poca altura | PASS: Tab alcanza Wine Club, About Us y Contact y cada caja queda íntegramente dentro del scrollport; Escape y retorno; `foco-corto.json`. |
+| Texto al 200% y sin JS | PASS: 102 casos en ambos documentos y los 17 anchos. Ampliación temporal de la raíz a 200% solo en el navegador de QA, sin cambios de fuente en producto; con JS y sin JS, sin overflow. Sin JS, destinos expandidos sin superposición; `zoom-nojs.json`. |
+| Accesibilidad y consola | PASS en los estados probados: foco visible, Escape, Tab/Shift+Tab, nombres, controles y ausencia de errores de página/recursos; `accesibilidad.json` contiene el análisis axe específico del Header con Discover abierto. No equivale a certificación WCAG. |
+| Fuentes y CSS protegidos | PASS: fuentes GSAP/Hero/media/main, tokens, PHP, paquetes e informes intactos. Bundle GSAP idéntico. Comparación AST del CSS sin cambios ajenos al Header y su nueva clase Offcanvas; geometría de Header 1200/1440 idéntica; `integridad.json`. |
+| QA técnico | PASS: `npm run lint`, `npm run build`, 65 PHP, suites Node de formularios (126 + 27 fechas), carrito, cierre comercial y Home pública (72), HTML Preview/pública y `git diff --check`. Sin nuevas dependencias ni Lighthouse extensivo. |
+
+Los cambios quedan limitados a `assets/js/modules/patterns/navegacion-global.js`, `assets/scss/patterns/_navegacion-global.scss`, el nuevo `assets/scss/vendors/_offcanvas-cabecera.scss`, sus imports en `assets/scss/home.scss` y `assets/scss/main.scss`, y este informe. GSAP, ScrollTrigger, Hero, imágenes, Pure Soul, las demás secciones, copy R5, formularios, SEO y rutas públicas se conservan. Los tres informes locales históricos siguen sin seguimiento y con los hashes originales. El historial publicado y `main` permanecen intactos.
+
+Pendiente: revisión visual humana de este ajuste, Safari/iOS y dispositivos físicos. En los escenarios comprobados no quedan defectos funcionales conocidos. No se extrapola la muestra a todos los navegadores ni a todas las combinaciones de ampliación y altura. Se conservan las limitaciones de rendimiento y hosting ya documentadas para R6; esta corrección no reabre ni optimiza el motion aprobado.
+
+---
+
+# Registro histórico íntegro — ajuste actual del Header en el bloque superior
+
 # Home R6 — cierre definitivo de motion y navegación responsive
 
 ## Estado vigente — 2026-11-07
