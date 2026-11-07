@@ -13,7 +13,7 @@
 @import "bootstrap/scss/helpers/visually-hidden";
 @import "bootstrap/scss/transitions";
 @import "bootstrap/scss/modal";
-@import "bootstrap/scss/offcanvas";
+@import "vendors/offcanvas-cabecera";
 @import "base/root";
 @import "base/typography";
 @import "base/a11y";
@@ -43,6 +43,7 @@
 @import "pages/home-historias";
 @import "pages/home-privadas";
 @import "pages/home-reserva";
+@import "pages/home-movimiento";
 
 // Adaptador de escenas sobre el mismo grid superpuesto de Wave 1.
 .cl-hero--slider {

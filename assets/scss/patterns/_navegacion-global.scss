@@ -25,6 +25,8 @@
 .cl-cabecera-testigo { block-size: 1px; }
 
 .cl-cabecera {
+  --cabecera-escritorio: #{$cl-cabecera-escritorio};
+
   position: relative;
   z-index: 100;
   inset-block-start: 0;
@@ -95,6 +97,9 @@
   &--con-carrito &__cuenta { margin: 0; }
   &__origen { display: flex; }
 
+  // Un destino modal no funciona sin JS; los enlaces a un carrito real conservan su fallback.
+  &:not(.cl-cabecera--mejorada) &__carrito[href^="#"] { display: none; }
+
   // Sin acciones demostrativas, conservar el menú móvil en su extremo aprobado.
   &--publica &__origen { margin-inline-start: auto; }
 
@@ -158,6 +163,9 @@
     min-block-size: 2.75rem;
     align-items: center;
   }
+
+  // El offset de las anclas de página no corresponde al scroll interno del menú.
+  &__nav :focus { scroll-margin-block: var(--espacio-2); }
   &__nav :focus-visible { outline-offset: -3px; }
 
   &__lista,
@@ -169,7 +177,8 @@
   &__grupo { position: relative; }
 
   &__enlace,
-  &__expandir {
+  &__expandir,
+  &__accion {
     display: flex;
     gap: var(--espacio-2);
     align-items: center;
@@ -226,10 +235,54 @@
   }
   &__reserva { margin-block-start: var(--espacio-5); }
 
-  @include media-breakpoint-up(xl) {
+  &__comercio {
+    display: grid;
+    flex-shrink: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--espacio-2);
+    padding: var(--espacio-3) var(--espacio-4);
+    border-block-end: 1px solid var(--color-borde);
+
+    &[hidden] { display: none; }
+  }
+
+  &__accion {
+    gap: var(--espacio-2);
+    min-inline-size: 0;
+    padding: var(--espacio-2);
+    border: 0;
+    border-radius: var(--radio-md);
+    background: transparent;
+    text-align: start;
+
+    &:hover,
+    &:focus-visible { color: var(--color-acento); }
+    &[hidden] { display: none; }
+  }
+
+  &__unidades { margin-inline-start: auto; }
+
+  // Solo el drawer reparte el espacio: acciones y reserva visibles, lista desplazable.
+  @include media-breakpoint-down(cabecera, $cl-cabecera-breakpoints) {
+    &--mejorada &__nav {
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+    }
+
+    &--mejorada &__lista {
+      min-block-size: 0;
+      overflow-y: auto;
+    }
+
+    &--mejorada &__reserva { flex-shrink: 0; }
+  }
+
+  @include media-breakpoint-up(cabecera, $cl-cabecera-breakpoints) {
     &__fila { flex-wrap: nowrap; }
 
     &__origen,
+    &__comercio,
     &__panel-cabecera,
     &__panel-pie { display: none; }
     &__panel { flex: 1 1 auto; }
@@ -238,6 +291,7 @@
 
     &__nav {
       display: flex;
+      flex-wrap: wrap;
       gap: var(--espacio-4);
       align-items: center;
       justify-content: flex-end;
@@ -266,6 +320,13 @@
     &__reserva {
       flex-shrink: 0;
       margin: 0;
+    }
+
+    // Sin Collapse, Discover permanece expandido y debe participar del flujo, sin superposición.
+    &:not(.cl-cabecera--mejorada) .cl-cabecera__sublista {
+      position: static;
+      inline-size: auto;
+      max-block-size: none;
     }
   }
 }

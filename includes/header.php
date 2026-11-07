@@ -20,6 +20,16 @@ $discoverActivo = array_key_exists($destinoActivo, $rutasDescubrir);
         <p class="cl-eyebrow" id="navegacion-global-titulo">Explore The Clandestino</p>
         <span class="cl-cabecera__cierre-slot" data-cl-nav-cierre></span>
       </div>
+      <?php if (($mostrarAccesoNavegacion ?? true) || !empty($carritoNavegacion['destino'])) : ?>
+      <div class="cl-cabecera__comercio" data-cl-nav-comercio hidden>
+        <?php if ($mostrarAccesoNavegacion ?? true) : ?>
+        <button class="cl-cabecera__accion" type="button" data-cl-nav-cuenta-panel aria-controls="acceso-global" aria-haspopup="dialog" hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-cuenta"></use></svg><span>Account</span></button>
+        <?php endif; ?>
+        <?php if (!empty($carritoNavegacion['destino'])) : ?>
+        <button class="cl-cabecera__accion" type="button" data-cl-nav-carrito-panel hidden><svg class="cl-icon" aria-hidden="true" focusable="false"><use href="/assets/icons/cl-iconos.svg#cl-icon-pedido"></use></svg><span>View cart</span><span class="cl-cabecera__unidades" data-cl-nav-carrito-panel-conteo aria-hidden="true" hidden></span></button>
+        <?php endif; ?>
+      </div>
+      <?php endif; ?>
       <nav class="cl-cabecera__nav" aria-label="Main navigation">
       <ul class="cl-cabecera__lista">
         <?php foreach ($rutasNavegacion as $nombre => $ruta) : ?>

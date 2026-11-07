@@ -20,10 +20,13 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   const piePanel = buscar("nav-pie");
   const carrito = buscar("nav-carrito");
   const conteoCarrito = buscar("nav-carrito-conteo");
+  const comercio = buscar("nav-comercio");
+  const carritoPanel = buscar("nav-carrito-panel");
+  const conteoPanel = buscar("nav-carrito-panel-conteo");
   if (![cabecera, testigo, boton, panel, expandir, subpanel, origen, cierre, tituloPanel, piePanel].every((nodo) => nodo instanceof HTMLElement)) {
     throw new TypeError("La navegación requiere cabecera, paneles y controles completos.");
   }
-  panel.classList.add("offcanvas-xl", "offcanvas-end");
+  panel.classList.add("offcanvas-cabecera", "offcanvas-end");
   subpanel.classList.add("collapse");
   boton.hidden = false;
   expandir.hidden = false;
@@ -35,10 +38,12 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   const secundaria = Collapse.getOrCreateInstance(subpanel, { toggle: false });
   const eventos = new AbortController();
   const opciones = { signal: eventos.signal };
-  const escritorio = window.matchMedia("(min-width: 1200px)");
+  const limiteEscritorio = getComputedStyle(cabecera).getPropertyValue("--cabecera-escritorio").trim();
+  const escritorio = window.matchMedia(`(min-width: ${limiteEscritorio})`);
   let transicion = false;
   let cerrarPendiente = false;
   let destinoPendiente = null;
+  let accionPendiente = null;
   let destruccion = null;
   let miniCarrito = null;
   let retirarCarrito = null;
@@ -92,6 +97,11 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
       destinoPendiente = null;
     } else if (escritorio.matches) expandir.focus();
     else boton.focus({ preventScroll: true });
+    if (accionPendiente) {
+      const accion = accionPendiente;
+      accionPendiente = null;
+      accion(escritorio.matches ? expandir : boton);
+    }
   }, opciones);
   // Captura local: Discover cierra antes de que Escape llegue al Offcanvas oficial.
   cabecera.addEventListener("keydown", (evento) => {
@@ -121,21 +131,46 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
   contenedor.addEventListener("click", (evento) => {
     if (escritorio.matches && !cabecera.contains(evento.target)) secundaria.hide();
   }, opciones);
-  const observador = new IntersectionObserver(([entrada]) => {
+  escritorio.addEventListener("change", () => {
+    secundaria.hide();
+    if (escritorio.matches) {
+      if (panel.classList.contains("show") || transicion) cerrar();
+      else if (document.activeElement === boton) expandir.focus({ preventScroll: true });
+    } else if (panel.contains(document.activeElement)) boton.focus({ preventScroll: true });
+  }, opciones);
+  const observador = typeof IntersectionObserver === "function" ? new IntersectionObserver(([entrada]) => {
     cabecera.classList.toggle("cl-cabecera--fijada", !entrada.isIntersecting && entrada.boundingClientRect.top < (entrada.rootBounds?.top ?? 0));
-  }, { root: raizScroll });
-  observador.observe(testigo);
+  }, { root: raizScroll }) : null;
+  observador?.observe(testigo);
   const medidas = new ResizeObserver(() => {
     contenedor.style.setProperty("--navegacion-offset", `${cabecera.getBoundingClientRect().height}px`);
   });
   medidas.observe(cabecera);
   const control = {
+    /** Cerrar el trap del menú antes de abrir el destino; devolver foco a un control visible. */
+    ejecutarAccion(origenAccion, accion) {
+      if (!(origenAccion instanceof HTMLElement) || typeof accion !== "function") throw new TypeError("Se requiere origen y acción funcional.");
+      secundaria.hide();
+      if (panel.contains(origenAccion) && !escritorio.matches && (panel.classList.contains("show") || transicion)) {
+        accionPendiente = accion;
+        cerrar();
+      } else accion(origenAccion);
+    },
+    /** Disponible solo después de conectar el mismo panel/proveedor que utiliza el Header. */
+    conectarAccesoPanel(selector, accion) {
+      const activador = buscar(selector);
+      if (!activador || !comercio) return;
+      activador.hidden = false;
+      comercio.hidden = false;
+      activador.addEventListener("click", () => control.ejecutarAccion(activador, accion), opciones);
+    },
     /** El anfitrión conecta estado y markup; el Header no conoce IDs ni fixtures del laboratorio. */
     conectarCarrito(proveedor, panelResumen, crearPanel = crearMiniCarrito) {
       if (!carrito || miniCarrito) return;
       if (typeof crearPanel !== "function") throw new TypeError("El anfitrión debe aportar el inicializador del mini-carrito.");
       miniCarrito = crearPanel(panelResumen, carrito, proveedor);
       retirarCarrito = proveedor.suscribir(control.actualizarCarrito);
+      control.conectarAccesoPanel("nav-carrito-panel", () => carrito.click());
     },
     /** El anfitrión aporta suma de unidades; null significa que no hay estado conectado. */
     actualizarCarrito(datos) {
@@ -145,6 +180,12 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
       conteoCarrito.textContent = datos === null ? "" : datos.unidades > 99 ? "99+" : String(datos.unidades);
       carrito.setAttribute("aria-label", datos === null ? "View cart" : `View cart, ${datos.unidades} ${datos.unidades === 1 ? "item" : "items"}`);
       carrito.setAttribute("aria-busy", String(datos?.estado === "actualizando"));
+      if (conteoPanel) {
+        conteoPanel.hidden = datos === null;
+        conteoPanel.textContent = conteoCarrito.textContent;
+        carritoPanel.setAttribute("aria-label", carrito.getAttribute("aria-label"));
+        carritoPanel.setAttribute("aria-busy", String(datos?.estado === "actualizando"));
+      }
     },
     destruir() {
       if (destruccion) return destruccion;
@@ -168,11 +209,11 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
           });
         }
         eventos.abort();
-        observador.disconnect();
+        observador?.disconnect();
         medidas.disconnect();
         drawer.dispose();
         secundaria.dispose();
-        panel.classList.remove("offcanvas-xl", "offcanvas-end");
+        panel.classList.remove("offcanvas-cabecera", "offcanvas-end");
         subpanel.classList.remove("collapse", "show");
         boton.hidden = true;
         expandir.hidden = true;
@@ -183,6 +224,8 @@ export function inicializarNavegacion(contenedor, { raizScroll = null, proveedor
         cabecera.classList.remove("cl-cabecera--mejorada");
         cabecera.classList.remove("cl-cabecera--con-carrito");
         control.actualizarCarrito(null);
+        accionPendiente = null;
+        if (comercio) comercio.hidden = true;
         inicializados.delete(contenedor);
       })();
       return destruccion;
