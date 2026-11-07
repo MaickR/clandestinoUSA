@@ -1,5 +1,9 @@
 # Arquitectura — The Clandestino USA
 
+## Preparación operativa Home — R7 (2026-11-07)
+
+La publicación sigue desactivada. `scripts/empaquetar-home.mjs` prepara una lista permitida de PHP/includes, páginas y recursos legacy, CSS/JS compilados (incluido GSAP/ScrollTrigger) y configuración Apache; el manifiesto SHA256 queda fuera de `web/`. No requiere Node en hosting. `scripts/ensayar-home-apache.mjs` prueba una copia aislada con Apache/FastCGI, TLS local y correo simulado: nunca activa el checkout ni el sitio público. Se añaden denegaciones de archivos privados/fuentes y defensa local de includes; HTML/PHP evitan cabeceras de caché duplicadas y los endpoints R1 conservan `private, no-store`. Inventario, evidencia, requisitos reales pendientes, activación y rollback: [HOME-DEPLOYMENT-READINESS.md](HOME-DEPLOYMENT-READINESS.md). Diseño, fotografías, animaciones, PHP de producto y comportamiento visual permanecen intactos. La compatibilidad de la cuenta GoDaddy exige staging autorizado y verificación propia.
+
 ## Formularios legacy — Phase R1 (2026-11-03)
 
 Contacto y reserva conservan endpoints PHP y contratos JSON. `includes/formularios.php` comparte sesión/token CSRF, origen explícito, calendario civil `America/Los_Angeles` y notificaciones con éxito respecto del destinatario principal. `form-token.php` y `assets/js/forms-security.js` preparan el envío AJAX; `/contact.html` se resuelve internamente mediante `contact-page.php` para insertar también el token en navegación convencional. No hay framework, persistencia comercial ni proveedor nuevo. Sin activación de Home ni entrega real certificada; pruebas, requisitos de Apache/cPanel/Cloudflare y límites en [FORMS-RELIABILITY-SECURITY.md](FORMS-RELIABILITY-SECURITY.md).
