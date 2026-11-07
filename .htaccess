@@ -124,8 +124,18 @@ FileETag MTime Size
 <IfModule mod_headers.c>
   # HTML & PHP: sin caché
   <FilesMatch "\.(?:html|php)$">
+    # Evitar un segundo Cache-Control de mod_expires en documentos dinámicos.
+    <IfModule mod_expires.c>
+      ExpiresActive Off
+    </IfModule>
+    Header onsuccess unset Cache-Control
     Header always set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
     Header always set Pragma "no-cache"
+  </FilesMatch>
+
+  # Las respuestas con sesión prevalecen sobre cualquier política genérica.
+  <FilesMatch "^(?:form-token|contact|contact-page|reservation)\.php$">
+    Header always set Cache-Control "private, no-store, max-age=0"
   </FilesMatch>
 
   # Service Worker: no-cache absoluto (para updates fiables)
@@ -177,6 +187,9 @@ FileETag MTime Size
   # y denegada en Apache/GoDaddy. No bloquea assets compartidos.
   RewriteRule ^style-guide(/|$) - [F,L]
   RewriteRule ^(?:includes|docs|scripts)(/|$) - [F,END]
+  RewriteRule ^(?:node_modules|\.git|\.github|\.agents|\.cursor|\.dist|build|dist)(/|$) - [F,END,NC]
+  RewriteRule ^assets/(?:scss|js/modules)(/|$) - [F,END,NC]
+  RewriteRule ^assets/js/(?:main|style-guide|optimize-images)\.js$ - [F,END,NC]
 
   RewriteCond %{HTTP_HOST} ^www\.theclandestinousa\.com$ [NC]
   RewriteRule ^ https://theclandestinousa.com%{REQUEST_URI} [L,R=301]
@@ -209,12 +222,12 @@ FileETag MTime Size
   RewriteRule ^contact\.html$ contact-page.php [L]
 
   # Backups and source maps are not public documents
-  RewriteRule \.(?:backup|bak|old|map)$ - [F,L]
+  RewriteRule \.(?:backup|bak|old|orig|log|sql|zip|tar|gz|map)(?:\.|$) - [F,L,NC]
 </IfModule>
 
 # Project files that must not be downloaded from the web.
 # Form handlers stay reachable: contact.php and reservation.php.
-<FilesMatch "(?i)^(package(-lock)?\.json|postcss\.config\.js|README\.md|CHANGELOG\.md|style-guide\.md|\.gitignore|\.htaccess)$">
+<FilesMatch "(?i)^(?:\.(?!well-known(?:$|/)).*|.*\.(?:md|ini|yml|yaml)|package(?:-lock)?\.json|(?:postcss|eslint)\.config\.(?:js|mjs)|gulpfile\.mjs|AGENTS\.md)$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
