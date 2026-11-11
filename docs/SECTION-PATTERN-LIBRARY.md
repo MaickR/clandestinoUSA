@@ -1,5 +1,7 @@
 # Biblioteca de patrones de sección
 
+Foundation, Core y Waves 1–7 están integradas en `develop`. Los contratos se contrastan con las fuentes actuales. Las fichas fechadas conservan la evidencia y los estados de cada encargo. Los antiguos pendientes de integración y aprobación se leen dentro de ese alcance. La aprobación de Home y sus pendientes operativos se registran en [R9](HOME-FINAL-ACCEPTANCE.md).
+
 ## Encabezado ornamentado
 
 Contrato de presentación selectiva para aperturas editoriales y bienvenidas destacadas. Usar `cl-seccion__encabezado--ornamentado` sobre un encabezado con eyebrow directo, seguido de título y descripción opcional. Su `::after` vacío dibuja el separador bajo el eyebrow con `separator.svg`, `--color-acento` y espaciado semántico. No agrega contenido accesible ni tab stops.
@@ -20,7 +22,7 @@ Uso moderado: encabezados editoriales destacados, bienvenidas y aperturas. No ap
 
 Header, Hero editorial/interior, Footer y acceso residen ahora en `includes/{header,hero,footer,access}.php`. Home, Navigation y los partials de Patterns/transacciones consumen esas mismas fuentes, sin fixtures en Home. Los nombres Wave de los registros inferiores son históricos. Welcome y Spanish Table reutilizan Section System, Media + Content, Foundation y Core; el diseño aprobado de Header/Hero/Footer no cambia. Contratos, archivos, evidencia comparativa y límites de la integración: [HOME-PHASE-B.md](HOME-PHASE-B.md).
 
-## Auditoría transversal vigente — 2026-10-21
+## Registro de auditoría transversal — 2026-10-21
 
 Inventario contrastado con fuentes, decisiones, defectos corregidos y evidencia actual en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). La aprobación de la dirección visual general expresada en este encargo sustituye los pendientes históricos de dirección; el cierre completo sigue esperando aprobación humana final. Los registros de QA inferiores conservan su fecha y alcance originales.
 
@@ -31,6 +33,8 @@ Core conserva sus APIs y estilos. Las muestras de botones anuncian su función d
 **DESIGN SYSTEM READY — WAITING FOR FINAL HUMAN APPROVAL**, con las limitaciones de pruebas del informe; sin autorización de publicación o venta.
 
 ## Wave 6 — Cierre final de biblioteca — 2026-10-19
+
+> Registro histórico de Wave 6. Para el Header compartido actual, aplicar la [excepción aprobada](ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido) y consumir la configuración real del anfitrión. Los umbrales `xl` y destinos demo de las fichas Wave 6 describen sus ensayos originales.
 
 Estado vigente sobre `bc93e59`, misma feature y base `develop` `a88845e`. Preflight limpio, fetch y sincronización 0/0; sin cambios ajenos. Se preservan los diseños aprobados de Header, Discover, drawer, acceso, breadcrumbs y Footer móvil. Este registro actualiza los contratos/QA del refinamiento histórico inferior; no autoriza PR, merge ni deploy.
 
@@ -198,6 +202,8 @@ Incremento CSS gzip 1522 bytes y guía minificada gzip 1587 bytes incluye mecán
 Evidencia local fuera del repositorio: carpeta `C:/Users/Mike/.codex/visualizations/2026/10/19/01a1547e-0df7-7222-8161-191d7900264d/wave-6-refinement/` con JSON antes/después/responsive/estrés/contraste y capturas finales 390/768/1280, drawer, modal e interiores. `npm run dev` sirve `http://localhost:3000/style-guide/navigation.php`, variantes anteriores y `/style-guide/patterns.php` / `/style-guide/` (Core) para revisión. Tras el build final se reinició dev correctamente; la reapertura final del navegador fue rechazada por su política de seguridad de URL, sin intentar evasión. Los resultados anteriores corresponden a pruebas reales ya ejecutadas; no se afirma una nueva sesión de navegador después de ese bloqueo. Aprobación visual humana pendiente; sin PR, merge ni deploy.
 
 ## Wave 6 — Navegación global y estructura — 2026-10-19
+
+> Registro histórico. Para la navegación compartida actual, rige la [excepción del Header](ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido).
 
 **Registro histórico inicial:** las decisiones sustituidas por el refinamiento vigente de arriba (Collapse móvil, cuenta estática, composición Footer y logo sin derivado) se conservan como trazabilidad, no como contrato actual.
 
@@ -1096,6 +1102,16 @@ Imagen editorial: `bg/clandestino-usa.jpg`, foco central en barra/copas. Interio
 
 Accesibilidad: comprobar contraste contra el recorte real y cada formato, foco visible sin clipping, DOM imagen → narrativa → enlaces. `--hero-proteccion-posicion` es un ajuste local del patrón, no un token global. Rendimiento: dimensiones explícitas y altura reservada por contenido antes de cargar la foto; sin JS. Las demos siguen bajo el primer viewport y usan lazy loading. Si el Hero futuro es LCP, **quitar `loading="lazy"`** y evaluar carga normal/eager y `fetchpriority="high"` en la página real.
 
+### Hero de páginas interiores
+
+**Contrato aprobado.** Una sola escena estática con una fotografía y un relato editorial. Conservar texto superpuesto en todos los tamaños, degradado que asegure legibilidad, tipografía, espaciado y botones del sistema. La [dirección visual](VISUAL-DIRECTION.md#degradado-cinematográfico-editorial) recoge el acabado de Home como referencia. Cada página aporta su heading y un CTA adecuado al propósito y con destino funcional.
+
+**Reutilización prevista.** El patrón ya soporta esta configuración. El anfitrión usa `.cl-hero.cl-hero--interior` y una sola inclusión de [`includes/hero.php`](../includes/hero.php) con `$hero['interior'] = true`. Puede usar `etiqueta = 'h1'` para el único título principal visible de la página y asociar el contenedor mediante `aria-labelledby` al `id` correspondiente. El [ejemplo interior de la guía](../style-guide/partials/patrones-wave-1.php) muestra la estructura y [`_hero.scss`](../assets/scss/patterns/_hero.scss) resuelve retícula, jerarquía y overlay base.
+
+- Entregar un solo `<picture>`. Usar dimensiones, alt contextual y, cuando aporten calidad o rendimiento, derivados de la misma foto mediante `media`, `srcset`, `sizes` y fallback. Si es el LCP, usar `carga = 'eager'` y evaluar `prioridad = 'high'`. Omitir `diferida` para que la imagen esté en el HTML inicial.
+- Mantener la composición propia de la foto y el copy. Probar legibilidad y encuadre en tamaños intermedios y extremos. Si el radial base es insuficiente, ajustar el degradado en un partial local siguiendo el criterio visual aprobado.
+- Omitir marcado y atributos de carrusel, autoplay, indicadores y controles de reproducción. [`main.js`](../assets/js/main.js) carga las escenas con `[data-cl-escenas]` y el módulo GSAP/ScrollTrigger en el anfitrión Home. El Hero interior no necesita esos hooks, el documento de Home ni `.cl-hero--slider`.
+
 ## `cl-media-contenido`
 
 **Propósito:** narrativa con foto gastronómica/restaurante, párrafos, lista semántica breve y CTA opcionales.
@@ -1133,6 +1149,8 @@ Fotos verificadas, sin personas, con fuentes AVIF/WebP reales, dimensiones expl�
 Fuentes alternativas bajo `webp/gallery/…` y `avif/gallery/…`, mismo nombre/dimensiones y extensión correspondiente. Foco central: copas/botella, tabla compartida y bocadillo. La tabla panorámica se recorta deliberadamente al plato central en el split; no usar esta composición cuando sea imprescindible mostrar todos los productos. No se alteran originales. Revisar cada nueva foto y texto antes de reutilizar. Texto sobre superficie sólida, alt informativo, h3 subordinado en guía y foco Core; targets ≥44px. Sin JS. **Diseño aprobado visualmente por el usuario; cierre UI-PATTERNS-05 sujeto a su última validación técnica.**
 
 ## Decisión futura — carrusel editorial de Home
+
+> Propuesta histórica de Wave 1. La implementación de Home se completó posteriormente en R1–R9. El [Hero de páginas interiores](#hero-de-páginas-interiores) tiene contrato propio.
 
 Solo la futura Home migrada tendrá carrusel por defecto; Heroes interiores seguirán estáticos. Reutilizar el Hero editorial aprobado, pocos slides con contenido realmente distinto, controles claros, navegación de teclado y pausa de reproducción cuando corresponda. Respetar `prefers-reduced-motion`, evitar movimiento automático distractor, primera imagen optimizada como posible LCP y altura estable entre slides. Evaluar imports selectivos de Bootstrap Carousel antes de escribir uno propio. Implementar en una feature separada al abordar Home; UI-PATTERNS-03 no añade carrusel ni JS.
 

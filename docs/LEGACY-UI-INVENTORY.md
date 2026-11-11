@@ -4,7 +4,7 @@
 **Fecha del análisis:** 26 de septiembre de 2026
 **Alcance:** Inventario read-only de patrones visuales, secciones, componentes, formularios e interacciones, como referencia para la reconstrucción en React + TypeScript + Tailwind CSS + shadcn/ui + Inertia + Laravel.
 
-> Este documento **no autoriza implementación**. Solo cataloga y clasifica.
+> **Inventario histórico.** La propuesta React, TypeScript, Tailwind, shadcn/ui, Inertia y Laravel del alcance original quedó descartada para este proyecto. Se conserva como contexto del relevamiento. La [arquitectura vigente](ARQUITECTURA.md) y la [regla de retiro de legacy](ARQUITECTURA.md#retiro-seguro-de-legacy) rigen las migraciones.
 
 ---
 

@@ -227,15 +227,16 @@ clandestinoUSA/
 ```bash
 npm ci          # instala dependencias
 npm run dev     # PHP :8000 + BrowserSync :3000 + watch (Ctrl+C para cerrar)
-npm run build   # genera assets/css/style.new.css y assets/js/dist/ minificados
+npm run build   # genera CSS de producto, JS minificado con chunks y el sprite
 npm run lint    # ESLint (JS nuevo) + Stylelint (SCSS nuevo)
 ```
 
 - Sitio local: http://localhost:3000/ (proxy a PHP en http://127.0.0.1:8000).
 - Style guide (solo local): http://localhost:3000/style-guide/ — bloqueado con 403 en Apache/producción.
-- Core Component Library: [contratos y validación](docs/CORE-COMPONENT-LIBRARY.md). `npm run icons` genera el sprite local; dev incluye demos CSS/JS, build solo producto y sprite. Aprobación visual humana pendiente antes de mergear Core.
+- [Core Component Library](docs/CORE-COMPONENT-LIBRARY.md) y [patrones](docs/SECTION-PATTERN-LIBRARY.md) integrados en `develop`. `npm run icons` genera el sprite local. Las demos CSS/JS se generan en desarrollo.
+- Home nueva aprobada localmente e integrada por el PR #35, pendiente de publicación. Abrir [Home Preview](http://localhost:3000/home-preview.php) con el entorno local en ejecución. Consultar [aceptación R9](docs/HOME-FINAL-ACCEPTANCE.md) para sus pendientes operativos.
 - Los outputs generados están ignorados por git y el CSS/JS legacy no se modifica.
-- Detalle: `docs/ARQUITECTURA.md`.
+- Detalle en la [arquitectura vigente](docs/ARQUITECTURA.md).
 
 ---
 

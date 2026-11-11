@@ -1,14 +1,30 @@
 # Arquitectura — The Clandestino USA
 
-## Preparación operativa Home — R7 (2026-11-07)
+## Arquitectura vigente
+
+El sitio público conserva páginas HTML/CSS/JS legacy y endpoints PHP. La base nueva usa **PHP 8 con plantillas compartidas**, HTML semántico, **SCSS BEM con prefijo `cl-`**, **Bootstrap 5 selectivo compilado desde Sass** y **JavaScript ES Modules con Gulp y esbuild**. Foundation, Core y Waves 1–7 están integradas en `develop`. Las páginas interiores reutilizan esa base y los contratos existentes.
+
+Home R1–R9 está aprobada localmente e integrada por el PR #35 (`e73a1d1`). La Home nueva sigue sin publicarse. [R9](HOME-FINAL-ACCEPTANCE.md) conserva la evidencia de aceptación y los pendientes de activación. El [mapa del sitio](MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md) distingue las rutas existentes de las iniciativas futuras.
+
+- Componer documentos PHP con las plantillas compartidas en `includes/`. `site.php` centraliza datos públicos y destinos. El anfitrión aporta contexto, semántica y metadatos. Usar los endpoints y las protecciones existentes cuando cubran una consulta o solicitud.
+- Mantener el CSS de página en partials locales y cargar solo los módulos que se necesitan. GSAP/ScrollTrigger conserva sus usos aprobados en Home. Cada uso posterior requiere una necesidad y alcance concretos. Las demos y fixtures de la guía son exclusivos del entorno local.
+- Reutilizar el Header compartido con su [excepción responsive documentada](ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido). Los demás componentes conservan los breakpoints globales y las transiciones que requiere su contenido.
+- GoDaddy compartido/cPanel sirve archivos y PHP. Gulp y esbuild operan durante desarrollo o empaquetado. El hosting no necesita Node, Redis, colas ni procesos persistentes. MySQL se diseña cuando lo requiera una feature real.
+- Mantener el stack actual, sin React, Laravel, Tailwind, plantillas de terceros, bibliotecas nuevas ni sistemas de build paralelos. Preservar contratos y tokens existentes. Aplicar los [estándares de código](ESTANDARES-DE-CODIGO.md) y actualizar este documento junto con cualquier cambio de arquitectura autorizado.
+
+## Registros de integración de Home
+
+Las siguientes fichas conservan el contexto de cada fase. Para el estado final de Home y sus bloqueantes de publicación rige [R9](HOME-FINAL-ACCEPTANCE.md).
+
+### Preparación operativa Home — R7 (2026-11-07)
 
 La publicación sigue desactivada. `scripts/empaquetar-home.mjs` prepara una lista permitida de PHP/includes, páginas y recursos legacy, CSS/JS compilados (incluido GSAP/ScrollTrigger) y configuración Apache; el manifiesto SHA256 queda fuera de `web/`. No requiere Node en hosting. `scripts/ensayar-home-apache.mjs` prueba una copia aislada con Apache/FastCGI, TLS local y correo simulado: nunca activa el checkout ni el sitio público. Se añaden denegaciones de archivos privados/fuentes y defensa local de includes; HTML/PHP evitan cabeceras de caché duplicadas y los endpoints R1 conservan `private, no-store`. Inventario, evidencia, requisitos reales pendientes, activación y rollback: [HOME-DEPLOYMENT-READINESS.md](HOME-DEPLOYMENT-READINESS.md). Diseño, fotografías, animaciones, PHP de producto y comportamiento visual permanecen intactos. La compatibilidad de la cuenta GoDaddy exige staging autorizado y verificación propia.
 
-## Formularios legacy — Phase R1 (2026-11-03)
+### Formularios legacy — Phase R1 (2026-11-03)
 
 Contacto y reserva conservan endpoints PHP y contratos JSON. `includes/formularios.php` comparte sesión/token CSRF, origen explícito, calendario civil `America/Los_Angeles` y notificaciones con éxito respecto del destinatario principal. `form-token.php` y `assets/js/forms-security.js` preparan el envío AJAX; `/contact.html` se resuelve internamente mediante `contact-page.php` para insertar también el token en navegación convencional. No hay framework, persistencia comercial ni proveedor nuevo. Sin activación de Home ni entrega real certificada; pruebas, requisitos de Apache/cPanel/Cloudflare y límites en [FORMS-RELIABILITY-SECURITY.md](FORMS-RELIABILITY-SECURITY.md).
 
-## Base pública compartida de Home — 2026-10-24
+### Base pública compartida de Home — 2026-10-24
 
 Home C8 incorpora `includes/reservation-cta.php` entre Guest Stories y Wine Club, exclusivamente en Home Preview. Adapta localmente Banda CTA con Grid Bootstrap, fotografía integrada, eyebrow, acciones y botón Core; `home.scss` importa `pages/_home-reserva.scss`. Usa los derivados AVIF/WebP existentes de una mesa de tapas en tablet/escritorio y un encuadre con vinos en teléfono. El CTA consume `$rutaReserva` de `site.php`, hacia `/index.html#reservation`, y aclara que la solicitud requiere confirmación. Sin formulario, JavaScript, animaciones, dependencias ni cambios de backend. No altera Visit ni activa la Home pública; C8 aprobada visualmente en móvil, tablet y escritorio el 2026-11-02, con cierre técnico para commit/push de la feature y PR manual hacia develop. Decisiones, evidencia y limitaciones operativas: [HOME-PHASE-C8.md](HOME-PHASE-C8.md).
 
@@ -26,25 +42,16 @@ Estado de integración local en [HOME-PHASE-B.md](HOME-PHASE-B.md). Header, Hero
 
 `main.js` inicializa el anfitrión optativo `[data-cl-site]` y solicita el módulo de escenas solo cuando existe slider; esbuild genera chunks ESM junto a la misma entrada global. El paquete futuro debe incluir todo `assets/js/dist`. Home amplía su SCSS reducido mediante los patrones existentes Media + Content y Footer; no carga hojas de guía ni legacy. Los registros inferiores conservan las rutas y estados históricos anteriores a esta extracción.
 
-Describe la arquitectura **vigente** y el **objetivo inmediato**. Lo marcado como *futuro* aún no existe en el repo.
-
-## Vigente
-
-- Páginas `.html` estáticas y PHP puntual (`contact.php`, `reservation.php`).
-- CSS legacy en `assets/css/` (`style.css`, `style.min.css` y hojas específicas como `faq-styles.css`, `form-feedback.css`, `pure-soul.css`, `whatsapp-float.css`).
-- JavaScript por página en `assets/js/` (scripts sueltos, sin bundler).
-- Hosting: GoDaddy shared (cPanel). Despliegue de archivos estáticos y PHP simple.
-- Inventario de UI actual: `docs/LEGACY-UI-INVENTORY.md`.
-
 ## Tooling frontend (vigente)
 
-Pipeline en `gulpfile.mjs`. Compila la foundation SCSS y el JS nuevo. El legacy no se compila ni se modifica.
+Pipeline en `gulpfile.mjs`. Compila SCSS y el JS nuevo. El pipeline deja fuera las hojas y los scripts legacy.
 
 | Pieza | Detalle |
 |---|---|
 | Sass producto | `assets/scss/main.scss` → `assets/css/style.new.css` |
+| Sass Home | `assets/scss/home.scss` → `assets/css/home.css` |
 | Sass guía | `assets/scss/style-guide.scss` → `assets/css/style-guide.css`, solo en `npm run dev` |
-| Bootstrap | 5.3.x desde `node_modules`: núcleo y mecánica transitions/modal/toasts; JS modular solo en la guía |
+| Bootstrap | 5.3.x desde `node_modules`: Sass selectivo y módulos JS según los componentes usados |
 | PostCSS | Autoprefixer siempre; cssnano solo en `build` |
 | JS | Entrada `assets/js/main.js` → `assets/js/dist/main.js` (esbuild, ESM, `es2020`) |
 | JS guía | `assets/js/style-guide.js` → `assets/js/dist/style-guide.js`, solo dev |
@@ -53,17 +60,17 @@ Pipeline en `gulpfile.mjs`. Compila la foundation SCSS y el JS nuevo. El legacy 
 | BrowserSync | `http://localhost:3000` con proxy a PHP `:8000` (PHP real, no estáticos) |
 | Lint | ESLint (JS nuevo y `.mjs` de tooling) y Stylelint (`assets/scss/**`) |
 
-Comandos: `npm run dev` (clean → CSS de producto y de guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → `style.new.css` y JS minificados, sin sourcemaps, sin servidores y sin CSS de la guía), `npm run lint`.
+Comandos: `npm run dev` (clean → CSS de producto y de guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → CSS y JS de producto minificados, sin sourcemaps, servidores ni bundles de guía), `npm run lint`.
 
-Outputs (ignorados por git): `assets/css/style.new.css`, sus sourcemaps, `assets/css/style-guide.css` (+ `.map`, solo dev), `assets/js/dist/**` y `assets/icons/cl-iconos.svg`. `clean` borra únicamente estos. `npm run build` no deja CSS/JS de guía y genera siempre el sprite. Todo futuro paquete de release deberá incluir el sprite generado.
+Outputs ignorados por Git: `assets/css/style.new.css`, `assets/css/home.css`, `assets/css/style-guide.css` y sourcemaps en desarrollo, `assets/js/dist/**` y `assets/icons/cl-iconos.svg`. El paquete de release incluye los recursos compilados aplicables, el sprite y los chunks ESM.
 
-Dev compila ambas entradas JS; build solo main.js. Main no importa Core mientras ninguna página lo utiliza. Watch incluye `style-guide/**/*.php`, entrada JS de guía, módulos Core y fuentes del sprite. `npm run icons` regenera el sprite sin servidores.
+Dev compila ambas entradas JS y build compila `main.js` con sus chunks. `main.js` inicializa el anfitrión optativo `[data-cl-site]` y carga las interacciones de Home bajo sus condiciones de uso. `style-guide.js` y los módulos de guía quedan en desarrollo. `npm run icons` regenera el sprite sin servidores.
 
 Separación legacy/new: los cambios en HTML/PHP/CSS/JS legacy solo recargan BrowserSync; no se compilan, optimizan ni regeneran (imágenes, sitemap).
 
 ## SCSS foundation (vigente)
 
-Design system oscuro, todavía sin páginas de producto migradas. Entrada: `assets/scss/main.scss`.
+Design System oscuro. La entrada general es `assets/scss/main.scss`. Home usa `assets/scss/home.scss`, que importa los módulos compartidos necesarios y sus partials locales.
 
 ```text
 assets/scss/
@@ -72,7 +79,7 @@ assets/scss/
 ├── abstracts/_tokens.scss    # primitivos y overrides de Bootstrap
 ├── base/                     # custom properties, tipo, accesibilidad
 ├── components/               # Foundation y Core
-└── patterns/                 # Wave 1 estructural y Wave 2 gastronómica
+└── patterns/                 # patrones compartidos de las Waves
 ```
 
 `components/_guia.scss` (clases `cl-guia-*` y `cl-muestra-*`) presenta las dos páginas de guía. Entra por `style-guide.scss`, no por `main.scss`, para que no infle el bundle de producto.
@@ -103,7 +110,11 @@ Una página migrada depende del sistema nuevo. No carga a la vez, para compensar
 
 Si una migración futura necesita una excepción temporal, el PR tiene que declararla, justificarla, nombrar el selector o la feature que la obliga y decir cuándo se elimina. No hay capa de compatibilidad ni se toca la raíz del legacy.
 
-Cada cutover es un commit de una página, verificado con la skill `qa-visual` en 390, 768 y 1280. Ninguna página de producción enlaza `style.new.css` todavía.
+Cada cutover mantiene un alcance por página y se verifica con el [contrato de regresión](ESTANDARES-DE-CODIGO.md#protección-de-páginas-aprobadas) y la skill `qa-visual` cuando aplica.
+
+## Registros del Design System
+
+Estas fichas describen los estados originales de cada entrega. La arquitectura, las entradas de producto y el estado de integración actuales figuran arriba. Usar los [contratos de Core](CORE-COMPONENT-LIBRARY.md) y los [patrones](SECTION-PATTERN-LIBRARY.md) para componer páginas reales.
 
 ### Core Component Library
 
@@ -113,7 +124,7 @@ Core amplía los controles genéricos: iconografía, feedback, estados, toast, m
 
 Los cuatro patrones se importan después de Core en `main.scss`, sin JavaScript nuevo. Solo `style-guide/patterns.php` incluye `partials/patrones-wave-1.php` con `require`/`__DIR__`; el bloqueo Apache existente cubre ambas páginas y sus partials. Hero superpuesto desde móvil, Media + Content desde md y CTA centrado; contratos, imágenes, QA y carrusel futuro de Home: `docs/SECTION-PATTERN-LIBRARY.md`. Sin motor de plantillas ni migración productiva; aprobación visual humana pendiente.
 
-### Pattern Library — Wave 2 (vigente, pendiente de aprobación visual)
+### Pattern Library — Wave 2
 
 Cuatro partials de producto amplían `main.scss`: tarjeta gastronómica compartida, fila de menú, media/ficha de vino y composición de catálogo. No cambia Foundation/Core ni los layouts Wave 1. La tarjeta Foundation y `cl-media-contenido` se reutilizan también para quesos, cestas y destacados. Demos en tres partials locales de `patterns.php`; `modules/guia/productos.js` entra exclusivamente por `style-guide.js`. La misma entrada conecta Core o productos según los elementos presentes. `main.js` continúa sin imports; build excluye las demos. No hay backend, requests de negocio ni persistencia. Inventario, matriz, assets y validación: `SECTION-PATTERN-LIBRARY.md`.
 
@@ -129,7 +140,7 @@ Cuatro partials SCSS de producto añaden membresía, regalo, evento/agenda y con
 
 Tres partials SCSS (`transaccion`, `carrito`, `reserva`) añaden composiciones de operación sobre Foundation/Core. Los módulos `patterns/{transaccion,estado-carrito,carrito,promocion,checkout,reserva}.js` separan estado de compra, presentación y callbacks de contexto; el snapshot versionado alimenta Cart/Order/Payment y el contador optativo de Header Wave6; `modules/guia/transacciones.js` y `transacciones-fixtures.js` conectan exclusivamente el laboratorio desde `style-guide.js`. PHP de referencia en `style-guide/partials/*wave-7.php` y `transacciones-componentes.php`; incluye Header/Footer/acceso Wave 6 existentes. No hay requests comerciales ni persistencia. `main.js` permanece vacío y el build excluye el JS de guía. Contratos futuros y QA en `SECTION-PATTERN-LIBRARY.md` / `WAVE-7-COVERAGE.md`; índice para construir páginas en `DESIGN-SYSTEM-READINESS.md`. La aprobación visual humana sigue pendiente.
 
-## Objetivo inmediato (futuro)
+### Objetivo original tras Wave 6
 
 Wave 6 mantiene partials compartidos de Header/Footer/modal y Topbar opcional. Los datos/rutas de la muestra se concentran en `style-guide/partials/configuracion-wave-6.php` (fixture local, no configuración productiva). El anfitrión futuro aportará configuración central confiable de rutas, contacto/redes y campos opcionales antes de incluir los mismos partials; no se migra ninguna página en esta wave. Topbar no sticky, omitida por defecto; contrato y QA de cierre en `SECTION-PATTERN-LIBRARY.md`.
 
@@ -143,11 +154,10 @@ Wave 6 mantiene partials compartidos de Header/Footer/modal y Topbar opcional. L
 ## Estrategia CSS: migración incremental
 
 - `style.css` es **legacy** y sigue siendo el CSS de producción hasta su cutover.
-- `style.new.css` es el **output** de la foundation. Hoy solo lo carga `style-guide/index.php`.
-- La migración es **página por página**: se quita el CSS legacy de esa página, se enlaza `style.new.css` y se reescribe el markup a `cl-` y al grid.
+- `style.new.css` es la salida general del Design System. Home tiene su propia salida selectiva, `home.css`.
+- La migración es **página por página**. La página migrada usa el marcado `cl-`, el grid y la salida SCSS que cubre sus componentes.
 - Una página migrada no carga el CSS legacy y el nuevo a la vez para tapar huecos. La excepción temporal, si existiera, se documenta en el PR con selector, motivo y retirada.
 - No hay hoja que compense la raíz de 10px del legacy.
-- Verificación de cada cutover: skill `qa-visual`.
 
 ```mermaid
 flowchart LR
@@ -158,19 +168,19 @@ flowchart LR
   js["assets/js (fuente)"] -->|esbuild| dist["assets/js/dist"]
 ```
 
-## Reglas de arquitectura
+## Retiro seguro de legacy
 
-- Refactor incremental del código existente; sin Laravel, React ni plantillas de terceros.
-- Sin Redis, colas ni procesos persistentes (limitación del hosting).
-- PHP: validación de input, escaping de output, CSRF en POST nuevos, importes recalculados en servidor.
-- Los cambios de arquitectura se documentan aquí en el mismo commit que los introduce.
+Secuencia obligatoria. **Reemplazo implementado → equivalencia validada → rutas y redirecciones verificadas → consumidores comprobados → retiro autorizado → QA posterior.** Inventariar HTML, PHP, CSS, JS y fotografías con sus referencias. Contrastar comportamiento y contenido contra `production-baseline` y verificar en `develop` rutas, enlaces, anclas, formularios, plantillas y referencias de recursos. Delimitar el retiro y la recuperación de cada recurso. La limpieza legacy general se gestiona aparte de una feature visual nueva. El [inventario legacy](LEGACY-UI-INVENTORY.md) aporta contexto histórico.
 
+## Otros registros históricos
 
 ### Extensión de comercio Wave7
 
 `patterns/mini-carrito.js` proyecta el proveedor observable de `carrito.js` dentro de Offcanvas; Header recibe proveedor/panel explícitos. `paginacion-carrito.js` separa diez líneas visibles del estado global producto/variante/línea. `horario-servicio.js` concentra lógica civil de configuración por servicio/excepción y `horario-formulario.js` adapta selectores nativos; reservas consume esa misma fuente. Fixtures permanecen en `modules/guia/transacciones-fixtures.js`, sin persistencia ni backend. Contratos y QA del cierre2026-10-21 en `WAVE-7-COVERAGE.md`.
 
-## Vista previa local de Home — 2026-10-21
+### Primera vista previa local de Home — 2026-10-21
+
+> Registro histórico de la primera integración. El estado final y la evidencia aplicable se encuentran en [R9](HOME-FINAL-ACCEPTANCE.md).
 
 La primera integración de `home-preview.php` fue rechazada visualmente. Sus pruebas técnicas anteriores no aprueban el diseño. La reconstrucción y su evidencia actual están en [HOME-HEADER-HERO-REWORK.md](HOME-HEADER-HERO-REWORK.md).
 

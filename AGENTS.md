@@ -1,73 +1,26 @@
 # AGENTS.md — The Clandestino USA
 
-Reglas globales para cualquier agente de IA o colaborador. El detalle vive en `docs/`; aquí solo lo transversal.
+Refactor incremental del sitio de un restaurante español en Mount Shasta, CA. Priorizamos recorridos que ayudan a descubrir y contratar experiencias. Home R1–R9 está aprobada localmente e integrada en `develop`. La publicación tiene su propia autorización y pendientes.
 
-## Qué es este proyecto
+## Qué documento rige cada decisión
 
-The Clandestino USA (theclandestinousa.com) es un restaurante español en Mt. Shasta, CA. Se hace un **refactor incremental del sitio actual** (HTML/CSS/JS/PHP en producción) hacia una plataforma de venta digital. Enfoque **revenue-first**: primero lo que genera ingresos (Take Away, Gift Cards, Wine Club, Reservas, Eventos).
+| Autoridad | Consultar |
+|---|---|
+| Instrucciones vigentes | Este archivo, [estándares de código](docs/ESTANDARES-DE-CODIGO.md) y [flujo Git](docs/GIT-WORKFLOW.md). Las reglas de editor y skills aplican dentro de este marco. |
+| Arquitectura actual | [Arquitectura](docs/ARQUITECTURA.md). |
+| Decisiones visuales expresamente aprobadas | [Dirección visual](docs/VISUAL-DIRECTION.md) y evidencia aprobada para la composición concreta. |
+| Contratos de componentes | [Core](docs/CORE-COMPONENT-LIBRARY.md), [patrones](docs/SECTION-PATTERN-LIBRARY.md) y sus fuentes vigentes en `develop`. |
+| Documentos históricos | [Aceptación de Home R9](docs/HOME-FINAL-ACCEPTANCE.md), inventarios y registros fechados. Acreditan decisiones y pruebas dentro de su alcance original. |
+| Propuestas futuras | [Mapa del sitio](docs/MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md). Requieren aprobación antes de entrar en el alcance de una feature. |
 
-## Design System e integración en páginas reales
+Ante una contradicción, identifica los textos y la decisión vigente por ámbito, contrástala con `develop` y registra la resolución en su fuente. Si falta una decisión o la fuente contradice un contrato aprobado, explicita la diferencia y eleva la decisión al responsable.
 
-- Foundation, Core y Waves 1–7 están integradas en `develop`; la fase de construcción del Design System está cerrada.
-- El siguiente trabajo consiste en implementar páginas reales reutilizando los componentes y patrones existentes, sin nuevas Waves ni rediseños innecesarios.
-- Las demostraciones del Style Guide no equivalen a funciones comerciales reales integradas. Los servicios comerciales y sus dependencias requieren integración y validación propias; el cierre técnico no sustituye la aprobación humana final ni autoriza su activación.
+## Reglas transversales
 
-## Stack y restricciones
-
-- HTML5 semántico, CSS legacy hoy; SCSS + Bootstrap 5 (Sass) + JS con esbuild + Gulp como objetivo.
-- PHP simple primero; MySQL solo cuando una feature real lo requiera.
-- Hosting: GoDaddy shared (cPanel). Sin Redis, colas ni procesos persistentes.
-- **NO** Laravel, **NO** React, **NO** plantillas de terceros.
-- Dependencias nuevas solo con justificación explícita.
-
-## Autoridad de ramas
-
-- `production-baseline`: autoridad histórica sobre el comportamiento desplegado al iniciar el refactor.
-- `master`: **legacy congelado**; no es autoridad sobre producción. No se hace merge de `master`.
-- `main`: producción estable. `develop`: integración. Las features nacen desde `develop`.
-- Nunca trabajar directamente en `main`, `master` ni `production-baseline`.
-- Detalle: `docs/GIT-WORKFLOW.md`.
-
-## Principios de ingeniería
-
-- **DRY**, **KISS**, **YAGNI**, **Fail Fast**.
-- **No asumas en silencio**: si algo es ambiguo, dilo y propone la interpretación más razonable.
-- **Cambios quirúrgicos**: toca solo lo que la tarea requiere; sin reformatear ni renombrar fuera de alcance.
-- No sobre-ingenierizar: sin capas ni abstracciones que nadie pidió.
-
-## Idioma
-
-- Código, comentarios y documentación: **español**.
-- Texto visible al usuario final: **inglés**.
-
-## Protección de producción
-
-- No modificar comportamiento en producción sin pedirlo explícitamente.
-- No commitear secretos ni `.env`; los secretos van por entorno.
-- Antes de cambiar una página, contrastar con `production-baseline`.
-- Deploy solo desde `main`/tag (futuro); nunca desde una feature.
-
-## Git (resumen)
-
-- Commits atómicos con Conventional Commits en español.
-- Sin `Co-authored-by` ni firmas de herramientas/IA; el autor es el usuario del repo.
-- Sin force push salvo recuperación explícita.
-
-## Definición de terminado
-
-Una tarea está terminada solo si:
-
-1. Se indicó cómo se verifica (qué abrir, en qué viewport, qué comando correr) y se verificó.
-2. HTML semántico y accesible (labels, `alt`, contraste, foco visible).
-3. No se tocó nada fuera del alcance (si ocurrió, se revierte).
-4. La documentación afectada se actualizó en el mismo commit.
-
-## Referencias
-
-- `docs/ESTANDARES-DE-CODIGO.md` — estándares de código.
-- `docs/VISUAL-DIRECTION.md` — criterio estético y referencias aprobadas; consultar antes de diseñar o refinar UI.
-- `docs/ARQUITECTURA.md` — arquitectura vigente y objetivo inmediato.
-- `docs/MAPA-DEL-SITIO-Y-ORDEN-DE-CONSTRUCCION.md` — producto y prioridades.
-- `docs/GIT-WORKFLOW.md` — ramas, commits y releases.
-- `docs/LEGACY-UI-INVENTORY.md` — inventario de UI legacy.
-- `.cursor/rules/` y `.agents/skills/` — reglas por tipo de archivo y procedimientos.
+- PHP 8 con plantillas compartidas, SCSS BEM `cl-`, Bootstrap 5 selectivo desde Sass, ES Modules, Gulp y esbuild. GSAP/ScrollTrigger en usos aprobados. Compatible con GoDaddy/cPanel. Sin React, Laravel, Tailwind, plantillas de terceros, bibliotecas ni pipelines paralelos.
+- Reutilizar Foundation, Core y Waves 1–7. Aplicar DRY, KISS, YAGNI, Fail Fast y cambios quirúrgicos. Conservar tokens y contratos salvo necesidad demostrada. El Header compartido tiene una [excepción responsive propia](docs/ESTANDARES-DE-CODIGO.md#css--scss).
+- Código, comentarios y documentación en español. Texto visible al visitante en inglés. Secretos por entorno y fuera de Git.
+- Definir contenido, destino funcional y objetivo comercial antes de diseñar o programar. Los patrones y las demos se reutilizan según su contrato. La habilitación de servicios depende de datos, operación y validación propios.
+- Declarar alcance y consumidores compartidos. Proteger las páginas aprobadas y contrastar cambios de página con `production-baseline`. Comparar con `develop` y aplicar el [contrato de regresión](docs/ESTANDARES-DE-CODIGO.md#protección-de-páginas-aprobadas) cuando se toque el runtime. La aprobación visual corresponde al responsable.
+- Las features parten de `develop`. `main` es producción estable, `production-baseline` es la referencia histórica de producción y `master` está congelada. Trabajar en la rama de la feature. El responsable crea y fusiona los PR manualmente. Publicar desde `main` o un tag requiere autorización propia.
+- Registrar cómo se verificó el alcance y qué queda pendiente. Actualizar la documentación afectada junto al cambio, con Conventional Commits en español cuando corresponda.

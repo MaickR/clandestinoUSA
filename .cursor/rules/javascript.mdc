@@ -13,6 +13,6 @@ alwaysApply: false
 - Fail Fast: validar entradas y elementos del DOM al inicio; salir con mensaje claro.
 - DOM seguro: `textContent` por defecto; nunca `innerHTML` con datos no sanitizados.
 - Event delegation en listas o contenido dinámico; `throttle` en scroll/resize y `debounce` en búsqueda.
-- Si Bootstrap cubre el caso (modal, collapse, dropdown, carousel), usar atributos `data-bs-*` en vez de JS propio.
-- Sin dependencias nuevas sin justificarlas (peso, mantenimiento, alternativa nativa).
+- Preferir atributos `data-bs-*` cuando Bootstrap cubra el caso. Conservar los adaptadores e interacciones aprobados según sus [contratos](../../docs/SECTION-PATTERN-LIBRARY.md).
+- Usar las dependencias del stack vigente según los [estándares de JavaScript](../../docs/ESTANDARES-DE-CODIGO.md#javascript).
 - Comentarios en español explicando el porqué; textos visibles al usuario en inglés.
