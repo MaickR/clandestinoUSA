@@ -70,11 +70,11 @@
   border-radius: 0;
 
   @include media-breakpoint-down(md) {
-    // Se recorta la franja alta de estanterías para llevar botella y copa al área visible.
-    --experiencia-foco: 60% center;
+    // La variante móvil ya recorta el techo; queda más mesa a la vista con menos ampliación.
+    --experiencia-foco: 56% center;
 
     inset-block-end: 0;
-    block-size: 145%;
+    block-size: 125%;
   }
 }
 

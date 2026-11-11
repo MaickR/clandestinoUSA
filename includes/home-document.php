@@ -7,9 +7,9 @@ if (!isset($esVistaPreviaHome) || realpath($_SERVER['SCRIPT_FILENAME'] ?? '') ==
 // Derivado de entrega exclusivo de Home; las demás páginas conservan su logo.
 $logoNavegacion = '/assets/images/clandestino-logo-home.svg';
 $fotografias = [
-    ['archivo' => 'banner-the_clandestino_1', 'encuadre' => 'mesa', 'titulo' => 'Spanish Wine & Tapas in Mount Shasta', 'descripcion' => 'A taste of Spain. A table to share. Make yourself at home.', 'alt' => 'Spanish tapas and red wine on a candlelit table at The Clandestino'],
-    ['archivo' => 'banner-the_clandestino_2', 'encuadre' => 'encuentro', 'titulo' => 'Gather, Sip & Celebrate', 'descripcion' => 'Good wine, shared plates, and the pleasure of being together.', 'alt' => 'Three guests raising glasses of red wine around a shared tapas table'],
-    ['archivo' => 'banner-the_clandestino_3', 'encuadre' => 'vino', 'titulo' => 'Pure Soul & Spanish Wines', 'descripcion' => 'Explore Spanish wines with character, from the first glass to the last.', 'alt' => 'A bottle of Pure Soul red wine with two glasses and Spanish tapas'],
+    ['archivo' => 'banner-the_clandestino_1', 'vertical' => 'hero-tapas-vertical', 'encuadre' => 'mesa', 'titulo' => 'Spanish Wine & Tapas in Mount Shasta', 'descripcion' => 'A taste of Spain. A table to share. Make yourself at home.', 'alt' => 'Spanish tapas and red wine on a candlelit table at The Clandestino'],
+    ['archivo' => 'banner-the_clandestino_2', 'vertical' => 'hero-brindis-vertical', 'encuadre' => 'encuentro', 'titulo' => 'Gather, Sip & Celebrate', 'descripcion' => 'Good wine, shared plates, and the pleasure of being together.', 'alt' => 'Three guests raising glasses of red wine around a shared tapas table'],
+    ['archivo' => 'banner-the_clandestino_3', 'vertical' => 'hero-pure-soul-vertical', 'encuadre' => 'vino', 'titulo' => 'Pure Soul & Spanish Wines', 'descripcion' => 'Explore Spanish wines with character, from the first glass to the last.', 'alt' => 'A bottle of Pure Soul red wine with two glasses and Spanish tapas'],
 ];
 $accionesEscenas = [
     [['Request a Table', $rutaReserva], ['Explore Wines', '/wines.html']],
@@ -55,9 +55,15 @@ $entradasEscenas = ['A taste of Spain', 'Food · Fiesta · Friends', 'Wines with
         <?php foreach ($fotografias as $indice => $fotografia) : ?>
         <div class="cl-hero cl-hero__diapositiva cl-hero__diapositiva--<?= $escaparNavegacion($fotografia['encuadre']) ?><?= $indice === 0 ? ' cl-hero__diapositiva--activa' : '' ?>" role="group" aria-label="<?= $indice + 1 ?> of 3" aria-roledescription="slide"<?= $indice === 0 ? '' : ' aria-hidden="true" inert' ?>>
           <?php
+          $vertical = '/assets/images/home-r8/' . $fotografia['vertical'];
+          // En tablet el encuadre horizontal de vino deja más aire para la botella y las copas.
+          $limiteVertical = $fotografia['encuadre'] === 'vino' ? 768 : 992;
+          $mediaVertical = "(orientation: portrait) and (width < {$limiteVertical}px)";
           $hero = [
               // Cover necesita más anchura que el viewport cuando la fotografía es verticalmente recortada.
               'fuentes' => [
+                  ['tipo' => 'image/avif', 'media' => $mediaVertical, 'srcset' => "$vertical-480.avif 480w, $vertical-768.avif 768w, $vertical-1086.avif 1086w", 'sizes' => 'max(100vw, 360px)', 'ancho' => 1086, 'alto' => 1448],
+                  ['tipo' => 'image/webp', 'media' => $mediaVertical, 'srcset' => "$vertical-480.webp 480w, $vertical-768.webp 768w, $vertical-1086.webp 1086w", 'sizes' => 'max(100vw, 360px)', 'ancho' => 1086, 'alto' => 1448],
                   ['tipo' => 'image/avif', 'srcset' => '/assets/images/' . $fotografia['archivo'] . '-1024.avif 1024w, /assets/images/' . $fotografia['archivo'] . '-1672.avif 1672w', 'sizes' => '(min-width: 992px) 100vw, max(100vw, 960px)'],
                   ['tipo' => 'image/webp', 'srcset' => '/assets/images/' . $fotografia['archivo'] . '-768.webp 768w, /assets/images/' . $fotografia['archivo'] . '-1672.webp 1672w', 'sizes' => '(min-width: 992px) 100vw, max(100vw, 960px)'],
               ],
