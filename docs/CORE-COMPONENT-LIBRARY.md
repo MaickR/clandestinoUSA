@@ -1,5 +1,7 @@
 # Core Component Library — UI-CORE-02
 
+Core está integrado en `develop`. Las notas de QA y aprobación de abajo describen el estado al cierre de cada entrega. Para una página nueva, aplicar los contratos Core y verificar su integración y revisión visual según el [flujo vigente](GIT-WORKFLOW.md#flujo-de-una-feature).
+
 ## Auditoría transversal — 2026-10-21
 
 Registro vigente en [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). APIs/SCSS Core preservados. Se corrigieron exclusivamente las muestras de la guía: tres botones antes inertes ahora anuncian activación demostrativa y muestran feedback; alertas/estados y toasts llevan contexto inequívoco de ejemplo, sin prometer reservas, stock ni una ventana retenida. La muestra assertive es un aviso informativo persistente; no enseña a resolver un error crítico mediante un toast. Los errores de operación y su recuperación se presentan en contexto en las waves.

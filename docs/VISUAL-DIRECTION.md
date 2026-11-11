@@ -1,6 +1,6 @@
 # Dirección visual — The Clandestino USA
 
-Referencia estética para próximas waves y revisiones. Complementa UX-UI-GUIDELINES y los contratos de componentes; no redefine tokens ni atribuye aprobaciones nuevas. Foundation/Core/Waves 1 y 2 son la base aprobada del encargo. El refinamiento Wave 3 sigue pendiente de aprobación visual humana.
+Referencia estética para páginas reales y revisiones. Foundation, Core y Waves 1–7 son la base integrada. Esta guía recoge decisiones visuales expresamente aprobadas y complementa los contratos de componentes. Cada composición nueva requiere revisión visual humana.
 
 ## Personalidad traducida a interfaz
 
@@ -43,7 +43,7 @@ Tratamiento disponible como criterio para futuros banners: enlazar progresivamen
 
 Home Hero aplica este criterio en su overlay local: transición vertical de altura completa y densidad decreciente para lectura centrada por debajo de `lg`, y lateral desde `lg`. En mobile/tablet se evita un máximo oscuro central entre dos extremos mucho más luminosos: esa curva dibujaba zonas horizontales perceptibles. Las tres escenas comparten la corrección, sin cambiar composición, imágenes ni movimiento. Se validan juntas, incluidos contraste de glifos sobre el recorte real, CTA y extremos responsive. Implementación y evidencia en [HOME-HEADER-HERO-REWORK.md](HOME-HEADER-HERO-REWORK.md), cierre del 2026-11-02; **Hero definitivo aprobado visualmente por el responsable en desktop, tablet y móvil, incluido el degradado vertical**.
 
-Su disponibilidad editorial no implica una variante global nueva: el código permanece en `.cl-hero--slider` de `home.scss`. No se aplica a interiores ni a otras secciones. Ante otro uso real autorizado, reutilizar el criterio y evaluar la extracción mínima de estilos tras comprobar sus consumidores; no duplicar marcado ni adoptar automáticamente los mismos porcentajes para otra composición.
+El degradado de Home vive en `.cl-hero--slider` de `home.scss`. En interiores, partir del [Hero estático compartido](SECTION-PATTERN-LIBRARY.md#hero-de-páginas-interiores) y aplicar el criterio visual a la fotografía real. Ajustar el foco, la dirección y la densidad del degradado a la lectura de cada encuadre. Si el overlay del patrón necesita ajuste, resolverlo en un partial local de página. Evaluar una extracción compartida solo ante una necesidad demostrada y tras verificar sus consumidores.
 
 ## Acciones y controles
 
@@ -57,6 +57,7 @@ En overlays, cierre y navegación permanecen disponibles aunque falle la media. 
 - Tablet: revisar dimensiones efectivas y anchos de línea. Una experiencia principal puede pasar a foto y texto laterales, mientras una galería usa miniaturas equilibradas de igual peso.
 - Desktop: introducir protagonismo y asimetría sin perder la retícula. Los elementos de apoyo no deben inflarse hasta parecer protagonistas vacíos.
 - Probar entre breakpoints Bootstrap, texto largo, 320px y poca altura. El visor limita su superficie al viewport y permite scroll interno para captions extensos, conservando sus controles.
+- El Header compartido sigue su [excepción de navegación](ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido). Las demás secciones ajustan composición y comportamiento según el espacio que requiere su contenido.
 
 ## Recursos visuales
 
@@ -65,7 +66,7 @@ Champagne para jerarquía/acción y bordes selectivos para separación. Superfic
 ## Referencias concretas aprobadas
 
 - **Wave 1 / `cl-hero`:** copy y foto superpuestos en todos los tamaños; la protección elíptica es localizada, sin rectángulo opaco global. El texto no cae debajo de la fotografía en móvil.
-- **Home Hero / refinamiento 2026-11-02:** conserva el contrato superpuesto de Wave 1 y desactiva su radial mediante el adaptador local existente. El acabado lateral de desktop y el degradado vertical de mobile/tablet están aprobados. Son referencia editorial para futuros banners; el código pertenece exclusivamente a Home y requiere evaluación contextual antes de otro uso autorizado.
+- **Home Hero / refinamiento 2026-11-02:** la superposición de Wave 1, el acabado lateral de desktop y el degradado vertical de mobile/tablet son referencias aprobadas. En interiores conservar la integración de foto, relato y acción con una sola escena.
 - **Wave 1 / `cl-media-contenido`:** columnas desde md, proporciones contextuales y orden imagen/narrativa conservado. Es la primera opción para un split que no requiere otra responsabilidad.
 - **Wave 1 / `cl-banda-cta--destacada`:** fotografía lateral, invitación con nota útil y acciones claras; sirve de referencia para densidad y CTA contextual.
 - **Wave 2 / `cl-producto-gastronomico`:** fotografía protagonista y pie comercial con precio/acción agrupados. La experiencia editorial no debe copiar ese pie de catálogo.

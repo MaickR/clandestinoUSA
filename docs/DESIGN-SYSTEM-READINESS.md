@@ -1,8 +1,10 @@
 # Preparación del Design System para construir páginas
 
+Foundation, Core y Waves 1–7 están integradas en `develop`. La biblioteca está disponible para componer páginas reales. Los estados de aprobación de las fichas fechadas corresponden a su revisión original. La integración, la revisión visual humana de cada página y la habilitación de servicios comerciales se verifican por separado. Para Home rige la [aceptación R9](HOME-FINAL-ACCEPTANCE.md).
+
 ## Cierre transversal — 2026-10-21
 
-Registro vigente: [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). El usuario aprueba la dirección visual general; este cierre verifica defectos e integración frontend, sin aprobar automáticamente las páginas reales ni su publicación. Los estados pendientes de las waves que siguen son registros históricos.
+Registro histórico: [FINAL-DESIGN-SYSTEM-AUDIT.md](FINAL-DESIGN-SYSTEM-AUDIT.md). El usuario aprueba la dirección visual general; este cierre verifica defectos e integración frontend, sin aprobar automáticamente las páginas reales ni su publicación.
 
 Se corrigieron Undo obsoleto entre vistas, límites/media desactualizados del mini carrito, acciones sin función en las muestras Core y mensajes que podían confundirse con disponibilidad real. El proveedor de mini carrito debe aportar `puedeRestaurar(id)` además de `suscribir`: la recuperación se invalida al restaurar la línea o sustituir su colección. Mantener una identidad no autoriza conservar límites o fotografías anteriores.
 
@@ -32,21 +34,21 @@ El inventario detallado, contratos y evolución viven en `SECTION-PATTERN-LIBRAR
 2. Componer `container` / `row` / columnas, `cl-seccion`, Core y patrones existentes. Extraer datos de los ejemplos; no copiar sus fixtures ni sus referencias `DEMO-*` a producción.
 3. Pasar rutas/contacto confiables a los partials Wave 6. Preparar documentos legales y canales reales antes de enlazarlos. El acceso Wave 6 es una interfaz sintética, no autenticación.
 4. Conectar el snapshot de `estado-carrito.js` a las vistas y al contador optativo de Header; todas las cantidades/importes de la operación proceden de esa fuente. Usar `cl-resumen` para datos de operación; `cl-cantidad` para cantidades; `inicializarCheckout` para pasos de datos/revisión con callbacks del anfitrión. Cada dominio aporta su semántica y resultado.
-5. Conectar solo los módulos necesarios desde la entrada de esa página al hacer su integración autorizada. `style-guide.js` y `modules/guia/**` nunca son dependencias productivas. `main.js` sigue vacío.
+5. Conectar solo los módulos necesarios según la [arquitectura vigente](ARQUITECTURA.md#tooling-frontend-vigente). `style-guide.js` y `modules/guia/**` son de desarrollo.
 6. Validar la página real en navegador, con teclado y datos extremos. El QA del laboratorio no aprueba automáticamente su layout ni el motor comercial.
 
 ## Readiness por página
 
 | Página | Composición disponible | Dependencia real antes de publicar |
 |---|---|---|
-| Home | Header/Footer, Hero/CTA, experiencias, teasers de producto, club, regalo, eventos y testimonios | Copy final, navegación y destinos publicados; reseñas con permiso y procedencia; decisión de vídeo |
+| Home | Aprobada localmente e integrada por el PR #35 | Pendientes de activación en [R9](HOME-FINAL-ACCEPTANCE.md) |
 | Restaurant | Menú/producto, editorial, CTA reserva y order ahead; carrito/checkout Wave 7 | Menú/precios/porciones, disponibilidad, impuestos y operación de cocina/recogida/mesa |
 | Wines | Tarjeta/ficha vino, catálogo, cesta, Core select/disclosure y estados de lista | Datos normalizados, filtros reales por catálogo y política de venta; añada/volumen/precio confirmados |
 | Gift Cards | Diseñador Wave 4 + revisión Wave 7, pago/emisión diferenciados | Importes/oferta vigente, presentación/entrega/redención/expiración y proveedor |
 | Wine Club | Gold/Diamond, beneficios históricos identificados, selección/condiciones/revisión y ciclo de suscripción | Beneficios actuales, precio/cadencia/renovación/cancelación y proveedor recurrente |
 | Events | Listado/evento, asistentes/resumen, estados cupos/registro; consulta privada y seguimiento | Eventos publicados, fechas/cupos/precios/condiciones; capacidad y autorización servidor |
 | Reservations | Fecha/comensales, slots, contacto, revisión y gestión | Motor existente auditado/adaptado en una tarea futura, capacidad/concurrencia, políticas y autorización |
-| Contact | Footer/contacto, enlaces contextuales y campos Core; consulta privada cuando corresponda | Decidir página propia o solo footer; datos/horarios/canal y recepción real |
+| Contact | Página legacy existente. Footer/contacto, enlaces contextuales y campos Core disponibles para su evolución | Datos, horarios, canal y recepción real verificados para cualquier cambio |
 | Take Away | Producto, carrito, resumen, pickup o mesa, checkout, estados y recuperación | Fulfillment disponible, ventanas de servicio, inventario, total servidor, cobro y notificación |
 | Account FUTURE | Modal visual existente, historial compacto de cuatro dominios, vacío/error/no autorizado | Identidad, sesiones, autorización por operación y privacidad. No se habilita un área privada completa |
 
@@ -60,7 +62,7 @@ El inventario detallado, contratos y evolución viven en `SECTION-PATTERN-LIBRAR
 | Contacto y ayuda contextual | Footer Wave 6 y enlaces Core; falta decidir destinos/contactos verificados | P1 antes de publicar: no crear enlaces de soporte ficticios |
 | Historial privado / Account | `cl-resumen`, estado e historial Wave 7; falta autorización servidor | FUTURE: no justifica dashboard, roles, fidelización ni infraestructura nueva |
 
-No se identifica una familia visual fundamental ausente para la composición prevista. Las piezas de integración anteriores se resuelven al construir cada página, sin abrir Wave 8 ni reconstruir Waves 1–6. Esta conclusión es técnica; continúa pendiente la aprobación visual humana.
+Las piezas de integración anteriores se resuelven al construir cada página con los patrones existentes. Cada página nueva requiere su propia revisión visual.
 
 ## Contratos y pendientes
 
@@ -70,9 +72,9 @@ Pendientes comerciales transversales: catálogo vigente, horarios/ventanas, impu
 
 ## Revisión local
 
-Ejecutar `npm run dev` y abrir `http://localhost:3000/style-guide/patterns.php#wave-7`; Foundation/Core en `/style-guide/`, navegación aislada en `/style-guide/navigation.php`. Verificar `npm run lint`, `npm run build`, PHP lint y `git diff --check` antes del cierre de cada cambio. El build productivo excluye los bundles de guía; revisar el navegador de nuevo tras cada integración.
+Para cambios de runtime, ejecutar las comprobaciones que correspondan al alcance y aplicar el [contrato de regresión](ESTANDARES-DE-CODIGO.md#protección-de-páginas-aprobadas). Para revisar la biblioteca, ejecutar `npm run dev` y abrir `http://localhost:3000/style-guide/patterns.php#wave-7`. Foundation/Core está en `/style-guide/` y la navegación aislada en `/style-guide/navigation.php`.
 
-## Actualización tras el refinamiento final de Wave7
+## Registro del refinamiento final de Wave7
 
 Carrito y checkout incorporan líneas dinámicas por plantilla, variantes, papelera/Undo, subtotal destacado, CTA de ancho completo, promo demo y snapshot común hasta Payment. El Header recibe destino confiable y suma de unidades desde su anfitrión; la muestra independiente Wave6 permanece sin cantidad ficticia. Las colecciones1/2/8/20/40 son estrés bajo demanda, no catálogo ni paginación.
 

@@ -1,5 +1,5 @@
 ---
-description: Convenciones SCSS/BEM del proyecto (arquitectura futura)
+description: Convenciones SCSS/BEM vigentes del proyecto
 globs: assets/scss/**/*.scss
 alwaysApply: false
 ---
@@ -13,8 +13,8 @@ alwaysApply: false
 - No sobrescribir el `font-size` raíz: respetar el valor predeterminado del navegador/usuario y usar `rem` sobre esa base (así `rem` respeta las preferencias de accesibilidad del usuario).
 - Prohibido `html { font-size: 62.5% }` y no hardcodear `16px` (ni otro valor) en `html`.
 - Dark-first: estilos base oscuros; el tema claro, si existe, es la excepción.
-- Breakpoints de Bootstrap como fuente de verdad (mixins `media-breakpoint-*`); no definir breakpoints propios.
+- Usar el grid y los breakpoints globales de Bootstrap. La excepción local del Header compartido está en [Estándares de código](../../docs/ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido).
 - Máximo 3 niveles de nesting.
 - Sin `!important` sobre clases de Bootstrap.
 - **Nunca editar CSS compilado manualmente** (`style.new.css` y similares son output); se edita el SCSS.
-- `style.css` es legacy: no se mezcla con SCSS nuevo salvo en un cutover explícito por página (ver `docs/ARQUITECTURA.md`).
+- La página migrada usa los estilos del sistema nuevo. Documentar cualquier excepción temporal de convivencia según la [estrategia de migración](../../docs/ARQUITECTURA.md#estrategia-css-migración-incremental).

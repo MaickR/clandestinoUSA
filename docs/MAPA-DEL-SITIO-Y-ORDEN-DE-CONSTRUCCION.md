@@ -1,5 +1,60 @@
 # Mapa del sitio y prioridades — The Clandestino USA
 
+The Clandestino vende experiencias. Cada página ayuda al visitante a entender la oferta y dar un siguiente paso que el restaurante pueda atender.
+
+## Navegación y rutas existentes
+
+| Contexto | Navegación y destinos |
+|---|---|
+| Sitio público de referencia | [Home legacy](../index.html). Header con Home, Menus (General Menu, Tapas, Wines, Hampers), About Us, SWC y Contact (Contact Form y FAQ). La reserva enlaza a [la solicitud de mesa](../index.html#reservation). |
+| Home Preview local | [Anfitrión](../home-preview.php) y [configuración compartida](../includes/site.php). Home, Experiences (ancla `/index.html#services`), Restaurant, Wine Shop y Discover (Wine Club, About Us, Contact), más Request a Table. |
+| Home candidata, aún sin publicar | [Anfitrión](../home.php). Home apunta a la raíz, Experiences a `/#private-events` y Request a Table al formulario legacy `/index.html?legacy=1#reservation`. Cuenta y carrito demo quedan fuera de la candidata. |
+
+Home R1–R9 está aprobada localmente y fusionada en `develop` mediante PR #35. Su aceptación y los bloqueantes de publicación constan en [R9](HOME-FINAL-ACCEPTANCE.md). Menú, tapas, vinos, hampers, Wine Club, About Us y Contact ya tienen páginas legacy. Su existencia permite explorar o consultar según el destino. La reserva y el contacto son solicitudes gestionadas por el equipo.
+
+## Objetivos futuros y alcance pendiente
+
+El Design System y la integración local de Home ya se completaron. El siguiente bloque es definir y aprobar páginas interiores, priorizando el valor comercial, el contenido disponible y la operación que pueda sostener el CTA. El orden histórico al pie conserva el planteamiento original. La prioridad y el alcance de cada página se deciden con el responsable.
+
+| Iniciativa | Estado |
+|---|---|
+| Restaurant / Take Away | Menú y tapas legacy existentes. La página renovada y la integración transaccional están pendientes. |
+| Wine Shop y Hampers | Destinos legacy existentes. Pendientes catálogo renovado, datos, reglas de venta y compra. |
+| Gift Cards | La Home candidata dirige a una consulta. Pendientes oferta confirmada, página transaccional, pago, emisión y redención. |
+| Wine Club | Página legacy existente. Pendientes renovación, condiciones vigentes y operación de alta/cobro. |
+| Reservations | Solicitud legacy existente. Pendientes página o recorrido renovado, disponibilidad real y confirmación. |
+| Events / Private Experiences | Hay información o vías de consulta. Pendientes alcance de las páginas y cualquier agenda, contratación o pago. |
+| Experiences | Propuesta editorial pendiente de aprobación. La navegación existente conserva sus destinos. |
+| Mi Cuenta, administración y fidelización | Iniciativas futuras. Autenticación, cuenta, carrito persistente, pedidos y checkout requieren integración real antes de aparecer como servicios. |
+
+## Definición comercial de cada página
+
+Completar en la fase Strategy & Content del [flujo de una feature](GIT-WORKFLOW.md#flujo-de-una-feature):
+
+- Objetivo comercial, público, necesidad o motivación del visitante y propuesta de valor.
+- Recorrido desde descubrimiento hasta acción. Función concreta de cada sección y contenido real disponible para sostenerla.
+- CTA, destino funcional, siguiente paso y expectativas de respuesta. Evidencia de confianza verificable y necesidades fotográficas, incluidos encuadres y permisos aplicables.
+
+Distinguir el contenido editorial que explica la experiencia, el catálogo que describe una oferta verificada y la operación que acepta, procesa o confirma la acción. Justificar cada sección por lo que aporta a la decisión y conservar la información necesaria para comprender la oferta. Omitir afirmaciones sin confirmar sobre precios, beneficios, inventario, testimonios, disponibilidad, eventos o condiciones. Las demos de cuenta, carrito y checkout son ejemplos de interfaz.
+
+## Experiences — PROPUESTA PENDIENTE DE APROBACIÓN
+
+Hipótesis comercial para evaluar con el responsable:
+
+1. Hero estático.
+2. Explore Our Experiences.
+3. The Spanish Table.
+4. Private Gatherings.
+5. Wine Tastings & Special Moments.
+6. Final Invitation.
+
+Antes de programar, validar la función de cada sección, las experiencias que pueden describirse con evidencia, el contenido real y el CTA. El responsable aporta o selecciona referencias visuales y aprueba el contenido, la fotografía y el alcance. La propuesta carece de ruta pública asignada y deja intacta la navegación existente.
+
+<details>
+<summary>Mapa y orden originales · registro histórico</summary>
+
+Los destinos, nombres de menú, cifras, beneficios y secuencia de abajo pertenecen a la planificación original. Su aplicación requiere validación actual de producto y operación.
+
 Inventario de lo pactado para el sitio y el orden general de trabajo (revenue-first). Es un refactor incremental sobre el código actual.
 
 ## Navegación principal (9 items, en este orden)
@@ -71,3 +126,5 @@ Cursos online, merchandising, Chef's Table/private dinner como módulo aparte, r
 8. Mejoras posteriores: Wine Shop y Home.
 
 Cada paso se cierra (clases renombradas, copy real, accesibilidad verificada con `qa-visual`) antes de pasar al siguiente. Mi Cuenta, panel admin y puntos quedan como FUTURE.
+
+</details>

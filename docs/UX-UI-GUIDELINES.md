@@ -13,7 +13,7 @@ Guía práctica para decidir, diseñar y revisar. Complementa `ESTANDARES-DE-COD
 
 - Empezar por móvil y escalar según el espacio y el contenido; una tablet no necesita automáticamente el layout de teléfono.
 - En páginas públicas, una presentación editorial apilada en una columna en teléfonos centra eyebrow, títulos/subtítulos, descripciones breves, dirección, horarios, avisos breves y enlaces/acciones complementarias. Aplicar el centrado al bloque editorial concreto, nunca globalmente al sitio. No extender esta norma a formularios, tablas, listas o contenido extenso; tablet y desktop conservan la alineación que requiera su composición.
-- Usar exclusivamente los breakpoints Bootstrap vigentes y su grid como estructura principal. No añadir cortes arbitrarios para un dispositivo concreto.
+- Usar el grid y los breakpoints globales de Bootstrap como estructura principal. Aplicar la [excepción documentada del Header](ESTANDARES-DE-CODIGO.md#excepción-del-header-compartido) en su propio ámbito. Escoger las transiciones de cada sección según su contenido.
 - Probar entre breakpoints, textos largos, 320px, poca altura y zoom 200%. El contenido determina la altura; una fotografía no debe expulsar controles ni cortar texto.
 - Usar `--espacio-1`…`--espacio-9`. La base visual preferente es 8 con subdivisiones de 4, compatible con la escala existente; no todas las medidas deben ser múltiplos de 8.
 - Preferir anchos relativos, límites de lectura y proporciones coherentes. Justificar medidas contextuales como los límites de grupos de acciones y `clamp()` local, sin crear otra escala global.
