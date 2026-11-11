@@ -45,7 +45,9 @@
   border-radius: inherit;
   object-position: 43% center;
 
-  @include media-breakpoint-up(md) { object-position: center; }
+  @include media-breakpoint-up(md) { object-position: 68% center; }
+
+  @include media-breakpoint-up(xl) { object-position: center; }
 }
 
 .cl-home-reserva__contenido {

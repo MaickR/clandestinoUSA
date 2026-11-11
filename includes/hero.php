@@ -17,7 +17,7 @@ if (!in_array($etiquetaHero, ['h1', 'h2', 'h3'], true)) {
 <?php if ($hero['diferida'] ?? false) : ?><template data-cl-escenas-imagen><?php endif; ?>
 <picture class="cl-hero__media">
   <?php foreach ($hero['fuentes'] as $fuente) : ?>
-  <source type="<?= $escaparHero($fuente['tipo']) ?>" srcset="<?= $escaparHero($fuente['srcset']) ?>"<?= isset($fuente['sizes']) ? ' sizes="' . $escaparHero($fuente['sizes']) . '"' : '' ?>>
+  <source type="<?= $escaparHero($fuente['tipo']) ?>" srcset="<?= $escaparHero($fuente['srcset']) ?>"<?= isset($fuente['media']) ? ' media="' . $escaparHero($fuente['media']) . '"' : '' ?><?= isset($fuente['sizes']) ? ' sizes="' . $escaparHero($fuente['sizes']) . '"' : '' ?><?php if (isset($fuente['ancho'], $fuente['alto'])) : ?> width="<?= (int) $fuente['ancho'] ?>" height="<?= (int) $fuente['alto'] ?>"<?php endif; ?>>
   <?php endforeach; ?>
   <img class="cl-hero__imagen" src="<?= $escaparHero($hero['imagen']) ?>" width="<?= (int) $hero['ancho'] ?>" height="<?= (int) $hero['alto'] ?>" alt="<?= $escaparHero($hero['alt']) ?>" loading="<?= $escaparHero($hero['carga'] ?? 'lazy') ?>"<?= isset($hero['prioridad']) ? ' fetchpriority="' . $escaparHero($hero['prioridad']) . '"' : '' ?> decoding="async">
 </picture>

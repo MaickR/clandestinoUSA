@@ -10,9 +10,11 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     <div class="cl-home-privadas__composicion">
       <figure class="cl-historia__figura cl-home-privadas__escenario">
         <picture class="cl-experiencia__media">
-          <source srcset="/assets/images/private-room-640.avif 640w, /assets/images/private-room-960.avif 960w, /assets/images/private-room-1600.avif 1600w, /assets/images/private-room-2048.avif 2048w" sizes="(min-width: 1200px) calc((100vw - 96px) * .75), (min-width: 768px) calc(100vw - 64px), 1600px" type="image/avif">
-          <source srcset="/assets/images/private-room-640.webp 640w, /assets/images/private-room-960.webp 960w, /assets/images/private-room-1600.webp 1600w, /assets/images/private-room-2048.webp 2048w" sizes="(min-width: 1200px) calc((100vw - 96px) * .75), (min-width: 768px) calc(100vw - 64px), 1600px" type="image/webp">
-          <img class="cl-experiencia__imagen cl-home-privadas__imagen" src="/assets/images/the-clandestino.jpg" width="2048" height="1536" alt="Wine glasses set on the wooden bar, with wine shelves and barrel tables inside The Clandestino" loading="lazy" decoding="async">
+          <source media="(width < 768px)" srcset="/assets/images/home-r8/private-experiences-movil-1152.avif" type="image/avif">
+          <source media="(width < 768px)" srcset="/assets/images/home-r8/private-experiences-movil-1152.webp" type="image/webp">
+          <source srcset="/assets/images/home-r8/private-experiences-768.avif 768w, /assets/images/home-r8/private-experiences-1152.avif 1152w, /assets/images/home-r8/private-experiences-1536.avif 1536w" sizes="(min-width: 1200px) calc((100vw - 96px) * .75), calc(100vw - 64px)" type="image/avif">
+          <source srcset="/assets/images/home-r8/private-experiences-768.webp 768w, /assets/images/home-r8/private-experiences-1152.webp 1152w, /assets/images/home-r8/private-experiences-1536.webp 1536w" sizes="(min-width: 1200px) calc((100vw - 96px) * .75), calc(100vw - 64px)" type="image/webp">
+          <img class="cl-experiencia__imagen cl-home-privadas__imagen" src="/assets/images/home-r8/private-experiences-1536.jpg" width="1536" height="1024" alt="A table set with a charcuterie board, wine glasses and flowers inside The Clandestino" loading="lazy" decoding="async">
         </picture>
       </figure>
       <div class="cl-home-privadas__invitacion">

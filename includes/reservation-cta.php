@@ -9,12 +9,12 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
   <div class="container-fluid cl-home-reserva__ancho">
     <div class="row g-0 cl-banda-cta__fila cl-home-reserva__escena">
       <picture class="cl-home-reserva__media">
-        <source media="(min-width: 768px)" srcset="/assets/images/avif/gallery/tapas/the-clandestino-tapas-table.avif" type="image/avif">
-        <source media="(min-width: 768px)" srcset="/assets/images/webp/gallery/tapas/the-clandestino-tapas-table.webp" type="image/webp">
-        <source media="(min-width: 768px)" srcset="/assets/images/gallery/tapas/the-clandestino-tapas-table.jpeg" type="image/jpeg">
+        <source media="(min-width: 768px)" srcset="/assets/images/home-r8/reservations-1082.avif 1082w, /assets/images/home-r8/reservations-1623.avif 1623w, /assets/images/home-r8/reservations-2164.avif 2164w" sizes="(min-width: 1200px) calc(100vw - 96px), max(calc(100vw - 64px), 1082px)" width="2164" height="727" type="image/avif">
+        <source media="(min-width: 768px)" srcset="/assets/images/home-r8/reservations-1082.webp 1082w, /assets/images/home-r8/reservations-1623.webp 1623w, /assets/images/home-r8/reservations-2164.webp 2164w" sizes="(min-width: 1200px) calc(100vw - 96px), max(calc(100vw - 64px), 1082px)" width="2164" height="727" type="image/webp">
+        <source media="(min-width: 768px)" srcset="/assets/images/home-r8/reservations-2164.jpg" width="2164" height="727" type="image/jpeg">
         <source srcset="/assets/images/avif/gallery/tapas/the-clandestino-tapas-wines.avif" type="image/avif">
         <source srcset="/assets/images/webp/gallery/tapas/the-clandestino-tapas-wines.webp" type="image/webp">
-        <img class="cl-banda-cta__imagen cl-home-reserva__imagen" src="/assets/images/gallery/tapas/the-clandestino-tapas-wines.jpeg" width="1536" height="2048" alt="Spanish cheeses, cured meats, bread, and other tapas arranged for sharing at The Clandestino" loading="lazy" decoding="async">
+        <img class="cl-banda-cta__imagen cl-home-reserva__imagen" src="/assets/images/gallery/tapas/the-clandestino-tapas-wines.jpeg" width="1536" height="2048" alt="Spanish tapas and wine on a table set for sharing at The Clandestino" loading="lazy" decoding="async">
       </picture>
       <div class="col-12 col-md-7 col-lg-6 cl-banda-cta__contenido cl-home-reserva__contenido">
         <p class="cl-eyebrow">Your next Clandestino moment</p>

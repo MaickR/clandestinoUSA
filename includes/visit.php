@@ -9,7 +9,11 @@ if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
   <div class="container">
     <div class="row g-0 cl-banda-cta__fila">
       <div class="col-md-5 cl-banda-cta__media">
-        <img class="cl-banda-cta__imagen" src="/assets/images/inside-clandestino.jpg" width="1440" height="1440" alt="Wine barrels, metal chairs, and Spanish and U.S. flags inside The Clandestino USA" loading="lazy" decoding="async">
+        <picture>
+          <source srcset="/assets/images/home-r8/visit-480.avif 480w, /assets/images/home-r8/visit-816.avif 816w, /assets/images/home-r8/visit-1254.avif 1254w" sizes="(min-width: 768px) 530px, calc(100vw - 24px)" type="image/avif">
+          <source srcset="/assets/images/home-r8/visit-480.webp 480w, /assets/images/home-r8/visit-816.webp 816w, /assets/images/home-r8/visit-1254.webp 1254w" sizes="(min-width: 768px) 530px, calc(100vw - 24px)" type="image/webp">
+          <img class="cl-banda-cta__imagen" src="/assets/images/home-r8/visit-1254.jpg" width="1254" height="1254" alt="The Clandestino wine bar with chairs, barrel tables, flowers, and Spanish and U.S. flags" loading="lazy" decoding="async">
+        </picture>
       </div>
       <div class="col-md-7 cl-banda-cta__contenido">
         <p class="cl-eyebrow">Visit The Clandestino</p>

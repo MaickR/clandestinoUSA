@@ -163,6 +163,16 @@
     .cl-hero__diapositiva--encuentro { --hero-foco: center; }
   }
 
+  @media (orientation: portrait) and (width < 992px) {
+    .cl-hero__diapositiva--mesa { --hero-foco: center 68%; }
+    .cl-hero__diapositiva--encuentro { --hero-foco: center; }
+  }
+
+  @media (orientation: portrait) and (width < 768px) {
+    .cl-hero__diapositiva--encuentro { --hero-foco: center 68%; }
+    .cl-hero__diapositiva--vino { --hero-foco: center 60%; }
+  }
+
   @include media-breakpoint-up(lg) {
     .cl-hero__media::after {
       // Como en C7, una sola transición cálida enlaza lectura y fotografía, sin velo global.
