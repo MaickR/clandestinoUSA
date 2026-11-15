@@ -37,6 +37,8 @@ assets/css/style-guide.css
 assets/css/style-guide.css.map
 assets/css/home.css
 assets/css/home.css.map
+assets/css/experiences.css
+assets/css/experiences.css.map
 assets/icons/cl-iconos.svg
 
 # Activación operativa de Home: solo durante un release autorizado.

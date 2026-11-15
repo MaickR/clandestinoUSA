@@ -1,0 +1,27 @@
+// Entrada reducida de Experiences: los mismos tokens y patrones que usa la página, sin Home ni la guía.
+@import "bootstrap/scss/functions";
+@import "abstracts/tokens";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/helpers/visually-hidden";
+@import "bootstrap/scss/transitions";
+@import "vendors/offcanvas-cabecera";
+@import "base/root";
+@import "base/typography";
+@import "base/a11y";
+@import "components/button";
+@import "components/link";
+@import "components/eyebrow";
+@import "components/icon";
+@import "components/boton-icono";
+@import "patterns/seccion";
+@import "patterns/banda-cta";
+@import "patterns/hero";
+@import "patterns/navegacion-global";
+@import "patterns/pie-global";
+@import "pages/experiences";
