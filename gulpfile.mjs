@@ -36,6 +36,9 @@ const paths = {
   cssMap: "assets/css/style.new.css.map",
   cssHomeOut: "assets/css/home.css",
   cssHomeMap: "assets/css/home.css.map",
+  scssExperiencesEntry: "assets/scss/experiences.scss",
+  cssExperiencesOut: "assets/css/experiences.css",
+  cssExperiencesMap: "assets/css/experiences.css.map",
   cssGuideOut: "assets/css/style-guide.css",
   cssGuideMap: "assets/css/style-guide.css.map",
   jsEntry: "assets/js/main.js",
@@ -54,6 +57,7 @@ const paths = {
     "!assets/css/style.new.css",
     "!assets/css/style-guide.css",
     "!assets/css/home.css",
+    "!assets/css/experiences.css",
     "assets/js/*.js",
     "!assets/js/main.js",
     "!assets/js/style-guide.js",
@@ -73,7 +77,7 @@ let phpProcess = null;
 // --- Clean: solo outputs generados por este pipeline ---
 export async function clean() {
   await Promise.all(
-    [paths.cssOut, paths.cssMap, paths.cssHomeOut, paths.cssHomeMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist, paths.iconOut].map((p) =>
+    [paths.cssOut, paths.cssMap, paths.cssHomeOut, paths.cssHomeMap, paths.cssExperiencesOut, paths.cssExperiencesMap, paths.cssGuideOut, paths.cssGuideMap, paths.jsDist, paths.iconOut].map((p) =>
       rm(p, { recursive: true, force: true }),
     ),
   );
@@ -91,6 +95,7 @@ function cssDevDesde(entrada, salida) {
 
 const cssDev = () => cssDevDesde(paths.scssEntry, "style.new.css");
 const cssHomeDev = () => cssDevDesde(paths.scssHomeEntry, "home.css");
+const cssExperiencesDev = () => cssDevDesde(paths.scssExperiencesEntry, "experiences.css");
 
 function cssGuideDev() {
   return src(paths.scssGuideEntry, { sourcemaps: true })
@@ -111,6 +116,7 @@ function cssBuildDesde(entrada, salida) {
 
 const cssBuild = () => cssBuildDesde(paths.scssEntry, "style.new.css");
 const cssHomeBuild = () => cssBuildDesde(paths.scssHomeEntry, "home.css");
+const cssExperiencesBuild = () => cssBuildDesde(paths.scssExperiencesEntry, "experiences.css");
 
 // --- JS ---
 const jsOptions = {
@@ -211,6 +217,7 @@ function serve(done) {
   server.init({
     proxy: `http://${PHP_HOST}:${PHP_PORT}`,
     port: SYNC_PORT,
+    listen: PHP_HOST,
     ui: false,
     notify: false,
     open: false,
@@ -220,7 +227,7 @@ function serve(done) {
 const reload = (done) => { server.reload(); done(); };
 
 function watcher() {
-  watch(paths.scssWatch, parallel(cssDev, cssHomeDev, cssGuideDev));
+  watch(paths.scssWatch, parallel(cssDev, cssHomeDev, cssExperiencesDev, cssGuideDev));
   watch(paths.jsWatch, series(parallel(jsDev, jsGuideDev), reload));
   watch(paths.guideWatch, reload);
   watch(paths.iconWatch, series(iconos, reload));
@@ -233,6 +240,6 @@ for (const signal of ["SIGINT", "SIGTERM", "SIGHUP"]) {
 }
 process.on("exit", stopPhp);
 
-export const dev = series(clean, generarIconos, parallel(cssDev, cssHomeDev, cssGuideDev, jsDev, jsGuideDev), php, serve, watcher);
-export const build = series(clean, generarIconos, parallel(cssBuild, cssHomeBuild, jsBuild));
+export const dev = series(clean, generarIconos, parallel(cssDev, cssHomeDev, cssExperiencesDev, cssGuideDev, jsDev, jsGuideDev), php, serve, watcher);
+export const build = series(clean, generarIconos, parallel(cssBuild, cssHomeBuild, cssExperiencesBuild, jsBuild));
 export default dev;

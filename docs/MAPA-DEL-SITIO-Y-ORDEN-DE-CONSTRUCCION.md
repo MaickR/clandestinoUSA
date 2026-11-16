@@ -24,7 +24,7 @@ El Design System y la integración local de Home ya se completaron. El siguiente
 | Wine Club | Página legacy existente. Pendientes renovación, condiciones vigentes y operación de alta/cobro. |
 | Reservations | Solicitud legacy existente. Pendientes página o recorrido renovado, disponibilidad real y confirmación. |
 | Events / Private Experiences | Hay información o vías de consulta. Pendientes alcance de las páginas y cualquier agenda, contratación o pago. |
-| Experiences | Propuesta editorial pendiente de aprobación. La navegación existente conserva sus destinos. |
+| Experiences | Documento local en `experiences.php`, sin publicar. La navegación compartida conserva sus destinos. |
 | Mi Cuenta, administración y fidelización | Iniciativas futuras. Autenticación, cuenta, carrito persistente, pedidos y checkout requieren integración real antes de aparecer como servicios. |
 
 ## Definición comercial de cada página
@@ -37,18 +37,15 @@ Completar en la fase Strategy & Content del [flujo de una feature](GIT-WORKFLOW.
 
 Distinguir el contenido editorial que explica la experiencia, el catálogo que describe una oferta verificada y la operación que acepta, procesa o confirma la acción. Justificar cada sección por lo que aporta a la decisión y conservar la información necesaria para comprender la oferta. Omitir afirmaciones sin confirmar sobre precios, beneficios, inventario, testimonios, disponibilidad, eventos o condiciones. Las demos de cuenta, carrito y checkout son ejemplos de interfaz.
 
-## Experiences — PROPUESTA PENDIENTE DE APROBACIÓN
+## Experiences — documento local, sin publicar
 
-Hipótesis comercial para evaluar con el responsable:
+`experiences.php` compone cinco secciones con movimiento editorial aprobado en M2.4: Hero de una sola escena con animación de entrada, introducción editorial, The Spanish Table, Private Gatherings y Final Invitation. Los estilos viven en `assets/scss/experiences.scss` y `assets/scss/pages/_experiences.scss`, y `npm run dev` / `npm run build` generan `assets/css/experiences.css`. La carga de GSAP y el compromiso de rendimiento aceptado para integración local se describen en [Arquitectura](ARQUITECTURA.md#experiences-local).
 
-1. Hero estático.
-2. Explore Our Experiences.
-3. The Spanish Table.
-4. Private Gatherings.
-5. Wine Tastings & Special Moments.
-6. Final Invitation.
+Los CTA usan destinos existentes: Explore the Menu → `/menu.html`, Plan Your Private Gathering → `/contact.html#contact-form` y Request a Table → `/index.html?legacy=1#reservation`. La guarda PHP limita el acceso directo y BrowserSync escucha en `127.0.0.1:3000` en el flujo de desarrollo. Cualquier proxy externo requiere su propia restricción de acceso. El documento lleva `noindex, nofollow`, la ruta propuesta `/experiences.html` sigue sin activarse y el ensayo en Apache/GoDaddy queda pendiente.
 
-Antes de programar, validar la función de cada sección, las experiencias que pueden describirse con evidencia, el contenido real y el CTA. El responsable aporta o selecciona referencias visuales y aprueba el contenido, la fotografía y el alcance. La propuesta carece de ruta pública asignada y deja intacta la navegación existente.
+La fase de publicación requiere autorización de la ruta y del empaquetado, incorporación a navegación y sitemap, y permiso documentado para el uso de `the-clandestino-wines-table` o una sustitución aprobada. La imagen muestra una persona parcial.
+
+La hipótesis anterior, con «Explore Our Experiences» y «Wine Tastings & Special Moments», no se construyó. No hay una oferta de catas verificada que la sostenga.
 
 <details>
 <summary>Mapa y orden originales · registro histórico</summary>

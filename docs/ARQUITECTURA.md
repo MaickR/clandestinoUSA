@@ -50,6 +50,7 @@ Pipeline en `gulpfile.mjs`. Compila SCSS y el JS nuevo. El pipeline deja fuera l
 |---|---|
 | Sass producto | `assets/scss/main.scss` → `assets/css/style.new.css` |
 | Sass Home | `assets/scss/home.scss` → `assets/css/home.css` |
+| Sass Experiences | `assets/scss/experiences.scss` → `assets/css/experiences.css`. Importa los patrones que usa la página y `pages/_experiences.scss` |
 | Sass guía | `assets/scss/style-guide.scss` → `assets/css/style-guide.css`, solo en `npm run dev` |
 | Bootstrap | 5.3.x desde `node_modules`: Sass selectivo y módulos JS según los componentes usados |
 | PostCSS | Autoprefixer siempre; cssnano solo en `build` |
@@ -57,12 +58,22 @@ Pipeline en `gulpfile.mjs`. Compila SCSS y el JS nuevo. El pipeline deja fuera l
 | JS guía | `assets/js/style-guide.js` → `assets/js/dist/style-guide.js`, solo dev |
 | Iconos | `bootstrap-icons@1.13.1` (devDependency) → sprite local curado `assets/icons/cl-iconos.svg`, dev/build |
 | PHP local | `php -S 127.0.0.1:8000` lanzado por Gulp y cerrado al salir |
-| BrowserSync | `http://localhost:3000` con proxy a PHP `:8000` (PHP real, no estáticos) |
+| BrowserSync | Escucha en `127.0.0.1:3000` y reenvía a PHP en `127.0.0.1:8000` |
 | Lint | ESLint (JS nuevo y `.mjs` de tooling) y Stylelint (`assets/scss/**`) |
 
-Comandos: `npm run dev` (clean → CSS de producto y de guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → CSS y JS de producto minificados, sin sourcemaps, servidores ni bundles de guía), `npm run lint`.
+Comandos: `npm run dev` (clean → CSS de producto, Home, Experiences y guía, con sourcemaps, más JS → PHP → BrowserSync → watch), `npm run build` (clean → CSS de producto, Home y Experiences, y JS de producto minificados, sin sourcemaps, servidores ni bundles de guía), `npm run lint`.
 
-Outputs ignorados por Git: `assets/css/style.new.css`, `assets/css/home.css`, `assets/css/style-guide.css` y sourcemaps en desarrollo, `assets/js/dist/**` y `assets/icons/cl-iconos.svg`. El paquete de release incluye los recursos compilados aplicables, el sprite y los chunks ESM.
+Outputs ignorados por Git: `assets/css/style.new.css`, `assets/css/home.css`, `assets/css/experiences.css`, `assets/css/style-guide.css` y sourcemaps en desarrollo, `assets/js/dist/**` y `assets/icons/cl-iconos.svg`. El paquete de release incluye los recursos compilados aplicables, el sprite y los chunks ESM. Experiences todavía no entra en ese paquete.
+
+## Experiences local
+
+`experiences.php` es el documento local de la página. Reutiliza Header, Hero y Footer. El Hero de una sola escena, la introducción editorial, The Spanish Table, Private Gatherings y Final Invitation incorporan el movimiento editorial aprobado en M2.4. `main.js` importa dinámicamente `assets/js/modules/patterns/movimiento-experiences.js`, que usa GSAP, cuando encuentra `main.cl-experiences` y se cumplen las condiciones de movimiento. Home conserva su motor y su carga condicional propios. Los CTA usan `/menu.html`, `/contact.html#contact-form` y `/index.html?legacy=1#reservation`.
+
+El script de entrada de `experiences.php` usa `blocking="render"` para inicializar el Header antes del primer pintado y evitar su salto responsive. En C3.3-A1, a 820 px, desapareció el aporte de aproximadamente 0.532 del Header al CLS y quedó un residual de aproximadamente 0.026 en las cargas normales. La prueba con latencia aislada de `main.js` retrasó el primer pintado y el LCP. Se acepta el compromiso para la integración local en `develop` y se reevaluará antes de publicar.
+
+En acceso directo, la guarda exige el servidor PHP embebido, una conexión desde loopback y un `Host` local. En `npm run dev`, BrowserSync escucha en loopback IPv4 y reescribe el `Host` al reenviar a PHP. Cualquier proxy externo necesita su propia restricción de acceso porque PHP recibe la conexión del proxy. El documento lleva `noindex, nofollow` y carece de canonical y ficha social. La ruta propuesta `/experiences.html` sigue sin activarse en `.htaccess`, la navegación compartida y el sitemap. Experiences queda pendiente de ensayo en Apache/GoDaddy.
+
+La fotografía `the-clandestino-wines-table` muestra una persona parcial. Su permiso no está documentado. Publicar exige confirmación o una sustitución aprobada. El paquete de release y la navegación pública siguen pendientes de autorización propia.
 
 Dev compila ambas entradas JS y build compila `main.js` con sus chunks. `main.js` inicializa el anfitrión optativo `[data-cl-site]` y carga las interacciones de Home bajo sus condiciones de uso. `style-guide.js` y los módulos de guía quedan en desarrollo. `npm run icons` regenera el sprite sin servidores.
 
